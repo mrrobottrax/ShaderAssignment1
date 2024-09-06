@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc541c89016a84042b749bf5669cebb5, type: 3}
+  m_Name: PageTest
+  m_EditorClassIdentifier: 
+  <TextAreaWidth>k__BackingField: 638
+  <TextAreaHeight>k__BackingField: 825
+  <TextBackground>k__BackingField: {fileID: 21300000, guid: c253fbe1c3605d74c9dabb3a15a2a764,
+    type: 3}
+  <PageText>k__BackingField:
+  - <size=24><color=#3498db>Large Blue Text</color></size> and <size=18><color=red>Smaller
+    Red Text</color></size>
+  - '<size=18><color=red>Smaller Red Text</color></size> and
+
+    <size=24><color=#3498db>Large
+    Blue Text</color></size>'

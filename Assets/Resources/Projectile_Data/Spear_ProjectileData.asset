@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4093fd11cc8eb04faf3a08de90c67e5, type: 3}
+  m_Name: Spear_ProjectileData
+  m_EditorClassIdentifier: 
+  <ProjectilePrefab>k__BackingField: {fileID: 202192059368933816, guid: 6f757dab8f55a1e47b8c31ae68f1330a,
+    type: 3}
+  <Damage>k__BackingField: 5
+  <ProjectileLifetime>k__BackingField: 20
+  <DamageType>k__BackingField: 2
+  <AppliedEffects>k__BackingField: []
+  <HitResult>k__BackingField: 1
+  <ExplosionData>k__BackingField: {fileID: 11400000, guid: c6863c96276fbc843a8d990dab98bcdf,
+    type: 2}
