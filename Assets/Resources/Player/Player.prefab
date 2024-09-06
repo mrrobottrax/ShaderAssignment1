@@ -90,8 +90,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -207,8 +205,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -356,8 +352,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1030170647110415365}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000029336661, y: 0.0000000018626451, z: -0.0000000060535976,
-    w: 1}
+  m_LocalRotation: {x: 0.000000029336661, y: 0.0000000018626451, z: -0.0000000060535976, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -389,8 +384,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -862,12 +855,6 @@ MonoBehaviour:
   minVaultHeight: 0.25
   maxVaultDist: 0.3
   vaultDuration: 0.4
-  ghostBoat: {fileID: 0}
-  realBoat: {fileID: 0}
-  rotateWithBoat: 0
-  waterSurface: {fileID: 0}
-  bouyancyForce: 7
-  depthBeforeSubmerged: 2
   climbSpeed: 3
 --- !u!114 &4612386199360249716
 MonoBehaviour:
@@ -1131,8 +1118,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -1468,8 +1453,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3425615552706575135}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000029802322, y: -1.1093356e-31, z: -0.0000000055879363,
-    w: 1}
+  m_LocalRotation: {x: 0.000000029802322, y: -1.1093356e-31, z: -0.0000000055879363, w: 1}
   m_LocalPosition: {x: -0, y: 0.0013204493, z: -7.4505804e-11}
   m_LocalScale: {x: 0.99999994, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1497,13 +1481,11 @@ MonoBehaviour:
     <AttackGroups>k__BackingField:
     - <GroupTitle>k__BackingField: Spear_Melee
       <Attacks>k__BackingField:
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 188ce60f1a5ea3a4ab8129e347792ab8,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 188ce60f1a5ea3a4ab8129e347792ab8, type: 2}
         <AttackPosition>k__BackingField: {fileID: 6778819629779878474}
     - <GroupTitle>k__BackingField: Spear_Throw
       <Attacks>k__BackingField:
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: ee1252ec5b558c8419fcf46d6226e4cd,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: ee1252ec5b558c8419fcf46d6226e4cd, type: 2}
         <AttackPosition>k__BackingField: {fileID: 3193733149603600265}
 --- !u!1 &3470968441132696525
 GameObject:
@@ -1593,8 +1575,7 @@ MonoBehaviour:
     <AttackGroups>k__BackingField:
     - <GroupTitle>k__BackingField: Spotlamp_Toggle
       <Attacks>k__BackingField:
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 6bc3bef81fbf842469818477a5d82397,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 6bc3bef81fbf842469818477a5d82397, type: 2}
         <AttackPosition>k__BackingField: {fileID: 5403729670471450427}
   _castPoint: {fileID: 5403729670471450427}
 --- !u!120 &6043692443319541238
@@ -1615,8 +1596,6 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -1958,7 +1937,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &3999419431818739391
 Animator:
-  serializedVersion: 7
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1972,7 +1951,6 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -1994,14 +1972,11 @@ MonoBehaviour:
     <AttackGroups>k__BackingField:
     - <GroupTitle>k__BackingField: Punch
       <Attacks>k__BackingField:
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 5f37034c38d71a743afb2a8002a5ac10,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 5f37034c38d71a743afb2a8002a5ac10, type: 2}
         <AttackPosition>k__BackingField: {fileID: 6778819629779878474}
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 5f37034c38d71a743afb2a8002a5ac10,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 5f37034c38d71a743afb2a8002a5ac10, type: 2}
         <AttackPosition>k__BackingField: {fileID: 6778819629779878474}
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 7d1062e1fd0866045b392b39c035891d,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 7d1062e1fd0866045b392b39c035891d, type: 2}
         <AttackPosition>k__BackingField: {fileID: 6778819629779878474}
     - <GroupTitle>k__BackingField: ChargedPunch
       <Attacks>k__BackingField:
@@ -2794,13 +2769,6 @@ MonoBehaviour:
     GateFit: 1
     FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
-    Iso: 200
-    ShutterSpeed: 0.005
-    Aperture: 16
-    BladeCount: 5
-    Curvature: {x: 2, y: 11}
-    BarrelClipping: 0.25
-    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3169,19 +3137,15 @@ MonoBehaviour:
     <AttackGroups>k__BackingField:
     - <GroupTitle>k__BackingField: Shovel_Melee
       <Attacks>k__BackingField:
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 6c31358106b914a4b95f2e1427ebde26,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 6c31358106b914a4b95f2e1427ebde26, type: 2}
         <AttackPosition>k__BackingField: {fileID: 6778819629779878474}
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 681f3d994cc9f954a9bc6ac12bb21a4e,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 681f3d994cc9f954a9bc6ac12bb21a4e, type: 2}
         <AttackPosition>k__BackingField: {fileID: 6778819629779878474}
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 817e5bedb38c10e489e3cdf9886fd592,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 817e5bedb38c10e489e3cdf9886fd592, type: 2}
         <AttackPosition>k__BackingField: {fileID: 6778819629779878474}
     - <GroupTitle>k__BackingField: Shovel_Dig
       <Attacks>k__BackingField:
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: 674d28ea91babdb479d9c57e6569de4d,
-          type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 674d28ea91babdb479d9c57e6569de4d, type: 2}
         <AttackPosition>k__BackingField: {fileID: 6778819629779878474}
 --- !u!1 &7704260078335915880
 GameObject:
@@ -3592,8 +3556,6 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -3755,8 +3717,8 @@ GameObject:
   - component: {fileID: 6778819629779878474}
   - component: {fileID: 127748538297917337}
   - component: {fileID: 2459626024574969098}
-  - component: {fileID: 6676253145992639111}
   - component: {fileID: 2696183236694401387}
+  - component: {fileID: 8037854491074830990}
   m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3773,7 +3735,7 @@ Transform:
   m_GameObject: {fileID: 9222364406917590681}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0000030994415, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3839,138 +3801,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9222364406917590681}
   m_Enabled: 1
---- !u!114 &6676253145992639111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9222364406917590681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23c1ce4fb46143f46bc5cb5224c934f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clearColorMode: 0
-  backgroundColorHDR: {r: 0.025, g: 0.07, b: 0.19, a: 0}
-  clearDepth: 1
-  volumeLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  volumeAnchorOverride: {fileID: 0}
-  antialiasing: 2
-  SMAAQuality: 2
-  dithering: 0
-  stopNaNs: 0
-  taaSharpenStrength: 0.5
-  TAAQuality: 2
-  taaSharpenMode: 1
-  taaRingingReduction: 0
-  taaHistorySharpening: 0.35
-  taaAntiFlicker: 0.5
-  taaMotionVectorRejection: 0
-  taaAntiHistoryRinging: 0
-  taaBaseBlendFactor: 0.875
-  taaJitterScale: 1
-  physicalParameters:
-    m_Iso: 200
-    m_ShutterSpeed: 0.005
-    m_Aperture: 16
-    m_FocusDistance: 10
-    m_BladeCount: 5
-    m_Curvature: {x: 2, y: 11}
-    m_BarrelClipping: 0.25
-    m_Anamorphism: 0
-  flipYMode: 0
-  xrRendering: 1
-  fullscreenPassthrough: 0
-  allowDynamicResolution: 0
-  customRenderingSettings: 0
-  invertFaceCulling: 0
-  probeLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  hasPersistentHistory: 0
-  screenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
-  screenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
-  allowDeepLearningSuperSampling: 1
-  deepLearningSuperSamplingUseCustomQualitySettings: 0
-  deepLearningSuperSamplingQuality: 0
-  deepLearningSuperSamplingUseCustomAttributes: 0
-  deepLearningSuperSamplingUseOptimalSettings: 1
-  deepLearningSuperSamplingSharpening: 0
-  fsrOverrideSharpness: 0
-  fsrSharpness: 0.92
-  exposureTarget: {fileID: 0}
-  materialMipBias: 0
-  m_RenderingPathCustomFrameSettings:
-    bitDatas:
-      data1: 5770166122053453
-      data2: 13799031440106553368
-    lodBias: 1
-    lodBiasMode: 0
-    lodBiasQualityLevel: 0
-    maximumLODLevel: 0
-    maximumLODLevelMode: 0
-    maximumLODLevelQualityLevel: 0
-    sssQualityMode: 0
-    sssQualityLevel: 0
-    sssCustomSampleBudget: 20
-    sssCustomDownsampleSteps: 0
-    msaaMode: 1
-    materialQuality: 0
-  renderingPathCustomFrameSettingsOverrideMask:
-    mask:
-      data1: 0
-      data2: 0
-  defaultFrameSettings: 0
-  m_Version: 9
-  m_ObsoleteRenderingPath: 0
-  m_ObsoleteFrameSettings:
-    overrides: 0
-    enableShadow: 0
-    enableContactShadows: 0
-    enableShadowMask: 0
-    enableSSR: 0
-    enableSSAO: 0
-    enableSubsurfaceScattering: 0
-    enableTransmission: 0
-    enableAtmosphericScattering: 0
-    enableVolumetrics: 0
-    enableReprojectionForVolumetrics: 0
-    enableLightLayers: 0
-    enableExposureControl: 1
-    diffuseGlobalDimmer: 0
-    specularGlobalDimmer: 0
-    shaderLitMode: 0
-    enableDepthPrepassWithDeferredRendering: 0
-    enableTransparentPrepass: 0
-    enableMotionVectors: 0
-    enableObjectMotionVectors: 0
-    enableDecals: 0
-    enableRoughRefraction: 0
-    enableTransparentPostpass: 0
-    enableDistortion: 0
-    enablePostprocess: 0
-    enableOpaqueObjects: 0
-    enableTransparentObjects: 0
-    enableRealtimePlanarReflection: 0
-    enableMSAA: 0
-    enableAsyncCompute: 0
-    runLightListAsync: 0
-    runSSRAsync: 0
-    runSSAOAsync: 0
-    runContactShadowsAsync: 0
-    runVolumeVoxelizationAsync: 0
-    lightLoopSettings:
-      overrides: 0
-      enableDeferredTileAndCluster: 0
-      enableComputeLightEvaluation: 0
-      enableComputeLightVariants: 0
-      enableComputeMaterialVariants: 0
-      enableFptlForForwardOpaque: 0
-      enableBigTilePrepass: 0
-      isFptlEnabled: 0
 --- !u!114 &2696183236694401387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4005,3 +3835,47 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8037854491074830990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222364406917590681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 1
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
