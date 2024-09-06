@@ -3,24 +3,25 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Item
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Health
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Environment
+  - Interaction
+  - GlobalWind
+  - Vault
+  - Viewmodels
+  - Player
+  - ShipTrigger
+  - DigSite
+  - Reflective
   - 
   - 
   - 
