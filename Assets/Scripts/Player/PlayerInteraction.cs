@@ -17,6 +17,8 @@ public class PlayerInteraction : MonoBehaviour
 	private void Awake()
 	{
 		m_useAction = InputManager.Controls.Player.Use;
+
+		m_uiText.text = null;
 	}
 
 	private void Update()
