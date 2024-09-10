@@ -4,7 +4,7 @@ public class HostOnly : MonoBehaviour
 {
 	private void Awake()
 	{
-		if (NetworkManager.Mode != ENetworkMode.Host)
+		if (NetworkManager.Mode == ENetworkMode.Client)
 		{
 			gameObject.SetActive(false);
 		}

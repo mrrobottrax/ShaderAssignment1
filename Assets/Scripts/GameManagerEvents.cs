@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class GameManagerFunctions : ScriptableObject
+public class GameManagerEvents : ScriptableObject
 {
 	public void StartHosting()
 	{

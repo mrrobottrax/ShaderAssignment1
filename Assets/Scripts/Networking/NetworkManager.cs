@@ -16,9 +16,9 @@ public static class NetworkManager
 
 	public static void SetGameJoinable(bool joinable)
 	{
-		if (m_mode != ENetworkMode.Host)
+		if (m_mode == ENetworkMode.Client)
 		{
-			Debug.LogWarning("Joining groups is not implemented yet!");
+			Debug.LogWarning("Joining from clients is not implemented yet!");
 			return;
 		}
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FirstPersonCamera : MonoBehaviour, IInputHandler
+public class FirstPersonCamera : MonoBehaviour
 {
 	[Header("Player")]
 	public PlayerController m_followPlayer;
@@ -39,7 +39,7 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 
 	void OnDestroy()
 	{
-		SetControlsSubscription(false);
+		EnableFirstPersonCamera(false);
 	}
 
 	private void Update()
@@ -91,10 +91,7 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 
 	public void SetControlsSubscription(bool isInputEnabled)
 	{
-		if (isInputEnabled)
-			Subscribe();
-		else
-			Unsubscribe();
+		m_lookAction = isInputEnabled ? InputManager.Controls.Player.Look : null;
 	}
 
 	/// <summary>
@@ -109,16 +106,6 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 		Cursor.visible = !isEnabled;
 
 		SetControlsSubscription(isEnabled);
-	}
-
-	public void Subscribe()
-	{
-		m_lookAction = InputManager.Controls.Player.Look;
-	}
-
-	public void Unsubscribe()
-	{
-		m_lookAction = null;
 	}
 	#endregion
 

@@ -3,7 +3,7 @@ using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
-public class PlayerController : NetworkBehaviour, IInputHandler
+public class PlayerController : NetworkBehaviour
 {
 	[Header("Movement")]
 	[SerializeField] PlayerMovementData m_movementData;
