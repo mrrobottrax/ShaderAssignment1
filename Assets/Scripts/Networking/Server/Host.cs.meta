@@ -3,9 +3,8 @@ guid: fecd0abbce22b8e43acb3dc1d33cc26e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - prefabPlayer: {fileID: 5067302201104481768, guid: 92df18e89889a354392a0b32775ab300, type: 3}
-  executionOrder: -50
+  defaultReferences: []
+  executionOrder: 0
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 
