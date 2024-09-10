@@ -15,6 +15,7 @@ public abstract class NetworkBehaviour : MonoBehaviour
 
 	public bool IsOwner { get; internal set; } = true;
 
+
 	internal byte[] GetNetVarBytes()
 	{
 		// Allocate buffer
@@ -75,11 +76,12 @@ public abstract class NetworkBehaviour : MonoBehaviour
 
 				if (!field.GetValue(comp).Equals(value))
 				{
+					field.SetValue(comp, value);
+
 					// Run value change function if set
 					comp.m_netVarCallbacks[index]?.Invoke(comp, null);
 				}
 
-				field.SetValue(comp, value);
 				offset += Marshal.SizeOf(field.FieldType);
 
 				++index;
@@ -118,5 +120,23 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		Array.Copy(data, 0, buffer, Marshal.SizeOf<NetworkBehaviourUpdateMessage>(), data.Length);
 
 		return buffer;
+	}
+
+	private void OnValidate()
+	{
+		// Check parents for another NetworkBehaviour
+		Transform parent = transform;
+		while (parent != null)
+		{
+			if (parent.TryGetComponent<NetworkObject>(out _))
+			{
+				break;
+			}
+
+			parent = parent.parent;
+		}
+
+		if (parent == null)
+			Debug.LogWarning("NetworkBehaviour detected on a GameObject without a NetworkObject as it's self or parent, tread lightly!");
 	}
 }

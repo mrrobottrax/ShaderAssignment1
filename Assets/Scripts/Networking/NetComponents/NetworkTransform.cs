@@ -10,7 +10,7 @@ internal struct TransformUpdate
 [FrequentUpdate]
 public class NetworkTransform : NetworkBehaviour
 {
-	[NetVar(nameof(OnRecvTransform))] TransformUpdate m_transform;
+	[NetVar(nameof(OnRecvTransform))] internal TransformUpdate m_transform;
 
 	/// <summary>
 	/// Allows the client to display the object with a different transformation
@@ -18,9 +18,9 @@ public class NetworkTransform : NetworkBehaviour
 	/// </summary>
 	public bool overrideTransform = false;
 
-	private void FixedUpdate()
+	private void Update()
 	{
-		if (IsOwner)
+		if (IsOwner && TickManager.ShouldTick())
 		{
 			m_transform.position = transform.position;
 			m_transform.rotation = transform.rotation;

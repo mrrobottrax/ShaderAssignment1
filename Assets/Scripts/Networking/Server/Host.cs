@@ -9,22 +9,12 @@ public class Host : MonoBehaviour
 {
 	protected Callback<SteamNetConnectionStatusChangedCallback_t> m_SteamNetConnectionStatusChanged;
 
-	internal static Host m_instance;
-
 	internal static NetworkObject m_player;
-	internal readonly Dictionary<SteamNetworkingIdentity, RemoteClient> m_clients = new();
+	internal static readonly Dictionary<SteamNetworkingIdentity, RemoteClient> m_clients = new();
 
 	#region Initialization
 	private void Awake()
 	{
-		if (m_instance)
-		{
-			Destroy(this);
-			return;
-		}
-
-		m_instance = this;
-
 		SceneManager.activeSceneChanged += OnSceneChange;
 	}
 
@@ -62,7 +52,7 @@ public class Host : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		if (TickManager.ShouldTick())
+		//if (TickManager.ShouldTick())
 		{
 			// Send updates to all clients
 			foreach (var client in m_clients)
@@ -87,14 +77,14 @@ public class Host : MonoBehaviour
 		{
 			SteamNetworkingMessage_t message = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pMessages[i]);
 
-			ProcessMessage(message);
+			ProcessMessage(message, client);
 
 			// Free data
 			SteamNetworkingMessage_t.Release(pMessages[i]);
 		}
 	}
 
-	private void ProcessMessage(SteamNetworkingMessage_t message)
+	private void ProcessMessage(SteamNetworkingMessage_t message, RemoteClient sender)
 	{
 		ESnapshotMessageType type = (ESnapshotMessageType)Marshal.ReadByte(message.m_pData);
 
@@ -106,7 +96,8 @@ public class Host : MonoBehaviour
 				// Tell all clients about this change too
 				foreach (var client in m_clients.Values)
 				{
-					SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, message.m_pData, (uint)message.m_cbSize, message.m_nFlags, out _);
+					if (client != sender)
+						SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, message.m_pData, (uint)message.m_cbSize, message.m_nFlags, out _);
 				}
 				break;
 
@@ -177,6 +168,6 @@ public class Host : MonoBehaviour
 
 	public static Dictionary<SteamNetworkingIdentity, RemoteClient>.ValueCollection GetClients()
 	{
-		return m_instance.m_clients.Values;
+		return m_clients.Values;
 	}
 }

@@ -16,6 +16,7 @@ public class NetworkObject : MonoBehaviour
 
 	private void Awake()
 	{
+		// Init all NetworkBehaviours
 		m_networkBehaviours = gameObject.GetComponentsInChildren<NetworkBehaviour>();
 
 		for (int i = 0; i < m_networkBehaviours.Length; ++i)
@@ -76,7 +77,7 @@ public class NetworkObject : MonoBehaviour
 	// Get NetID and add to lists and all that
 	public void ForceRegister()
 	{
-		if (NetworkManager.Mode == ENetworkMode.Host)
+		if (NetworkManager.Mode != ENetworkMode.Client)
 		{
 			if (m_netID == 0)
 			{
