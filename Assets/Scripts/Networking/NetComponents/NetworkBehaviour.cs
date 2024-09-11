@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 
 public abstract class NetworkBehaviour : MonoBehaviour
@@ -100,8 +101,10 @@ public abstract class NetworkBehaviour : MonoBehaviour
 				else
 				{
 					byte[] arr = (byte[])field.GetValue(comp);
-
 					Marshal.Copy(pFieldData, arr, 0, arr.Length);
+
+					// Run value change function if set
+					comp.m_netVarCallbacks[index]?.Invoke(comp, null);
 
 					offset += arr.Length * Marshal.SizeOf(field.FieldType.GetElementType());
 				}
