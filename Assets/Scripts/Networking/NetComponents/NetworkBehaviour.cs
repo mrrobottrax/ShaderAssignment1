@@ -47,7 +47,6 @@ public abstract class NetworkBehaviour : MonoBehaviour
 
 				Array.Copy(arr, 0, buffer, offset, arr.Length);
 				offset += arr.Length;
-
 			}
 		}
 
@@ -84,17 +83,28 @@ public abstract class NetworkBehaviour : MonoBehaviour
 			{
 				IntPtr pFieldData = pBuffer + offset;
 
-				object value = Marshal.PtrToStructure(pFieldData, field.FieldType);
-
-				if (!field.GetValue(comp).Equals(value))
+				if (!field.FieldType.IsArray)
 				{
-					field.SetValue(comp, value);
+					object value = Marshal.PtrToStructure(pFieldData, field.FieldType);
 
-					// Run value change function if set
-					comp.m_netVarCallbacks[index]?.Invoke(comp, null);
+					if (!field.GetValue(comp).Equals(value))
+					{
+						field.SetValue(comp, value);
+
+						// Run value change function if set
+						comp.m_netVarCallbacks[index]?.Invoke(comp, null);
+					}
+
+					offset += Marshal.SizeOf(field.FieldType);
 				}
+				else
+				{
+					byte[] arr = (byte[])field.GetValue(comp);
 
-				offset += Marshal.SizeOf(field.FieldType);
+					Marshal.Copy(pFieldData, arr, 0, arr.Length);
+
+					offset += arr.Length * Marshal.SizeOf(field.FieldType.GetElementType());
+				}
 
 				++index;
 			}
