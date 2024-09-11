@@ -181,8 +181,8 @@ MonoBehaviour:
   m_pitchMin: -85
   m_pitchMax: 85
   m_foreheadSize: 0.2
-  m_duckSpeed: 1
-  m_stepLerpSpeed: 5
+  m_duckSpeed: 6
+  m_stepLerpSpeed: 15
   m_maxStepLerpDist: 0.6
 --- !u!1 &5067302201104481768
 GameObject:

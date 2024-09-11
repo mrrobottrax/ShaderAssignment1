@@ -5,16 +5,16 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(Animator))]
 public class PlayerController : NetworkBehaviour
 {
-	[Header("Movement")]
-	[SerializeField] PlayerMovementData m_movementData;
-	public PlayerMovementData MvmtData { get => m_movementData; }
-
 	// Constants
 	const float k_hitEpsilon = 0.015f; // Min distance to wall
 	const float k_groundCheckDist = 0.03f;
-	const float k_stopEpsilon = 0.001f; // Stop when <= this speed
+	const float k_stopEpsilon = 0.0001f; // Stop when <= this speed
 	const int k_maxBumps = 8; // Max number of iterations per frame
 	const int k_maxPlanes = 8; // Max number of planes to collide with at once
+
+	[Header("Movement")]
+	[SerializeField] PlayerMovementData m_movementData;
+	public PlayerMovementData MvmtData { get => m_movementData; }
 
 	// Components
 	[Header("Components")]
@@ -25,12 +25,11 @@ public class PlayerController : NetworkBehaviour
 
 	// System
 	public bool IsCrouching { get; private set; }
+	public bool IsGrounded { get; private set; }
 
 	Vector2 m_wishMoveDir;
 	Vector3 m_velocity;
 	Vector3 m_position;
-
-	bool m_isGrounded;
 
 	bool m_isCrouchPressed;
 	bool m_isJumpPressed;
@@ -130,7 +129,7 @@ public class PlayerController : NetworkBehaviour
 	{
 		m_isJumpPressed = context.ReadValueAsButton();
 
-		if (m_isJumpPressed && m_isGrounded)
+		if (m_isJumpPressed && IsGrounded)
 			Jump();
 	}
 
@@ -171,16 +170,31 @@ public class PlayerController : NetworkBehaviour
 		if (isAttemptingCrouch)
 		{
 			IsCrouching = true;
+
+			if (!IsGrounded)
+			{
+				m_position += Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+			}
 		}
 		else
 		{
 			// Make sure there is room
+			// todo: box cast in air so we can uncrouch close to ground
 			IsCrouching = false;
+			if (!IsGrounded)
+			{
+				m_position -= Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+			}
+
 			bool hasRoom = !CheckHull();
 
 			if (!hasRoom)
 			{
 				IsCrouching = true;
+				if (!IsGrounded)
+				{
+					m_position += Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+				}
 			}
 		}
 
@@ -190,7 +204,7 @@ public class PlayerController : NetworkBehaviour
 	private void Jump()
 	{
 		m_velocity.y += m_movementData.m_jumpForce;
-		m_isGrounded = false;
+		IsGrounded = false;
 	}
 
 	#endregion
@@ -427,7 +441,7 @@ public class PlayerController : NetworkBehaviour
 		// Allow for force to knock off the ground
 		if (m_velocity.y > m_movementData.m_knockUpThreshold)
 		{
-			m_isGrounded = false;
+			IsGrounded = false;
 			return;
 		}
 
@@ -435,16 +449,16 @@ public class PlayerController : NetworkBehaviour
 		{
 			if (hit.normal.y > Mathf.Cos(Mathf.Deg2Rad * m_movementData.m_maxWalkableAngle))
 			{
-				m_isGrounded = true;
+				IsGrounded = true;
 			}
 			else
 			{
-				m_isGrounded = false;
+				IsGrounded = false;
 			}
 		}
 		else
 		{
-			m_isGrounded = false;
+			IsGrounded = false;
 		}
 	}
 
@@ -459,7 +473,10 @@ public class PlayerController : NetworkBehaviour
 	void Friction(float friction)
 	{
 		float speed = m_velocity.magnitude;
-		float newSpeed = Mathf.Max(speed - friction * Time.fixedDeltaTime, 0);
+
+		float control = Mathf.Max(speed, m_movementData.m_stopSpeed);
+
+		float newSpeed = Mathf.Max(speed - (control * friction * Time.fixedDeltaTime), 0);
 
 		if (speed != 0)
 		{
@@ -470,7 +487,7 @@ public class PlayerController : NetworkBehaviour
 
 	void Accelerate(Vector3 direction, float acceleration, float maxSpeed)
 	{
-		float add = acceleration * Time.fixedDeltaTime;
+		float add = acceleration * maxSpeed * Time.fixedDeltaTime;
 
 		// Clamp added velocity in acceleration direction
 		float speed = Vector3.Dot(direction, m_velocity);
@@ -503,7 +520,7 @@ public class PlayerController : NetworkBehaviour
 		else if (IsCrouching)
 			TryCrouch(false);
 
-		if (m_isGrounded)
+		if (IsGrounded)
 		{
 			GroundMove(globalWishDir);
 		}
@@ -518,8 +535,8 @@ public class PlayerController : NetworkBehaviour
 		m_velocity.y = 0;
 
 		float moveSpeed = IsCrouching ? m_movementData.m_crouchingSpeed : m_movementData.m_walkingSpeed;
-		float acceleration = IsCrouching ? m_movementData.m_crouchingAcceleration : m_movementData.m_acceleration;
-		float friction = IsCrouching ? m_movementData.m_crouchingFriction : m_movementData.m_friction;
+		float acceleration = m_movementData.m_acceleration;
+		float friction = m_movementData.m_friction;
 
 		// Friction
 		Friction(friction);
@@ -581,7 +598,7 @@ public class PlayerController : NetworkBehaviour
 		// Either reset to the on ground move results, or keep the step move results
 
 		// If we stepped onto air, just do the regular move
-		if (!m_isGrounded)
+		if (!IsGrounded)
 		{
 			m_position = downPosition;
 			m_velocity = downVelocity;
