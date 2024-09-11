@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 
 public abstract class NetworkBehaviour : MonoBehaviour
@@ -27,16 +28,27 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		{
 			object value = field.GetValue(this);
 
-			var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-			try
+			if (!field.FieldType.IsArray)
 			{
-				Marshal.Copy(handle.AddrOfPinnedObject(), buffer, offset, Marshal.SizeOf(field.FieldType));
+				var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
+				try
+				{
+					Marshal.Copy(handle.AddrOfPinnedObject(), buffer, offset, Marshal.SizeOf(field.FieldType));
+				}
+				finally
+				{
+					handle.Free();
+				}
+
+				offset += Marshal.SizeOf(field.FieldType);
 			}
-			finally
+			else
 			{
-				handle.Free();
+				Array arr = (Array)value;
+
+				Array.Copy(arr, 0, buffer, offset, arr.Length);
+				offset += arr.Length;
 			}
-			offset += Marshal.SizeOf(field.FieldType);
 		}
 
 		return buffer;
@@ -72,17 +84,30 @@ public abstract class NetworkBehaviour : MonoBehaviour
 			{
 				IntPtr pFieldData = pBuffer + offset;
 
-				object value = Marshal.PtrToStructure(pFieldData, field.FieldType);
-
-				if (!field.GetValue(comp).Equals(value))
+				if (!field.FieldType.IsArray)
 				{
-					field.SetValue(comp, value);
+					object value = Marshal.PtrToStructure(pFieldData, field.FieldType);
+
+					if (!field.GetValue(comp).Equals(value))
+					{
+						field.SetValue(comp, value);
+
+						// Run value change function if set
+						comp.m_netVarCallbacks[index]?.Invoke(comp, null);
+					}
+
+					offset += Marshal.SizeOf(field.FieldType);
+				}
+				else
+				{
+					byte[] arr = (byte[])field.GetValue(comp);
+					Marshal.Copy(pFieldData, arr, 0, arr.Length);
 
 					// Run value change function if set
 					comp.m_netVarCallbacks[index]?.Invoke(comp, null);
-				}
 
-				offset += Marshal.SizeOf(field.FieldType);
+					offset += arr.Length * Marshal.SizeOf(field.FieldType.GetElementType());
+				}
 
 				++index;
 			}

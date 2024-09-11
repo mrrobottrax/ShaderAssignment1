@@ -5,13 +5,10 @@ public class PlayerMovementData : ScriptableObject
 {
 	[field: Header("Walking Movement Values")]
 	public float m_walkingSpeed = 5.5f;
+	public float m_crouchingSpeed = 2.5f;
 	public float m_friction = 50;
 	public float m_acceleration = 120;
-
-	[field: Header("Crouching Movement Values")]
-	public float m_crouchingSpeed = 2.5f;
-	public float m_crouchingFriction = 15;
-	public float m_crouchingAcceleration = 30;
+	public float m_stopSpeed = 80;
 
 	[field: Header("Ground Movement Values")]
 	public float m_jumpForce = 6;

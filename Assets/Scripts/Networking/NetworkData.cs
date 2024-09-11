@@ -26,8 +26,11 @@ internal class NetworkData : ScriptableObject
 	{
 #if UNITY_EDITOR
 		// Player gets a special index
-		m_playerPrefab.GetComponent<NetworkObject>().m_prefabIndex = k_playerPrefabIndex;
-		EditorUtility.SetDirty(m_playerPrefab);
+		if (m_playerPrefab != null)
+		{
+			m_playerPrefab.GetComponent<NetworkObject>().m_prefabIndex = k_playerPrefabIndex;
+			EditorUtility.SetDirty(m_playerPrefab);
+		}
 
 		if (m_networkPrefabs != null)
 		{

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d9fb03ee7c43841bbb00cb161d5727, type: 3}
   m_Name: Network Data
   m_EditorClassIdentifier: 
+  m_ticksPerSecond: 24
   m_playerPrefab: {fileID: 5067302201104481768, guid: 92df18e89889a354392a0b32775ab300, type: 3}
   m_networkPrefabs: []

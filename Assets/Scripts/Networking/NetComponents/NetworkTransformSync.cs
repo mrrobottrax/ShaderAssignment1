@@ -8,7 +8,7 @@ internal struct TransformUpdate
 }
 
 [FrequentUpdate]
-public class NetworkTransform : NetworkBehaviour
+public class NetworkTransformSync : NetworkBehaviour
 {
 	[NetVar(nameof(OnRecvTransform))] internal TransformUpdate m_transform;
 
