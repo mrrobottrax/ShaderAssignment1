@@ -28,6 +28,9 @@ public class Host : MonoBehaviour
 
 	private void OnDisable()
 	{
+		if (!SteamManager.Initialized)
+			return;
+
 		m_SteamNetConnectionStatusChanged.Dispose();
 	}
 
@@ -52,7 +55,7 @@ public class Host : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		//if (TickManager.ShouldTick())
+		if (TickManager.ShouldTick())
 		{
 			// Send updates to all clients
 			foreach (var client in m_clients)

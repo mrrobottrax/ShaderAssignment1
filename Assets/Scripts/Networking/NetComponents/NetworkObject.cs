@@ -37,16 +37,28 @@ public class NetworkObject : MonoBehaviour
 
 			// Iterate NetVars
 			int size = 0;
-			int index = 0;
-			foreach (var field in net.m_netVarFields)
+			for (int index = 0; index < net.m_netVarFields.Length; ++index)
 			{
+				FieldInfo field = net.m_netVarFields[index];
+
 				if (field.FieldType.IsByRef)
 				{
 					throw new InvalidOperationException($"NetVars cannot be reference types");
 				}
 
-				// Get size of all NetVars
-				size += Marshal.SizeOf(field.FieldType);
+				if (field.FieldType.IsArray)
+				{
+					// Get size of array
+					Array array = (Array)field.GetValue(net);
+					Type elementType = field.FieldType.GetElementType();
+
+					size += array.Length * Marshal.SizeOf(elementType);
+				}
+				else
+				{
+					// Get size of NetVar
+					size += Marshal.SizeOf(field.FieldType);
+				}
 
 				// Set callbacks
 				string callbackName = field.GetCustomAttribute<NetVarAttribute>().m_callback;
@@ -59,8 +71,6 @@ public class NetworkObject : MonoBehaviour
 				{
 					net.m_netVarCallbacks[index] = null;
 				}
-
-				++index;
 			}
 
 			// Apply to array

@@ -27,16 +27,28 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		{
 			object value = field.GetValue(this);
 
-			var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-			try
+			if (!field.FieldType.IsArray)
 			{
-				Marshal.Copy(handle.AddrOfPinnedObject(), buffer, offset, Marshal.SizeOf(field.FieldType));
+				var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
+				try
+				{
+					Marshal.Copy(handle.AddrOfPinnedObject(), buffer, offset, Marshal.SizeOf(field.FieldType));
+				}
+				finally
+				{
+					handle.Free();
+				}
+
+				offset += Marshal.SizeOf(field.FieldType);
 			}
-			finally
+			else
 			{
-				handle.Free();
+				Array arr = (Array)value;
+
+				Array.Copy(arr, 0, buffer, offset, arr.Length);
+				offset += arr.Length;
+
 			}
-			offset += Marshal.SizeOf(field.FieldType);
 		}
 
 		return buffer;
