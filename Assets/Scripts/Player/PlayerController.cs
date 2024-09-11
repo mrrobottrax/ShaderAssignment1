@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
+[RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(Animator))]
 public class PlayerController : NetworkBehaviour
 {
 	[Header("Movement")]
@@ -21,6 +21,7 @@ public class PlayerController : NetworkBehaviour
 	[SerializeField] FirstPersonCamera m_fpsCamera;
 	Rigidbody m_rigidbody;
 	BoxCollider m_collider;
+	Animator m_animator;
 
 	// System
 	public bool IsCrouching { get; private set; }
@@ -52,6 +53,7 @@ public class PlayerController : NetworkBehaviour
 	{
 		m_rigidbody = GetComponent<Rigidbody>();
 		m_collider = GetComponent<BoxCollider>();
+		m_animator = GetComponent<Animator>();
 
 		m_rigidbody.isKinematic = true;
 		m_rigidbody.freezeRotation = true;
@@ -60,10 +62,11 @@ public class PlayerController : NetworkBehaviour
 		m_collider.excludeLayers = ~m_movementData.m_layerMask;
 		m_collider.includeLayers = m_movementData.m_layerMask;
 
-		UpdateCollider();
-
 		Assert.IsNotNull(m_movementData);
 		Assert.IsNotNull(m_fpsCamera);
+
+
+		UpdateCollider();
 	}
 
 	void Start()
@@ -181,7 +184,7 @@ public class PlayerController : NetworkBehaviour
 			}
 		}
 
-		UpdateCollider();
+		m_animator.SetBool("Crouched", IsCrouching);
 	}
 
 	private void Jump()
