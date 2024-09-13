@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-internal enum ESteamNetworkingSend : int
+public enum ESteamNetworkingSend : int
 {
 	k_nSteamNetworkingSend_Unreliable = 0,
 	k_nSteamNetworkingSend_NoNagle = 1,

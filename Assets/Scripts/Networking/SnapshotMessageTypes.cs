@@ -1,9 +1,10 @@
-﻿internal enum ESnapshotMessageType : byte
+﻿public enum ESnapshotMessageType : byte
 {
 	SceneChange,
 	SpawnPrefab,
 	RemoveGameObject,
-	NetworkBehaviourUpdate
+	NetworkBehaviourUpdate,
+	VoiceData
 }
 
 struct SceneChangeMessage

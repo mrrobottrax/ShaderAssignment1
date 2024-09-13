@@ -126,6 +126,43 @@ public static class NetworkManager
 		m_localClient.Init(server);
 	}
 
+	public static void SendAll(ESnapshotMessageType messageType, System.IntPtr pData, int cbLength, ESteamNetworkingSend sendType)
+	{
+		if (!SteamManager.Initialized)
+			return;
+
+		// Allocate a new buffer to hold the messageType byte and the original data
+		byte[] buffer = new byte[cbLength + 1];
+		buffer[0] = (byte)messageType;
+
+		// Copy the original data to the new buffer, starting at index 1
+		Marshal.Copy(pData, buffer, 1, cbLength);
+
+		// Pin the buffer in memory and get a pointer to it
+		GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+		try
+		{
+			System.IntPtr pBuffer = handle.AddrOfPinnedObject();
+
+			// Send the message
+			if (m_mode == ENetworkMode.Host)
+			{
+				foreach (var client in Host.m_clients.Values)
+				{
+					SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+				}
+			}
+			else
+			{
+				SteamNetworkingSockets.SendMessageToConnection(LocalClient.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+			}
+		}
+		finally
+		{
+			handle.Free();
+		}
+	}
+
 	internal static void SendMessage(ESnapshotMessageType messageType, string message, ESteamNetworkingSend sendType, HSteamNetConnection hConn)
 	{
 		// Get the pointer to the message object
@@ -174,9 +211,17 @@ public static class NetworkManager
 		Marshal.Copy(pData, buffer, 1, cbLength);
 
 		// Pin the buffer in memory and get a pointer to it
-		System.IntPtr pBuffer = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, 0);
+		GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+		try
+		{
+			System.IntPtr pBuffer = handle.AddrOfPinnedObject();
 
-		// Send the message
-		SteamNetworkingSockets.SendMessageToConnection(hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+			// Send the message
+			SteamNetworkingSockets.SendMessageToConnection(hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+		}
+		finally
+		{
+			handle.Free();
+		}
 	}
 }
