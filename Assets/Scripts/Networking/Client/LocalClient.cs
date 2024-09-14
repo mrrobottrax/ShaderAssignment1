@@ -158,7 +158,11 @@ internal class LocalClient : MonoBehaviour
 			Debug.Log("Accepting connection request from " + pCallback.m_info.m_identityRemote.GetSteamID64());
 
 			SteamNetworkingSockets.AcceptConnection(pCallback.m_hConn);
+			SteamNetworkingSockets.FlushMessagesOnConnection(pCallback.m_hConn);
+		}
 
+		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
+		{
 			if (m_hServerConn == default)
 			{
 				// First connection is the server

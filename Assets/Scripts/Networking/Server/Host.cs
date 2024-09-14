@@ -38,9 +38,6 @@ public class Host : MonoBehaviour
 	{
 		SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
 
-		SteamNetworkingIdentity id = new();
-		id.SetSteamID(SteamUser.GetSteamID());
-
 		m_player = SpawnPlayer(true);
 	}
 	#endregion
@@ -119,6 +116,7 @@ public class Host : MonoBehaviour
 			// New connection request, accept it blindly
 			Debug.Log("Accepting connection request from " + pCallback.m_info.m_identityRemote.GetSteamID64());
 			SteamNetworkingSockets.AcceptConnection(pCallback.m_hConn);
+			SteamNetworkingSockets.FlushMessagesOnConnection(pCallback.m_hConn);
 		}
 
 		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
