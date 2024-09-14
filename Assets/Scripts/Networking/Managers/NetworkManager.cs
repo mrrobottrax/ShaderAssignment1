@@ -109,6 +109,8 @@ public static class NetworkManager
 				{
 					SteamNetworkingSockets.SendMessageToConnection(peer, pBuffer, (uint)buffer.Length, (int)sendType, out _);
 				}
+
+				SteamNetworkingSockets.SendMessageToConnection(LocalClient.m_hServerConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
 			}
 		}
 		finally

@@ -158,10 +158,11 @@ internal class LocalClient : MonoBehaviour
 
 			SteamNetworkingSockets.AcceptConnection(pCallback.m_hConn);
 
-			if (m_hServerConn == null)
+			if (m_hServerConn == default)
 			{
 				// First connection is the server
 				m_hServerConn = pCallback.m_hConn;
+				m_hPeerConns = new List<HSteamNetConnection>();
 			}
 			else
 			{
