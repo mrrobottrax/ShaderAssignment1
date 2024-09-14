@@ -34,12 +34,12 @@ public static class NetworkManager
 	{
 		if (m_localClient != null)
 		{
-			Object.Destroy(m_localClient.gameObject);
+			UnityEngine.Object.Destroy(m_localClient.gameObject);
 		}
 
 		if (m_host != null)
 		{
-			Object.Destroy(m_host.gameObject);
+			UnityEngine.Object.Destroy(m_host.gameObject);
 		}
 	}
 
@@ -98,19 +98,22 @@ public static class NetworkManager
 			// Send the message
 			if (m_mode == ENetworkMode.Host)
 			{
-				foreach (var client in Host.m_clients.Values)
-				{
-					SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
-				}
+				if (Host.m_clients != null)
+					foreach (var client in Host.m_clients.Values)
+					{
+						SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+					}
 			}
 			else
 			{
-				foreach (var peer in LocalClient.m_hPeerConns)
-				{
-					SteamNetworkingSockets.SendMessageToConnection(peer, pBuffer, (uint)buffer.Length, (int)sendType, out _);
-				}
+				if (LocalClient.m_hPeerConns != null)
+					foreach (var peer in LocalClient.m_hPeerConns)
+					{
+						SteamNetworkingSockets.SendMessageToConnection(peer, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+					}
 
-				SteamNetworkingSockets.SendMessageToConnection(LocalClient.m_hServerConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+				if (LocalClient.m_hServerConn != null)
+					SteamNetworkingSockets.SendMessageToConnection(LocalClient.m_hServerConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
 			}
 		}
 		finally
@@ -172,6 +175,9 @@ public static class NetworkManager
 
 	public static ENetworkMode Mode { get { return m_mode; } }
 
+	public delegate void ModeChange(ENetworkMode mode);
+	public static ModeChange OnModeChange;
+
 	public static int PlayerID
 	{
 		get
@@ -214,7 +220,7 @@ public static class NetworkManager
 		ClearHostAndClient();
 
 		m_host = new GameObject("Host Logic").AddComponent<Host>();
-		Object.DontDestroyOnLoad(m_host.gameObject);
+		UnityEngine.Object.DontDestroyOnLoad(m_host.gameObject);
 	}
 
 	public static void JoinGame(SteamNetworkingIdentity server)
@@ -225,7 +231,7 @@ public static class NetworkManager
 		ClearHostAndClient();
 
 		m_localClient = new GameObject("Client Logic").AddComponent<LocalClient>();
-		Object.DontDestroyOnLoad(m_localClient.gameObject);
+		UnityEngine.Object.DontDestroyOnLoad(m_localClient.gameObject);
 
 		m_localClient.Connect(server);
 	}
