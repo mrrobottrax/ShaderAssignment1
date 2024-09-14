@@ -137,7 +137,6 @@ public class Host : MonoBehaviour
 			// Give initial info
 			SendFunctions.SendConnectAck(client);
 			SendFunctions.SendSceneInfo(client);
-			SendFunctions.SendPeers(client);
 
 			// Send DontDestroyOnLoad objects on first connection
 			foreach (var networkObject in NetworkObjectManager.GetPersistentNetObjects())
@@ -150,6 +149,8 @@ public class Host : MonoBehaviour
 					SendFunctions.SendObjectSnapshot(networkObject, client);
 				}
 			}
+
+			SendFunctions.SendPeers(client);
 		}
 	}
 
