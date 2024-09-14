@@ -24,7 +24,7 @@ public class RemoteClient
 {
 	internal HSteamNetConnection m_hConn;
 	SteamNetworkingIdentity m_identity;
-	readonly NetworkObject m_player;
+	internal readonly NetworkObject m_player;
 
 	public RemoteClient(HSteamNetConnection hConn, SteamNetworkingIdentity identity, NetworkObject player)
 	{
@@ -45,7 +45,7 @@ public class RemoteClient
 	}
 
 	// Send this client the scene index
-	public void SendSceneInfo(bool sceneChange)
+	public void SendSceneInfo()
 	{
 		SceneChangeMessage message = new()
 		{
@@ -64,16 +64,27 @@ public class RemoteClient
 		foreach (var networkObject in NetworkObjectManager.GetNetObjects())
 		{
 			SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID);
-			networkObject.SendAllNetworkBehaviourData(this);
+			networkObject.SendFullSnapshotToClient(this);
 		}
+	}
 
-		// Send DontDestroyOnLoad objects on first scene only
-		if (!sceneChange)
+	public void SendPeers()
+	{
+		foreach (var client in Host.m_clients.Values)
 		{
-			foreach (var networkObject in NetworkObjectManager.GetPersistentNetObjects())
+			if (client != this)
 			{
-				SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID);
-				networkObject.SendAllNetworkBehaviourData(this);
+				NewPeerMessage message = new()
+				{
+					m_steamIdentity = client.m_identity,
+				};
+
+				NetworkManager.SendMessage(
+					ESnapshotMessageType.SpawnPrefab,
+					message,
+					ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
+					m_hConn
+				);
 			}
 		}
 	}

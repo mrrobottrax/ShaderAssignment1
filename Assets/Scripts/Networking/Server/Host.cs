@@ -115,7 +115,7 @@ public class Host : MonoBehaviour
 		// Tell all clients to change scene
 		foreach (var client in m_clients)
 		{
-			client.Value.SendSceneInfo(true);
+			client.Value.SendSceneInfo();
 		}
 	}
 
@@ -146,7 +146,18 @@ public class Host : MonoBehaviour
 				client.UpdateConnection(pCallback.m_hConn);
 			}
 
-			client.SendSceneInfo(false);
+			client.SendSceneInfo();
+			client.SendPeers();
+
+			// Send DontDestroyOnLoad objects on first connect only
+			foreach (var networkObject in NetworkObjectManager.GetPersistentNetObjects())
+			{
+				if (networkObject.m_netID != client.m_player.m_netID)
+				{
+					client.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID);
+					networkObject.SendFullSnapshotToClient(client);
+				}
+			}
 		}
 	}
 
@@ -167,10 +178,5 @@ public class Host : MonoBehaviour
 		}
 
 		return netObj;
-	}
-
-	public static Dictionary<SteamNetworkingIdentity, RemoteClient>.ValueCollection GetClients()
-	{
-		return m_clients.Values;
 	}
 }

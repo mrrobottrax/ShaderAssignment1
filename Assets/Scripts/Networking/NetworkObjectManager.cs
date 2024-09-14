@@ -81,7 +81,7 @@ internal static class NetworkObjectManager
 		return m_persistentNetObjects.Values;
 	}
 
-	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message)
+	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message, bool isOwner)
 	{
 		if (message.m_prefabIndex == -1)
 		{
@@ -119,7 +119,7 @@ internal static class NetworkObjectManager
 		// Set IsOwner of NetworkBehaviours
 		foreach (var component in netObj.m_networkBehaviours)
 		{
-			component.IsOwner = message.m_ownerID == LocalClient.m_playerObjectID;
+			component.IsOwner = isOwner;
 		}
 
 		return netObj;

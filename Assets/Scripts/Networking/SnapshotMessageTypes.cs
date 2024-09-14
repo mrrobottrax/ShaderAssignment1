@@ -1,10 +1,13 @@
-﻿public enum ESnapshotMessageType : byte
+﻿using Steamworks;
+
+public enum ESnapshotMessageType : byte
 {
 	SceneChange,
 	SpawnPrefab,
 	RemoveGameObject,
 	NetworkBehaviourUpdate,
-	VoiceData
+	VoiceData,
+	NewPeer
 }
 
 struct SceneChangeMessage
@@ -29,4 +32,9 @@ struct NetworkBehaviourUpdateMessage
 {
 	public int m_networkID;
 	public int m_componentIndex;
+}
+
+struct NewPeerMessage
+{
+	public SteamNetworkingIdentity m_steamIdentity;
 }

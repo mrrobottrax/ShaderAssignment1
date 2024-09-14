@@ -95,10 +95,10 @@ public class NetworkObject : MonoBehaviour
 				m_netID = NetworkObjectManager.ReserveID(this);
 
 				// Notify clients of object creation
-				foreach (var client in Host.GetClients())
+				foreach (var client in Host.m_clients.Values)
 				{
 					client.SendSpawnPrefab(m_netID, m_prefabIndex, m_ownerID);
-					SendAllNetworkBehaviourData(client);
+					SendFullSnapshotToClient(client);
 				}
 
 				// Add to list
@@ -107,11 +107,11 @@ public class NetworkObject : MonoBehaviour
 		}
 	}
 
-	internal void SendAllNetworkBehaviourData(RemoteClient client)
+	internal void SendFullSnapshotToClient(RemoteClient sendTo)
 	{
 		foreach (var net in m_networkBehaviours)
 		{
-			client.SendNetworkBehaviourUpdate(m_netID, net.m_index, net.GetNetVarBytes());
+			sendTo.SendNetworkBehaviourUpdate(m_netID, net.m_index, net.GetNetVarBytes());
 		}
 	}
 
@@ -120,7 +120,7 @@ public class NetworkObject : MonoBehaviour
 		if (NetworkManager.Mode == ENetworkMode.Host)
 		{
 			// Notify clients of object destruction
-			foreach (var client in Host.GetClients())
+			foreach (var client in Host.m_clients.Values)
 			{
 				client.SendDestroyGameObject(m_netID);
 			}
@@ -128,11 +128,6 @@ public class NetworkObject : MonoBehaviour
 
 		// Remove from list
 		NetworkObjectManager.RemoveNetworkObjectFromList(this);
-	}
-
-	public int GetNetID()
-	{
-		return m_netID;
 	}
 
 	private void Update()
@@ -159,7 +154,7 @@ public class NetworkObject : MonoBehaviour
 					if (NetworkManager.Mode == ENetworkMode.Host)
 					{
 						// Send to all clients
-						foreach (var client in Host.GetClients())
+						foreach (var client in Host.m_clients.Values)
 						{
 							client.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);
 						}
@@ -181,7 +176,7 @@ public class NetworkObject : MonoBehaviour
 								ESnapshotMessageType.NetworkBehaviourUpdate,
 								pMessage, buffer.Length,
 								ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
-								LocalClient.m_hConn
+								LocalClient.m_hServerConn
 							); ;
 						}
 						finally
