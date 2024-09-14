@@ -10,9 +10,6 @@ public class Player : NetworkBehaviour
 		if (IsOwner)
 		{
 			SetLocalOnlyStuffEnabled(true);
-
-			// fixes some warnings
-			GetComponentInChildren<Camera>().gameObject.AddComponent<AudioListener>();
 		}
 		else
 		{
