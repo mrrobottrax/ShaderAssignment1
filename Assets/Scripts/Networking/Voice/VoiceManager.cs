@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Audio;
 
 internal class VoiceManager : MonoBehaviour
 {
@@ -24,6 +25,7 @@ internal class VoiceManager : MonoBehaviour
 	{
 		public byte[] m_buffer;
 		public int m_end;
+		public AudioSource m_audioSource;
 	}
 
 
@@ -101,7 +103,7 @@ internal class VoiceManager : MonoBehaviour
 			{
 				IntPtr pData = handle.AddrOfPinnedObject();
 
-				NetworkManager.SendMessageAll(ESnapshotMessageType.VoiceData, pData, (int)nBytesWritten, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
+				NetworkManager.SendMessageAll(EMessageType.VoiceData, pData, (int)nBytesWritten, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
 			}
 			finally
 			{
@@ -122,7 +124,8 @@ internal class VoiceManager : MonoBehaviour
 			bufferStruct = new()
 			{
 				m_buffer = new byte[k_bufferSize],
-				m_end = 0
+				m_end = 0,
+				m_audioSource = sender.m_player.gameObject.AddComponent<AudioSource>()
 			};
 
 			m_playerBuffers.Add(sender.m_identity, bufferStruct);
@@ -141,13 +144,13 @@ internal class VoiceManager : MonoBehaviour
 			out uint nBytesWritten, m_sampleRate
 		);
 
-		_ = nBytesWritten;
-
-		Debug.Log(nBytesWritten);
-
 		if (result != EVoiceResult.k_EVoiceResultOK)
 		{
 			Debug.LogWarning(result);
+			return;
 		}
+
+		AudioClip audioClip = AudioClip.Create("Test", (int)nBytesWritten, 1, (int)m_sampleRate, true);
+		bufferStruct.m_audioSource.PlayOneShot(audioClip, 1);
 	}
 }

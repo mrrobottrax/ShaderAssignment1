@@ -2,24 +2,10 @@
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using Steamworks;
 
 internal static class SendFunctions
 {
-	public static void SendConnectAck(RemoteClient recepient)
-	{
-		ConnectAckMessage message = new()
-		{
-			m_playerObjectID = recepient.m_player.m_netID
-		};
-
-		NetworkManager.SendMessage(
-			ESnapshotMessageType.ConnectAck,
-			message,
-			ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
-			recepient.m_hConn
-		);
-	}
-
 	// Send NetVars of a NetworkBehaviour
 	public static void SendNetworkBehaviourUpdate(int networkID, int componentIndex, byte[] data, RemoteClient recepient = null)
 	{
@@ -36,7 +22,7 @@ internal static class SendFunctions
 			if (recepient == null)
 			{
 				NetworkManager.SendMessageAll(
-					ESnapshotMessageType.NetworkBehaviourUpdate,
+					EMessageType.NetworkBehaviourUpdate,
 					pMessage, buffer.Length,
 					ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable
 				);
@@ -44,7 +30,7 @@ internal static class SendFunctions
 			else
 			{
 				NetworkManager.SendMessage(
-					ESnapshotMessageType.NetworkBehaviourUpdate,
+					EMessageType.NetworkBehaviourUpdate,
 					pMessage, buffer.Length,
 					ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
 					recepient.m_hConn
@@ -78,7 +64,7 @@ internal static class SendFunctions
 		if (client != null)
 		{
 			NetworkManager.SendMessage(
-				ESnapshotMessageType.SceneChange,
+				EMessageType.SceneChange,
 				message,
 				ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
 				client.m_hConn
@@ -87,16 +73,17 @@ internal static class SendFunctions
 		else
 		{
 			NetworkManager.SendMessageAll(
-				ESnapshotMessageType.SceneChange,
+				EMessageType.SceneChange,
 				message,
 				ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable
 			);
 		}
 
-		// Send new objects
+		// Send new objects not included in scene file
+		// todo: this is just all of them
 		foreach (var networkObject in NetworkObjectManager.GetNetObjects())
 		{
-			SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID, client);
+			SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerIndentity, client);
 			SendObjectSnapshot(networkObject, client);
 		}
 	}
@@ -107,13 +94,13 @@ internal static class SendFunctions
 		{
 			if (client != recepient)
 			{
-				NewPeerMessage message = new()
+				AddPeerMessage message = new()
 				{
 					m_steamIdentity = client.m_identity,
 				};
 
 				NetworkManager.SendMessage(
-					ESnapshotMessageType.NewPeer,
+					EMessageType.AddPeer,
 					message,
 					ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
 					recepient.m_hConn
@@ -122,7 +109,7 @@ internal static class SendFunctions
 		}
 	}
 
-	public static void SendSpawnPrefab(int networkID, int prefabIndex, int ownerID, RemoteClient recepient = null)
+	public static void SendSpawnPrefab(int networkID, int prefabIndex, SteamNetworkingIdentity ownerIdentity, RemoteClient recepient = null)
 	{
 		if (prefabIndex == -1)
 		{
@@ -134,13 +121,13 @@ internal static class SendFunctions
 		{
 			m_networkID = networkID,
 			m_prefabIndex = prefabIndex,
-			m_ownerID = ownerID
+			m_ownerIdentity = ownerIdentity,
 		};
 
 		if (recepient != null)
 		{
 			NetworkManager.SendMessage(
-				ESnapshotMessageType.SpawnPrefab,
+				EMessageType.SpawnPrefab,
 				message,
 				ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
 				recepient.m_hConn
@@ -149,7 +136,7 @@ internal static class SendFunctions
 		else
 		{
 			NetworkManager.SendMessageAll(
-				ESnapshotMessageType.SpawnPrefab,
+				EMessageType.SpawnPrefab,
 				message,
 				ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable
 			);
@@ -164,7 +151,7 @@ internal static class SendFunctions
 		};
 
 		NetworkManager.SendMessageAll(
-			ESnapshotMessageType.RemoveGameObject,
+			EMessageType.RemoveGameObject,
 			message,
 			ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable
 		);

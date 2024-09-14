@@ -81,7 +81,7 @@ internal static class NetworkObjectManager
 		return m_persistentNetObjects.Values;
 	}
 
-	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message, bool isOwner)
+	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message)
 	{
 		if (message.m_prefabIndex == -1)
 		{
@@ -106,7 +106,7 @@ internal static class NetworkObjectManager
 		NetworkObject netObj = goPrefab.GetComponent<NetworkObject>();
 
 		netObj.m_netID = message.m_networkID;
-		netObj.m_ownerID = message.m_ownerID;
+		netObj.m_ownerIndentity = message.m_ownerIdentity;
 
 		if (message.m_networkID < 0)
 		{
@@ -119,7 +119,7 @@ internal static class NetworkObjectManager
 		// Set IsOwner of NetworkBehaviours
 		foreach (var component in netObj.m_networkBehaviours)
 		{
-			component.IsOwner = isOwner;
+			component.IsOwner = netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity);
 		}
 
 		return netObj;

@@ -24,7 +24,7 @@ public class Host : MonoBehaviour
 
 		m_hListenSocket = SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
 
-		m_player = SpawnPlayer(true);
+		m_player = SpawnPlayer(NetworkManager.m_localIdentity);
 
 	}
 
@@ -87,11 +87,11 @@ public class Host : MonoBehaviour
 
 	private void ProcessMessage(SteamNetworkingMessage_t message)
 	{
-		ESnapshotMessageType type = (ESnapshotMessageType)Marshal.ReadByte(message.m_pData);
+		EMessageType type = (EMessageType)Marshal.ReadByte(message.m_pData);
 
 		switch (type)
 		{
-			case ESnapshotMessageType.NetworkBehaviourUpdate:
+			case EMessageType.NetworkBehaviourUpdate:
 				NetworkBehaviour.ProcessUpdateMessage(message);
 				break;
 
@@ -126,7 +126,7 @@ public class Host : MonoBehaviour
 			if (!m_clients.TryGetValue(pCallback.m_info.m_identityRemote, out RemoteClient client))
 			{
 				// Add a new player
-				NetworkObject player = SpawnPlayer();
+				NetworkObject player = SpawnPlayer(pCallback.m_info.m_identityRemote);
 				client = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, player);
 				m_clients.Add(pCallback.m_info.m_identityRemote, client);
 			}
@@ -136,26 +136,21 @@ public class Host : MonoBehaviour
 			}
 
 			// Give initial info
-			SendFunctions.SendConnectAck(client);
 			SendFunctions.SendSceneInfo(client);
 
 			// Send DontDestroyOnLoad objects on first connection
 			foreach (var networkObject in NetworkObjectManager.GetPersistentNetObjects())
 			{
-				// Don't send their own player
-				if (networkObject.m_netID != client.m_player.m_netID)
-				{
-					Debug.Log("Sending spawn: " + networkObject.m_netID + " : " + networkObject.m_prefabIndex);
-					SendFunctions.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID, client);
-					SendFunctions.SendObjectSnapshot(networkObject, client);
-				}
+
+				SendFunctions.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerIndentity, client);
+				SendFunctions.SendObjectSnapshot(networkObject, client);
 			}
 
 			SendFunctions.SendPeers(client);
 		}
 	}
 
-	private NetworkObject SpawnPlayer(bool forHost = false)
+	private NetworkObject SpawnPlayer(SteamNetworkingIdentity owner)
 	{
 		GameObject goPlayer = Instantiate(NetworkData.GetPlayerPrefab());
 		DontDestroyOnLoad(goPlayer);
@@ -163,12 +158,12 @@ public class Host : MonoBehaviour
 		NetworkObject netObj = goPlayer.GetComponent<NetworkObject>();
 		netObj.ForceRegister();
 
-		netObj.m_ownerID = netObj.m_netID;
+		netObj.m_ownerIndentity = owner;
 
 		// Set IsOwner of NetworkBehaviours
 		foreach (var component in netObj.m_networkBehaviours)
 		{
-			component.IsOwner = forHost || netObj.m_ownerID == m_player.m_ownerID;
+			component.IsOwner = owner.Equals(NetworkManager.m_localIdentity);
 		}
 
 		return netObj;

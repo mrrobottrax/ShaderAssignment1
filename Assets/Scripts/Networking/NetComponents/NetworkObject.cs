@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Steamworks;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -10,7 +11,7 @@ public class NetworkObject : MonoBehaviour
 	internal int m_prefabIndex = -1; // Only used by spawned prefabs
 
 	internal int m_netID = 0;
-	internal int m_ownerID = 0; // 0 = server owned
+	internal SteamNetworkingIdentity m_ownerIndentity;
 
 	internal NetworkBehaviour[] m_networkBehaviours;
 
@@ -42,7 +43,7 @@ public class NetworkObject : MonoBehaviour
 
 	void Tick()
 	{
-		if (NetworkManager.PlayerID == m_ownerID)
+		if (NetworkManager.LocalIdentity.Equals(m_ownerIndentity))
 		{
 			// Scan NetworkBehaviours for changes
 			foreach (var net in m_networkBehaviours)
@@ -63,19 +64,19 @@ public class NetworkObject : MonoBehaviour
 	// Get NetID and add to lists and all that
 	public void ForceRegister()
 	{
-		if (NetworkManager.Mode != ENetworkMode.Client)
+		if (NetworkManager.Mode == ENetworkMode.Host)
 		{
 			if (m_netID == 0)
 			{
 				// Reserve net ID
 				m_netID = NetworkObjectManager.ReserveID(this);
 
-				// Notify clients of object creation
-				SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, m_ownerID);
-				SendFunctions.SendObjectSnapshot(this);
-
 				// Add to list
 				NetworkObjectManager.AddNetworkObjectToList(this);
+
+				// Notify clients of object creation
+				SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, NetworkManager.m_localIdentity);
+				SendFunctions.SendObjectSnapshot(this);
 			}
 		}
 	}

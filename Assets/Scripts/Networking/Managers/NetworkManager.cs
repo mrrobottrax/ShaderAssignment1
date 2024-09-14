@@ -16,6 +16,7 @@ public static class NetworkManager
 	internal static Host m_host;
 	internal static LocalClient m_localClient;
 	internal static ENetworkMode m_mode;
+	internal static SteamNetworkingIdentity m_localIdentity;
 
 	internal static bool m_tickFrame = false;
 
@@ -27,6 +28,11 @@ public static class NetworkManager
 		// Starts up steam relay, causing a small delay.
 		// VALVe recommends running this at game start if relay use is expected.
 		SteamNetworkingUtils.InitRelayNetworkAccess();
+
+		if (!SteamNetworkingSockets.GetIdentity(out m_localIdentity))
+		{
+			Debug.LogError("Failed to get identity from Steam");
+		}
 	}
 
 	// Destroy host and client objects
@@ -58,7 +64,7 @@ public static class NetworkManager
 
 	#region Send Functions
 
-	public static void SendMessageAll<T>(ESnapshotMessageType messageType, T message, ESteamNetworkingSend sendType) where T : struct
+	public static void SendMessageAll<T>(EMessageType messageType, T message, ESteamNetworkingSend sendType) where T : struct
 	{
 		// Pin the message object in memory
 		GCHandle handle = GCHandle.Alloc(message, GCHandleType.Pinned);
@@ -77,7 +83,7 @@ public static class NetworkManager
 		}
 	}
 
-	public static void SendMessageAll(ESnapshotMessageType messageType, System.IntPtr pData, int cbLength, ESteamNetworkingSend sendType)
+	public static void SendMessageAll(EMessageType messageType, System.IntPtr pData, int cbLength, ESteamNetworkingSend sendType)
 	{
 		if (!SteamManager.Initialized)
 			return;
@@ -122,7 +128,7 @@ public static class NetworkManager
 		}
 	}
 
-	public static void SendMessage<T>(ESnapshotMessageType messageType, T message, ESteamNetworkingSend sendType, HSteamNetConnection hConn) where T : struct
+	public static void SendMessage<T>(EMessageType messageType, T message, ESteamNetworkingSend sendType, HSteamNetConnection hConn) where T : struct
 	{
 		// Pin the message object in memory
 		GCHandle handle = GCHandle.Alloc(message, GCHandleType.Pinned);
@@ -141,7 +147,7 @@ public static class NetworkManager
 		}
 	}
 
-	public static void SendMessage(ESnapshotMessageType messageType, System.IntPtr pData, int cbLength, ESteamNetworkingSend sendType, HSteamNetConnection hConn)
+	public static void SendMessage(EMessageType messageType, System.IntPtr pData, int cbLength, ESteamNetworkingSend sendType, HSteamNetConnection hConn)
 	{
 		if (!SteamManager.Initialized)
 			return;
@@ -178,18 +184,11 @@ public static class NetworkManager
 	public delegate void ModeChange(ENetworkMode mode);
 	public static ModeChange OnModeChange;
 
-	public static int PlayerID
+	public static SteamNetworkingIdentity LocalIdentity
 	{
 		get
 		{
-			if (m_mode == ENetworkMode.Host)
-			{
-				return Host.m_player.m_netID;
-			}
-			else
-			{
-				return m_localClient.m_player.m_netID;
-			}
+			return m_localIdentity;
 		}
 	}
 

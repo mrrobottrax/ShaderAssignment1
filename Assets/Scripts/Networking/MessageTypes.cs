@@ -1,19 +1,13 @@
 ﻿using Steamworks;
 
-public enum ESnapshotMessageType : byte
+public enum EMessageType : byte
 {
-	ConnectAck,
 	SceneChange,
 	SpawnPrefab,
 	RemoveGameObject,
 	NetworkBehaviourUpdate,
 	VoiceData,
-	NewPeer
-}
-
-struct ConnectAckMessage
-{
-	public int m_playerObjectID;
+	AddPeer,
 }
 
 struct SceneChangeMessage
@@ -23,9 +17,9 @@ struct SceneChangeMessage
 
 struct SpawnPrefabMessage
 {
-	public int m_networkID;
 	public int m_prefabIndex;
-	public int m_ownerID;
+	public int m_networkID;
+	public SteamNetworkingIdentity m_ownerIdentity;
 }
 
 struct RemoveObjectMessage
@@ -39,7 +33,8 @@ struct NetworkBehaviourUpdateMessage
 	public int m_componentIndex;
 }
 
-struct NewPeerMessage
+struct AddPeerMessage
 {
 	public SteamNetworkingIdentity m_steamIdentity;
+	public int m_networkID;
 }
