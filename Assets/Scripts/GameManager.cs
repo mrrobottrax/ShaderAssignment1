@@ -44,8 +44,8 @@ public class GameManager : MonoBehaviour
 
 	public static void StartHosting()
 	{
-		NetworkManager.StartHosting();
 		SceneManager.LoadScene(1);
+		NetworkManager.StartHosting();
 		ChangeGameState(EGameState.OnBreak);
 	}
 
