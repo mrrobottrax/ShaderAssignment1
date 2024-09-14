@@ -96,7 +96,7 @@ internal static class SendFunctions
 		// Send new objects
 		foreach (var networkObject in NetworkObjectManager.GetNetObjects())
 		{
-			SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID);
+			SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID, client);
 			SendObjectSnapshot(networkObject, client);
 		}
 	}
