@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -36,10 +37,13 @@ public class NetworkAnimatorSync : NetworkBehaviour
 		int index = 0;
 		foreach (var param in m_animator.parameters)
 		{
+			byte[] bytes;
+
 			switch (param.type)
 			{
 				case AnimatorControllerParameterType.Bool:
-					ParamToBytes(m_animator.GetBool(param.nameHash), index);
+					bytes = BitConverter.GetBytes(m_animator.GetBool(param.nameHash));
+					CopyParamToBuffer(bytes, index);
 					break;
 			}
 
@@ -47,48 +51,29 @@ public class NetworkAnimatorSync : NetworkBehaviour
 		}
 	}
 
-	void ParamToBytes(object paramValue, int index)
+	void CopyParamToBuffer(byte[] bytes, int index)
 	{
-		// Get parameters as binary
-
-		GCHandle handle = GCHandle.Alloc(paramValue, GCHandleType.Pinned);
-		try
-		{
-			IntPtr pValue = handle.AddrOfPinnedObject();
-			Marshal.Copy(pValue, m_paramsBuffer, index * 4, 4);
-		}
-		finally
-		{
-			handle.Free();
-		}
+		Array.Copy(bytes, 0, m_paramsBuffer, index * 4, bytes.Length);
 	}
 
 	void OnRcvParams()
 	{
 		// Set parameters using binary data
 
-		GCHandle handle = GCHandle.Alloc(m_paramsBuffer, GCHandleType.Pinned);
-		try
+		int index = 0;
+		foreach (var param in m_animator.parameters)
 		{
-			int index = 0;
-			foreach (var param in m_animator.parameters)
+			ArraySegment<byte> paramBytes = new(m_paramsBuffer, 4 * index, 4);
+
+			switch (param.type)
 			{
-				IntPtr pValue = handle.AddrOfPinnedObject() + 4 * index;
-
-				switch (param.type)
-				{
-					case AnimatorControllerParameterType.Bool:
-						bool bValue = Marshal.PtrToStructure<bool>(pValue);
-						m_animator.SetBool(param.nameHash, bValue);
-						break;
-				}
-
-				++index;
+				case AnimatorControllerParameterType.Bool:
+					bool bValue = BitConverter.ToBoolean(paramBytes);
+					m_animator.SetBool(param.nameHash, bValue);
+					break;
 			}
-		}
-		finally
-		{
-			handle.Free();
+
+			++index;
 		}
 	}
 }

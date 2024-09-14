@@ -6,6 +6,7 @@ public class TickManager : MonoBehaviour
 	float m_nextTickTime = 0;
 
 	public static Action OnTick;
+	public static Action OnLateTick;
 
 	[RuntimeInitializeOnLoadMethod]
 	static void Initialize()
@@ -25,6 +26,7 @@ public class TickManager : MonoBehaviour
 			m_nextTickTime = Time.time + NetworkData.GetTickDelta();
 
 			OnTick?.Invoke();
+			OnLateTick?.Invoke();
 		}
 	}
 }

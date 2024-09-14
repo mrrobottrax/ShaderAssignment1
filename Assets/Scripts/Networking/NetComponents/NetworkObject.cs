@@ -17,7 +17,7 @@ public class NetworkObject : MonoBehaviour
 
 	private void Awake()
 	{
-		TickManager.OnTick += Tick;
+		TickManager.OnLateTick += LateTick;
 
 		InitNetworkBehaviours();
 	}
@@ -32,7 +32,7 @@ public class NetworkObject : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		TickManager.OnTick -= Tick;
+		TickManager.OnLateTick -= LateTick;
 
 		// Notify clients of destruction
 		if (NetworkManager.Mode == ENetworkMode.Host)
@@ -44,7 +44,7 @@ public class NetworkObject : MonoBehaviour
 		NetworkObjectManager.RemoveNetworkObjectFromList(this);
 	}
 
-	void Tick()
+	void LateTick()
 	{
 		if (NetworkManager.LocalIdentity.Equals(m_ownerIndentity))
 		{
