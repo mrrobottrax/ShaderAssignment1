@@ -1,25 +1,55 @@
 using Steamworks;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-internal static class VoiceManager
+internal class VoiceManager : MonoBehaviour
 {
-	[RuntimeInitializeOnLoadMethod()]
+	const uint k_bufferSize = 20 * 1024;
+
+
+	static VoiceManager s_instance;
+	public static VoiceManager Instance { get { return s_instance; } }
+
+	[RuntimeInitializeOnLoadMethod]
 	static void Init()
 	{
-		NetworkManager.OnModeChange += OnModeChange;
-		TickManager.OnTick += OnTick;
+		s_instance = new GameObject("Voice Manager").AddComponent<VoiceManager>();
+		DontDestroyOnLoad(s_instance);
 	}
 
-	static bool m_recording = false;
-	static uint m_sampleRate;
 
-	static readonly byte[] m_playBackBuffer = new byte[20 * 1024];
-	static uint m_bufferFill = 0;
-
-	static void OnModeChange(ENetworkMode mode)
+	struct PlayerBuffer
 	{
+		public byte[] m_buffer;
+		public int m_end;
+	}
+
+
+	bool m_recording = false;
+	uint m_sampleRate;
+
+
+	readonly Dictionary<SteamNetworkingIdentity, PlayerBuffer> m_playerBuffers = new();
+
+
+	private void Awake()
+	{
+		NetworkManager.OnModeChange += OnModeChange;
+		//TickManager.OnTick += OnTick;
+	}
+
+	private void OnDestroy()
+	{
+		NetworkManager.OnModeChange -= OnModeChange;
+		//TickManager.OnTick -= OnTick;
+	}
+
+	void OnModeChange(ENetworkMode mode)
+	{
+		Debug.Log($"Mode chage: {mode}");
+
 		if (mode == ENetworkMode.None)
 		{
 			StopRecording();
@@ -30,20 +60,28 @@ internal static class VoiceManager
 		}
 	}
 
-	public static void StartRecording()
+	public void StartRecording()
 	{
+		Debug.Log("Start recording");
+
 		SteamUser.StartVoiceRecording();
 		m_sampleRate = SteamUser.GetVoiceOptimalSampleRate();
 		m_recording = true;
+
+		SteamFriends.SetInGameVoiceSpeaking(new CSteamID(), true);
 	}
 
-	public static void StopRecording()
+	public void StopRecording()
 	{
+		Debug.Log("Stop recording");
+
 		SteamUser.StopVoiceRecording();
 		m_recording = false;
+
+		m_playerBuffers.Clear();
 	}
 
-	private static void OnTick()
+	private void Update()
 	{
 		if (!m_recording) return;
 
@@ -52,9 +90,9 @@ internal static class VoiceManager
 		if (result == EVoiceResult.k_EVoiceResultOK)
 		{
 			byte[] voiceBuffer = new byte[cbCompressed];
-			SteamUser.GetVoice(true, voiceBuffer, (uint)voiceBuffer.Length, out uint nBytesWritted);
+			SteamUser.GetVoice(true, voiceBuffer, (uint)voiceBuffer.Length, out uint nBytesWritten);
 
-			if (nBytesWritted == 0) return;
+			if (nBytesWritten == 0) return;
 
 			// send voice data
 			GCHandle handle = GCHandle.Alloc(voiceBuffer, GCHandleType.Pinned);
@@ -63,7 +101,7 @@ internal static class VoiceManager
 			{
 				IntPtr pData = handle.AddrOfPinnedObject();
 
-				NetworkManager.SendMessageAll(ESnapshotMessageType.VoiceData, pData, (int)nBytesWritted, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
+				NetworkManager.SendMessageAll(ESnapshotMessageType.VoiceData, pData, (int)nBytesWritten, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
 			}
 			finally
 			{
@@ -76,19 +114,40 @@ internal static class VoiceManager
 		}
 	}
 
-	public static void ReceiveVoice(SteamNetworkingMessage_t message, Peer sender)
+	public void ReceiveVoice(SteamNetworkingMessage_t message, Peer sender)
 	{
-		_ = sender;
+		// Check if peer needs a buffer
+		if (!m_playerBuffers.TryGetValue(sender.m_identity, out PlayerBuffer bufferStruct))
+		{
+			bufferStruct = new()
+			{
+				m_buffer = new byte[k_bufferSize],
+				m_end = 0
+			};
 
+			m_playerBuffers.Add(sender.m_identity, bufferStruct);
+		}
+
+		// Copy into byte array
 		byte[] buffer = new byte[message.m_cbSize - 1];
-
 		Marshal.Copy(message.m_pData + 1, buffer, 0, buffer.Length);
 
-		EVoiceResult result = SteamUser.DecompressVoice(buffer, (uint)buffer.Length, m_playBackBuffer, (uint)m_playBackBuffer.Length, out uint nBytesWritten, m_sampleRate);
+		byte[] pPlayBuffer = bufferStruct.m_buffer;
 
-		if (result == EVoiceResult.k_EVoiceResultOK)
+		// Decompress
+		EVoiceResult result = SteamUser.DecompressVoice(
+			buffer, (uint)buffer.Length,
+			pPlayBuffer, (uint)pPlayBuffer.Length,
+			out uint nBytesWritten, m_sampleRate
+		);
+
+		_ = nBytesWritten;
+
+		Debug.Log(nBytesWritten);
+
+		if (result != EVoiceResult.k_EVoiceResultOK)
 		{
-			m_bufferFill = nBytesWritten;
+			Debug.LogWarning(result);
 		}
 	}
 }

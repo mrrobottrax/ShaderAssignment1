@@ -156,7 +156,8 @@ internal class LocalClient : MonoBehaviour
 
 			// Receive voice
 			case ESnapshotMessageType.VoiceData:
-				VoiceManager.ReceiveVoice(message, sender);
+				if (VoiceManager.Instance != null)
+					VoiceManager.Instance.ReceiveVoice(message, sender);
 				break;
 
 			default:

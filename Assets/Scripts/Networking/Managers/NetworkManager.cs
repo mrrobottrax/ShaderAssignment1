@@ -215,6 +215,7 @@ public static class NetworkManager
 	public static void StartHosting()
 	{
 		m_mode = ENetworkMode.Host;
+		OnModeChange.Invoke(m_mode);
 
 		// Create host script
 		ClearHostAndClient();
@@ -226,6 +227,7 @@ public static class NetworkManager
 	public static void JoinGame(SteamNetworkingIdentity server)
 	{
 		m_mode = ENetworkMode.Client;
+		OnModeChange.Invoke(m_mode);
 
 		// Create client script
 		ClearHostAndClient();

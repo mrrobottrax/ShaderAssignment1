@@ -23,8 +23,8 @@ public class TickManager : MonoBehaviour
 		if (Time.time >= m_nextTickTime)
 		{
 			m_nextTickTime = Time.time + NetworkData.GetTickDelta();
-			
-			OnTick();
+
+			OnTick?.Invoke();
 		}
 	}
 }
