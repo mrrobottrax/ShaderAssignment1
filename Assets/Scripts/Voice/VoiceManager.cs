@@ -40,7 +40,7 @@ public class VoiceManager : MonoBehaviour
 			{
 				IntPtr pData = handle.AddrOfPinnedObject();
 
-				NetworkManager.SendMessageAll(ESnapshotMessageType.VoiceData, pData, (int)nBytesWritted, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
+				//NetworkManager.SendMessageAll(ESnapshotMessageType.VoiceData, pData, (int)nBytesWritted, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
 			}
 			finally
 			{
