@@ -91,6 +91,7 @@ internal class LocalClient : MonoBehaviour
 			// Spawn local player
 			case ESnapshotMessageType.ConnectAck:
 				ConnectAckMessage connectAck = Marshal.PtrToStructure<ConnectAckMessage>(message.m_pData + 1);
+				Debug.Log("Connect ack " + connectAck.m_playerObjectID);
 
 				SpawnPrefabMessage spawn = new()
 				{
@@ -99,32 +100,30 @@ internal class LocalClient : MonoBehaviour
 					m_prefabIndex = NetworkData.k_playerPrefabIndex
 				};
 				m_player = NetworkObjectManager.SpawnNetworkPrefab(spawn, true);
-
-				Debug.Log("Connect ack " + connectAck.m_playerObjectID);
 				break;
 
 			// Load scene
 			case ESnapshotMessageType.SceneChange:
 				SceneChangeMessage sceneChange = Marshal.PtrToStructure<SceneChangeMessage>(message.m_pData + 1);
-				SceneManager.LoadScene(sceneChange.m_sceneIndex);
-
 				Debug.Log("Scene change " + sceneChange.m_sceneIndex);
+
+				SceneManager.LoadScene(sceneChange.m_sceneIndex);
 				break;
 
 			// Spawn a network prefab
 			case ESnapshotMessageType.SpawnPrefab:
 				SpawnPrefabMessage spawnPrefab = Marshal.PtrToStructure<SpawnPrefabMessage>(message.m_pData + 1);
+				Debug.Log("Object spawn " + spawnPrefab.m_networkID);
 
 				NetworkObjectManager.SpawnNetworkPrefab(spawnPrefab, false);
-				Debug.Log("Object spawn");
 				break;
 
 			// Delete a network object
 			case ESnapshotMessageType.RemoveGameObject:
 				RemoveObjectMessage removeObject = Marshal.PtrToStructure<RemoveObjectMessage>(message.m_pData + 1);
+				Debug.Log("Remove object " + removeObject.m_networkID);
 
 				NetworkObjectManager.RemoveObject(removeObject);
-				Debug.Log("Remove object");
 				break;
 
 			// Update a network behaviour
@@ -135,6 +134,7 @@ internal class LocalClient : MonoBehaviour
 			// Add a new peer
 			case ESnapshotMessageType.NewPeer:
 				NewPeerMessage peerMessage = Marshal.PtrToStructure<NewPeerMessage>(message.m_pData + 1);
+				Debug.Log("New peer " + peerMessage.m_steamIdentity.GetSteamID64());
 
 				SteamNetworkingSockets.ConnectP2P(ref peerMessage.m_steamIdentity, 0, 0, null);
 				break;
