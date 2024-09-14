@@ -151,13 +151,7 @@ internal class LocalClient : MonoBehaviour
 				NewPeerMessage peerMessage = Marshal.PtrToStructure<NewPeerMessage>(message.m_pData + 1);
 				Debug.LogWarning("New peer " + peerMessage.m_steamIdentity.GetSteamID64());
 
-				HSteamNetConnection hConn = SteamNetworkingSockets.ConnectP2P(ref peerMessage.m_steamIdentity, 0, 0, null);
-				Peer peer = new()
-				{
-					m_identity = peerMessage.m_steamIdentity,
-					m_hConn = hConn,
-				};
-				m_peers.Add(peer);
+				SteamNetworkingSockets.ConnectP2P(ref peerMessage.m_steamIdentity, 0, 0, null);
 				break;
 
 			// Receive voice
@@ -190,14 +184,13 @@ internal class LocalClient : MonoBehaviour
 		{
 			if (pCallback.m_hConn != m_server.m_hConn)
 			{
-				// Next connections are peers
 				Peer peer = new()
 				{
 					m_identity = pCallback.m_info.m_identityRemote,
 					m_hConn = pCallback.m_hConn,
 				};
 				m_peers.Add(peer);
-				Debug.LogWarning("New peer");
+				Debug.LogWarning("Peer added");
 			}
 		}
 	}
