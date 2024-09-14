@@ -61,7 +61,7 @@ internal class LocalClient : MonoBehaviour
 
 	private void ReceiveMessages()
 	{
-		IntPtr[] pMessages = new IntPtr[NetworkManager.k_maxMessages];
+		IntPtr[] pMessages = new IntPtr[NetworkData.k_maxMessages];
 
 		int messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(m_hServerConn, pMessages, pMessages.Length);
 
@@ -88,23 +88,30 @@ internal class LocalClient : MonoBehaviour
 
 		switch (type)
 		{
-			case ESnapshotMessageType.SceneChange:
-				SceneChangeMessage sceneChange = Marshal.PtrToStructure<SceneChangeMessage>(message.m_pData + 1);
+			// Spawn local player
+			case ESnapshotMessageType.ConnectAck:
+				ConnectAckMessage connectAck = Marshal.PtrToStructure<ConnectAckMessage>(message.m_pData + 1);
 
-				SceneManager.LoadScene(sceneChange.m_sceneIndex);
-
-				// Spawn my own player
 				SpawnPrefabMessage spawn = new()
 				{
-					m_networkID = sceneChange.m_playerObjectID,
-					m_ownerID = sceneChange.m_playerObjectID,
+					m_networkID = connectAck.m_playerObjectID,
+					m_ownerID = connectAck.m_playerObjectID,
 					m_prefabIndex = NetworkData.k_playerPrefabIndex
 				};
 				m_player = NetworkObjectManager.SpawnNetworkPrefab(spawn, true);
 
-				Debug.Log("Scene change " + sceneChange.m_playerObjectID);
+				Debug.Log("Connect ack " + connectAck.m_playerObjectID);
 				break;
 
+			// Load scene
+			case ESnapshotMessageType.SceneChange:
+				SceneChangeMessage sceneChange = Marshal.PtrToStructure<SceneChangeMessage>(message.m_pData + 1);
+				SceneManager.LoadScene(sceneChange.m_sceneIndex);
+
+				Debug.Log("Scene change " + sceneChange.m_sceneIndex);
+				break;
+
+			// Spawn a network prefab
 			case ESnapshotMessageType.SpawnPrefab:
 				SpawnPrefabMessage spawnPrefab = Marshal.PtrToStructure<SpawnPrefabMessage>(message.m_pData + 1);
 
@@ -112,6 +119,7 @@ internal class LocalClient : MonoBehaviour
 				Debug.Log("Object spawn");
 				break;
 
+			// Delete a network object
 			case ESnapshotMessageType.RemoveGameObject:
 				RemoveObjectMessage removeObject = Marshal.PtrToStructure<RemoveObjectMessage>(message.m_pData + 1);
 
@@ -119,8 +127,16 @@ internal class LocalClient : MonoBehaviour
 				Debug.Log("Remove object");
 				break;
 
+			// Update a network behaviour
 			case ESnapshotMessageType.NetworkBehaviourUpdate:
 				NetworkBehaviour.ProcessUpdateMessage(message);
+				break;
+
+			// Add a new peer
+			case ESnapshotMessageType.NewPeer:
+				NewPeerMessage peerMessage = Marshal.PtrToStructure<NewPeerMessage>(message.m_pData + 1);
+
+				SteamNetworkingSockets.ConnectP2P(ref peerMessage.m_steamIdentity, 0, 0, null);
 				break;
 
 			default:
@@ -151,6 +167,7 @@ internal class LocalClient : MonoBehaviour
 			{
 				// Next connections are peers
 				Debug.LogWarning("Peer connecting");
+				m_hPeerConns.Add(pCallback.m_hConn);
 			}
 		}
 	}

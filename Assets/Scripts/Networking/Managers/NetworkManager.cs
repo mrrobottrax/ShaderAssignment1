@@ -13,8 +13,6 @@ public static class NetworkManager
 {
 	static Callback<GameRichPresenceJoinRequested_t> m_GameRichPresenceJoinRequested;
 
-	internal const int k_maxMessages = 64;
-
 	internal static Host m_host;
 	internal static LocalClient m_localClient;
 	internal static ENetworkMode m_mode;
@@ -172,6 +170,21 @@ public static class NetworkManager
 
 	public static ENetworkMode Mode { get { return m_mode; } }
 
+	public static int PlayerID
+	{
+		get
+		{
+			if (m_mode == ENetworkMode.Host)
+			{
+				return Host.m_player.m_netID;
+			}
+			else
+			{
+				return LocalClient.m_player.m_netID;
+			}
+		}
+	}
+
 	public static void SetGameJoinable(bool joinable)
 	{
 		if (m_mode == ENetworkMode.Client)
@@ -213,18 +226,6 @@ public static class NetworkManager
 		Object.DontDestroyOnLoad(m_localClient.gameObject);
 
 		m_localClient.Connect(server);
-	}
-
-	public static int GetPlayerNetID()
-	{
-		if (m_mode == ENetworkMode.Host)
-		{
-			return Host.m_player.m_netID;
-		}
-		else
-		{
-			return LocalClient.m_player.m_netID;
-		}
 	}
 
 	public static NetworkObject GetLocalPlayer()

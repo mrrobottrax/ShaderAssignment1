@@ -95,11 +95,8 @@ public class NetworkObject : MonoBehaviour
 				m_netID = NetworkObjectManager.ReserveID(this);
 
 				// Notify clients of object creation
-				foreach (var client in Host.m_clients.Values)
-				{
-					client.SendSpawnPrefab(m_netID, m_prefabIndex, m_ownerID);
-					SendFullSnapshotToClient(client);
-				}
+				SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, m_ownerID);
+				SendFunctions.SendObjectSnapshot(this);
 
 				// Add to list
 				NetworkObjectManager.AddNetworkObjectToList(this);
@@ -107,23 +104,11 @@ public class NetworkObject : MonoBehaviour
 		}
 	}
 
-	internal void SendFullSnapshotToClient(RemoteClient sendTo)
-	{
-		foreach (var net in m_networkBehaviours)
-		{
-			sendTo.SendNetworkBehaviourUpdate(m_netID, net.m_index, net.GetNetVarBytes());
-		}
-	}
-
 	private void OnDestroy()
 	{
 		if (NetworkManager.Mode == ENetworkMode.Host)
 		{
-			// Notify clients of object destruction
-			foreach (var client in Host.m_clients.Values)
-			{
-				client.SendDestroyGameObject(m_netID);
-			}
+			SendFunctions.SendDestroyGameObject(m_netID);
 		}
 
 		// Remove from list
@@ -138,7 +123,7 @@ public class NetworkObject : MonoBehaviour
 
 	void Tick()
 	{
-		if (NetworkManager.GetPlayerNetID() == m_ownerID)
+		if (NetworkManager.PlayerID == m_ownerID)
 		{
 			// Scan NetworkBehaviours for changes
 			foreach (var net in m_networkBehaviours)
@@ -150,41 +135,7 @@ public class NetworkObject : MonoBehaviour
 					// Change detected
 					net.m_netVarBuffer = newBytes;
 
-					// Broadcast new NetVars
-					if (NetworkManager.Mode == ENetworkMode.Host)
-					{
-						// Send to all clients
-						foreach (var client in Host.m_clients.Values)
-						{
-							client.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);
-						}
-					}
-					else
-					{
-						// Send to host
-						byte[] buffer = NetworkBehaviour.CreateMessageBuffer(m_netID, net.m_index, newBytes);
-
-						// Pin the buffer in memory
-						GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-						try
-						{
-							// Get the pointer to the buffer
-							IntPtr pMessage = handle.AddrOfPinnedObject();
-
-							// Send the message
-							NetworkManager.SendMessage(
-								ESnapshotMessageType.NetworkBehaviourUpdate,
-								pMessage, buffer.Length,
-								ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
-								LocalClient.m_hServerConn
-							); ;
-						}
-						finally
-						{
-							// Free the pinned object
-							handle.Free();
-						}
-					}
+					SendFunctions.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);
 				}
 			}
 		}

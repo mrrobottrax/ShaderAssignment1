@@ -67,7 +67,7 @@ public class Host : MonoBehaviour
 
 	private void ReceiveMessages(RemoteClient client)
 	{
-		IntPtr[] pMessages = new IntPtr[64];
+		IntPtr[] pMessages = new IntPtr[NetworkData.k_maxMessages];
 
 		int messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(client.m_hConn, pMessages, pMessages.Length);
 
@@ -80,14 +80,14 @@ public class Host : MonoBehaviour
 		{
 			SteamNetworkingMessage_t message = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pMessages[i]);
 
-			ProcessMessage(message, client);
+			ProcessMessage(message);
 
 			// Free data
 			SteamNetworkingMessage_t.Release(pMessages[i]);
 		}
 	}
 
-	private void ProcessMessage(SteamNetworkingMessage_t message, RemoteClient sender)
+	private void ProcessMessage(SteamNetworkingMessage_t message)
 	{
 		ESnapshotMessageType type = (ESnapshotMessageType)Marshal.ReadByte(message.m_pData);
 
@@ -95,13 +95,6 @@ public class Host : MonoBehaviour
 		{
 			case ESnapshotMessageType.NetworkBehaviourUpdate:
 				NetworkBehaviour.ProcessUpdateMessage(message);
-
-				// Tell all clients about this change too
-				foreach (var client in m_clients.Values)
-				{
-					if (client != sender)
-						SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, message.m_pData, (uint)message.m_cbSize, message.m_nFlags, out _);
-				}
 				break;
 
 			default:
@@ -113,10 +106,7 @@ public class Host : MonoBehaviour
 	private void OnSceneChange(Scene oldScene, Scene newScene)
 	{
 		// Tell all clients to change scene
-		foreach (var client in m_clients)
-		{
-			client.Value.SendSceneInfo();
-		}
+		SendFunctions.SendSceneInfo();
 	}
 
 	private void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t pCallback)
@@ -146,16 +136,19 @@ public class Host : MonoBehaviour
 				client.UpdateConnection(pCallback.m_hConn);
 			}
 
-			client.SendSceneInfo();
-			client.SendPeers();
+			// Give initial info
+			SendFunctions.SendConnectAck(client);
+			SendFunctions.SendSceneInfo(client);
+			SendFunctions.SendPeers(client);
 
-			// Send DontDestroyOnLoad objects on first connect only
+			// Send DontDestroyOnLoad objects on first connection
 			foreach (var networkObject in NetworkObjectManager.GetPersistentNetObjects())
 			{
+				// Don't send their own player
 				if (networkObject.m_netID != client.m_player.m_netID)
 				{
-					client.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID);
-					networkObject.SendFullSnapshotToClient(client);
+					SendFunctions.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID, client);
+					SendFunctions.SendObjectSnapshot(networkObject, client);
 				}
 			}
 		}

@@ -16,7 +16,8 @@ internal class NetworkData : ScriptableObject
 
 	[SerializeField] int m_ticksPerSecond = 24;
 
-	public const int k_playerPrefabIndex = -256;
+	internal const int k_playerPrefabIndex = -256;
+	internal const int k_maxMessages = 64;
 
 	[SerializeField] GameObject m_playerPrefab;
 	[SerializeField] GameObject[] m_networkPrefabs;
