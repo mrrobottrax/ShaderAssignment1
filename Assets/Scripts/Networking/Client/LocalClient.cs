@@ -61,8 +61,6 @@ internal class LocalClient : MonoBehaviour
 
 	internal void Tick()
 	{
-		SteamNetworkingSockets.FlushMessagesOnConnection(NetworkManager.m_peers[m_serverID].m_hConn);
-
 		foreach (var peer in NetworkManager.m_peers.Values)
 		{
 			SteamNetworkingSockets.FlushMessagesOnConnection(peer.m_hConn);
