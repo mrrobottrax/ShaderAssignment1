@@ -174,6 +174,9 @@ internal class LocalClient : MonoBehaviour
 				// Next connections are peers
 				m_hPeerConns.Add(pCallback.m_hConn);
 				Debug.LogWarning("New peer");
+
+				RemoteClient rc = new(pCallback.m_hConn,pCallback.m_info.m_identityRemote, null);
+				SendFunctions.SendConnectAck(rc);
 			}
 		}
 	}
