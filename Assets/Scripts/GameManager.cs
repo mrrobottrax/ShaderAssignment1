@@ -45,6 +45,14 @@ public class GameManager : MonoBehaviour
 	public static void StartHosting()
 	{
 		SceneManager.LoadScene(1);
+		SceneManager.activeSceneChanged += StartHostingPart2;
+	}
+
+	// Called after scene change to fix warning about 2 audio listeners
+	static void StartHostingPart2(Scene oldScene, Scene newScene)
+	{
+		SceneManager.activeSceneChanged -= StartHostingPart2;
+
 		NetworkManager.StartHosting();
 		ChangeGameState(EGameState.OnBreak);
 	}
