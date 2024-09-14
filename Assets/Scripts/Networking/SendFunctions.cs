@@ -7,7 +7,7 @@ using Steamworks;
 internal static class SendFunctions
 {
 	// Send NetVars of a NetworkBehaviour
-	public static void SendNetworkBehaviourUpdate(int networkID, int componentIndex, byte[] data, RemoteClient recepient = null)
+	public static void SendNetworkBehaviourUpdate(int networkID, int componentIndex, byte[] data, Peer recepient = null)
 	{
 		byte[] buffer = NetworkBehaviour.CreateMessageBuffer(networkID, componentIndex, data);
 
@@ -45,7 +45,7 @@ internal static class SendFunctions
 	}
 
 	// Send a full snapshot of an object
-	public static void SendObjectSnapshot(NetworkObject obj, RemoteClient recepient = null)
+	public static void SendObjectSnapshot(NetworkObject obj, Peer recepient = null)
 	{
 		foreach (var net in obj.m_networkBehaviours)
 		{
@@ -54,7 +54,7 @@ internal static class SendFunctions
 	}
 
 	// Send this client the scene index
-	public static void SendSceneInfo(RemoteClient client = null)
+	public static void SendSceneInfo(Peer client = null)
 	{
 		SceneChangeMessage message = new()
 		{
@@ -88,9 +88,9 @@ internal static class SendFunctions
 		}
 	}
 
-	public static void SendPeers(RemoteClient recepient)
+	public static void SendPeers(Peer recepient)
 	{
-		foreach (var client in NetworkManager.m_host.m_clients.Values)
+		foreach (var client in NetworkManager.m_peers.Values)
 		{
 			if (client != recepient)
 			{
@@ -109,7 +109,7 @@ internal static class SendFunctions
 		}
 	}
 
-	public static void SendSpawnPrefab(int networkID, int prefabIndex, SteamNetworkingIdentity ownerIdentity, RemoteClient recepient = null)
+	public static void SendSpawnPrefab(int networkID, int prefabIndex, SteamNetworkingIdentity ownerIdentity, Peer recepient = null)
 	{
 		if (prefabIndex == -1)
 		{

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Steamworks;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 public enum ENetworkMode
 {
@@ -19,6 +20,8 @@ public static class NetworkManager
 	internal static SteamNetworkingIdentity m_localIdentity;
 
 	internal static bool m_tickFrame = false;
+
+	internal static Dictionary<SteamNetworkingIdentity, Peer> m_peers = new(); // all other players
 
 	[RuntimeInitializeOnLoadMethod]
 	static void Initialize()
@@ -102,25 +105,14 @@ public static class NetworkManager
 			System.IntPtr pBuffer = handle.AddrOfPinnedObject();
 
 			// Send the message
-			if (m_mode == ENetworkMode.Host)
+			if (m_peers != null)
 			{
-				if (m_host.m_clients != null)
-					foreach (var client in m_host.m_clients.Values)
-					{
-						SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
-					}
+				foreach (var client in m_peers.Values)
+				{
+					SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+				}
 			}
-			else
-			{
-				if (m_localClient.m_peers != null)
-					foreach (var peer in m_localClient.m_peers)
-					{
-						SteamNetworkingSockets.SendMessageToConnection(peer.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
-					}
 
-				if (m_localClient.m_server.m_hConn != null)
-					SteamNetworkingSockets.SendMessageToConnection(m_localClient.m_server.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
-			}
 		}
 		finally
 		{

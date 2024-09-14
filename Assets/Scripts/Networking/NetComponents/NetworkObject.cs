@@ -24,7 +24,10 @@ public class NetworkObject : MonoBehaviour
 
 	private void Start()
 	{
-		ForceRegister();
+		if (NetworkManager.Mode == ENetworkMode.Host)
+		{
+			ForceRegister();
+		}
 	}
 
 	private void OnDestroy()
@@ -64,20 +67,17 @@ public class NetworkObject : MonoBehaviour
 	// Get NetID and add to lists and all that
 	public void ForceRegister()
 	{
-		if (NetworkManager.Mode == ENetworkMode.Host)
+		if (m_netID == 0)
 		{
-			if (m_netID == 0)
-			{
-				// Reserve net ID
-				m_netID = NetworkObjectManager.ReserveID(this);
+			// Reserve net ID
+			m_netID = NetworkObjectManager.ReserveID(this);
 
-				// Add to list
-				NetworkObjectManager.AddNetworkObjectToList(this);
+			// Add to list
+			NetworkObjectManager.AddNetworkObjectToList(this);
 
-				// Notify clients of object creation
-				SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, NetworkManager.m_localIdentity);
-				SendFunctions.SendObjectSnapshot(this);
-			}
+			// Notify peers of object creation
+			SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, NetworkManager.m_localIdentity);
+			SendFunctions.SendObjectSnapshot(this);
 		}
 	}
 

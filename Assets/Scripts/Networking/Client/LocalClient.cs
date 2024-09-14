@@ -11,12 +11,9 @@ internal class LocalClient : MonoBehaviour
 
 	HSteamListenSocket m_listenSocket;
 
-	internal Peer m_server;
-	internal List<Peer> m_peers = new();
+	internal SteamNetworkingIdentity m_serverID;
 
 	internal NetworkObject m_player;
-
-	readonly Dictionary<SteamNetworkingIdentity, int> m_peerIDs = new();
 
 	private void Awake()
 	{
@@ -36,8 +33,8 @@ internal class LocalClient : MonoBehaviour
 
 		SteamNetworkingSockets.CloseListenSocket(m_listenSocket);
 
-		SteamNetworkingSockets.CloseConnection(m_server.m_hConn, 0, null, true);
-		foreach (Peer peer in m_peers)
+		SteamNetworkingSockets.CloseConnection(NetworkManager.m_peers[m_serverID].m_hConn, 0, null, true);
+		foreach (Peer peer in NetworkManager.m_peers.Values)
 		{
 			SteamNetworkingSockets.CloseConnection(peer.m_hConn, 0, null, true);
 		}
@@ -48,17 +45,17 @@ internal class LocalClient : MonoBehaviour
 
 	internal void Connect(SteamNetworkingIdentity host)
 	{
-		m_server.m_identity = host;
-		m_server.m_hConn = SteamNetworkingSockets.ConnectP2P(ref host, 0, 0, null);
+		m_serverID = host;
+		SteamNetworkingSockets.ConnectP2P(ref host, 0, 0, null);
 
 		m_listenSocket = SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
 	}
 
 	private void Update()
 	{
-		ReceiveMessages(m_server);
+		ReceiveMessages(NetworkManager.m_peers[m_serverID]);
 
-		foreach (var peer in m_peers)
+		foreach (var peer in NetworkManager.m_peers.Values)
 		{
 			ReceiveMessages(peer);
 		}
@@ -66,9 +63,9 @@ internal class LocalClient : MonoBehaviour
 
 	internal void Tick()
 	{
-		SteamNetworkingSockets.FlushMessagesOnConnection(m_server.m_hConn);
+		SteamNetworkingSockets.FlushMessagesOnConnection(NetworkManager.m_peers[m_serverID].m_hConn);
 
-		foreach (var peer in m_peers)
+		foreach (var peer in NetworkManager.m_peers.Values)
 		{
 			SteamNetworkingSockets.FlushMessagesOnConnection(peer.m_hConn);
 		}
@@ -171,17 +168,10 @@ internal class LocalClient : MonoBehaviour
 
 		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
 		{
-			if (pCallback.m_hConn != m_server.m_hConn)
-			{
-				Peer peer = new()
-				{
-					m_identity = pCallback.m_info.m_identityRemote,
-					m_hConn = pCallback.m_hConn,
-					m_player = NetworkObjectManager.GetNetworkObject(m_peerIDs[pCallback.m_info.m_identityRemote])
-				};
-				m_peers.Add(peer);
-				Debug.LogWarning("Peer added");
-			}
+			// Not server
+			Peer peer = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, null);
+			NetworkManager.m_peers.Add(pCallback.m_info.m_identityRemote, peer);
+			Debug.LogWarning("Peer added");
 		}
 	}
 }

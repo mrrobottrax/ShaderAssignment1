@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Steamworks;
+using System.Collections.Generic;
 using UnityEngine;
 
 internal static class NetworkObjectManager
@@ -7,7 +8,9 @@ internal static class NetworkObjectManager
 	static int m_lastPersistentID = 0;
 
 	readonly static Dictionary<int, NetworkObject> m_netObjects = new();
-	readonly static Dictionary<int, NetworkObject> m_persistentNetObjects = new(); // DontDestroyOnLoad
+	readonly static Dictionary<int, NetworkObject> m_persistentNetObjects = new(); // DontDestroyOnLoad, includes players
+
+	readonly static Dictionary<SteamNetworkingIdentity, NetworkObject> m_playerObjects = new();
 
 
 	public static NetworkObject GetNetworkObject(int networkID)
@@ -111,6 +114,12 @@ internal static class NetworkObjectManager
 		if (message.m_networkID < 0)
 		{
 			Object.DontDestroyOnLoad(goPrefab);
+		}
+
+		// Players get added to dictionary
+		if (message.m_prefabIndex == NetworkData.k_playerPrefabIndex)
+		{
+			m_playerObjects.Add(message.m_ownerIdentity, netObj);
 		}
 
 		// Add to list

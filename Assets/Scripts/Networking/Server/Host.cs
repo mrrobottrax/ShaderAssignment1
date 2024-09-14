@@ -12,7 +12,6 @@ public class Host : MonoBehaviour
 	HSteamListenSocket m_hListenSocket;
 
 	internal NetworkObject m_player;
-	internal readonly Dictionary<SteamNetworkingIdentity, RemoteClient> m_clients = new();
 
 	#region Callbacks
 
@@ -40,7 +39,7 @@ public class Host : MonoBehaviour
 		if (!SteamManager.Initialized) return;
 
 		SteamNetworkingSockets.CloseListenSocket(m_hListenSocket);
-		foreach (var client in m_clients.Values)
+		foreach (var client in NetworkManager.m_peers.Values)
 		{
 			SteamNetworkingSockets.CloseConnection(client.m_hConn, 0, null, true);
 		}
@@ -48,7 +47,7 @@ public class Host : MonoBehaviour
 
 	private void Update()
 	{
-		foreach (var client in m_clients.Values)
+		foreach (var client in NetworkManager.m_peers.Values)
 		{
 			ReceiveMessages(client);
 		}
@@ -57,15 +56,15 @@ public class Host : MonoBehaviour
 	private void Tick()
 	{
 		// Send updates to all clients
-		foreach (var client in m_clients)
+		foreach (var client in NetworkManager.m_peers.Values)
 		{
-			client.Value.FlushQueuedMessages();
+			client.FlushQueuedMessages();
 		}
 	}
 
 	#endregion
 
-	private void ReceiveMessages(RemoteClient client)
+	private void ReceiveMessages(Peer client)
 	{
 		IntPtr[] pMessages = new IntPtr[NetworkData.k_maxMessages];
 
@@ -125,12 +124,12 @@ public class Host : MonoBehaviour
 		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
 		{
 			// Check if this player is already in game
-			if (!m_clients.TryGetValue(pCallback.m_info.m_identityRemote, out RemoteClient client))
+			if (!NetworkManager.m_peers.TryGetValue(pCallback.m_info.m_identityRemote, out Peer client))
 			{
 				// Add a new player
 				NetworkObject player = SpawnPlayer(pCallback.m_info.m_identityRemote);
 				client = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, player);
-				m_clients.Add(pCallback.m_info.m_identityRemote, client);
+				NetworkManager.m_peers.Add(pCallback.m_info.m_identityRemote, client);
 			}
 			else
 			{
