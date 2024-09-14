@@ -53,8 +53,6 @@ internal class LocalClient : MonoBehaviour
 
 	private void Update()
 	{
-		ReceiveMessages(NetworkManager.m_peers[m_serverID]);
-
 		foreach (var peer in NetworkManager.m_peers.Values)
 		{
 			ReceiveMessages(peer);
