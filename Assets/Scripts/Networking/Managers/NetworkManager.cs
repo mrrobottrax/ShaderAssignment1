@@ -106,14 +106,14 @@ public static class NetworkManager
 			}
 			else
 			{
-				if (LocalClient.m_hPeerConns != null)
-					foreach (var peer in LocalClient.m_hPeerConns)
+				if (m_localClient.m_peers != null)
+					foreach (var peer in m_localClient.m_peers)
 					{
-						SteamNetworkingSockets.SendMessageToConnection(peer, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+						SteamNetworkingSockets.SendMessageToConnection(peer.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
 					}
 
-				if (LocalClient.m_hServerConn != null)
-					SteamNetworkingSockets.SendMessageToConnection(LocalClient.m_hServerConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+				if (m_localClient.m_server.m_hConn != null)
+					SteamNetworkingSockets.SendMessageToConnection(m_localClient.m_server.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
 			}
 		}
 		finally
@@ -188,7 +188,7 @@ public static class NetworkManager
 			}
 			else
 			{
-				return LocalClient.m_player.m_netID;
+				return m_localClient.m_player.m_netID;
 			}
 		}
 	}
@@ -244,7 +244,7 @@ public static class NetworkManager
 		}
 		else
 		{
-			return LocalClient.m_player;
+			return m_localClient.m_player;
 		}
 	}
 

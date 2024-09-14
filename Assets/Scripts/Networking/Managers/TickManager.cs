@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class TickManager : MonoBehaviour
 {
-	static float m_nextTickTime = 0;
-	static bool m_shouldTick = true;
+	float m_nextTickTime = 0;
+
+	public static Action OnTick;
 
 	[RuntimeInitializeOnLoadMethod]
 	static void Initialize()
@@ -18,17 +20,11 @@ public class TickManager : MonoBehaviour
 
 	private void Update()
 	{
-		m_shouldTick = false;
-
 		if (Time.time >= m_nextTickTime)
 		{
 			m_nextTickTime = Time.time + NetworkData.GetTickDelta();
-			m_shouldTick = true;
+			
+			OnTick();
 		}
-	}
-
-	public static bool ShouldTick()
-	{
-		return m_shouldTick;
 	}
 }

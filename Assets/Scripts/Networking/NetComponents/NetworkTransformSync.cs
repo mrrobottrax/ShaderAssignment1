@@ -18,14 +18,21 @@ public class NetworkTransformSync : NetworkBehaviour
 	/// </summary>
 	public bool overrideTransform = false;
 
-	private void Update()
+	private void Awake()
 	{
-		if (IsOwner && TickManager.ShouldTick())
-		{
-			m_transform.position = transform.position;
-			m_transform.rotation = transform.rotation;
-			m_transform.scale = transform.localScale;
-		}
+		TickManager.OnTick += Tick;
+	}
+
+	private void OnDestroy()
+	{
+		TickManager.OnTick -= Tick;
+	}
+
+	private void Tick()
+	{
+		m_transform.position = transform.position;
+		m_transform.rotation = transform.rotation;
+		m_transform.scale = transform.localScale;
 	}
 
 	void OnRecvTransform()

@@ -15,16 +15,20 @@ public class NetworkAnimatorSync : NetworkBehaviour
 		m_animator = GetComponent<Animator>();
 
 		m_paramsBuffer = new byte[m_animator.parameterCount * 4];
+
+		TickManager.OnTick += Tick;
 	}
 
-	private void Update()
+	private void OnDestroy()
+	{
+		TickManager.OnTick -= Tick;
+	}
+
+	private void Tick()
 	{
 		if (!IsOwner) return;
 
-		if (TickManager.ShouldTick())
-		{
-			UpdateParameters();
-		}
+		UpdateParameters();
 	}
 
 	void UpdateParameters()

@@ -3,13 +3,13 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class VoiceManager : MonoBehaviour
+internal static class VoiceManager
 {
 	[RuntimeInitializeOnLoadMethod()]
 	static void Init()
 	{
-		new GameObject("Voice Manager").AddComponent<VoiceManager>();
 		NetworkManager.OnModeChange += OnModeChange;
+		TickManager.OnTick += OnTick;
 	}
 
 	static bool m_recording = false;
@@ -43,10 +43,9 @@ public class VoiceManager : MonoBehaviour
 		m_recording = false;
 	}
 
-	private void LateUpdate()
+	private static void OnTick()
 	{
 		if (!m_recording) return;
-		if (!TickManager.ShouldTick()) return;
 
 		EVoiceResult result = SteamUser.GetAvailableVoice(out uint cbCompressed);
 
@@ -77,8 +76,10 @@ public class VoiceManager : MonoBehaviour
 		}
 	}
 
-	public static void ReceiveVoice(SteamNetworkingMessage_t message)
+	public static void ReceiveVoice(SteamNetworkingMessage_t message, Peer sender)
 	{
+		_ = sender;
+
 		byte[] buffer = new byte[message.m_cbSize - 1];
 
 		Marshal.Copy(message.m_pData + 1, buffer, 0, buffer.Length);

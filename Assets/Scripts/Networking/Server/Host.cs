@@ -9,38 +9,40 @@ public class Host : MonoBehaviour
 {
 	protected Callback<SteamNetConnectionStatusChangedCallback_t> m_SteamNetConnectionStatusChanged;
 
+	HSteamListenSocket m_hListenSocket;
+
 	internal static NetworkObject m_player;
 	internal static readonly Dictionary<SteamNetworkingIdentity, RemoteClient> m_clients = new();
 
-	#region Initialization
+	#region Callbacks
+
 	private void Awake()
 	{
-		SceneManager.activeSceneChanged += OnSceneChange;
-	}
-
-	private void OnEnable()
-	{
-		if (!SteamManager.Initialized)
-			return;
-
 		m_SteamNetConnectionStatusChanged = Callback<SteamNetConnectionStatusChangedCallback_t>.Create(OnSteamNetConnectionStatusChanged);
-	}
+		SceneManager.activeSceneChanged += OnSceneChange;
+		TickManager.OnTick += Tick;
 
-	private void OnDisable()
-	{
-		if (!SteamManager.Initialized)
-			return;
-
-		m_SteamNetConnectionStatusChanged.Dispose();
-	}
-
-	private void Start()
-	{
-		SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
+		m_hListenSocket = SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
 
 		m_player = SpawnPlayer(true);
+
 	}
-	#endregion
+
+	private void OnDestroy()
+	{
+		m_SteamNetConnectionStatusChanged.Dispose();
+		SceneManager.activeSceneChanged -= OnSceneChange;
+		TickManager.OnTick -= Tick;
+
+		// Close connections
+		if (!SteamManager.Initialized) return;
+
+		SteamNetworkingSockets.CloseListenSocket(m_hListenSocket);
+		foreach (var client in m_clients.Values)
+		{
+			SteamNetworkingSockets.CloseConnection(client.m_hConn, 0, null, true);
+		}
+	}
 
 	private void Update()
 	{
@@ -50,17 +52,16 @@ public class Host : MonoBehaviour
 		}
 	}
 
-	private void LateUpdate()
+	private void Tick()
 	{
-		if (TickManager.ShouldTick())
+		// Send updates to all clients
+		foreach (var client in m_clients)
 		{
-			// Send updates to all clients
-			foreach (var client in m_clients)
-			{
-				client.Value.FlushQueuedMessages();
-			}
+			client.Value.FlushQueuedMessages();
 		}
 	}
+
+	#endregion
 
 	private void ReceiveMessages(RemoteClient client)
 	{

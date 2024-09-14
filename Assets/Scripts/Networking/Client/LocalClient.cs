@@ -7,68 +7,78 @@ using UnityEngine.SceneManagement;
 
 internal class LocalClient : MonoBehaviour
 {
-	protected Callback<SteamNetConnectionStatusChangedCallback_t> m_SteamNetConnectionStatusChanged;
+	Callback<SteamNetConnectionStatusChangedCallback_t> m_SteamNetConnectionStatusChanged;
 
-	private SteamNetworkingIdentity m_server;
-	internal static HSteamNetConnection m_hServerConn;
+	HSteamListenSocket m_listenSocket;
 
-	internal static List<HSteamNetConnection> m_hPeerConns = new();
+	internal Peer m_server;
+	internal List<Peer> m_peers = new();
 
-	internal static NetworkObject m_player;
+	internal NetworkObject m_player;
 
-	#region Initialization
-
-	private void OnEnable()
+	private void Awake()
 	{
-		if (!SteamManager.Initialized)
-			return;
-
 		m_SteamNetConnectionStatusChanged = Callback<SteamNetConnectionStatusChangedCallback_t>.Create(OnSteamNetConnectionStatusChanged);
+
+		TickManager.OnTick += Tick;
 	}
 
-	private void OnDisable()
+	private void OnDestroy()
 	{
 		m_SteamNetConnectionStatusChanged.Dispose();
+
+		TickManager.OnTick -= Tick;
+
+		// Close connections
+		if (!SteamManager.Initialized) return;
+
+		SteamNetworkingSockets.CloseListenSocket(m_listenSocket);
+
+		SteamNetworkingSockets.CloseConnection(m_server.m_hConn, 0, null, true);
+		foreach (Peer peer in m_peers)
+		{
+			SteamNetworkingSockets.CloseConnection(peer.m_hConn, 0, null, true);
+		}
+
 	}
 
-	public void Connect(SteamNetworkingIdentity server)
-	{
-		m_server = server;
-		SteamNetworkingSockets.ConnectP2P(ref m_server, 0, 0, null);
+	#region Callbacks
 
-		SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
+	internal void Connect(SteamNetworkingIdentity host)
+	{
+		m_server.m_identity = host;
+		m_server.m_hConn = SteamNetworkingSockets.ConnectP2P(ref host, 0, 0, null);
+
+		m_listenSocket = SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
+	}
+
+	private void Update()
+	{
+		ReceiveMessages(m_server);
+
+		foreach (var peer in m_peers)
+		{
+			ReceiveMessages(peer);
+		}
+	}
+
+	internal void Tick()
+	{
+		SteamNetworkingSockets.FlushMessagesOnConnection(m_server.m_hConn);
+
+		foreach (var peer in m_peers)
+		{
+			SteamNetworkingSockets.FlushMessagesOnConnection(peer.m_hConn);
+		}
 	}
 
 	#endregion
 
-	private void Update()
-	{
-		ReceiveMessages(m_hServerConn);
-
-		foreach (var conn in m_hPeerConns)
-		{
-			ReceiveMessages(conn);
-		}
-	}
-
-	private void LateUpdate()
-	{
-		if (TickManager.ShouldTick())
-		{
-			SteamNetworkingSockets.FlushMessagesOnConnection(m_hServerConn);
-
-			foreach (var hPeer in m_hPeerConns)
-			{
-				SteamNetworkingSockets.FlushMessagesOnConnection(hPeer);
-			}
-		}
-	}
-
-	private void ReceiveMessages(HSteamNetConnection hConn)
+	void ReceiveMessages(Peer peer)
 	{
 		IntPtr[] pMessages = new IntPtr[NetworkData.k_maxMessages];
 
-		int messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(hConn, pMessages, pMessages.Length);
+		int messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(peer.m_hConn, pMessages, pMessages.Length);
 
 		if (messageCount <= 0)
 		{
@@ -80,14 +90,14 @@ internal class LocalClient : MonoBehaviour
 		{
 			SteamNetworkingMessage_t message = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pMessages[i]);
 
-			ProcessMessage(message);
+			ProcessMessage(message, peer);
 
 			// Free data
 			SteamNetworkingMessage_t.Release(pMessages[i]);
 		}
 	}
 
-	private void ProcessMessage(SteamNetworkingMessage_t message)
+	void ProcessMessage(SteamNetworkingMessage_t message, Peer sender)
 	{
 		ESnapshotMessageType type = (ESnapshotMessageType)Marshal.ReadByte(message.m_pData);
 
@@ -139,15 +149,20 @@ internal class LocalClient : MonoBehaviour
 			// Add a new peer
 			case ESnapshotMessageType.NewPeer:
 				NewPeerMessage peerMessage = Marshal.PtrToStructure<NewPeerMessage>(message.m_pData + 1);
-				Debug.Log("New peer " + peerMessage.m_steamIdentity.GetSteamID64());
+				Debug.LogWarning("New peer " + peerMessage.m_steamIdentity.GetSteamID64());
 
 				HSteamNetConnection hConn = SteamNetworkingSockets.ConnectP2P(ref peerMessage.m_steamIdentity, 0, 0, null);
-				m_hPeerConns.Add(hConn);
+				Peer peer = new()
+				{
+					m_identity = peerMessage.m_steamIdentity,
+					m_hConn = hConn,
+				};
+				m_peers.Add(peer);
 				break;
 
 			// Receive voice
 			case ESnapshotMessageType.VoiceData:
-				VoiceManager.ReceiveVoice(message);
+				VoiceManager.ReceiveVoice(message, sender);
 				break;
 
 			default:
@@ -157,7 +172,7 @@ internal class LocalClient : MonoBehaviour
 	}
 
 
-	private void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t pCallback)
+	void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t pCallback)
 	{
 		Debug.Log("Connection state changed to " + pCallback.m_info.m_eState);
 
@@ -173,17 +188,22 @@ internal class LocalClient : MonoBehaviour
 
 		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
 		{
-			if (m_hServerConn == default)
+			if (m_server.m_hConn == default)
 			{
 				// First connection is the server
-				m_hServerConn = pCallback.m_hConn;
-				m_hPeerConns = new List<HSteamNetConnection>();
+				m_server.m_hConn = pCallback.m_hConn;
+				m_peers = new List<Peer>();
 			}
 			else
 			{
 				// Next connections are peers
-				m_hPeerConns.Add(pCallback.m_hConn);
-				Debug.Log("New peer");
+				Peer peer = new()
+				{
+					m_identity = pCallback.m_info.m_identityRemote,
+					m_hConn = pCallback.m_hConn,
+				};
+				m_peers.Add(peer);
+				Debug.LogWarning("New peer");
 			}
 		}
 	}
