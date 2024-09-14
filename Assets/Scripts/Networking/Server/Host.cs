@@ -130,6 +130,7 @@ public class Host : MonoBehaviour
 				NetworkObject player = SpawnPlayer(pCallback.m_info.m_identityRemote);
 				client = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, player);
 				NetworkManager.m_peers.Add(pCallback.m_info.m_identityRemote, client);
+				Debug.LogWarning("Peer added from host");
 			}
 			else
 			{

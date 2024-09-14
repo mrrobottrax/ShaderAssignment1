@@ -164,10 +164,9 @@ internal class LocalClient : MonoBehaviour
 
 		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
 		{
-			// Not server
 			Peer peer = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, null);
 			NetworkManager.m_peers.Add(pCallback.m_info.m_identityRemote, peer);
-			Debug.LogWarning("Peer added");
+			Debug.LogWarning("Peer added from client");
 		}
 	}
 }
