@@ -10,8 +10,6 @@ internal static class NetworkObjectManager
 	readonly static Dictionary<int, NetworkObject> m_netObjects = new();
 	readonly static Dictionary<int, NetworkObject> m_persistentNetObjects = new(); // DontDestroyOnLoad, includes players
 
-	readonly static Dictionary<SteamNetworkingIdentity, NetworkObject> m_playerObjects = new();
-
 
 	public static NetworkObject GetNetworkObject(int networkID)
 	{
@@ -84,7 +82,7 @@ internal static class NetworkObjectManager
 		return m_persistentNetObjects.Values;
 	}
 
-	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message)
+	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message, Peer sender)
 	{
 		if (message.m_prefabIndex == -1)
 		{
@@ -117,9 +115,9 @@ internal static class NetworkObjectManager
 		}
 
 		// Players get added to dictionary
-		if (message.m_prefabIndex == NetworkData.k_playerPrefabIndex)
+		if (netObj.m_ownerIndentity.Equals(sender.m_identity))
 		{
-			m_playerObjects.Add(message.m_ownerIdentity, netObj);
+			sender.m_player = netObj;
 		}
 
 		// Add to list

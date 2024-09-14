@@ -113,7 +113,7 @@ internal class LocalClient : MonoBehaviour
 				SpawnPrefabMessage spawnPrefab = Marshal.PtrToStructure<SpawnPrefabMessage>(message.m_pData + 1);
 				Debug.Log("Object spawn " + spawnPrefab.m_networkID + " : " + spawnPrefab.m_prefabIndex);
 
-				NetworkObjectManager.SpawnNetworkPrefab(spawnPrefab);
+				NetworkObjectManager.SpawnNetworkPrefab(spawnPrefab, sender);
 				break;
 
 			// Delete a network object
