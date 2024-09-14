@@ -12,7 +12,7 @@ internal class LocalClient : MonoBehaviour
 	private SteamNetworkingIdentity m_server;
 	internal static HSteamNetConnection m_hServerConn;
 
-	internal static List<HSteamNetConnection> m_hPeerConns;
+	internal static List<HSteamNetConnection> m_hPeerConns = new();
 
 	internal static NetworkObject m_player;
 
