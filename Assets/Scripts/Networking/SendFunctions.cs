@@ -90,7 +90,7 @@ internal static class SendFunctions
 
 	public static void SendPeers(RemoteClient recepient)
 	{
-		foreach (var client in Host.m_clients.Values)
+		foreach (var client in NetworkManager.m_host.m_clients.Values)
 		{
 			if (client != recepient)
 			{

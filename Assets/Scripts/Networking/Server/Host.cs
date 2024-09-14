@@ -11,8 +11,8 @@ public class Host : MonoBehaviour
 
 	HSteamListenSocket m_hListenSocket;
 
-	internal static NetworkObject m_player;
-	internal static readonly Dictionary<SteamNetworkingIdentity, RemoteClient> m_clients = new();
+	internal NetworkObject m_player;
+	internal readonly Dictionary<SteamNetworkingIdentity, RemoteClient> m_clients = new();
 
 	#region Callbacks
 
@@ -23,9 +23,11 @@ public class Host : MonoBehaviour
 		TickManager.OnTick += Tick;
 
 		m_hListenSocket = SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
+	}
 
+	private void Start()
+	{
 		m_player = SpawnPlayer(NetworkManager.m_localIdentity);
-
 	}
 
 	private void OnDestroy()

@@ -104,8 +104,8 @@ public static class NetworkManager
 			// Send the message
 			if (m_mode == ENetworkMode.Host)
 			{
-				if (Host.m_clients != null)
-					foreach (var client in Host.m_clients.Values)
+				if (m_host.m_clients != null)
+					foreach (var client in m_host.m_clients.Values)
 					{
 						SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
 					}
@@ -241,7 +241,7 @@ public static class NetworkManager
 	{
 		if (m_mode == ENetworkMode.Host)
 		{
-			return Host.m_player;
+			return m_host.m_player;
 		}
 		else
 		{
