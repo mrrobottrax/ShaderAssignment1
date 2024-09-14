@@ -43,7 +43,12 @@ internal class LocalClient : MonoBehaviour
 
 	private void Update()
 	{
-		ReceiveMessages();
+		ReceiveMessages(m_hServerConn);
+
+		foreach (var conn in m_hPeerConns)
+		{
+			ReceiveMessages(conn);
+		}
 	}
 
 	private void LateUpdate()
@@ -59,11 +64,11 @@ internal class LocalClient : MonoBehaviour
 		}
 	}
 
-	private void ReceiveMessages()
+	private void ReceiveMessages(HSteamNetConnection hConn)
 	{
 		IntPtr[] pMessages = new IntPtr[NetworkData.k_maxMessages];
 
-		int messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(m_hServerConn, pMessages, pMessages.Length);
+		int messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(hConn, pMessages, pMessages.Length);
 
 		if (messageCount <= 0)
 		{
@@ -174,9 +179,6 @@ internal class LocalClient : MonoBehaviour
 				// Next connections are peers
 				m_hPeerConns.Add(pCallback.m_hConn);
 				Debug.LogWarning("New peer");
-
-				RemoteClient rc = new(pCallback.m_hConn,pCallback.m_info.m_identityRemote, null);
-				SendFunctions.SendSceneInfo(rc);
 			}
 		}
 	}
