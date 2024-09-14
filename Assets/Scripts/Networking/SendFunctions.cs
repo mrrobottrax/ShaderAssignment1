@@ -113,7 +113,7 @@ internal static class SendFunctions
 				};
 
 				NetworkManager.SendMessage(
-					ESnapshotMessageType.SpawnPrefab,
+					ESnapshotMessageType.NewPeer,
 					message,
 					ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
 					recepient.m_hConn
