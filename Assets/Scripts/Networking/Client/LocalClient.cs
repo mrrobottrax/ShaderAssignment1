@@ -145,6 +145,11 @@ internal class LocalClient : MonoBehaviour
 				m_hPeerConns.Add(hConn);
 				break;
 
+			// Receive voice
+			case ESnapshotMessageType.VoiceData:
+				VoiceManager.ReceiveVoice(message);
+				break;
+
 			default:
 				Debug.LogWarning("Unknown message type " + type);
 				break;
@@ -178,7 +183,7 @@ internal class LocalClient : MonoBehaviour
 			{
 				// Next connections are peers
 				m_hPeerConns.Add(pCallback.m_hConn);
-				Debug.LogWarning("New peer");
+				Debug.Log("New peer");
 			}
 		}
 	}
