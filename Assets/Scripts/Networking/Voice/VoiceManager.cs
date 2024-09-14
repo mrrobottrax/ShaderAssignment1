@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Audio;
 
 internal class VoiceManager : MonoBehaviour
 {
@@ -68,6 +67,9 @@ internal class VoiceManager : MonoBehaviour
 
 		SteamUser.StartVoiceRecording();
 		m_sampleRate = SteamUser.GetVoiceOptimalSampleRate();
+
+		Debug.Log($"Sample rate: {m_sampleRate}");
+
 		m_recording = true;
 
 		SteamFriends.SetInGameVoiceSpeaking(new CSteamID(), true);
@@ -118,6 +120,13 @@ internal class VoiceManager : MonoBehaviour
 
 	public void ReceiveVoice(SteamNetworkingMessage_t message, Peer sender)
 	{
+		// Check if receiving before player spawns
+		if (sender.m_player == null)
+		{
+			Debug.LogWarning("Receiving mic data before player spawned");
+			return;
+		}
+
 		// Check if peer needs a buffer
 		if (!m_playerBuffers.TryGetValue(sender.m_identity, out PlayerBuffer bufferStruct))
 		{

@@ -79,14 +79,14 @@ public class Host : MonoBehaviour
 		{
 			SteamNetworkingMessage_t message = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pMessages[i]);
 
-			ProcessMessage(message);
+			ProcessMessage(message, client);
 
 			// Free data
 			SteamNetworkingMessage_t.Release(pMessages[i]);
 		}
 	}
 
-	private void ProcessMessage(SteamNetworkingMessage_t message)
+	private void ProcessMessage(SteamNetworkingMessage_t message, Peer sender)
 	{
 		EMessageType type = (EMessageType)Marshal.ReadByte(message.m_pData);
 
@@ -94,6 +94,11 @@ public class Host : MonoBehaviour
 		{
 			case EMessageType.NetworkBehaviourUpdate:
 				NetworkBehaviour.ProcessUpdateMessage(message);
+				break;
+
+			case EMessageType.VoiceData:
+				if (VoiceManager.Instance)
+					VoiceManager.Instance.ReceiveVoice(message, sender);
 				break;
 
 			default:

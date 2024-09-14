@@ -32,8 +32,6 @@ internal class LocalClient : MonoBehaviour
 		if (!SteamManager.Initialized) return;
 
 		SteamNetworkingSockets.CloseListenSocket(m_listenSocket);
-
-		SteamNetworkingSockets.CloseConnection(NetworkManager.m_peers[m_serverID].m_hConn, 0, null, true);
 		foreach (Peer peer in NetworkManager.m_peers.Values)
 		{
 			SteamNetworkingSockets.CloseConnection(peer.m_hConn, 0, null, true);
