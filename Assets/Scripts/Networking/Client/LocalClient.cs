@@ -169,6 +169,7 @@ internal class LocalClient : MonoBehaviour
 			{
 				// Next connections are peers
 				m_hPeerConns.Add(pCallback.m_hConn);
+				Debug.LogWarning("New peer");
 			}
 		}
 	}
