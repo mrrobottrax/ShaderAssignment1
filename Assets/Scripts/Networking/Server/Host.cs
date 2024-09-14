@@ -147,6 +147,7 @@ public class Host : MonoBehaviour
 				// Don't send their own player
 				if (networkObject.m_netID != client.m_player.m_netID)
 				{
+					Debug.Log("Sending spawn: " + networkObject.m_netID + " : " + networkObject.m_prefabIndex);
 					SendFunctions.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID, client);
 					SendFunctions.SendObjectSnapshot(networkObject, client);
 				}

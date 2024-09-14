@@ -113,7 +113,7 @@ internal class LocalClient : MonoBehaviour
 			// Spawn a network prefab
 			case ESnapshotMessageType.SpawnPrefab:
 				SpawnPrefabMessage spawnPrefab = Marshal.PtrToStructure<SpawnPrefabMessage>(message.m_pData + 1);
-				Debug.Log("Object spawn " + spawnPrefab.m_networkID);
+				Debug.Log("Object spawn " + spawnPrefab.m_networkID + " : " + spawnPrefab.m_prefabIndex);
 
 				NetworkObjectManager.SpawnNetworkPrefab(spawnPrefab, false);
 				break;
