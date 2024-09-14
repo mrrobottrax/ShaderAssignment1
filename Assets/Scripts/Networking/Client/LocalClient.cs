@@ -42,7 +42,7 @@ internal class LocalClient : MonoBehaviour
 
 	}
 
-	#region Callbacks
+	#region External Calls
 
 	internal void Connect(SteamNetworkingIdentity host)
 	{
@@ -188,13 +188,7 @@ internal class LocalClient : MonoBehaviour
 
 		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
 		{
-			if (m_server.m_hConn == default)
-			{
-				// First connection is the server
-				m_server.m_hConn = pCallback.m_hConn;
-				m_peers = new List<Peer>();
-			}
-			else
+			if (pCallback.m_hConn != m_server.m_hConn)
 			{
 				// Next connections are peers
 				Peer peer = new()
