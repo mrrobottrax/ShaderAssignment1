@@ -108,7 +108,7 @@ internal class VoiceManager : MonoBehaviour
 			{
 				IntPtr pData = handle.AddrOfPinnedObject();
 
-				NetworkManager.SendMessageAll(EMessageType.VoiceData, pData, (int)nBytesWritten, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
+				NetworkManager.SendMessageAll(EMessageType.VoiceData, pData, (int)nBytesWritten, ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable);
 
 				//Debug.Log("Send");
 			}
