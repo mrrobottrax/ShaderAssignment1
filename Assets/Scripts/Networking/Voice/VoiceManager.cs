@@ -6,7 +6,7 @@ using UnityEngine;
 
 internal class VoiceManager : MonoBehaviour
 {
-	const uint k_bufferSize = 20 * 1024;
+	const int k_bufferSize = 20 * 1024; // Must be even
 
 	static VoiceManager s_instance;
 	public static VoiceManager Instance { get { return s_instance; } }
@@ -18,11 +18,16 @@ internal class VoiceManager : MonoBehaviour
 		DontDestroyOnLoad(s_instance);
 	}
 
-
-	struct PlayerBuffer
+	class Buffer
 	{
-		public byte[] m_buffer;
-		public int m_end;
+		public byte[] m_buffer = new byte[k_bufferSize];
+		public int m_nBytes;
+	}
+
+	class PlayerBuffer
+	{
+		public Queue<Buffer> m_buffers;
+		public int m_position;
 		public AudioSource m_audioSource;
 	}
 
@@ -127,28 +132,49 @@ internal class VoiceManager : MonoBehaviour
 		}
 
 		// Check if peer needs a buffer
-		if (!m_playerBuffers.TryGetValue(sender.m_identity, out PlayerBuffer bufferStruct))
+		if (!m_playerBuffers.TryGetValue(sender.m_identity, out PlayerBuffer playBuffer))
 		{
-			bufferStruct = new()
+			playBuffer = new()
 			{
-				m_buffer = new byte[k_bufferSize],
-				m_end = 0,
+				m_buffers = new Queue<Buffer>(),
+				m_position = 0,
 				m_audioSource = sender.m_player.gameObject.AddComponent<AudioSource>()
 			};
 
-			m_playerBuffers.Add(sender.m_identity, bufferStruct);
+			m_playerBuffers.Add(sender.m_identity, playBuffer);
+
+			AudioClip audioClip = AudioClip.Create(
+				$"{sender.m_identity}",
+				(int)m_sampleRate * 1024,
+				1,
+				(int)m_sampleRate,
+				true,
+				(float[] data) => OnPCMReader(data, playBuffer),
+				(int pos) => OnPCMSetPos(pos, playBuffer)
+			);
+
+			playBuffer.m_audioSource.loop = false;
+			playBuffer.m_audioSource.clip = audioClip;
+			playBuffer.m_audioSource.volume = 1;
+			playBuffer.m_audioSource.spatialBlend = 1;
+			playBuffer.m_audioSource.spatialize = true;
+			playBuffer.m_audioSource.Play();
 		}
 
 		// Copy into byte array
 		byte[] buffer = new byte[message.m_cbSize - 1];
 		Marshal.Copy(message.m_pData + 1, buffer, 0, buffer.Length);
 
-		// Decompress
+		// Decompress into play buffer
+		Buffer queueBuffer = new();
+
 		EVoiceResult result = SteamUser.DecompressVoice(
 			buffer, (uint)buffer.Length,
-			bufferStruct.m_buffer, (uint)bufferStruct.m_buffer.Length,
+			queueBuffer.m_buffer, (uint)queueBuffer.m_buffer.Length,
 			out uint nBytesWritten, m_sampleRate
 		);
+
+		queueBuffer.m_nBytes = (int)nBytesWritten;
 
 		if (result != EVoiceResult.k_EVoiceResultOK)
 		{
@@ -156,39 +182,63 @@ internal class VoiceManager : MonoBehaviour
 			return;
 		}
 
+		playBuffer.m_buffers.Enqueue(queueBuffer);
 
-		float[] floatData = new float[nBytesWritten / 2];
-		float maxValue = 0;
-		for (int i = 0; i < floatData.Length; i++)
-		{
-			Int16 value = BitConverter.ToInt16(bufferStruct.m_buffer, i * 2);
-			floatData[i] = (float)value / Int16.MaxValue;
-			
-			if (Mathf.Abs(floatData[i]) > maxValue)
-			{
-				maxValue = Mathf.Abs(floatData[i]);
-			}
-		}
-
-		// Normalize audio
-		for (int i = 0; i < floatData.Length; i++)
-		{
-			floatData[i] /= maxValue;
-
-			if (Mathf.Abs(floatData[i]) > 1)
-			{
-				Debug.LogWarning("Audio fucked");
-			}
-		}
-
-		AudioClip audioClip = AudioClip.Create("Test", (int)nBytesWritten, 1, (int)m_sampleRate, false, OnPCMReader);
-
-		audioClip.SetData(floatData, 0);
-		bufferStruct.m_audioSource.PlayOneShot(audioClip, 1);
+		Debug.Log("Enqueue " + playBuffer.m_buffers.Count);
 	}
 
-	void OnPCMReader(float[] data)
+	void OnPCMReader(float[] data, PlayerBuffer playBuffer)
 	{
+		if (playBuffer.m_buffers.Count == 0)
+		{
+			Debug.Log("Zero 1");
+			//for (int j = 0; j < data.Length; ++j)
+			//{
+			//	data[j] = 0;
+			//}
+			return;
+		}
 
+		Buffer buffer = playBuffer.m_buffers.Peek();
+
+		// Convert to floats
+		for (int i = 0; i < data.Length; i++)
+		{
+			// Check if we've read the whole buffer
+			playBuffer.m_position += 2;
+			if (playBuffer.m_position >= buffer.m_nBytes)
+			{
+				playBuffer.m_position = 0;
+				playBuffer.m_buffers.Dequeue();
+				Debug.Log("Dequeue " + playBuffer.m_buffers.Count);
+
+				if (playBuffer.m_buffers.Count == 0)
+				{
+					Debug.Log("Zero 2");
+					//for (int j = i; j < data.Length; ++j)
+					//{
+					//	data[j] = 0;
+					//}
+					return;
+				}
+
+				buffer = playBuffer.m_buffers.Peek();
+			}
+
+			short value = BitConverter.ToInt16(buffer.m_buffer, playBuffer.m_position);
+			data[i] = value / 32768.0f;
+
+			// Compressor
+			//data[i] /= 2.0f;
+			//data[i] -= 0.5f;
+			//data[i] = data[i] * data[i] * data[i] * data[i];
+			//data[i] *= -2.0f;
+			//data[i] += 1.0f;
+		}
+	}
+
+	void OnPCMSetPos(int pos, PlayerBuffer playBuffer)
+	{
+		_ = pos;
 	}
 }
