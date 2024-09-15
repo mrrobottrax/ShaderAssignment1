@@ -8,7 +8,6 @@ internal class VoiceManager : MonoBehaviour
 {
 	const uint k_bufferSize = 20 * 1024;
 
-
 	static VoiceManager s_instance;
 	public static VoiceManager Instance { get { return s_instance; } }
 
@@ -159,10 +158,27 @@ internal class VoiceManager : MonoBehaviour
 
 
 		float[] floatData = new float[nBytesWritten / 2];
+		float maxValue = 0;
 		for (int i = 0; i < floatData.Length; i++)
 		{
 			Int16 value = BitConverter.ToInt16(bufferStruct.m_buffer, i * 2);
-			floatData[i] = value / 32767.0f;
+			floatData[i] = (float)value / Int16.MaxValue;
+			
+			if (Mathf.Abs(floatData[i]) > maxValue)
+			{
+				maxValue = Mathf.Abs(floatData[i]);
+			}
+		}
+
+		// Normalize audio
+		for (int i = 0; i < floatData.Length; i++)
+		{
+			floatData[i] /= maxValue;
+
+			if (Mathf.Abs(floatData[i]) > 1)
+			{
+				Debug.LogWarning("Audio fucked");
+			}
 		}
 
 		AudioClip audioClip = AudioClip.Create("Test", (int)nBytesWritten, 1, (int)m_sampleRate, false, OnPCMReader);
