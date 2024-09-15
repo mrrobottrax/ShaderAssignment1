@@ -2,13 +2,13 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 internal class VoiceManager : MonoBehaviour
 {
-	const int k_bufferSize = 20 * 1024; // Must be even
+	const int k_bufferSize = 200 * 1024; // Must be even
+	[SerializeField] float k_seperateMessageThreshold = 0.1f; // Messages this far apart are considered seperate
+	[SerializeField] int k_bufferCooldown = 32768;
 
 	[SerializeField] float m_gain = 8;
 
@@ -25,29 +25,32 @@ internal class VoiceManager : MonoBehaviour
 	class PlayerBuffer
 	{
 		public byte[] m_buffer = new byte[k_bufferSize];
-		public int m_end;
-		public int m_position;
+		public int m_end = 0;
+		public int m_position = 0;
+		public int m_winding = 0;
+		public int m_bufferCooldown = 0;
 		public AudioSource m_audioSource;
 	}
 
 
 	bool m_recording = false;
 	uint m_sampleRate;
-
+	float m_lastMessageTime = -100.0f;
 
 	readonly Dictionary<SteamNetworkingIdentity, PlayerBuffer> m_playerBuffers = new();
+
 
 
 	private void Awake()
 	{
 		NetworkManager.OnModeChange += OnModeChange;
-		//TickManager.OnTick += OnTick;
+		TickManager.OnTick += Tick;
 	}
 
 	private void OnDestroy()
 	{
 		NetworkManager.OnModeChange -= OnModeChange;
-		//TickManager.OnTick -= OnTick;
+		TickManager.OnTick -= Tick;
 	}
 
 	void OnModeChange(ENetworkMode mode)
@@ -88,7 +91,7 @@ internal class VoiceManager : MonoBehaviour
 		m_playerBuffers.Clear();
 	}
 
-	private void Update()
+	private void Tick()
 	{
 		if (!m_recording) return;
 
@@ -101,20 +104,56 @@ internal class VoiceManager : MonoBehaviour
 
 			if (nBytesWritten == 0) return;
 
-			// send voice data
-			GCHandle handle = GCHandle.Alloc(voiceBuffer, GCHandleType.Pinned);
+			// Check if this message is seperate from the last one
+			VoiceDataMessage voiceDataMessage = new();
+			if (Time.time - m_lastMessageTime >= k_seperateMessageThreshold)
+			{
+				voiceDataMessage.m_isSeperate = true;
+				Debug.Log("New message");
+			}
+			else
+			{
+				voiceDataMessage.m_isSeperate = false;
+			}
+			m_lastMessageTime = Time.time;
+
+			byte[] data = new byte[nBytesWritten + Marshal.SizeOf<VoiceDataMessage>()];
+
+			GCHandle voiceBufferHandle = GCHandle.Alloc(voiceBuffer, GCHandleType.Pinned);
+			GCHandle messageHandle = GCHandle.Alloc(voiceDataMessage, GCHandleType.Pinned);
+			GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
 			try
 			{
-				IntPtr pData = handle.AddrOfPinnedObject();
+				IntPtr pVoiceData = voiceBufferHandle.AddrOfPinnedObject();
+				IntPtr pMessage = messageHandle.AddrOfPinnedObject();
+				IntPtr pData = dataHandle.AddrOfPinnedObject();
 
-				NetworkManager.SendMessageAll(EMessageType.VoiceData, pData, (int)nBytesWritten, ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable);
+				// Copy into one big array
+				Marshal.Copy(pMessage, data, 0, Marshal.SizeOf<VoiceDataMessage>());
+				Marshal.Copy(pVoiceData, data, Marshal.SizeOf<VoiceDataMessage>(), (int)nBytesWritten);
 
+				NetworkManager.SendMessageAll(EMessageType.VoiceData, pData, data.Length, ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable);
+
+				// loopback
+				{
+					SteamNetworkingMessage_t message1 = new()
+					{
+						m_pData = pData - 1,
+						m_cbSize = data.Length + 1
+					};
+
+					SteamNetworkingSockets.GetIdentity(out SteamNetworkingIdentity identity);
+					Peer peer = new(new HSteamNetConnection(), identity, NetworkManager.GetLocalPlayer());
+					ReceiveVoice(message1, peer);
+				}
 				//Debug.Log("Send");
 			}
 			finally
 			{
-				handle.Free();
+				voiceBufferHandle.Free();
+				messageHandle.Free();
+				dataHandle.Free();
 			}
 		}
 		else if (result != EVoiceResult.k_EVoiceResultNoData)
@@ -139,7 +178,8 @@ internal class VoiceManager : MonoBehaviour
 		{
 			playBuffer = new()
 			{
-				m_audioSource = sender.m_player.gameObject.GetComponent<AudioSource>()
+				m_audioSource = sender.m_player.gameObject.GetComponent<AudioSource>(),
+				m_bufferCooldown = k_bufferCooldown,
 			};
 
 			m_playerBuffers.Add(sender.m_identity, playBuffer);
@@ -162,9 +202,16 @@ internal class VoiceManager : MonoBehaviour
 			playBuffer.m_audioSource.Play();
 		}
 
+		// Check if this message is seperate
+		VoiceDataMessage voiceData = Marshal.PtrToStructure<VoiceDataMessage>(message.m_pData + sizeof(EMessageType));
+		if (voiceData.m_isSeperate)
+		{
+			playBuffer.m_bufferCooldown = k_bufferCooldown;
+		}
+
 		// Copy into byte array
-		byte[] compressedBuffer = new byte[message.m_cbSize - 1];
-		Marshal.Copy(message.m_pData + 1, compressedBuffer, 0, compressedBuffer.Length);
+		byte[] compressedBuffer = new byte[message.m_cbSize - sizeof(EMessageType) - Marshal.SizeOf<VoiceDataMessage>()];
+		Marshal.Copy(message.m_pData + sizeof(EMessageType) + Marshal.SizeOf<VoiceDataMessage>(), compressedBuffer, 0, compressedBuffer.Length);
 
 		// Decompress into buffer
 		byte[] rawBuffer = new byte[k_bufferSize];
@@ -192,9 +239,14 @@ internal class VoiceManager : MonoBehaviour
 			if (playBuffer.m_end >= k_bufferSize)
 			{
 				playBuffer.m_end = 0;
+				playBuffer.m_winding -= 1;
 			}
 		}
 
+		if (playBuffer.m_winding < -2 || playBuffer.m_winding > 2)
+		{
+			Debug.LogWarning($"Voice buffer winding at {playBuffer.m_winding}");
+		}
 
 		//Debug.Log("Enqueue " + playBuffer.m_buffers.Count);
 	}
@@ -205,6 +257,14 @@ internal class VoiceManager : MonoBehaviour
 		int i;
 		for (i = 0; i < data.Length; i++)
 		{
+			// Add a little cooldown to messages to give time to buffer
+			if (playBuffer.m_bufferCooldown > 0)
+			{
+				data[i] = 0;
+				playBuffer.m_bufferCooldown -= 1;
+				continue;
+			}
+
 			// Check if we've read the whole buffer
 			if (playBuffer.m_position == playBuffer.m_end)
 			{
@@ -222,6 +282,7 @@ internal class VoiceManager : MonoBehaviour
 			if (playBuffer.m_position >= k_bufferSize)
 			{
 				playBuffer.m_position = 0;
+				playBuffer.m_winding += 1;
 			}
 		}
 

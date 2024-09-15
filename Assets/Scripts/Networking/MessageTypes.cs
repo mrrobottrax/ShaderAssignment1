@@ -38,3 +38,8 @@ struct AddPeerMessage
 	public SteamNetworkingIdentity m_steamIdentity;
 	public int m_networkID;
 }
+
+struct VoiceDataMessage
+{
+	public bool m_isSeperate;
+}
