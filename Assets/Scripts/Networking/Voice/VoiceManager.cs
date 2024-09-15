@@ -45,13 +45,13 @@ internal class VoiceManager : MonoBehaviour
 	private void Awake()
 	{
 		NetworkManager.OnModeChange += OnModeChange;
-		TickManager.OnTick += OnTick;
+		//TickManager.OnTick += OnTick;
 	}
 
 	private void OnDestroy()
 	{
 		NetworkManager.OnModeChange -= OnModeChange;
-		TickManager.OnTick -= OnTick;
+		//TickManager.OnTick -= OnTick;
 	}
 
 	void OnModeChange(ENetworkMode mode)
@@ -92,7 +92,7 @@ internal class VoiceManager : MonoBehaviour
 		m_playerBuffers.Clear();
 	}
 
-	private void OnTick()
+	private void Update()
 	{
 		if (!m_recording) return;
 
