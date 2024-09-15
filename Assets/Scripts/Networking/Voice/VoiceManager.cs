@@ -113,6 +113,8 @@ internal class VoiceManager : MonoBehaviour
 				IntPtr pData = handle.AddrOfPinnedObject();
 
 				NetworkManager.SendMessageAll(EMessageType.VoiceData, pData, (int)nBytesWritten, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
+
+				Debug.Log("Send");
 			}
 			finally
 			{
@@ -127,6 +129,8 @@ internal class VoiceManager : MonoBehaviour
 
 	public void ReceiveVoice(SteamNetworkingMessage_t message, Peer sender)
 	{
+		Debug.Log("Receive");
+
 		// Check if receiving before player spawns
 		if (sender.m_player == null)
 		{
@@ -187,7 +191,7 @@ internal class VoiceManager : MonoBehaviour
 
 		playBuffer.m_buffers.Enqueue(queueBuffer);
 
-		Debug.Log("Enqueue " + playBuffer.m_buffers.Count);
+		//Debug.Log("Enqueue " + playBuffer.m_buffers.Count);
 	}
 
 	void OnPCMReader(float[] data, PlayerBuffer playBuffer)
