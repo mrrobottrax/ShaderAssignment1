@@ -9,6 +9,8 @@ internal class VoiceManager : MonoBehaviour
 {
 	const int k_bufferSize = 20 * 1024; // Must be even
 
+	[SerializeField] float m_gain = 4;
+
 	static VoiceManager s_instance;
 	public static VoiceManager Instance { get { return s_instance; } }
 
@@ -230,7 +232,7 @@ internal class VoiceManager : MonoBehaviour
 			data[i] = value / 32768.0f;
 
 			// Compressor
-			data[i] *= 3.0f;
+			data[i] *= m_gain;
 		}
 	}
 
