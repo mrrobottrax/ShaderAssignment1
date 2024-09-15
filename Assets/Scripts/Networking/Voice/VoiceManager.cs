@@ -9,7 +9,7 @@ internal class VoiceManager : MonoBehaviour
 {
 	const int k_bufferSize = 20 * 1024; // Must be even
 
-	[SerializeField] float m_gain = 4;
+	[SerializeField] float m_gain = 8;
 
 	static VoiceManager s_instance;
 	public static VoiceManager Instance { get { return s_instance; } }
@@ -45,13 +45,13 @@ internal class VoiceManager : MonoBehaviour
 	private void Awake()
 	{
 		NetworkManager.OnModeChange += OnModeChange;
-		//TickManager.OnTick += OnTick;
+		TickManager.OnTick += OnTick;
 	}
 
 	private void OnDestroy()
 	{
 		NetworkManager.OnModeChange -= OnModeChange;
-		//TickManager.OnTick -= OnTick;
+		TickManager.OnTick -= OnTick;
 	}
 
 	void OnModeChange(ENetworkMode mode)
@@ -92,7 +92,7 @@ internal class VoiceManager : MonoBehaviour
 		m_playerBuffers.Clear();
 	}
 
-	private void Update()
+	private void OnTick()
 	{
 		if (!m_recording) return;
 
@@ -114,7 +114,7 @@ internal class VoiceManager : MonoBehaviour
 
 				NetworkManager.SendMessageAll(EMessageType.VoiceData, pData, (int)nBytesWritten, ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
 
-				Debug.Log("Send");
+				//Debug.Log("Send");
 			}
 			finally
 			{
@@ -129,7 +129,7 @@ internal class VoiceManager : MonoBehaviour
 
 	public void ReceiveVoice(SteamNetworkingMessage_t message, Peer sender)
 	{
-		Debug.Log("Receive");
+		//Debug.Log("Receive");
 
 		// Check if receiving before player spawns
 		if (sender.m_player == null)
@@ -145,14 +145,14 @@ internal class VoiceManager : MonoBehaviour
 			{
 				m_buffers = new Queue<Buffer>(),
 				m_position = 0,
-				m_audioSource = sender.m_player.gameObject.AddComponent<AudioSource>()
+				m_audioSource = sender.m_player.gameObject.GetComponent<AudioSource>()
 			};
 
 			m_playerBuffers.Add(sender.m_identity, playBuffer);
 
 			AudioClip audioClip = AudioClip.Create(
 				$"{sender.m_identity}",
-				(int)m_sampleRate * 1024,
+				(int)m_sampleRate * 2,
 				1,
 				(int)m_sampleRate,
 				true,
@@ -160,7 +160,7 @@ internal class VoiceManager : MonoBehaviour
 				(int pos) => OnPCMSetPos(pos, playBuffer)
 			);
 
-			playBuffer.m_audioSource.loop = false;
+			playBuffer.m_audioSource.loop = true;
 			playBuffer.m_audioSource.clip = audioClip;
 			playBuffer.m_audioSource.volume = 1;
 			playBuffer.m_audioSource.spatialBlend = 1;
