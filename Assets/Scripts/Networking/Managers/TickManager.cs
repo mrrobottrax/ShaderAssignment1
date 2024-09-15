@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TickManager : MonoBehaviour
 {
-	float m_nextTickTime = 0;
+	float m_nextTickTime;
 
 	public static Action OnTick;
 	public static Action OnLateTick;
@@ -17,13 +17,15 @@ public class TickManager : MonoBehaviour
 	private void Awake()
 	{
 		DontDestroyOnLoad(gameObject);
+
+		m_nextTickTime = Time.time;
 	}
 
 	private void Update()
 	{
 		if (Time.time >= m_nextTickTime)
 		{
-			m_nextTickTime = Time.time + NetworkData.GetTickDelta();
+			m_nextTickTime += NetworkData.GetTickDelta();
 
 			OnTick?.Invoke();
 			OnLateTick?.Invoke();

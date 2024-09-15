@@ -2,6 +2,7 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEditor.VersionControl;
 using UnityEngine;
 
@@ -21,15 +22,10 @@ internal class VoiceManager : MonoBehaviour
 		DontDestroyOnLoad(s_instance);
 	}
 
-	class Buffer
-	{
-		public byte[] m_buffer = new byte[k_bufferSize];
-		public int m_nBytes;
-	}
-
 	class PlayerBuffer
 	{
-		public Queue<Buffer> m_buffers;
+		public byte[] m_buffer = new byte[k_bufferSize];
+		public int m_end;
 		public int m_position;
 		public AudioSource m_audioSource;
 	}
@@ -143,8 +139,6 @@ internal class VoiceManager : MonoBehaviour
 		{
 			playBuffer = new()
 			{
-				m_buffers = new Queue<Buffer>(),
-				m_position = 0,
 				m_audioSource = sender.m_player.gameObject.GetComponent<AudioSource>()
 			};
 
@@ -169,19 +163,18 @@ internal class VoiceManager : MonoBehaviour
 		}
 
 		// Copy into byte array
-		byte[] buffer = new byte[message.m_cbSize - 1];
-		Marshal.Copy(message.m_pData + 1, buffer, 0, buffer.Length);
+		byte[] compressedBuffer = new byte[message.m_cbSize - 1];
+		Marshal.Copy(message.m_pData + 1, compressedBuffer, 0, compressedBuffer.Length);
 
-		// Decompress into play buffer
-		Buffer queueBuffer = new();
+		// Decompress into buffer
+		byte[] rawBuffer = new byte[k_bufferSize];
 
 		EVoiceResult result = SteamUser.DecompressVoice(
-			buffer, (uint)buffer.Length,
-			queueBuffer.m_buffer, (uint)queueBuffer.m_buffer.Length,
+			compressedBuffer, (uint)compressedBuffer.Length,
+			rawBuffer, (uint)rawBuffer.Length,
 			out uint nBytesWritten, m_sampleRate
 		);
 
-		queueBuffer.m_nBytes = (int)nBytesWritten;
 
 		if (result != EVoiceResult.k_EVoiceResultOK)
 		{
@@ -189,54 +182,55 @@ internal class VoiceManager : MonoBehaviour
 			return;
 		}
 
-		playBuffer.m_buffers.Enqueue(queueBuffer);
+		// Copy into play buffer
+		for (int i = 0; i < nBytesWritten; ++i)
+		{
+			playBuffer.m_buffer[playBuffer.m_end] = rawBuffer[i];
+
+			playBuffer.m_end++;
+			// Loop around
+			if (playBuffer.m_end >= k_bufferSize)
+			{
+				playBuffer.m_end = 0;
+			}
+		}
+
 
 		//Debug.Log("Enqueue " + playBuffer.m_buffers.Count);
 	}
 
 	void OnPCMReader(float[] data, PlayerBuffer playBuffer)
 	{
-		if (playBuffer.m_buffers.Count == 0)
-		{
-			//Debug.Log("Zero 1");
-			for (int j = 0; j < data.Length; ++j)
-			{
-				data[j] = 0;
-			}
-			return;
-		}
-
-		Buffer buffer = playBuffer.m_buffers.Peek();
-
 		// Convert to floats
-		for (int i = 0; i < data.Length; i++)
+		int i;
+		for (i = 0; i < data.Length; i++)
 		{
 			// Check if we've read the whole buffer
-			playBuffer.m_position += 2;
-			if (playBuffer.m_position >= buffer.m_nBytes)
+			if (playBuffer.m_position == playBuffer.m_end)
 			{
-				playBuffer.m_position = 0;
-				playBuffer.m_buffers.Dequeue();
-				//Debug.Log("Dequeue " + playBuffer.m_buffers.Count);
-
-				if (playBuffer.m_buffers.Count == 0)
-				{
-					//Debug.Log("Zero 2");
-					for (int j = i; j < data.Length; ++j)
-					{
-						data[j] = 0;
-					}
-					return;
-				}
-
-				buffer = playBuffer.m_buffers.Peek();
+				break;
 			}
 
-			short value = BitConverter.ToInt16(buffer.m_buffer, playBuffer.m_position);
+			short value = BitConverter.ToInt16(playBuffer.m_buffer, playBuffer.m_position);
 			data[i] = value / 32768.0f;
 
-			// Compressor
+			// Gain
 			data[i] *= m_gain;
+
+			playBuffer.m_position += 2;
+			// Loop around
+			if (playBuffer.m_position >= k_bufferSize)
+			{
+				playBuffer.m_position = 0;
+			}
+		}
+
+		if (i == data.Length) return; // Sucessfully set all data
+
+		// Set the rest to 0
+		for (; i < data.Length; i++)
+		{
+			data[i] = 0;
 		}
 	}
 
