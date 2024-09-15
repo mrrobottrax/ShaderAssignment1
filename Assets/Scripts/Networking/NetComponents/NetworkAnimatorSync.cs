@@ -60,8 +60,6 @@ public class NetworkAnimatorSync : NetworkBehaviour
 	{
 		// Set parameters using binary data
 
-		Debug.Log("Receive params");
-
 		int index = 0;
 		foreach (var param in m_animator.parameters)
 		{
