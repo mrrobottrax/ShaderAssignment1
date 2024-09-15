@@ -17,14 +17,10 @@ internal class LocalClient : MonoBehaviour
 	private void Awake()
 	{
 		m_SteamNetConnectionStatusChanged = Callback<SteamNetConnectionStatusChangedCallback_t>.Create(OnSteamNetConnectionStatusChanged);
-
-		TickManager.OnTick += Tick;
 	}
 
 	private void OnDestroy()
 	{
-		TickManager.OnTick -= Tick;
-
 		// Close connections
 		if (!SteamManager.Initialized) return;
 		m_SteamNetConnectionStatusChanged.Dispose();
@@ -52,13 +48,6 @@ internal class LocalClient : MonoBehaviour
 		foreach (var peer in NetworkManager.m_peers.Values)
 		{
 			ReceiveMessages(peer);
-		}
-	}
-
-	internal void Tick()
-	{
-		foreach (var peer in NetworkManager.m_peers.Values)
-		{
 			SteamNetworkingSockets.FlushMessagesOnConnection(peer.m_hConn);
 		}
 	}

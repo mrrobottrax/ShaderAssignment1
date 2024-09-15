@@ -56,12 +56,6 @@ public class NetworkObject : MonoBehaviour
 				if (!Enumerable.SequenceEqual(net.m_netVarBuffer, newBytes))
 				{
 					// Change detected
-
-					if (net.GetType() == typeof(NetworkAnimatorSync))
-					{
-						_ = 0;
-					}
-
 					net.m_netVarBuffer = newBytes;
 
 					SendFunctions.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);

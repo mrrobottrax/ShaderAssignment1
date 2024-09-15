@@ -18,7 +18,6 @@ public class Host : MonoBehaviour
 	{
 		m_SteamNetConnectionStatusChanged = Callback<SteamNetConnectionStatusChangedCallback_t>.Create(OnSteamNetConnectionStatusChanged);
 		SceneManager.activeSceneChanged += OnSceneChange;
-		TickManager.OnTick += Tick;
 
 		m_hListenSocket = SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
 	}
@@ -32,7 +31,6 @@ public class Host : MonoBehaviour
 	{
 		m_SteamNetConnectionStatusChanged.Dispose();
 		SceneManager.activeSceneChanged -= OnSceneChange;
-		TickManager.OnTick -= Tick;
 
 		// Close connections
 		if (!SteamManager.Initialized) return;
@@ -49,14 +47,6 @@ public class Host : MonoBehaviour
 		foreach (var client in NetworkManager.m_peers.Values)
 		{
 			ReceiveMessages(client);
-		}
-	}
-
-	private void Tick()
-	{
-		// Send updates to all clients
-		foreach (var client in NetworkManager.m_peers.Values)
-		{
 			client.FlushQueuedMessages();
 		}
 	}
