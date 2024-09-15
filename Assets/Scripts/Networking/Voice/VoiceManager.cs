@@ -2,6 +2,7 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 internal class VoiceManager : MonoBehaviour
@@ -42,13 +43,13 @@ internal class VoiceManager : MonoBehaviour
 	private void Awake()
 	{
 		NetworkManager.OnModeChange += OnModeChange;
-		TickManager.OnTick += OnTick;
+		//TickManager.OnTick += OnTick;
 	}
 
 	private void OnDestroy()
 	{
 		NetworkManager.OnModeChange -= OnModeChange;
-		TickManager.OnTick -= OnTick;
+		//TickManager.OnTick -= OnTick;
 	}
 
 	void OnModeChange(ENetworkMode mode)
@@ -89,7 +90,7 @@ internal class VoiceManager : MonoBehaviour
 		m_playerBuffers.Clear();
 	}
 
-	private void OnTick()
+	private void Update()
 	{
 		if (!m_recording) return;
 
@@ -191,11 +192,11 @@ internal class VoiceManager : MonoBehaviour
 	{
 		if (playBuffer.m_buffers.Count == 0)
 		{
-			Debug.Log("Zero 1");
-			//for (int j = 0; j < data.Length; ++j)
-			//{
-			//	data[j] = 0;
-			//}
+			//Debug.Log("Zero 1");
+			for (int j = 0; j < data.Length; ++j)
+			{
+				data[j] = 0;
+			}
 			return;
 		}
 
@@ -210,15 +211,15 @@ internal class VoiceManager : MonoBehaviour
 			{
 				playBuffer.m_position = 0;
 				playBuffer.m_buffers.Dequeue();
-				Debug.Log("Dequeue " + playBuffer.m_buffers.Count);
+				//Debug.Log("Dequeue " + playBuffer.m_buffers.Count);
 
 				if (playBuffer.m_buffers.Count == 0)
 				{
-					Debug.Log("Zero 2");
-					//for (int j = i; j < data.Length; ++j)
-					//{
-					//	data[j] = 0;
-					//}
+					//Debug.Log("Zero 2");
+					for (int j = i; j < data.Length; ++j)
+					{
+						data[j] = 0;
+					}
 					return;
 				}
 
@@ -229,11 +230,7 @@ internal class VoiceManager : MonoBehaviour
 			data[i] = value / 32768.0f;
 
 			// Compressor
-			//data[i] /= 2.0f;
-			//data[i] -= 0.5f;
-			//data[i] = data[i] * data[i] * data[i] * data[i];
-			//data[i] *= -2.0f;
-			//data[i] += 1.0f;
+			data[i] *= 3.0f;
 		}
 	}
 
