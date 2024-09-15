@@ -23,12 +23,11 @@ internal class LocalClient : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		m_SteamNetConnectionStatusChanged.Dispose();
-
 		TickManager.OnTick -= Tick;
 
 		// Close connections
 		if (!SteamManager.Initialized) return;
+		m_SteamNetConnectionStatusChanged.Dispose();
 
 		SteamNetworkingSockets.CloseListenSocket(m_listenSocket);
 		foreach (Peer peer in NetworkManager.m_peers.Values)
