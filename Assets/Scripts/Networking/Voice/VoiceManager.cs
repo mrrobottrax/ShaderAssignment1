@@ -144,12 +144,10 @@ internal class VoiceManager : MonoBehaviour
 		byte[] buffer = new byte[message.m_cbSize - 1];
 		Marshal.Copy(message.m_pData + 1, buffer, 0, buffer.Length);
 
-		byte[] pPlayBuffer = bufferStruct.m_buffer;
-
 		// Decompress
 		EVoiceResult result = SteamUser.DecompressVoice(
 			buffer, (uint)buffer.Length,
-			pPlayBuffer, (uint)pPlayBuffer.Length,
+			bufferStruct.m_buffer, (uint)bufferStruct.m_buffer.Length,
 			out uint nBytesWritten, m_sampleRate
 		);
 
@@ -159,7 +157,22 @@ internal class VoiceManager : MonoBehaviour
 			return;
 		}
 
-		AudioClip audioClip = AudioClip.Create("Test", (int)nBytesWritten, 1, (int)m_sampleRate, true);
+
+		float[] floatData = new float[nBytesWritten / 2];
+		for (int i = 0; i < floatData.Length; i++)
+		{
+			Int16 value = BitConverter.ToInt16(bufferStruct.m_buffer, i * 2);
+			floatData[i] = value / 32767.0f;
+		}
+
+		AudioClip audioClip = AudioClip.Create("Test", (int)nBytesWritten, 1, (int)m_sampleRate, false, OnPCMReader);
+
+		audioClip.SetData(floatData, 0);
 		bufferStruct.m_audioSource.PlayOneShot(audioClip, 1);
+	}
+
+	void OnPCMReader(float[] data)
+	{
+
 	}
 }
