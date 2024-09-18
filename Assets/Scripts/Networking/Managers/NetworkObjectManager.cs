@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Steamworks;
+using System.Collections.Generic;
 using UnityEngine;
 
 internal static class NetworkObjectManager
@@ -7,7 +8,7 @@ internal static class NetworkObjectManager
 	static int m_lastPersistentID = 0;
 
 	readonly static Dictionary<int, NetworkObject> m_netObjects = new();
-	readonly static Dictionary<int, NetworkObject> m_persistentNetObjects = new(); // DontDestroyOnLoad
+	readonly static Dictionary<int, NetworkObject> m_persistentNetObjects = new(); // DontDestroyOnLoad, includes players
 
 
 	public static NetworkObject GetNetworkObject(int networkID)
@@ -81,7 +82,7 @@ internal static class NetworkObjectManager
 		return m_persistentNetObjects.Values;
 	}
 
-	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message, bool isOwner)
+	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message, Peer sender)
 	{
 		if (message.m_prefabIndex == -1)
 		{
@@ -106,11 +107,17 @@ internal static class NetworkObjectManager
 		NetworkObject netObj = goPrefab.GetComponent<NetworkObject>();
 
 		netObj.m_netID = message.m_networkID;
-		netObj.m_ownerID = message.m_ownerID;
+		netObj.m_ownerIndentity = message.m_ownerIdentity;
 
 		if (message.m_networkID < 0)
 		{
 			Object.DontDestroyOnLoad(goPrefab);
+		}
+
+		// Players get added to dictionary
+		if (netObj.m_ownerIndentity.Equals(sender.m_identity))
+		{
+			sender.m_player = netObj;
 		}
 
 		// Add to list
@@ -119,7 +126,7 @@ internal static class NetworkObjectManager
 		// Set IsOwner of NetworkBehaviours
 		foreach (var component in netObj.m_networkBehaviours)
 		{
-			component.IsOwner = isOwner;
+			component.IsOwner = netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity);
 		}
 
 		return netObj;

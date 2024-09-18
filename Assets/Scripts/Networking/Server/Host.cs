@@ -1,6 +1,5 @@
 ﻿using Steamworks;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,60 +8,52 @@ public class Host : MonoBehaviour
 {
 	protected Callback<SteamNetConnectionStatusChangedCallback_t> m_SteamNetConnectionStatusChanged;
 
-	internal static NetworkObject m_player;
-	internal static readonly Dictionary<SteamNetworkingIdentity, RemoteClient> m_clients = new();
+	HSteamListenSocket m_hListenSocket;
 
-	#region Initialization
+	internal NetworkObject m_player;
+
+	#region Callbacks
+
 	private void Awake()
 	{
-		SceneManager.activeSceneChanged += OnSceneChange;
-	}
-
-	private void OnEnable()
-	{
-		if (!SteamManager.Initialized)
-			return;
-
 		m_SteamNetConnectionStatusChanged = Callback<SteamNetConnectionStatusChangedCallback_t>.Create(OnSteamNetConnectionStatusChanged);
-	}
+		SceneManager.activeSceneChanged += OnSceneChange;
 
-	private void OnDisable()
-	{
-		if (!SteamManager.Initialized)
-			return;
-
-		m_SteamNetConnectionStatusChanged.Dispose();
+		m_hListenSocket = SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
 	}
 
 	private void Start()
 	{
-		SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
-
-		m_player = SpawnPlayer(true);
+		m_player = SpawnPlayer(NetworkManager.m_localIdentity);
 	}
-	#endregion
+
+	private void OnDestroy()
+	{
+		m_SteamNetConnectionStatusChanged.Dispose();
+		SceneManager.activeSceneChanged -= OnSceneChange;
+
+		// Close connections
+		if (!SteamManager.Initialized) return;
+
+		SteamNetworkingSockets.CloseListenSocket(m_hListenSocket);
+		foreach (var client in NetworkManager.m_peers.Values)
+		{
+			SteamNetworkingSockets.CloseConnection(client.m_hConn, 0, null, true);
+		}
+	}
 
 	private void Update()
 	{
-		foreach (var client in m_clients.Values)
+		foreach (var client in NetworkManager.m_peers.Values)
 		{
 			ReceiveMessages(client);
+			client.FlushQueuedMessages();
 		}
 	}
 
-	private void LateUpdate()
-	{
-		if (TickManager.ShouldTick())
-		{
-			// Send updates to all clients
-			foreach (var client in m_clients)
-			{
-				client.Value.FlushQueuedMessages();
-			}
-		}
-	}
+	#endregion
 
-	private void ReceiveMessages(RemoteClient client)
+	private void ReceiveMessages(Peer client)
 	{
 		IntPtr[] pMessages = new IntPtr[NetworkData.k_maxMessages];
 
@@ -77,21 +68,26 @@ public class Host : MonoBehaviour
 		{
 			SteamNetworkingMessage_t message = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pMessages[i]);
 
-			ProcessMessage(message);
+			ProcessMessage(message, client);
 
 			// Free data
 			SteamNetworkingMessage_t.Release(pMessages[i]);
 		}
 	}
 
-	private void ProcessMessage(SteamNetworkingMessage_t message)
+	private void ProcessMessage(SteamNetworkingMessage_t message, Peer sender)
 	{
-		ESnapshotMessageType type = (ESnapshotMessageType)Marshal.ReadByte(message.m_pData);
+		EMessageType type = (EMessageType)Marshal.ReadByte(message.m_pData);
 
 		switch (type)
 		{
-			case ESnapshotMessageType.NetworkBehaviourUpdate:
+			case EMessageType.NetworkBehaviourUpdate:
 				NetworkBehaviour.ProcessUpdateMessage(message);
+				break;
+
+			case EMessageType.VoiceData:
+				if (VoiceManager.Instance)
+					VoiceManager.Instance.ReceiveVoice(message, sender);
 				break;
 
 			default:
@@ -122,12 +118,13 @@ public class Host : MonoBehaviour
 		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
 		{
 			// Check if this player is already in game
-			if (!m_clients.TryGetValue(pCallback.m_info.m_identityRemote, out RemoteClient client))
+			if (!NetworkManager.m_peers.TryGetValue(pCallback.m_info.m_identityRemote, out Peer client))
 			{
 				// Add a new player
-				NetworkObject player = SpawnPlayer();
+				NetworkObject player = SpawnPlayer(pCallback.m_info.m_identityRemote);
 				client = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, player);
-				m_clients.Add(pCallback.m_info.m_identityRemote, client);
+				NetworkManager.m_peers.Add(pCallback.m_info.m_identityRemote, client);
+				Debug.LogWarning("Peer added from host");
 			}
 			else
 			{
@@ -135,26 +132,21 @@ public class Host : MonoBehaviour
 			}
 
 			// Give initial info
-			SendFunctions.SendConnectAck(client);
 			SendFunctions.SendSceneInfo(client);
 
 			// Send DontDestroyOnLoad objects on first connection
 			foreach (var networkObject in NetworkObjectManager.GetPersistentNetObjects())
 			{
-				// Don't send their own player
-				if (networkObject.m_netID != client.m_player.m_netID)
-				{
-					Debug.Log("Sending spawn: " + networkObject.m_netID + " : " + networkObject.m_prefabIndex);
-					SendFunctions.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerID, client);
-					SendFunctions.SendObjectSnapshot(networkObject, client);
-				}
+
+				SendFunctions.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerIndentity, client);
+				SendFunctions.SendObjectSnapshot(networkObject, client);
 			}
 
 			SendFunctions.SendPeers(client);
 		}
 	}
 
-	private NetworkObject SpawnPlayer(bool forHost = false)
+	private NetworkObject SpawnPlayer(SteamNetworkingIdentity owner)
 	{
 		GameObject goPlayer = Instantiate(NetworkData.GetPlayerPrefab());
 		DontDestroyOnLoad(goPlayer);
@@ -162,12 +154,12 @@ public class Host : MonoBehaviour
 		NetworkObject netObj = goPlayer.GetComponent<NetworkObject>();
 		netObj.ForceRegister();
 
-		netObj.m_ownerID = netObj.m_netID;
+		netObj.m_ownerIndentity = owner;
 
 		// Set IsOwner of NetworkBehaviours
 		foreach (var component in netObj.m_networkBehaviours)
 		{
-			component.IsOwner = forHost || netObj.m_ownerID == m_player.m_ownerID;
+			component.IsOwner = owner.Equals(NetworkManager.m_localIdentity);
 		}
 
 		return netObj;

@@ -1,6 +1,4 @@
 ﻿using Steamworks;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum ESteamNetworkingSend : int
 {
@@ -18,13 +16,13 @@ public enum ESteamNetworkingSend : int
 	k_nSteamNetworkingSend_ReliableNoNagle = k_nSteamNetworkingSend_Reliable | k_nSteamNetworkingSend_NoNagle
 }
 
-public class RemoteClient
+public class Peer
 {
 	internal HSteamNetConnection m_hConn;
 	internal SteamNetworkingIdentity m_identity;
-	internal readonly NetworkObject m_player;
+	internal NetworkObject m_player;
 
-	public RemoteClient(HSteamNetConnection hConn, SteamNetworkingIdentity identity, NetworkObject player)
+	public Peer(HSteamNetConnection hConn, SteamNetworkingIdentity identity, NetworkObject player)
 	{
 		m_hConn = hConn;
 		m_identity = identity;

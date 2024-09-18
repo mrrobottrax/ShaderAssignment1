@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Steamworks;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -10,13 +11,78 @@ public class NetworkObject : MonoBehaviour
 	internal int m_prefabIndex = -1; // Only used by spawned prefabs
 
 	internal int m_netID = 0;
-	internal int m_ownerID = 0; // 0 = server owned
+	internal SteamNetworkingIdentity m_ownerIndentity;
 
 	internal NetworkBehaviour[] m_networkBehaviours;
 
 	private void Awake()
 	{
-		// Init all NetworkBehaviours
+		TickManager.OnLateTick += LateTick;
+
+		InitNetworkBehaviours();
+	}
+
+	private void Start()
+	{
+		if (NetworkManager.Mode == ENetworkMode.Host)
+		{
+			ForceRegister();
+		}
+	}
+
+	private void OnDestroy()
+	{
+		TickManager.OnLateTick -= LateTick;
+
+		// Notify clients of destruction
+		if (NetworkManager.Mode == ENetworkMode.Host)
+		{
+			SendFunctions.SendDestroyGameObject(m_netID);
+		}
+
+		// Remove from list
+		NetworkObjectManager.RemoveNetworkObjectFromList(this);
+	}
+
+	void LateTick()
+	{
+		if (NetworkManager.LocalIdentity.Equals(m_ownerIndentity))
+		{
+			// Scan NetworkBehaviours for changes
+			foreach (var net in m_networkBehaviours)
+			{
+				byte[] newBytes = net.GetNetVarBytes();
+
+				if (!Enumerable.SequenceEqual(net.m_netVarBuffer, newBytes))
+				{
+					// Change detected
+					net.m_netVarBuffer = newBytes;
+
+					SendFunctions.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);
+				}
+			}
+		}
+	}
+
+	// Get NetID and add to lists and all that
+	public void ForceRegister()
+	{
+		if (m_netID == 0)
+		{
+			// Reserve net ID
+			m_netID = NetworkObjectManager.ReserveID(this);
+
+			// Add to list
+			NetworkObjectManager.AddNetworkObjectToList(this);
+
+			// Notify peers of object creation
+			SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, NetworkManager.m_localIdentity);
+			SendFunctions.SendObjectSnapshot(this);
+		}
+	}
+
+	void InitNetworkBehaviours()
+	{
 		m_networkBehaviours = gameObject.GetComponentsInChildren<NetworkBehaviour>();
 
 		for (int i = 0; i < m_networkBehaviours.Length; ++i)
@@ -76,68 +142,6 @@ public class NetworkObject : MonoBehaviour
 			// Apply to array
 			net.m_netVarBuffer = new byte[size];
 			net.m_netVarBuffer = net.GetNetVarBytes();
-		}
-	}
-
-	private void Start()
-	{
-		ForceRegister();
-	}
-
-	// Get NetID and add to lists and all that
-	public void ForceRegister()
-	{
-		if (NetworkManager.Mode != ENetworkMode.Client)
-		{
-			if (m_netID == 0)
-			{
-				// Reserve net ID
-				m_netID = NetworkObjectManager.ReserveID(this);
-
-				// Notify clients of object creation
-				SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, m_ownerID);
-				SendFunctions.SendObjectSnapshot(this);
-
-				// Add to list
-				NetworkObjectManager.AddNetworkObjectToList(this);
-			}
-		}
-	}
-
-	private void OnDestroy()
-	{
-		if (NetworkManager.Mode == ENetworkMode.Host)
-		{
-			SendFunctions.SendDestroyGameObject(m_netID);
-		}
-
-		// Remove from list
-		NetworkObjectManager.RemoveNetworkObjectFromList(this);
-	}
-
-	private void Update()
-	{
-		if (TickManager.ShouldTick())
-			Tick();
-	}
-
-	void Tick()
-	{
-		if (NetworkManager.PlayerID == m_ownerID)
-		{
-			// Scan NetworkBehaviours for changes
-			foreach (var net in m_networkBehaviours)
-			{
-				byte[] newBytes = net.GetNetVarBytes();
-
-				if (!Enumerable.SequenceEqual(net.m_netVarBuffer, newBytes))
-				{
-					// Change detected
-					net.m_netVarBuffer = newBytes;
-
-					SendFunctions.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);
-				}
-			}
 		}
 	}
 }

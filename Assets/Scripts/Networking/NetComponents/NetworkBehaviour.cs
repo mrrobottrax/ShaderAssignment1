@@ -59,16 +59,22 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		// Read message from buffer
 		NetworkBehaviourUpdateMessage behaviourUpdate = Marshal.PtrToStructure<NetworkBehaviourUpdateMessage>(message.m_pData + 1);
 
+		// Copy new data into fields
+		NetworkObject obj = NetworkObjectManager.GetNetworkObject(behaviourUpdate.m_networkID);
+		NetworkBehaviour comp = obj.m_networkBehaviours[behaviourUpdate.m_componentIndex];
+
+		if (!obj)
+		{
+			Debug.LogWarning($"Network object {behaviourUpdate.m_networkID} doesn't exist yet");
+			return;
+		}
+
 		// Read new data from buffer
 		int cbStart = 1 + Marshal.SizeOf<NetworkBehaviourUpdateMessage>();
 		int cbBuffer = message.m_cbSize - cbStart;
 
 		byte[] buffer = new byte[cbBuffer];
 		Marshal.Copy(message.m_pData + cbStart, buffer, 0, cbBuffer);
-
-		// Copy new data into fields
-		NetworkObject obj = NetworkObjectManager.GetNetworkObject(behaviourUpdate.m_networkID);
-		NetworkBehaviour comp = obj.m_networkBehaviours[behaviourUpdate.m_componentIndex];
 
 		comp.m_netVarBuffer = buffer;
 
