@@ -46,14 +46,16 @@ public class NetworkAnimatorSync : NetworkBehaviour
 					CopyParamToBuffer(bytes, index);
 					break;
 				case AnimatorControllerParameterType.Float:
-					ParamToBytes(m_animator.GetFloat(param.nameHash), index);
+					bytes = BitConverter.GetBytes(m_animator.GetFloat(param.nameHash));
+					CopyParamToBuffer(bytes, index);
 					break;
 				case AnimatorControllerParameterType.Int:
-					ParamToBytes(m_animator.GetInteger(param.nameHash), index);
+					bytes = BitConverter.GetBytes(m_animator.GetInteger(param.nameHash));
+					CopyParamToBuffer(bytes, index);
 					break;
-				//case AnimatorControllerParameterType.Trigger:
-				//	ParamToBytes(m_animator.GetBool(param.nameHash), index);
-				//	break;
+					//case AnimatorControllerParameterType.Trigger:
+					//	ParamToBytes(m_animator.GetBool(param.nameHash), index);
+					//	break;
 			}
 
 			++index;
@@ -76,30 +78,23 @@ public class NetworkAnimatorSync : NetworkBehaviour
 
 			switch (param.type)
 			{
-				IntPtr pValue = handle.AddrOfPinnedObject() + 4 * index;
-
-				switch (param.type)
-				{
-					case AnimatorControllerParameterType.Bool:
-						bool bValue = Marshal.PtrToStructure<bool>(pValue);
-						m_animator.SetBool(param.nameHash, bValue);
-						break;
-					case AnimatorControllerParameterType.Float:
-						float fValue = Marshal.PtrToStructure<float>(pValue);
-						m_animator.SetFloat(param.nameHash, fValue);
-						break;
-					case AnimatorControllerParameterType.Int:
-						int iValue = Marshal.PtrToStructure<int>(pValue);
-						m_animator.SetInteger(param.nameHash, iValue);
-						break;
-					case AnimatorControllerParameterType.Trigger:
-						bool trigger = Marshal.PtrToStructure<bool>(pValue);
-						if (trigger)
-							m_animator.SetTrigger(param.nameHash);
-						break;
-				}
-
-				++index;
+				case AnimatorControllerParameterType.Bool:
+					bool bValue = BitConverter.ToBoolean(paramBytes);
+					m_animator.SetBool(param.nameHash, bValue);
+					break;
+				case AnimatorControllerParameterType.Float:
+					float fValue = BitConverter.ToSingle(paramBytes);
+					m_animator.SetFloat(param.nameHash, fValue);
+					break;
+				case AnimatorControllerParameterType.Int:
+					int iValue = BitConverter.ToInt32(paramBytes);
+					m_animator.SetInteger(param.nameHash, iValue);
+					break;
+				//case AnimatorControllerParameterType.Trigger:
+				//	bool trigger = Marshal.PtrToStructure<bool>(pValue);
+				//	if (trigger)
+				//		m_animator.SetTrigger(param.nameHash);
+				//	break;
 			}
 
 			++index;
