@@ -29,7 +29,7 @@ public class PortableCamera_ViewModel : ViewModel_Base
         {
             Weapon_ItemData weaponData = weaponItem.GetWeaponData();
 
-            captureCameraComponent.PrintPhysicalPhoto();
+            captureCameraComponent.PrintPhysicalPhoto(attack.AttackPosition.position, Quaternion.identity);
         }
     }
     #endregion

@@ -30,8 +30,6 @@ namespace CaptureCamera
             photo.polaroidImage.material.SetTexture("_Texture", CaptureFrame(cameraLensWidth, cameraLensHeight));
             photo.SetImageTexture(CaptureFrame(cameraLensWidth, cameraLensHeight));
 
-            FindObjectsInView();
-
             return photo.gameObject;
         }
 
