@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Shovel_ViewModel : ViewModel_Base
 {
-    [SerializeField] static private LayerMask _digLayer;
-
     private static FirstPersonCamera firstPersonCamera;
 
     private void Awake()

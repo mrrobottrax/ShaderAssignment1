@@ -16,6 +16,8 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 1
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -290,24 +292,21 @@ ModelImporter:
       - time: 0
         functionName: StartAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.41935486
         functionName: TryAttack_AnimationEvent
         data: Spear_Melee
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 1
         functionName: FinishAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -343,24 +342,21 @@ ModelImporter:
       - time: 0
         functionName: StartAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
       - time: 0.54748297
         functionName: TryAttack_AnimationEvent
         data: Spear_Throw
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 1
         functionName: FinishAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
@@ -396,8 +392,7 @@ ModelImporter:
       - time: 0
         functionName: EnableViewModelPrimaryMesh
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 3212dfe8727e67342aa6dceec2327590,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 3212dfe8727e67342aa6dceec2327590, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -462,24 +457,21 @@ ModelImporter:
       - time: 0
         functionName: StartAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.3470877
         functionName: TryAttack_AnimationEvent
         data: Punch
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 1
         functionName: FinishAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -515,24 +507,21 @@ ModelImporter:
       - time: 0
         functionName: StartAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.35318276
         functionName: TryAttack_AnimationEvent
         data: Punch
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
       - time: 1
         functionName: FinishAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -568,24 +557,21 @@ ModelImporter:
       - time: 0
         functionName: StartAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.3559133
         functionName: TryAttack_AnimationEvent
         data: Punch
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 2
         messageOptions: 0
       - time: 1
         functionName: FinishAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -650,8 +636,7 @@ ModelImporter:
       - time: 0.43967828
         functionName: TryAttack_AnimationEvent
         data: Shovel_Dig
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -687,24 +672,21 @@ ModelImporter:
       - time: 0
         functionName: StartAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.47727272
         functionName: TryAttack_AnimationEvent
         data: Shovel_Melee
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 1
         functionName: FinishAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -740,24 +722,21 @@ ModelImporter:
       - time: 0
         functionName: StartAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.4798928
         functionName: TryAttack_AnimationEvent
         data: Shovel_Melee
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
       - time: 1
         functionName: FinishAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -793,24 +772,21 @@ ModelImporter:
       - time: 0
         functionName: StartAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.4664879
         functionName: TryAttack_AnimationEvent
         data: Shovel_Melee
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 2
         messageOptions: 0
       - time: 1
         functionName: FinishAttack_AnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -933,8 +909,159 @@ ModelImporter:
       - time: 0.24355972
         functionName: TryAttack_AnimationEvent
         data: Spotlamp_Toggle
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|PortableCamera_Transition
+      takeName: Armature|PortableCamera_Transition
+      internalID: 7618004424778780574
+      firstFrame: 0
+      lastFrame: 16
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|PortableCamera_Idle
+      takeName: Armature|PortableCamera_Idle
+      internalID: 7033807579250390168
+      firstFrame: 0
+      lastFrame: 65
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|PortableCamera_Aim
+      takeName: Armature|PortableCamera_Aim
+      internalID: -5990191974882312045
+      firstFrame: 0
+      lastFrame: 12
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|PortableCamera_AimIdle
+      takeName: Armature|PortableCamera_AimIdle
+      internalID: -5465480162635926223
+      firstFrame: 0
+      lastFrame: 65
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|PortableCamera_Shoot
+      takeName: Armature|PortableCamera_Shoot
+      internalID: -5694637585634827325
+      firstFrame: 0
+      lastFrame: 12
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.6449704
+        functionName: TryAttack_AnimationEvent
+        data: Shoot
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
