@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Host : MonoBehaviour
+internal class Host : MonoBehaviour
 {
 	protected Callback<SteamNetConnectionStatusChangedCallback_t> m_SteamNetConnectionStatusChanged;
 

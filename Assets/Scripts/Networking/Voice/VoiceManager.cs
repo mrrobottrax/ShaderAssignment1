@@ -40,7 +40,6 @@ internal class VoiceManager : MonoBehaviour
 	readonly Dictionary<SteamNetworkingIdentity, PlayerBuffer> m_playerBuffers = new();
 
 
-
 	private void Awake()
 	{
 		NetworkManager.OnModeChange += OnModeChange;
