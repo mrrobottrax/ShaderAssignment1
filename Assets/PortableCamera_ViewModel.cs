@@ -1,13 +1,18 @@
+using CaptureCamera;
 using UnityEngine;
 
+[RequireComponent(typeof(CaptureCameraComponent))]
 public class PortableCamera_ViewModel : ViewModel_Base
 {
     private static FirstPersonCamera firstPersonCamera;
+    private static CaptureCameraComponent captureCameraComponent;
 
     private void Awake()
     {
         // Add available actions to the functions list
         functions.Add("Shoot", new ShootAction());
+
+        captureCameraComponent = GetComponent<CaptureCameraComponent>();
     }
 
     private void Start()
@@ -24,7 +29,7 @@ public class PortableCamera_ViewModel : ViewModel_Base
         {
             Weapon_ItemData weaponData = weaponItem.GetWeaponData();
 
-            
+            captureCameraComponent.PrintPhysicalPhoto();
         }
     }
     #endregion
