@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu]
+//[CreateAssetMenu]
 public class PlayerMovementData : ScriptableObject
 {
 	[field: Header("Walking Movement Values")]

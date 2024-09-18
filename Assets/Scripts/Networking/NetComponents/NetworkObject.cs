@@ -120,6 +120,11 @@ public class NetworkObject : MonoBehaviour
 
 					size += array.Length * Marshal.SizeOf(elementType);
 				}
+				else if (field.FieldType.IsEnum)
+				{
+					Type underlyingType = Enum.GetUnderlyingType(field.FieldType);
+					size += Marshal.SizeOf(underlyingType);
+				}
 				else
 				{
 					// Get size of NetVar

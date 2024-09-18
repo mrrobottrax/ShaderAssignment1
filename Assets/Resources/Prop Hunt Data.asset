@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3832d0374283a4bb2a16e88f056ad8, type: 3}
+  m_Name: Prop Hunt Data
+  m_EditorClassIdentifier: 
+  m_meshes:
+  - {fileID: 2534964839176971238, guid: 4817128843d9b314db63851712fa49ff, type: 3}
+  - {fileID: 2534964839176971238, guid: f8ff5171a7eb85d4aa37a50a32905693, type: 3}
+  - {fileID: -7387706064836869012, guid: c48a566a7eb2b894cba4e283c7295b79, type: 3}
+  - {fileID: -1579241630799410176, guid: dceed6ebde2625a40a9b0a2248c937b9, type: 3}

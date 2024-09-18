@@ -28,7 +28,26 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		{
 			object value = field.GetValue(this);
 
-			if (!field.FieldType.IsArray)
+			if (field.FieldType.IsEnum)
+			{
+				Type underlying = Enum.GetUnderlyingType(field.FieldType);
+				int size = Marshal.SizeOf(underlying);
+
+				IntPtr pData = Marshal.AllocHGlobal(size);
+				try
+				{
+
+					Marshal.StructureToPtr(value, pData, false);
+					Marshal.Copy(pData, buffer, offset, size);
+				}
+				finally
+				{
+					Marshal.FreeHGlobal(pData);
+				}
+
+				offset += size;
+			}
+			else if (!field.FieldType.IsArray)
 			{
 				var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
 				try

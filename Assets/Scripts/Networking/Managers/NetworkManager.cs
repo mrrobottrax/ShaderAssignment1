@@ -241,5 +241,27 @@ public static class NetworkManager
 		}
 	}
 
+	public static int GetPlayerCount()
+	{
+		return m_peers.Count + 1;
+	}
+
+	public static NetworkObject[] GetAllPlayers()
+	{
+		NetworkObject[] players = new NetworkObject[GetPlayerCount()];
+
+		players[0] = m_localClient.m_player;
+
+		int i = 1;
+		foreach (var peer in m_peers.Values)
+		{
+			players[i] = peer.m_player;
+
+			++i;
+		}
+
+		return players;
+	}
+
 	#endregion
 }

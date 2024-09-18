@@ -1,20 +1,36 @@
-﻿using System;
+using System;
 using UnityEngine.SceneManagement;
 
-public enum EGameState
+public enum EPropHuntGameState
 {
 	Menu = 0,
 	InLobby, // In the lobby, selling stuff, etc, players can join
 	InGame, // Players can join but will be put in spectator mode
 }
 
-public static class GameManager
+public static class PropHuntGameManager
 {
 	private static EGameState m_gameState;
 	public static EGameState GameState { get { return m_gameState; } }
 
 
 	public static Action onGameStateChange;
+
+	public static void StartGame()
+	{
+		SceneManager.LoadScene("Prop Hunt Map");
+		ChangeGameState(EGameState.InGame);
+
+		foreach (var player in NetworkManager.GetAllPlayers())
+		{
+			player.gameObject.GetComponent<PropHuntPlayer>().Init();
+		}
+	}
+
+	public static void StopGame()
+	{
+
+	}
 
 	private static void ChangeGameState(EGameState state)
 	{
@@ -41,11 +57,5 @@ public static class GameManager
 	{
 		SceneManager.LoadScene(1);
 		ChangeGameState(EGameState.InLobby);
-	}
-
-	public static void GoToTestLevel()
-	{
-		ChangeGameState(EGameState.InGame);
-		SceneManager.LoadScene(2);
 	}
 }
