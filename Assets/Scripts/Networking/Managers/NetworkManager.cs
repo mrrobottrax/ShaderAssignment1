@@ -206,7 +206,7 @@ public static class NetworkManager
 	public static void StartHosting()
 	{
 		m_mode = ENetworkMode.Host;
-		OnModeChange.Invoke(m_mode);
+		OnModeChange?.Invoke(m_mode);
 
 		// Create host script
 		ClearHostAndClient();

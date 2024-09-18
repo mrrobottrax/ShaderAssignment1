@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 internal struct TransformUpdate
 {
 	public Vector3 position;
@@ -20,12 +21,14 @@ public class NetworkTransformSync : NetworkBehaviour
 
 	private void Awake()
 	{
-		TickManager.OnTick += Tick;
+		if (IsOwner)
+			TickManager.OnTick += Tick;
 	}
 
 	private void OnDestroy()
 	{
-		TickManager.OnTick -= Tick;
+		if (IsOwner)
+			TickManager.OnTick -= Tick;
 	}
 
 	private void Tick()
