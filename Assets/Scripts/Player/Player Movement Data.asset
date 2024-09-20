@@ -16,7 +16,7 @@ MonoBehaviour:
   m_crouchingSpeed: 2.5
   m_friction: 50
   m_acceleration: 120
-  m_stopSpeed: 80
+  m_stopSpeed: 8
   m_jumpForce: 6
   m_knockUpThreshold: 2
   m_stepHeight: 0.7
