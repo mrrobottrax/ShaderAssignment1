@@ -250,7 +250,7 @@ public static class NetworkManager
 	{
 		NetworkObject[] players = new NetworkObject[GetPlayerCount()];
 
-		players[0] = m_localClient.m_player;
+		players[0] = GetLocalPlayer();
 
 		int i = 1;
 		foreach (var peer in m_peers.Values)

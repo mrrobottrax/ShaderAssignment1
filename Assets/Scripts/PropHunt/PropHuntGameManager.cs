@@ -18,7 +18,7 @@ public static class PropHuntGameManager
 
 	public static void StartGame()
 	{
-		SceneManager.LoadScene("Prop Hunt Map");
+		SceneManager.LoadScene("PropHunt");
 		ChangeGameState(EGameState.InGame);
 
 		foreach (var player in NetworkManager.GetAllPlayers())

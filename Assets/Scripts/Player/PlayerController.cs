@@ -248,7 +248,7 @@ public class PlayerController : NetworkBehaviour
 		float halfHeight = GetColliderHeight() / 2f;
 		Collider[] colliders = Physics.OverlapBox(
 			m_position + Vector3.up * halfHeight,
-			new Vector3(m_movementData.m_horizontalSize / 2f, halfHeight, m_movementData.m_horizontalSize / 2f),
+			new Vector3(m_movementData.m_horizontalSize / 2f - k_hitEpsilon, halfHeight - k_hitEpsilon, m_movementData.m_horizontalSize / 2f - k_hitEpsilon),
 			Quaternion.identity,
 			m_movementData.m_layerMask,
 			QueryTriggerInteraction.Ignore
@@ -518,8 +518,11 @@ public class PlayerController : NetworkBehaviour
 			}
 		}
 		else if (IsCrouching)
+		{
 			TryCrouch(false);
+		}
 
+		// Pick movement method
 		if (IsGrounded)
 		{
 			GroundMove(globalWishDir);
@@ -622,6 +625,11 @@ public class PlayerController : NetworkBehaviour
 		m_velocity.y -= (m_movementData.m_gravity * Time.fixedDeltaTime) / 2f;
 		CollideAndSlide();
 		m_velocity.y -= (m_movementData.m_gravity * Time.fixedDeltaTime) / 2f;
+	}
+
+	public void Teleport(Vector3 position)
+	{
+		m_position = position;
 	}
 
 	#endregion
