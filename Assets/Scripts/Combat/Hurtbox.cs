@@ -10,8 +10,8 @@ public class Hurtbox : MonoBehaviour, IDamagable
     [SerializeField] private bool _isDamagable = true;
 
     [field: Header("Damage Reduction")]
-    public int Defence => _defence;
     [SerializeField] private int _defence;
+    public int Defence => _defence;
 
     public float BludgeoningResistance => _bludgeoningResistance;
     [SerializeField, Range(0, 1)] private float _bludgeoningResistance;

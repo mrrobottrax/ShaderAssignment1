@@ -1,13 +1,10 @@
-using UnityEngine;
 
 public interface ITickingStatusEffectData
 {
 
-    [field: Header("Application Properties")]
     public bool IsStackable { get; }
     public bool IsInfinite { get; }
 
-    [field: Header("Tick Properties")]
     public float TickSpeed { get; } // The amount of seconds that pass before the effect is applied again.
     public float Duration { get; }  // The duration of the effect in seconds
 

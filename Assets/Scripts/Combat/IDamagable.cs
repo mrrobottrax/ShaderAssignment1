@@ -1,10 +1,8 @@
-using UnityEngine;
 
 public interface IDamagable
 {
     public bool IsDamagable { get; }
 
-    [field: Header("Damage Reduction")]
     public int Defence { get; }
 
     public float BludgeoningResistance { get; }

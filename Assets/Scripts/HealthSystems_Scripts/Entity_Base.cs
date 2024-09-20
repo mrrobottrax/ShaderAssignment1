@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,8 +8,8 @@ using UnityEngine;
 public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPacketCompleter
 {
     [field: Header("Health")]
-    public int Health => health;
     private int health;
+    public int Health => health;
 
     public int MaxHealth => maxHealth;
     [SerializeField] private int maxHealth;

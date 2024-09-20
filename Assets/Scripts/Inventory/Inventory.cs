@@ -10,9 +10,6 @@ public class Inventory
     [SerializeField] private List<InventorySlot> _slots;
     public List<InventorySlot> Slots => _slots;
 
-    [field: Header("System")]
-    public int InvSize => _slots.Count;
-
     [field: Header("Events")]
     public event Action OnSlotChanged;
 

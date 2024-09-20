@@ -18,10 +18,8 @@ public abstract class InventoryDisplay : MenuDisplayBase
     [SerializeField] private ItemDescriptionDisplay _itemDiscription_Display;
 
     [field: Header("System")]
-
-    // Inventory and locally organized slots
+    protected InventoryComponent pairedInventoryComponent;// Inventory and locally organized slots
     public InventoryComponent PairedInventoryComponent => pairedInventoryComponent;
-    protected InventoryComponent pairedInventoryComponent;
 
     protected Inventory pairedInventory;
 

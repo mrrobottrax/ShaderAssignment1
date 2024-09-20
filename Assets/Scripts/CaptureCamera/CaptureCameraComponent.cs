@@ -45,7 +45,7 @@ namespace CaptureCamera
         private void FindObjectsInView()
         {
 
-            RaycastHit hit;
+            //RaycastHit hit;
 
             Vector3 p1 = transform.position + (transform.forward * castStartPoint);
         
