@@ -20,7 +20,7 @@ MonoBehaviour:
   <ItemBaseValue>k__BackingField: 0
   <BaseDamage>k__BackingField: 0
   <BaseWeaponRange>k__BackingField: 0
-  <ViewModelID>k__BackingField: 3
+  <ViewModelID>k__BackingField: 2
   <AmmoType>k__BackingField: 0
   <AmmoItemData>k__BackingField: {fileID: 0}
   <MagazineSize>k__BackingField: 0
