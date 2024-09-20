@@ -52,6 +52,7 @@ public class ProjectileData : ScriptableObject
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(ProjectileData))]
 public class ProjectileDataEditor : Editor
 {
@@ -100,3 +101,5 @@ public class ProjectileDataEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+
+#endif

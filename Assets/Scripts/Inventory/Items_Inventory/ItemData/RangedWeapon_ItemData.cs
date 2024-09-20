@@ -25,6 +25,7 @@ public class RangedWeapon_ItemData : Weapon_ItemData
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(RangedWeapon_ItemData))]
 public class RangedWeapon_ItemDataEditor : Editor
 {
@@ -99,3 +100,4 @@ public class RangedWeapon_ItemDataEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif

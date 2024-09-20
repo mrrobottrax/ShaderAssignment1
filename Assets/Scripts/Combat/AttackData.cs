@@ -20,15 +20,6 @@ public class AttackData : ScriptableObject
     [field: SerializeField] public LayerMask AffectedLayers { get; private set; }
     [field: SerializeField] public StatusEffectData_Base[] EffectsApplied { get; private set; }
 
-    /*
-     * At some point we should have attack follow through that overrides the entities move direction for a duration of time
-     * This will allow us to make attacks where the player charges forward & shit.
-    [field: SerializeField, Tooltip("A movement overide applied to the attacker")]
-    public Vector3 FollowThroughMovement { get; private set; }
-    public float FollowThroughDuration { get; private set; }
-    */
-
-
     [field: SerializeField, Tooltip("When given a projectile, a copy of said projectile will be created on attack.")]
     public ProjectileData ProjectileCreated { get; private set; }
 
@@ -53,6 +44,15 @@ public class AttackData : ScriptableObject
     public float ScreenShakeDuration { get; private set; }
 }
 
+public enum EAttackApplicationType
+{
+    NoneOrProjectile,
+    Positional,
+    Swinging,
+    Hitscan
+}
+
+#if UNITY_EDITOR
 [CustomEditor(typeof(AttackData))]
 public class AttackData_Editor : Editor
 {
@@ -101,7 +101,7 @@ public class AttackData_Editor : Editor
         EditorGUILayout.PropertyField(cooldown);
         EditorGUILayout.PropertyField(applicationType);
 
-        if(applicationType.enumValueIndex == (int)EAttackApplicationType.Swinging)
+        if (applicationType.enumValueIndex == (int)EAttackApplicationType.Swinging)
         {
             EditorGUILayout.PropertyField(swingRange);
             EditorGUILayout.PropertyField(swingClockwiseAngle);
@@ -125,11 +125,4 @@ public class AttackData_Editor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
-
-public enum EAttackApplicationType
-{
-    NoneOrProjectile,
-    Positional,
-    Swinging,
-    Hitscan
-}
+#endif

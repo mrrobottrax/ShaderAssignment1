@@ -24,7 +24,8 @@ namespace CaptureCamera
         /// </summary>
         public GameObject PrintPhysicalPhoto(Vector3 pos, Quaternion rot)
         {
-            Polaroid photo = Instantiate(_photoPrefab, pos, rot, null);
+            Polaroid photo = Instantiate(_photoPrefab, pos, Quaternion.identity, null);
+            photo.transform.rotation = rot;
 
             // Apply frame as a texture to the created photo
             photo.polaroidImage.material.SetTexture("_Texture", CaptureFrame(cameraLensWidth, cameraLensHeight));
@@ -36,7 +37,7 @@ namespace CaptureCamera
 
         public GameObject PrintPhysicalPhoto()
         {
-            return PrintPhysicalPhoto(transform.position, Quaternion.identity);
+            return PrintPhysicalPhoto(transform.position, transform.rotation);
         }
 
         #region Photo Capture methods
