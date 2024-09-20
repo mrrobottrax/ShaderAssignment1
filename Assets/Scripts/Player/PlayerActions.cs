@@ -34,11 +34,49 @@ public class PlayerActions : MonoBehaviour, IInputHandler
 	{
 		SetControlsSubscription(true);
 	}
-	#endregion
+    #endregion
 
-	#region Input Methods
+    #region Input Methods
 
-	public void SetControlsSubscription(bool isInputEnabled)
+    public void Subscribe()
+    {
+        // Fire 1
+        InputManager.Instance.controls.Player.Fire1.performed += OnPressFire1;
+
+        InputManager.Instance.controls.Player.Fire1.performed += Fire1Input;
+        InputManager.Instance.controls.Player.Fire1.canceled += Fire1Input;
+
+        // Fire 2
+        InputManager.Instance.controls.Player.Fire2.performed += OnPressFire2;
+
+        InputManager.Instance.controls.Player.Fire2.performed += Fire2Input;
+        InputManager.Instance.controls.Player.Fire2.canceled += Fire2Input;
+
+        // Reload
+        InputManager.Instance.controls.Player.Reload.performed += OnPressReload;
+        InputManager.Instance.controls.Player.Reload.canceled += OnReleaseReload;
+    }
+
+    public void Unsubscribe()
+    {
+        // Fire 1
+        InputManager.Instance.controls.Player.Fire1.performed -= OnPressFire1;
+
+        InputManager.Instance.controls.Player.Fire1.performed -= Fire1Input;
+        InputManager.Instance.controls.Player.Fire1.canceled -= Fire1Input;
+
+        // Fire 2
+        InputManager.Instance.controls.Player.Fire2.performed -= OnPressFire2;
+
+        InputManager.Instance.controls.Player.Fire2.performed -= Fire2Input;
+        InputManager.Instance.controls.Player.Fire2.canceled -= Fire2Input;
+
+        // Reload
+        InputManager.Instance.controls.Player.Reload.performed -= OnPressReload;
+        InputManager.Instance.controls.Player.Reload.canceled -= OnReleaseReload;
+    }
+
+    public void SetControlsSubscription(bool isInputEnabled)
     {
         if (isInputEnabled)
             Subscribe();
@@ -55,10 +93,7 @@ public class PlayerActions : MonoBehaviour, IInputHandler
             return;
 
         if (!isPlayerReady)
-        {
-            isPlayerReady = true;
-            viewModelManager.SetPlayerReady(isPlayerReady);
-        }
+            SetPlayerReady(true);
         else
         {
             // Try primary function
@@ -124,50 +159,27 @@ public class PlayerActions : MonoBehaviour, IInputHandler
         }
         else if (!isPlayerReady && timeReloadHeld <= 0.2f)// Only ready the player when they briefly click reload, not after they release it after waiting.
         {
-            isPlayerReady = true;
-            viewModelManager.SetPlayerReady(isPlayerReady);
+            SetPlayerReady(true);
         }
 
         // Reset reloading timer
         timeReloadHeld = 0;
     }
 
-    public void Subscribe()
+    private void SetPlayerReady(bool isReady)
     {
-        // Fire 1
-        InputManager.Instance.controls.Player.Fire1.performed += OnPressFire1;
+        isPlayerReady = isReady;
 
-        InputManager.Instance.controls.Player.Fire1.performed += Fire1Input;
-        InputManager.Instance.controls.Player.Fire1.canceled += Fire1Input;
-
-        // Fire 2
-        InputManager.Instance.controls.Player.Fire2.performed += OnPressFire2;
-
-        InputManager.Instance.controls.Player.Fire2.performed += Fire2Input;
-        InputManager.Instance.controls.Player.Fire2.canceled += Fire2Input;
-
-        // Reload
-        InputManager.Instance.controls.Player.Reload.performed += OnPressReload;
-        InputManager.Instance.controls.Player.Reload.canceled += OnReleaseReload;
-    }
-
-    public void Unsubscribe()
-    {
-        // Fire 1
-        InputManager.Instance.controls.Player.Fire1.performed -= OnPressFire1;
-
-        InputManager.Instance.controls.Player.Fire1.performed -= Fire1Input;
-        InputManager.Instance.controls.Player.Fire1.canceled -= Fire1Input;
-
-        // Fire 2
-        InputManager.Instance.controls.Player.Fire2.performed -= OnPressFire2;
-
-        InputManager.Instance.controls.Player.Fire2.performed -= Fire2Input;
-        InputManager.Instance.controls.Player.Fire2.canceled -= Fire2Input;
-
-        // Reload
-        InputManager.Instance.controls.Player.Reload.performed -= OnPressReload;
-        InputManager.Instance.controls.Player.Reload.canceled -= OnReleaseReload;
+        if (isReady)
+        {
+            viewModelManager.TriggerReady();
+            viewModelManager.SetReady(true);
+        }
+        else
+        {
+            viewModelManager.TriggerHolster();
+            viewModelManager.SetReady(false);
+        }
     }
     #endregion
 
@@ -187,13 +199,8 @@ public class PlayerActions : MonoBehaviour, IInputHandler
 
             // If reload passes threshold, un-ready the player
             if (timeReloadHeld > 1)
-            {
-                isHoldingReload = false;
-                isPlayerReady = false;
-                viewModelManager.SetPlayerReady(isPlayerReady);
-            }
+                SetPlayerReady(false);
         }
-
     }
     #endregion
 }

@@ -57,8 +57,22 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.32792422
-        functionName: NewEvent
+      - time: 0
+        functionName: StartAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.372172
+        functionName: TryAttack_AnimationEvent
+        data: Punch
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: FinishAttack_AnimationEvent
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -92,7 +106,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: StartAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.30884504
+        functionName: TryAttack_AnimationEvent
+        data: Punch
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 1
+        functionName: FinishAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -121,7 +156,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: StartAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.35738298
+        functionName: TryAttack_AnimationEvent
+        data: Punch
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 1
+        functionName: FinishAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -167,7 +223,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -225,7 +281,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -272,18 +328,18 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Idle
-      takeName: Armature|Idle
+      name: Armature|Unready_Idle
+      takeName: Armature|Unready_Idle
       internalID: -8945691123924629249
       firstFrame: 0
-      lastFrame: 0
+      lastFrame: 9
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -341,7 +397,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -382,7 +438,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.60939336
+        functionName: TryAttack_AnimationEvent
+        data: Shoot
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -399,7 +462,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -440,7 +503,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.6535824
+        functionName: TryAttack_AnimationEvent
+        data: Shoot
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -498,7 +568,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: StartAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4753654
+        functionName: TryAttack_AnimationEvent
+        data: Shovel_Melee
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: FinishAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -527,7 +618,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: StartAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.26849413
+        functionName: TryAttack_AnimationEvent
+        data: Shovel_Melee
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 1
+        functionName: FinishAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -556,7 +668,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: StartAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.45464167
+        functionName: TryAttack_AnimationEvent
+        data: Shovel_Melee
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 1
+        functionName: FinishAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -585,7 +718,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.4735379
+        functionName: TryAttack_AnimationEvent
+        data: Shovel_Dig
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -602,7 +742,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -625,93 +765,6 @@ ModelImporter:
       internalID: 1896909158980499487
       firstFrame: 0
       lastFrame: 27
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|Spotlamp_Idle
-      takeName: Armature|Spotlamp_Idle
-      internalID: 3964681634829048538
-      firstFrame: 0
-      lastFrame: 70
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|Spotlamp_Toggle
-      takeName: Armature|Spotlamp_Toggle
-      internalID: -955866831603228027
-      firstFrame: 0
-      lastFrame: 23
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|Spotlamp_Transition
-      takeName: Armature|Spotlamp_Transition
-      internalID: 877369519869194288
-      firstFrame: 0
-      lastFrame: 12
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -776,7 +829,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -805,7 +858,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -846,7 +899,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: StartAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.41396192
+        functionName: TryAttack_AnimationEvent
+        data: Spear_Melee
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: FinishAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -875,7 +949,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: StartAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.47956857
+        functionName: TryAttack_AnimationEvent
+        data: Spear_Throw
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: FinishAttack_AnimationEvent
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

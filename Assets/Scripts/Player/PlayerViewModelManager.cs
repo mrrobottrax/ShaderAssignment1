@@ -103,9 +103,28 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
     }
 
     /// <summary>
-    /// This method will update the animator to either show or hide the players hands and held item
+    /// Triggers the "Ready" trigger on the view model animator
     /// </summary>
-    public void SetPlayerReady(bool isReady)
+    public void TriggerReady()
+    {
+        animator.SetTrigger("Ready");
+    }
+
+    /// <summary>
+    /// Triggers the "Holster" trigger on the view model animator
+    /// </summary>
+    public void TriggerHolster()
+    {
+        animator.SetTrigger("Holster");
+    }
+
+    /// <summary>
+    /// Sets the state of the "IsReady" boolean on the view model animator
+    /// </summary>
+    /// <remarks>
+    /// This is should be used when transitioning to layers when already ready
+    /// </remarks>
+    public void SetReady(bool isReady)
     {
         animator.SetBool("IsReady", isReady);
     }
