@@ -84,7 +84,7 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 		crouchProgress += Time.fixedDeltaTime * duckSpeed * (playerController.IsCrouching ? -1 : 1);
 		crouchProgress = Mathf.Clamp01(crouchProgress);
 
-		height = Mathf.Lerp(playerController.crouchingHeight, playerController.standingHeight, crouchProgress) - foreheadSize;
+		height = Mathf.Lerp(playerController.MvmtData.m_crouchingHeight, playerController.MvmtData.m_standingHeight, crouchProgress) - foreheadSize;
 
 		// Smooth stepping
 		stepOffset -= 0.5f * stepOffset * Time.fixedDeltaTime * stepLerpSpeed;
@@ -168,26 +168,5 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 	{
 		stepOffset -= stepHeight;
 	}
-
-	IEnumerator VaultAnimation(Vector3 startPos, Vector3 endPos, bool isOnBoat)
-	{
-		float endTime = Time.time + playerController.vaultDuration;
-
-		// Loop each FixedUpdate until animation complete
-		float vaultProgress = 0;
-		while (Time.time <= endTime)
-		{
-			yield return new WaitForFixedUpdate();
-
-			// Vaulting interp
-			vaultProgress += Time.fixedDeltaTime / playerController.vaultDuration;
-			position = Vector3.Lerp(startPos, endPos, vaultCurve.Evaluate(vaultProgress));
-		}
-	}
-
-	public void Vault(Vector3 positionDelta)
-	{
-        StartCoroutine(VaultAnimation(position, position + positionDelta, false));
-    }
     #endregion
 }

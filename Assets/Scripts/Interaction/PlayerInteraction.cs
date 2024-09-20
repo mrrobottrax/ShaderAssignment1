@@ -167,7 +167,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	public void UseInvolvedInteractable(Transform interactionParent = null, Vector3? offset = null, Quaternion? rot = null)
 	{
 		SetUsingInteractable(true);
-		playerController.BeginUsingInvolvedInteractable(interactionParent, offset, rot);
+		//playerController.BeginUsingInvolvedInteractable(interactionParent, offset, rot);
 	}
 
 	/// <summary>
@@ -178,7 +178,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	public void LeaveInvolvedInteractable(Vector3? offset = null, Quaternion? rot = null)
 	{
 		SetUsingInteractable(false);
-		playerController.EndUsingInvolvedInteractable(offset, rot);
+		//playerController.EndUsingInvolvedInteractable(offset, rot);
 	}
     #endregion
 

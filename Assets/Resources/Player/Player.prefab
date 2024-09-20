@@ -829,6 +829,7 @@ GameObject:
   - component: {fileID: 131796477153244184}
   - component: {fileID: 683332155768199902}
   - component: {fileID: 4696816560091568506}
+  - component: {fileID: 4467829728629240096}
   m_Layer: 12
   m_Name: Player
   m_TagString: Player
@@ -907,34 +908,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859aa288cf6b2464c9015e5ae7fcad9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingSpeed: 5
-  friction: 50
-  acceleration: 120
-  crouchingSpeed: 1.5
-  crouchingFriction: 15
-  crouchingAcceleration: 30
-  jumpForce: 6
-  knockUpThreshold: 2
-  stepHeight: 0.7
-  maxWalkableAngle: 55
-  airSpeed: 1
-  airAcceleration: 40
-  gravity: 16
-  swimSpeed: 4
-  swimAcceleration: 20
-  swimFriction: 10
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 465
-  horizontalSize: 1
-  collider: {fileID: 4696816560091568506}
-  standingHeight: 2
-  crouchingHeight: 1.2
-  maxVaultHeight: 3.5
-  minVaultHeight: 0.25
-  maxVaultDist: 0.3
-  vaultDuration: 0.4
-  climbSpeed: 3
+  m_movementData: {fileID: 11400000, guid: 445387bd48e319d4a839c96f67e1814b, type: 2}
+  m_fpsCamera: {fileID: 4612386199360249716}
+  m_movementMode: 0
 --- !u!114 &4612386199360249716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1075,6 +1051,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!95 &4467829728629240096
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2196076804327108542}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2208382966810985532
 GameObject:
   m_ObjectHideFlags: 0

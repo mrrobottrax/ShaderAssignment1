@@ -58,7 +58,7 @@ public class Climbable_Interaction : MonoBehaviour, IInteraction, IInputHandler
 		interactor.UseInvolvedInteractable();
 
 		// Enter climbing state
-		playerController.BeginClimb(bottom, top, this);
+		//playerController.BeginClimb(bottom, top, this);
 
 		// Enable ladder controls
 		SetControlsSubscription(true);
@@ -76,7 +76,7 @@ public class Climbable_Interaction : MonoBehaviour, IInteraction, IInputHandler
 
 		// Exit climbing state
 		PlayerController playerController = interactor.GetPlayerController();
-		playerController.DismountClimb();
+		//playerController.DismountClimb();
 
 		interactor = null;
 	}

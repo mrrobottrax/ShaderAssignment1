@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b47dd7d64683a2449bb9b8de97dea64, type: 3}
+  m_Name: Player Movement Data
+  m_EditorClassIdentifier: 
+  m_walkingSpeed: 5.5
+  m_crouchingSpeed: 2.5
+  m_friction: 50
+  m_acceleration: 120
+  m_stopSpeed: 80
+  m_jumpForce: 6
+  m_knockUpThreshold: 2
+  m_stepHeight: 0.7
+  m_maxWalkableAngle: 55
+  m_airSpeed: 1
+  m_airAcceleration: 40
+  m_gravity: 16
+  m_layerMask:
+    serializedVersion: 2
+    m_Bits: 193
+  m_horizontalSize: 1
+  m_standingHeight: 2
+  m_crouchingHeight: 1.2
+  m_noclipAcceleration: 20
+  m_noclipFriction: 10
+  m_noclipSpeed: 20

@@ -1,111 +1,81 @@
-using System.Collections;
+using System.Globalization;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour, IInputHandler
+[RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(Animator))]
+public class PlayerController : MonoBehaviour
 {
-	[field: Header("Walking Movement Values")]
-	[SerializeField] float walkingSpeed = 5.5f;
-	[SerializeField] float friction = 50;
-	[SerializeField] float acceleration = 120;
+	// Constants
+	const float k_hitEpsilon = 0.015f; // Min distance to wall
+	const float k_groundCheckDist = 0.03f;
+	const float k_stopEpsilon = 0.0001f; // Stop when <= this speed
+	const int k_maxBumps = 8; // Max number of iterations per frame
+	const int k_maxPlanes = 8; // Max number of planes to collide with at once
 
-	[field: Header("Crouching Movement Values")]
-	[SerializeField] float crouchingSpeed = 2.5f;
-	[SerializeField] float crouchingFriction = 15;
-	[SerializeField] float crouchingAcceleration = 30;
+	[Header("Movement")]
+	[SerializeField] PlayerMovementData m_movementData;
+	public PlayerMovementData MvmtData { get => m_movementData; }
 
-	[field: Header("Ground Movement Values")]
-	[SerializeField] float jumpForce = 6;
-	[SerializeField] float knockUpThreshold = 2; // This much upwards velocity removes the grounded state
-	[SerializeField] float stepHeight = 0.7f;
-	[SerializeField] float maxWalkableAngle = 55;
+	// Components
+	[Header("Components")]
+	[SerializeField] FirstPersonCamera m_fpsCamera;
+	Rigidbody m_rigidbody;
+	BoxCollider m_collider;
+	Animator m_animator;
 
-	[field: Header("Air Movement Values")]
-	[SerializeField] float airSpeed = 1;
-	[SerializeField] float airAcceleration = 40;
-	[SerializeField] float gravity = 16;
+	// System
+	public bool IsCrouching { get; private set; }
+	public bool IsGrounded { get; private set; }
 
-	[field: Header("Swim Movement Values")]
-	[SerializeField] float swimSpeed = 3.5f;
-	[SerializeField] float swimAcceleration = 10;
-	[SerializeField] float swimFriction = 10;
+	Vector2 m_wishMoveDir;
+	Vector3 m_velocity;
+	Vector3 m_position;
 
+	bool m_isCrouchPressed;
+	bool m_isJumpPressed;
 
-	[field: Header("Collision Values")]
-	[SerializeField] LayerMask layerMask = ~(1 << 3);
-	[SerializeField] float horizontalSize = 1;
-	[SerializeField] new Collider collider;
-	public float standingHeight = 2;
-	public float crouchingHeight = 1.2f;
+	int m_framesStuck = 0;
 
-	[field: Header("Vaulting")]
-	[SerializeField] float maxVaultHeight = 2.5f;
-	[SerializeField] float minVaultHeight = 1; // Disallow tiny vaults
-	[SerializeField] float maxVaultDist = 0.3f; // Maximum distance to check forwards when vaulting
-	public float vaultDuration = 0.5f; // Duration of vault animation
-
-    [field: Header("Other Values")]
-	[SerializeField] float climbSpeed = 3;
-
-	[field: Header("Components")]
-	FirstPersonCamera fpsCamera;
-	PlayerActions playerActions;
-	new Rigidbody rigidbody;
-
-	[field: Header("System")]
-	Vector2 wishMoveDir;
-	Vector3 velocity;
-	Vector3 position;
-
-    private bool isMovementEnabled = true;
-    private bool isGrounded;
-
-    public bool IsCrouching { get; private set; }
-    private bool isCrouchPressed;
-
-    private bool isJumpPressed;
-
-    // Interaction
-    Transform interactableParent;
-	Transform ladderBottom;
-	Transform ladderTop;
-	float ladderProgress = 0;
-	Climbable_Interaction ladder; // todo: the ladder shouldn't be responsible for the player leaving the ladder
-
-	const float hitEpsilon = 0.015f; // Min distance to wall
-	const float groundCheckDist = 0.03f;
-	const float stopEpsilon = 0.001f; // Stop when <= this speed
-	const int maxBumps = 8; // Max number of iterations per frame
-	const int maxPlanes = 5; // Max number of planes to collide with at once
 
 	enum EMovementMode
 	{
 		Standard,
-		Interacting,
-		Climbing,
 		Noclip
 	}
-	private EMovementMode movementMode;
+	[Header("Debug")]
+	[SerializeField] private EMovementMode m_movementMode;
+
 
 	#region Initialization Methods
 
 	void Awake()
 	{
-		rigidbody = GetComponent<Rigidbody>();
-		fpsCamera = GetComponent<FirstPersonCamera>();
-		playerActions = GetComponent<PlayerActions>();
-	}
+		m_rigidbody = GetComponent<Rigidbody>();
+		m_collider = GetComponent<BoxCollider>();
+		m_animator = GetComponent<Animator>();
 
+		m_rigidbody.isKinematic = true;
+		m_rigidbody.freezeRotation = true;
+
+		m_collider.layerOverridePriority = 100;
+		m_collider.excludeLayers = ~m_movementData.m_layerMask;
+		m_collider.includeLayers = m_movementData.m_layerMask;
+
+		Assert.IsNotNull(m_movementData);
+		Assert.IsNotNull(m_fpsCamera);
+
+
+		UpdateCollider();
+	}
 
 	void Start()
 	{
-		rigidbody.isKinematic = true;
-		rigidbody.freezeRotation = true;
-
-		position = transform.position;
+		m_position = transform.position;
 
 		SetControlsSubscription(true);
 	}
+
 	#endregion
 
 	#region Unity Callbacks
@@ -117,31 +87,24 @@ public class PlayerController : MonoBehaviour, IInputHandler
 
 	void FixedUpdate()
 	{
-		if (isMovementEnabled)
+		UpdateCollider();
+
+		switch (m_movementMode)
 		{
-			switch (movementMode)
-			{
-				case EMovementMode.Standard:
-					Movement();
-					break;
-				case EMovementMode.Interacting:
-					InteractionMovement();
-					break;
-				case EMovementMode.Climbing:
-					ClimbingMovement();
-					break;
-			}
+			case EMovementMode.Standard:
+				StandardMovement();
+				break;
+
+			case EMovementMode.Noclip:
+				Accelerate(m_fpsCamera.RotateVector(m_wishMoveDir), m_movementData.m_noclipAcceleration, m_movementData.m_noclipSpeed);
+				Friction(m_movementData.m_noclipFriction);
+				m_position += m_velocity * Time.fixedDeltaTime;
+				break;
 		}
 
-        rigidbody.MovePosition(position);
-        rigidbody.MoveRotation(Quaternion.identity);
-    }
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = Color.green;
-		Gizmos.DrawWireCube(position + GetColliderHeight() * 0.5f * Vector3.up, new Vector3(horizontalSize, GetColliderHeight(), horizontalSize));
+		m_rigidbody.MovePosition(m_position);
 	}
+
 	#endregion
 
 	#region Input Methods
@@ -150,26 +113,26 @@ public class PlayerController : MonoBehaviour, IInputHandler
 	{
 		if (isInputEnabled)
 			Subscribe();
-		else if (InputManager.Instance != null)
+		else
 			Unsubscribe();
 	}
 
 	void OnMoveInput(InputAction.CallbackContext context)
 	{
-		wishMoveDir = context.ReadValue<Vector2>();
+		m_wishMoveDir = context.ReadValue<Vector2>();
 	}
 
 	void OnJumpInput(InputAction.CallbackContext context)
 	{
-		isJumpPressed = context.ReadValueAsButton();
+		m_isJumpPressed = context.ReadValueAsButton();
 
-		if (isJumpPressed && isGrounded)
+		if (m_isJumpPressed && IsGrounded)
 			Jump();
 	}
 
 	void OnCrouchInput(InputAction.CallbackContext context)
 	{
-        isCrouchPressed = context.ReadValueAsButton();
+		m_isCrouchPressed = context.ReadValueAsButton();
 	}
 
 	public void Subscribe()
@@ -177,193 +140,71 @@ public class PlayerController : MonoBehaviour, IInputHandler
 		InputManager.Instance.controls.Player.Movement.performed += OnMoveInput;
 
 		InputManager.Instance.controls.Player.Jump.performed += OnJumpInput;
-        InputManager.Instance.controls.Player.Jump.canceled += OnJumpInput;
+		InputManager.Instance.controls.Player.Jump.canceled += OnJumpInput;
 
-        InputManager.Instance.controls.Player.Crouch.performed += OnCrouchInput;
-        InputManager.Instance.controls.Player.Crouch.canceled += OnCrouchInput;
-
-        playerActions.SetControlsSubscription(true);
+		InputManager.Instance.controls.Player.Crouch.performed += OnCrouchInput;
+		InputManager.Instance.controls.Player.Crouch.canceled += OnCrouchInput;
 	}
 
 	public void Unsubscribe()
 	{
-		InputManager.Instance.controls.Player.Movement.performed -= OnMoveInput;
-
-		InputManager.Instance.controls.Player.Jump.performed -= OnJumpInput;
-        InputManager.Instance.controls.Player.Jump.canceled -= OnJumpInput;
-
-        InputManager.Instance.controls.Player.Crouch.performed -= OnCrouchInput;
-        InputManager.Instance.controls.Player.Crouch.canceled -= OnCrouchInput;
-
-        wishMoveDir = Vector2.zero;
-		playerActions.SetControlsSubscription(false);
-	}
-    #endregion
-
-    #region Actions
-
-	/// <summary>
-	/// Checks if the player can enter either a crouched or uncrouched state
-	/// </summary>
-	/// <param name="isAttemptingCrouch">What the player is attempting to do</param>
-    private void TryCrouch(bool isAttemptingCrouch)
-    {
-        if (isAttemptingCrouch)
-        {
-            IsCrouching = true;
-        }
-        else
-        {
-            // Make sure there is room
-            IsCrouching = false;
-            bool hasRoom = !CheckHull();
-
-            if (!hasRoom)
-            {
-                IsCrouching = true;
-            }
-        }
-    }
-
-    private void Jump()
-	{
-		velocity.y += jumpForce;
-		isGrounded = false;
-	}
-
-	private IEnumerator VaultMovementFreeze()
-	{
-		isMovementEnabled = false;
-
-		yield return new WaitForSeconds(vaultDuration);
-
-		isMovementEnabled = true;
-	}
-
-	// Returns true on successful vault
-	private bool Vault()
-	{
-		Vector3 startPosition = position;
-		Vector3 startVelocity = velocity;
-
-		// Move up
-		if (CastHull(Vector3.up, maxVaultHeight, out RaycastHit hit))
+		if (InputManager.Instance)
 		{
-			position += hit.distance * Vector3.up;
-		}
-		else
-		{
-			position += maxVaultHeight * Vector3.up;
+			InputManager.Instance.controls.Player.Movement.performed -= OnMoveInput;
+
+			InputManager.Instance.controls.Player.Jump.performed -= OnJumpInput;
+			InputManager.Instance.controls.Player.Jump.canceled -= OnJumpInput;
+
+			InputManager.Instance.controls.Player.Crouch.performed -= OnCrouchInput;
+			InputManager.Instance.controls.Player.Crouch.canceled -= OnCrouchInput;
 		}
 
-		// Move forwards
-		Vector3 forwards = fpsCamera.RotateVectorYaw(new Vector2(0, 1));
-		if (CastHull(forwards, maxVaultDist, out hit))
-		{
-			position += hit.distance * forwards;
-		}
-		else
-		{
-			position += maxVaultDist * forwards;
-		}
-
-		// Move back down
-		if (CastHull(-Vector3.up, maxVaultHeight, out hit))
-		{
-			position += hit.distance * -Vector3.up;
-		}
-		else
-		{
-			position += maxVaultHeight * -Vector3.up;
-		}
-
-		GroundCheck();
-
-		float height = position.y - startPosition.y;
-		if (isGrounded && height > minVaultHeight)
-		{
-			// Successful vault
-			velocity = Vector3.zero;
-			fpsCamera.Vault(position - startPosition);
-			StartCoroutine(VaultMovementFreeze());
-			return true;
-		}
-
-		position = startPosition;
-		velocity = startVelocity;
-
-		return false;
+		m_wishMoveDir = Vector2.zero;
 	}
 	#endregion
 
-	#region Movement Mode Setters
+	#region Actions
 
-	public void BeginClimb(Transform ladderBottom, Transform ladderTop, Climbable_Interaction ladder)
+	private void TryCrouch(bool isAttemptingCrouch)
 	{
-		this.ladderBottom = ladderBottom;
-		this.ladderTop = ladderTop;
-		this.ladder = ladder;
-
-		// todo: this is a silly way of doing this
-		// Calculate progress on ladder from 0 to 1
-		float dist = Vector3.Distance(ladderBottom.position, ladderTop.position);
-
-		Vector3 relativePosition = position - ladderBottom.position;
-		Vector3 ladderUp = (ladderTop.position - ladderBottom.position).normalized;
-
-		ladderProgress = Vector3.Dot(relativePosition, ladderUp) / dist;
-		ladderProgress = Mathf.Clamp01(ladderProgress);
-
-		velocity = Vector3.zero;
-		movementMode = EMovementMode.Climbing;
-	}
-
-	public void DismountClimb()
-	{
-		movementMode = EMovementMode.Standard;
-
-		// Cast up
-		if (CastHull(Vector3.up, 0.1f, out RaycastHit hit))
+		if (isAttemptingCrouch)
 		{
-			position.y += hit.distance;
+			IsCrouching = true;
+
+			if (!IsGrounded)
+			{
+				m_position += Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+			}
 		}
 		else
 		{
-			position.y += 0.1f;
+			// Make sure there is room
+			// todo: box cast in air so we can uncrouch close to ground
+			IsCrouching = false;
+			if (!IsGrounded)
+			{
+				m_position -= Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+			}
+
+			bool hasRoom = !CheckHull();
+
+			if (!hasRoom)
+			{
+				IsCrouching = true;
+				if (!IsGrounded)
+				{
+					m_position += Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+				}
+			}
 		}
 
-		// Cast forwards
-		Vector3 forwards = fpsCamera.RotateVectorYaw(new Vector2(0, 1));
-		if (CastHull(forwards, 0.1f, out hit))
-		{
-			position += forwards * hit.distance;
-		}
-		else
-		{
-			position += forwards * 0.1f;
-		}
-
-		// Cast down
-		if (CastHull(Vector3.down, 0.1f, out hit))
-		{
-			position.y -= hit.distance;
-		}
-		else
-		{
-			position.y -= 0.1f;
-		}
+		m_animator.SetBool("Crouched", IsCrouching);
 	}
 
-	public void BeginUsingInvolvedInteractable(Transform parent = null, Vector3? offset = null, Quaternion? rotation = null)
+	private void Jump()
 	{
-		interactableParent = parent;
-
-		movementMode = EMovementMode.Interacting;
-	}
-
-	public void EndUsingInvolvedInteractable(Vector3? offset = null, Quaternion? rotation = null)
-	{
-		movementMode = EMovementMode.Standard;
+		m_velocity.y += m_movementData.m_jumpForce;
+		IsGrounded = false;
 	}
 
 	#endregion
@@ -374,17 +215,17 @@ public class PlayerController : MonoBehaviour, IInputHandler
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 
-		bool hit = Physics.BoxCast(position + Vector3.up * halfHeight,
-			new Vector3(horizontalSize / 2f, halfHeight, horizontalSize / 2f),
+		bool hit = Physics.BoxCast(m_position + Vector3.up * halfHeight,
+			new Vector3(m_movementData.m_horizontalSize / 2f, halfHeight, m_movementData.m_horizontalSize / 2f),
 			direction,
 			out hitInfo,
 			Quaternion.identity,
 			maxDist,
-			layerMask,
+			m_movementData.m_layerMask,
 			QueryTriggerInteraction.Ignore
 		);
 
-		hitInfo.distance -= hitEpsilon / -Vector3.Dot(direction, hitInfo.normal); // Back up a little
+		hitInfo.distance -= k_hitEpsilon / -Vector3.Dot(direction, hitInfo.normal); // Back up a little
 		if (hitInfo.distance < 0) hitInfo.distance = 0;
 
 		return hit;
@@ -394,34 +235,42 @@ public class PlayerController : MonoBehaviour, IInputHandler
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 		return Physics.CheckBox(
-			position + Vector3.up * halfHeight,
-			new Vector3(horizontalSize / 2f, halfHeight, horizontalSize / 2f),
+			m_position + Vector3.up * halfHeight,
+			new Vector3(m_movementData.m_horizontalSize / 2f, halfHeight, m_movementData.m_horizontalSize / 2f),
 			Quaternion.identity,
-			layerMask,
+			m_movementData.m_layerMask,
 			QueryTriggerInteraction.Ignore
 		);
 	}
 
-	void StuckCheck()
+	bool StuckCheck()
 	{
-		// todo: I know there's a function somewhere to find the vector that would move a collider out from whatever it's stuck in
-		// it's Physics.ComputePenetration
-
 		float halfHeight = GetColliderHeight() / 2f;
 		Collider[] colliders = Physics.OverlapBox(
-			position + Vector3.up * halfHeight,
-			new Vector3(horizontalSize / 2f, halfHeight, horizontalSize / 2f),
+			m_position + Vector3.up * halfHeight,
+			new Vector3(m_movementData.m_horizontalSize / 2f, halfHeight, m_movementData.m_horizontalSize / 2f),
 			Quaternion.identity,
-			layerMask,
+			m_movementData.m_layerMask,
 			QueryTriggerInteraction.Ignore
 		);
 
 		if (colliders.Length > 0)
 		{
+			++m_framesStuck;
+
+			Debug.LogWarning("Player stuck!");
+
+			if (m_framesStuck > 5)
+			{
+				Debug.Log("Wow, you're REALLY stuck.");
+				m_velocity = Vector3.zero;
+				m_position += Vector3.up * 0.5f;
+			}
+
 			if (Physics.ComputePenetration(
-				collider,
-				position,
-				Quaternion.identity,
+				m_collider,
+				m_position,
+				transform.rotation,
 				colliders[0],
 				colliders[0].transform.position,
 				colliders[0].transform.rotation,
@@ -429,40 +278,52 @@ public class PlayerController : MonoBehaviour, IInputHandler
 				out float dist
 			))
 			{
-				position += dir * (dist + hitEpsilon * 1.5f);
+				m_position += dir * (dist + k_hitEpsilon * 2.0f);
+				m_velocity = Vector3.zero;
 			}
+			else
+			{
+				m_velocity = Vector3.zero;
+				m_position += Vector3.up * 0.5f;
+			}
+
+			return true;
 		}
+
+		m_framesStuck = 0;
+
+		return false;
 	}
 
 	void CollideAndSlide()
 	{
-		Vector3 originalVelocity = velocity;
+		Vector3 originalVelocity = m_velocity;
 
 		// When we collide with multiple planes at once (crease)
-		Vector3[] planes = new Vector3[maxPlanes];
+		Vector3[] planes = new Vector3[k_maxPlanes];
 		int planeCount = 0;
 
 		float time = Time.fixedDeltaTime; // The amount of time remaining in the frame, decreases with each iteration
 		int bumpCount;
-		for (bumpCount = 0; bumpCount < maxBumps; ++bumpCount)
+		for (bumpCount = 0; bumpCount < k_maxBumps; ++bumpCount)
 		{
-			float speed = velocity.magnitude;
+			float speed = m_velocity.magnitude;
 
-			if (speed <= stopEpsilon)
+			if (speed <= k_stopEpsilon)
 			{
-				velocity = Vector3.zero;
+				m_velocity = Vector3.zero;
 				break;
 			}
 
 			// Try to move in this direction
-			Vector3 direction = velocity.normalized;
+			Vector3 direction = m_velocity.normalized;
 			float maxDist = speed * time;
 			if (CastHull(direction, maxDist, out RaycastHit hit))
 			{
 				if (hit.distance > 0)
 				{
 					// Move rigibody to where it collided
-					position += direction * hit.distance;
+					m_position += direction * hit.distance;
 
 					// Decrease time based on how far it travelled
 					float fraction = hit.distance / maxDist;
@@ -478,10 +339,10 @@ public class PlayerController : MonoBehaviour, IInputHandler
 					planeCount = 0;
 				}
 
-				if (planeCount >= maxPlanes)
+				if (planeCount >= k_maxPlanes)
 				{
 					Debug.LogWarning("Colliding with too many planes at once");
-					velocity = Vector3.zero;
+					m_velocity = Vector3.zero;
 					break;
 				}
 
@@ -492,14 +353,14 @@ public class PlayerController : MonoBehaviour, IInputHandler
 				bool conflictingPlanes = false;
 				for (int j = 0; j < planeCount; ++j)
 				{
-					velocity = Vector3.ProjectOnPlane(originalVelocity, planes[j]);
+					m_velocity = Vector3.ProjectOnPlane(originalVelocity, planes[j]);
 
 					// Check if the velocity is against any other planes
 					for (int k = 0; k < planeCount; ++k)
 					{
 						if (j != k) // No point in checking the same plane we just clipped to
 						{
-							if (Vector3.Dot(velocity, planes[k]) < 0.002f) // Moving into the plane, BAD!
+							if (Vector3.Dot(m_velocity, planes[k]) < 0.002f) // Moving into the plane, BAD!
 							{
 								conflictingPlanes = true;
 								break;
@@ -519,11 +380,11 @@ public class PlayerController : MonoBehaviour, IInputHandler
 						Vector3 dir = Vector3.Cross(planes[0], planes[1]).normalized; // todo: maybe normalize is unnecessary?
 
 						// Go in that direction
-						velocity = dir * Vector3.Dot(dir, originalVelocity);
+						m_velocity = dir * Vector3.Dot(dir, originalVelocity);
 					}
 					else
 					{
-						velocity = Vector3.zero;
+						m_velocity = Vector3.zero;
 						break;
 					}
 				}
@@ -531,14 +392,14 @@ public class PlayerController : MonoBehaviour, IInputHandler
 			else
 			{
 				// Move rigibody according to velocity
-				position += direction * maxDist;
+				m_position += direction * maxDist;
 				break;
 			}
 
 			// Stop tiny oscillations
-			if (Vector3.Dot(velocity, originalVelocity) <= 0)
+			if (Vector3.Dot(m_velocity, originalVelocity) <= 0)
 			{
-				velocity = Vector3.zero;
+				m_velocity = Vector3.zero;
 				break;
 			}
 
@@ -549,7 +410,7 @@ public class PlayerController : MonoBehaviour, IInputHandler
 			}
 		}
 
-		if (bumpCount >= maxBumps)
+		if (bumpCount >= k_maxBumps)
 		{
 			Debug.LogWarning("Bumps exceeded");
 		}
@@ -558,34 +419,46 @@ public class PlayerController : MonoBehaviour, IInputHandler
 
 	#region Utility
 
+	void UpdateCollider()
+	{
+		float h = GetColliderHeight();
+		m_collider.size = new Vector3(m_movementData.m_horizontalSize, h, m_movementData.m_horizontalSize);
+		m_collider.center = new Vector3(0, h / 2.0f, 0);
+	}
+
 	public float GetColliderHeight()
 	{
-		return IsCrouching ? crouchingHeight : standingHeight;
+		return IsCrouching ? m_movementData.m_crouchingHeight : m_movementData.m_standingHeight;
+	}
+
+	public Vector3 GetPosition()
+	{
+		return m_position;
 	}
 
 	void GroundCheck()
 	{
 		// Allow for force to knock off the ground
-		if (velocity.y > knockUpThreshold)
+		if (m_velocity.y > m_movementData.m_knockUpThreshold)
 		{
-			isGrounded = false;
+			IsGrounded = false;
 			return;
 		}
 
-		if (CastHull(-Vector3.up, groundCheckDist, out RaycastHit hit))
+		if (CastHull(-Vector3.up, k_groundCheckDist, out RaycastHit hit))
 		{
-			if (hit.normal.y > Mathf.Cos(Mathf.Deg2Rad * maxWalkableAngle))
+			if (hit.normal.y > Mathf.Cos(Mathf.Deg2Rad * m_movementData.m_maxWalkableAngle))
 			{
-				isGrounded = true;
+				IsGrounded = true;
 			}
 			else
 			{
-				isGrounded = false;
+				IsGrounded = false;
 			}
 		}
 		else
 		{
-			isGrounded = false;
+			IsGrounded = false;
 		}
 	}
 
@@ -599,82 +472,84 @@ public class PlayerController : MonoBehaviour, IInputHandler
 
 	void Friction(float friction)
 	{
-		float speed = velocity.magnitude;
-		float newSpeed = Mathf.Max(speed - friction * Time.fixedDeltaTime, 0);
+		float speed = m_velocity.magnitude;
+
+		float control = Mathf.Max(speed, m_movementData.m_stopSpeed);
+
+		float newSpeed = Mathf.Max(speed - (control * friction * Time.fixedDeltaTime), 0);
 
 		if (speed != 0)
 		{
 			float mult = newSpeed / speed;
-			velocity *= mult;
+			m_velocity *= mult;
 		}
 	}
 
 	void Accelerate(Vector3 direction, float acceleration, float maxSpeed)
 	{
-		float add = acceleration * Time.fixedDeltaTime;
+		float add = acceleration * maxSpeed * Time.fixedDeltaTime;
 
 		// Clamp added velocity in acceleration direction
-		float speed = Vector3.Dot(direction, velocity);
+		float speed = Vector3.Dot(direction, m_velocity);
 
 		if (speed + add > maxSpeed)
 		{
 			add = Mathf.Max(maxSpeed - speed, 0);
 		}
 
-		velocity += add * direction;
+		m_velocity += add * direction;
 	}
 
-	/// <summary>
-	/// Standard player movement 
-	/// </summary>
-	private void Movement()
+	private void StandardMovement()
 	{
-		StuckCheck();
+		if (StuckCheck())
+			return;
+
 		CategorizePosition();
 
-        Vector3 globalWishDir = fpsCamera.RotateVectorYaw(wishMoveDir);
+		Vector3 globalWishDir = m_fpsCamera.RotateVectorYaw(m_wishMoveDir);
 
-        // Crouch / un-crouch
-        if (isCrouchPressed)
-        {
-            if (!IsCrouching)
-            {
-                TryCrouch(true);
-            }
-        }
-        else if (IsCrouching)
-            TryCrouch(false);
+		// Crouch / un-crouch
+		if (m_isCrouchPressed)
+		{
+			if (!IsCrouching)
+			{
+				TryCrouch(true);
+			}
+		}
+		else if (IsCrouching)
+			TryCrouch(false);
 
-        if (isGrounded)
-        {
-            GroundMove(globalWishDir);
-        }
-        else
-        {
-            AirMove(globalWishDir);
-        }
-    }
+		if (IsGrounded)
+		{
+			GroundMove(globalWishDir);
+		}
+		else
+		{
+			AirMove(globalWishDir);
+		}
+	}
 
 	private void GroundMove(Vector3 moveDir)
 	{
-		velocity.y = 0;
+		m_velocity.y = 0;
 
-		float moveSpeed = IsCrouching ? crouchingSpeed : walkingSpeed;
-		float acceleration = IsCrouching ? crouchingAcceleration : this.acceleration;
-		float friction = IsCrouching ? crouchingFriction : this.friction;
+		float moveSpeed = IsCrouching ? m_movementData.m_crouchingSpeed : m_movementData.m_walkingSpeed;
+		float acceleration = m_movementData.m_acceleration;
+		float friction = m_movementData.m_friction;
 
 		// Friction
 		Friction(friction);
 
 		// Accelerate
 		Accelerate(moveDir, acceleration, moveSpeed);
-		float speed = velocity.magnitude;
+		float speed = m_velocity.magnitude;
 
 		// Clamp Speed
 		if (speed > moveSpeed)
 		{
 			float mult = moveSpeed / speed;
-			velocity *= mult;
+			m_velocity *= mult;
 		}
 
 		if (speed <= 0)
@@ -682,25 +557,25 @@ public class PlayerController : MonoBehaviour, IInputHandler
 			return;
 		}
 
-		Vector3 startVelocity = velocity;
-		Vector3 startPosition = position;
+		Vector3 startVelocity = m_velocity;
+		Vector3 startPosition = m_position;
 
 		CollideAndSlide();
-		Vector3 downVelocity = velocity;
-		Vector3 downPosition = position;
+		Vector3 downVelocity = m_velocity;
+		Vector3 downPosition = m_position;
 
 		// Move up and try another move
 		{
-			velocity = startVelocity;
-			position = startPosition;
+			m_velocity = startVelocity;
+			m_position = startPosition;
 
-			if (CastHull(Vector3.up, stepHeight, out RaycastHit hit))
+			if (CastHull(Vector3.up, m_movementData.m_stepHeight, out RaycastHit hit))
 			{
-				position += Vector3.up * hit.distance;
+				m_position += Vector3.up * hit.distance;
 			}
 			else
 			{
-				position += Vector3.up * stepHeight;
+				m_position += Vector3.up * m_movementData.m_stepHeight;
 			}
 		}
 
@@ -708,13 +583,13 @@ public class PlayerController : MonoBehaviour, IInputHandler
 
 		// Move back down
 		{
-			if (CastHull(-Vector3.up, stepHeight * 2, out RaycastHit hit))
+			if (CastHull(-Vector3.up, m_movementData.m_stepHeight * 2, out RaycastHit hit))
 			{
-				position -= Vector3.up * hit.distance;
+				m_position -= Vector3.up * hit.distance;
 			}
 			else
 			{
-				position -= 2 * stepHeight * Vector3.up;
+				m_position -= 2 * m_movementData.m_stepHeight * Vector3.up;
 			}
 		}
 
@@ -723,82 +598,31 @@ public class PlayerController : MonoBehaviour, IInputHandler
 		// Either reset to the on ground move results, or keep the step move results
 
 		// If we stepped onto air, just do the regular move
-		if (!isGrounded)
+		if (!IsGrounded)
 		{
-			position = downPosition;
-			velocity = downVelocity;
+			m_position = downPosition;
+			m_velocity = downVelocity;
 		}
 		// Otherwise, pick the move that goes the furthest
-		else if (Vector3.Distance(startPosition, downPosition) >= Vector3.Distance(startPosition, position))
+		else if (Vector3.Distance(startPosition, downPosition) >= Vector3.Distance(startPosition, m_position))
 		{
-			position = downPosition;
-			velocity = downVelocity;
+			m_position = downPosition;
+			m_velocity = downVelocity;
 		}
 		else
 		{
-			fpsCamera.Step(position.y - startPosition.y);
+			m_fpsCamera.Step(m_position.y - startPosition.y);
 		}
 	}
 
 	private void AirMove(Vector3 moveDir)
 	{
-		Accelerate(moveDir, airAcceleration, airSpeed);
+		Accelerate(moveDir, m_movementData.m_airAcceleration, m_movementData.m_airSpeed);
 
-		velocity.y -= (gravity * Time.fixedDeltaTime) / 2f;
+		m_velocity.y -= (m_movementData.m_gravity * Time.fixedDeltaTime) / 2f;
 		CollideAndSlide();
-		velocity.y -= (gravity * Time.fixedDeltaTime) / 2f;
-
-		if (velocity.y > 0)
-			Vault();
+		m_velocity.y -= (m_movementData.m_gravity * Time.fixedDeltaTime) / 2f;
 	}
 
-	private void SwimmingMovement(Vector3 moveDir)
-	{
-		Friction(swimFriction);
-
-		// Do look Movement
-		Accelerate(moveDir, swimAcceleration, swimSpeed);
-
-        // Get heightened control dir
-        if (isJumpPressed && !isCrouchPressed)
-            moveDir = Vector3.up;
-        else if (!isJumpPressed && isCrouchPressed)
-            moveDir = Vector3.down;
-
-		// Do heightened control movement
-        if (moveDir != Vector3.zero)
-            Accelerate(moveDir, swimAcceleration, swimSpeed);
-
-        CollideAndSlide();
-	}
-    #endregion
-
-    #region External Movement Methods
-
-    /// <summary>
-    /// This movement type follows the interaction parent
-    /// </summary>
-    void InteractionMovement()
-    {
-        if (interactableParent)
-            position = interactableParent.position;
-    }
-
-    /// <summary>
-    /// This movement type follows the climbing parents climb axis
-    /// </summary>
-    void ClimbingMovement()
-    {
-        float climbSign = fpsCamera.pitch > 0 ? -1 : 1;
-        float add = (wishMoveDir.y * climbSign * climbSpeed * Time.fixedDeltaTime) / Vector3.Distance(ladderBottom.position, ladderTop.position);
-        ladderProgress += add;
-
-        position = Vector3.Lerp(ladderBottom.position, ladderTop.position, ladderProgress);
-
-        if (ladderProgress < 0 || ladderProgress > 1)
-        {
-            ladder.KickClimber();
-        }
-    }
-    #endregion
+	#endregion
 }
