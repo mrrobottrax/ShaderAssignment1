@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NPC : MonoBehaviour, IInteraction
@@ -19,12 +17,13 @@ public class NPC : MonoBehaviour, IInteraction
 
     public void Interact(Transform interactor)
     {
+        interactor.TryGetComponent(out Player player);
         interactor.TryGetComponent(out PlayerInteraction interaction);
 
         interaction?.SetUsingInteractable(true);
 
         // Display dialogue
-        DialogueMenuDisplay dialogueMenuDisplay = UIManager.Instance.DialogueMenuDisplay;
+        DialogueMenuDisplay dialogueMenuDisplay = player.PlayerUIManager.DialogueMenuDisplay;
         dialogueMenuDisplay.DisplayDialogueNode(interactionDialogue);
 
         interaction?.SetUsingInteractable(false);

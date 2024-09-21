@@ -17,12 +17,13 @@ public class ReadInteraction : MonoBehaviour, IInteraction
 
     public void Interact(Transform interactor)
     {
+        interactor.TryGetComponent(out Player player);
         interactor.TryGetComponent(out PlayerInteraction interaction);
 
         interaction?.SetUsingInteractable(true);
 
         // Display readable data
-        LegibleObjectDisplay display = UIManager.Instance.LegibleObjectDisplay;
+        LegibleObjectDisplay display = player.PlayerUIManager.LegibleObjectDisplay;
         display.SetReadableData(readableData);
 
         interaction?.SetUsingInteractable(false);

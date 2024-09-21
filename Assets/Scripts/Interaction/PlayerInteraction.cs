@@ -9,9 +9,11 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	[SerializeField] private LayerMask _interactionLayer;
 
 	[Header("Componenets")]
+    [SerializeField] Transform _cameraTransform;
+	private PlayerUIManager playerUIManager;
 	private InteractionDisplay promptDisplay;
 	private PlayerController playerController;
-	[SerializeField] Transform cameraTransform;
+
 
 	[Header("Systems")]
 	private float sqrInteractionRange;
@@ -24,9 +26,11 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	private void Awake()
 	{
 		playerController = GetComponent<PlayerController>();
-		sqrInteractionRange = _interactionRange * _interactionRange;
+		playerUIManager = GetComponentInChildren<PlayerUIManager>();
 
-		Assert.IsNotNull(cameraTransform);
+        sqrInteractionRange = _interactionRange * _interactionRange;
+
+		Assert.IsNotNull(_cameraTransform);
 	}
 
 	private void Start()
@@ -35,7 +39,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		SetControlsSubscription(true);
 
 		// Cache prompt display
-		promptDisplay = UIManager.Instance.InteractionPromptDisplay;
+		promptDisplay = playerUIManager.InteractionPromptDisplay;
 	}
     #endregion
 
@@ -89,10 +93,10 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		// Cache what the player was just looking at
 		Interactable prevInteractable = currentInteractable;
 
-		Debug.DrawRay(cameraTransform.position, cameraTransform.forward);
+		Debug.DrawRay(_cameraTransform.position, _cameraTransform.forward);
 
 		// Send out a raycast
-		if (!IsUsingInteractable && Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, _interactionRange,
+		if (!IsUsingInteractable && Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, _interactionRange,
 			_interactionLayer))
 		{
 			// Ensure an interactable was hit

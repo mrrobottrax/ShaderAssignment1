@@ -5,7 +5,9 @@ public class Player : Entity_Base
 {
     public static Player Instance;
 
-    [Header("Components")]
+    [field: Header("Components")]
+    [field: SerializeField] public PlayerUIManager PlayerUIManager { get; private set; }
+
     private PlayerController playerController;
     private PlayerInventoryComponent playerInventoryComponent;
     private FirstPersonCamera firstPersonCamera;
@@ -23,6 +25,7 @@ public class Player : Entity_Base
         playerInventoryComponent = GetComponent<PlayerInventoryComponent>();
         firstPersonCamera = GetComponent<FirstPersonCamera>();
         playerViewModelManager = GetComponentInChildren<PlayerViewModelManager>();
+        PlayerUIManager = GetComponentInChildren<PlayerUIManager>();
 
         // Send a reference to the player to the GameManager
         GameManager.Instance.SetPlayer(this);
@@ -38,7 +41,7 @@ public class Player : Entity_Base
     {
         base.SetHealth(value);
 
-        UIManager.Instance.HUDManager.HealthBar.SetHealthBar(value);
+        PlayerUIManager.HUDManager.HealthBar.SetHealthBar(value);
     }
 
     #region Helper Methods

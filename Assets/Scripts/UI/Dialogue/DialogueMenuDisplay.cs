@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(AudioSource))]
 public class DialogueMenuDisplay : MenuDisplayBase
 {
+    [Header("Components")]
+    [SerializeField] private PlayerUIManager _playerUIManager;
+
     [Header("Text Fields")]
     [SerializeField] private TextMeshProUGUI _nameField;
     [SerializeField] private TextMeshProUGUI _dialogueField;
@@ -42,6 +45,7 @@ public class DialogueMenuDisplay : MenuDisplayBase
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        _playerUIManager = GetComponentInChildren<PlayerUIManager>();
     }
     #endregion
 
@@ -101,7 +105,7 @@ public class DialogueMenuDisplay : MenuDisplayBase
             StartDialogueEvent?.Invoke();
 
             // Set this as the active UI display
-            UIManager.Instance.SetActiveDisplay(this);
+            _playerUIManager.SetActiveDisplay(this);
         }
 
         // Check if the text has a associated name
@@ -129,8 +133,8 @@ public class DialogueMenuDisplay : MenuDisplayBase
         currentNode = null;
 
         // Disable this display if it is the active one
-        if (UIManager.Instance.GetActiveDisplay() == this)
-            UIManager.Instance.DisableActiveDisplay();
+        if (_playerUIManager.GetActiveDisplay() == this)
+            _playerUIManager.DisableActiveDisplay();
 
         currentDialogueState = EDialogueState.None;
 

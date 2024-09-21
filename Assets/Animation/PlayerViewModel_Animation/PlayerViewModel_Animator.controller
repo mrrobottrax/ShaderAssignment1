@@ -163,7 +163,7 @@ AnimatorStateTransition:
     m_ConditionEvent: IsHoldingShovel
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Ready
+    m_ConditionEvent: IsReady
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4514126109625996545}
@@ -359,7 +359,7 @@ AnimatorStateTransition:
     m_ConditionEvent: IsHoldingNothing
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Ready
+    m_ConditionEvent: IsReady
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3696562345400344157}
@@ -1391,6 +1391,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: IsReady
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: IsHoldingFire1
     m_Type: 4
     m_DefaultFloat: 0
@@ -2278,7 +2284,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isHoldingPortableCamera
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Ready
+    m_ConditionEvent: IsReady
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8878052258631627629}
@@ -2306,7 +2312,7 @@ AnimatorStateTransition:
     m_ConditionEvent: IsHoldingSpear
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: Ready
+    m_ConditionEvent: IsReady
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2362508072228236991}

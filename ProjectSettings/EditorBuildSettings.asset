@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/GDWShowcase.unity
+    guid: 9038be16adfa5d84ab5e3f3ef513b18a
+  - enabled: 1
     path: Assets/Scenes/FPSTest.unity
     guid: c4a6e5fc6335b2042b65f81c38240821
   - enabled: 1

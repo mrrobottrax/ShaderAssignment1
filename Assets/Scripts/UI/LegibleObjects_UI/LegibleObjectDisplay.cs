@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LegibleObjectDisplay : MenuDisplayBase
 {
     [Header("Components")]
+    [SerializeField] private PlayerUIManager _playerUIManager;
 
     [Header("UI Elements")]
     [SerializeField] private Image _background;
@@ -39,8 +40,8 @@ public class LegibleObjectDisplay : MenuDisplayBase
     public void CloseDisplay(InputAction.CallbackContext context)
     {
         // Disable this display if it is the active one
-        if (UIManager.Instance.GetActiveDisplay() == this)
-            UIManager.Instance.DisableActiveDisplay();
+        if (_playerUIManager.GetActiveDisplay() == this)
+            _playerUIManager.DisableActiveDisplay();
     }
 
     public override void Subscribe()
@@ -56,7 +57,7 @@ public class LegibleObjectDisplay : MenuDisplayBase
     public void SetReadableData(ReadableData data)
     {
         // Set this as the active UI display
-        UIManager.Instance.SetActiveDisplay(this);
+        _playerUIManager.SetActiveDisplay(this);
 
         currentPage = 0;
 

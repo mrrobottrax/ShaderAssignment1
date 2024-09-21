@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ItemQuantityDisplay : MenuDisplayBase
 {
     [Header("Components")]
-    [SerializeField] private UIManager uIManager;
+    [SerializeField] private PlayerUIManager uIManager;
     private PlayerInventoryComponent playerInventoryComponent;
 
     [Header("UI Elements")]

@@ -45,7 +45,7 @@ public class Spear_ViewModel : ViewModel_Base
                     firstPersonCamera.GetCamera().forward, weaponData.BaseDamage, 0, weaponData.BaseWeaponRange);
 
                 // Remove one from the item amount
-                rangedWeapon_Item.ProjectileCreated(1);
+                rangedWeapon_Item.ProjectileCreated(player, 1);
             }
         }
     }

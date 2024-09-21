@@ -1,22 +1,10 @@
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class PlayerUIManager : MonoBehaviour
 {
-    [Header("Singleton")]
-    private static UIManager instance;
-    public static UIManager Instance
-    {
-        get
-        {
-            if (!instance)
-                instance = GameManager.Instance.GetComponent<UIManager>();
-
-            return instance;
-        }
-    }
 
     [field: SerializeField] public InteractionDisplay InteractionPromptDisplay { get; private set; }
-    [field: SerializeField] public HUDManager HUDManager { get; private set; }
+    [field: SerializeField] public PlayerHUDManager HUDManager { get; private set; }
     [field: SerializeField] public InventoryUI InventoryUI { get; private set; }
     [field: SerializeField] public FavouriteWheelDisplay FavouritesWheel { get; private set; }
     [field: SerializeField] public LegibleObjectDisplay LegibleObjectDisplay { get; private set; }
@@ -26,9 +14,9 @@ public class UIManager : MonoBehaviour
     private MenuDisplayBase activeDisplay;
     private Player player;
 
-    private void Start()
+    private void Awake()
     {
-        player = GameManager.Instance.GetPlayer();
+        player = GetComponentInParent<Player>();
     }
 
     /// <summary>

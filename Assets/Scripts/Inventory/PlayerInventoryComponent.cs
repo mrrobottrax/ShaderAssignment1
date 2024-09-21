@@ -17,7 +17,7 @@ public class PlayerInventoryComponent : InventoryComponent
     private List<InventorySlotPointer> favouriteSlots;
 
     [Header("System")]
-    private UIManager uiManager;
+    private PlayerUIManager playerUIManager;
     private FavouriteWheelDisplay favouriteWheelDisplay;
 
     #region Initialization Methods
@@ -35,16 +35,15 @@ public class PlayerInventoryComponent : InventoryComponent
             InventorySlotPointer slot = new();
             favouriteSlots.Add(slot);
         }
+
+        playerUIManager = GetComponentInChildren<PlayerUIManager>();
     }
     private void Start()
     {
         SetControlsSubscription(true);
 
-        // Cache UI manager
-        uiManager = UIManager.Instance;
-
         // Cache ref to favourites wheel
-        favouriteWheelDisplay = uiManager.FavouritesWheel;
+        favouriteWheelDisplay = playerUIManager.FavouritesWheel;
 
         // Assign the created favourite slots to the favourite wheel display
         favouriteWheelDisplay.AssignSlots(favouriteSlots.ToArray());
@@ -105,12 +104,12 @@ public class PlayerInventoryComponent : InventoryComponent
     /// </summary>
     private void InventoryInput(InputAction.CallbackContext context)
     {
-        InventoryUI inventoryUI = uiManager.InventoryUI;
+        InventoryUI inventoryUI = playerUIManager.InventoryUI;
 
         // Display the players inventory if it is not already active
         if (!inventoryUI.GetPlayerInventoryDisplay().GetDisplayActive())
             inventoryUI.DisplayInventory(this);
-        else uiManager.DisableActiveDisplay(); // Disable the inventory display
+        else playerUIManager.DisableActiveDisplay(); // Disable the inventory display
     }
 
     /// <summary>
@@ -119,13 +118,13 @@ public class PlayerInventoryComponent : InventoryComponent
     private void FavouriteWheelInput(InputAction.CallbackContext context)
     {
         // Stop the input if another menu is already open
-        if (uiManager.GetActiveDisplay() != null && uiManager.GetActiveDisplay() != uiManager.FavouritesWheel)
+        if (playerUIManager.GetActiveDisplay() != null && playerUIManager.GetActiveDisplay() != playerUIManager.FavouritesWheel)
             return;
 
         // Display the favourites wheel if it is not active
-        if (!uiManager.FavouritesWheel.GetDisplayActive())
-            uiManager.SetActiveDisplay(favouriteWheelDisplay);
-        else uiManager.DisableActiveDisplay(); // Disable the faourite wheel display
+        if (!playerUIManager.FavouritesWheel.GetDisplayActive())
+            playerUIManager.SetActiveDisplay(favouriteWheelDisplay);
+        else playerUIManager.DisableActiveDisplay(); // Disable the faourite wheel display
     }
 
     /// <summary>

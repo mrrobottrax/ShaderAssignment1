@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
+    [Header("Components")]
+    [SerializeField] private PlayerUIManager _playerUIManager;
+
+    [Header("Display Types")]
     [SerializeField] private ContainerInventoryDisplay _containerInventoryDisplay;
     [SerializeField] private PlayerInventoryDisplay _playerInventoryDisplay;
 
@@ -18,7 +22,7 @@ public class InventoryUI : MonoBehaviour
         if(inventory is PlayerInventoryComponent)
         {
             _playerInventoryDisplay.AssignInventory(inventory);
-            UIManager.Instance.SetActiveDisplay(_playerInventoryDisplay);
+            _playerUIManager.SetActiveDisplay(_playerInventoryDisplay);
         }
         else
         {

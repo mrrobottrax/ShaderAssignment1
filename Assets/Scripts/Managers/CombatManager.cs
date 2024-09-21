@@ -23,7 +23,6 @@ public class CombatManager : MonoBehaviour
 	[field: Header("Components")]
     [SerializeField] private CinemachineImpulseSource _cinemachineImpulseSource;
     private GameManager gameManager;
-	private HUDManager hudManager;
 
     [field: Header("Pool")]
 	// Combat Packets
@@ -54,7 +53,6 @@ public class CombatManager : MonoBehaviour
 	private void Start()
 	{
 		gameManager = GetComponent<GameManager>();
-		hudManager = UIManager.Instance.HUDManager;
 	}
 	#endregion
 
