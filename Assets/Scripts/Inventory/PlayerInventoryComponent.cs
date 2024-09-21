@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInventoryComponent : InventoryComponent
+public class PlayerInventoryComponent : InventoryComponent, IInputHandler
 {
     [Header("Equipment Slot Pointers")]
 	private readonly InventorySlotPointer _heldItemSlot = new();
@@ -52,51 +52,50 @@ public class PlayerInventoryComponent : InventoryComponent
 
     #region Input Methods
 
-    /// <summary>
-    /// This method either subscribes or unsubscribes the players controls
-    /// </summary>
-    public void SetControlsSubscription(bool isSubscribing)
+    public void Subscribe()
     {
-        if (isSubscribing)
-        {
-            // Inventory
-            InputManager.Instance.controls.Permanents.Inventory.performed += InventoryInput;
+        // Inventory
+        InputManager.Instance.controls.Permanents.Inventory.performed += InventoryInput;
 
-            // Favourites wheel
-            InputManager.Instance.controls.Permanents.FavouritesWheel.performed += FavouriteWheelInput;
-            InputManager.Instance.controls.Permanents.FavouritesWheel.canceled += FavouriteWheelInput;
+        // Favourites wheel
+        InputManager.Instance.controls.Permanents.FavouritesWheel.performed += FavouriteWheelInput;
+        InputManager.Instance.controls.Permanents.FavouritesWheel.canceled += FavouriteWheelInput;
 
-            // Hotbar
-            InputManager.Instance.controls.Player._1.performed += HotBarInput;
-            InputManager.Instance.controls.Player._2.performed += HotBarInput;
-            InputManager.Instance.controls.Player._3.performed += HotBarInput;
-            InputManager.Instance.controls.Player._4.performed += HotBarInput;
-            InputManager.Instance.controls.Player._5.performed += HotBarInput;
-            InputManager.Instance.controls.Player._6.performed += HotBarInput;
-            InputManager.Instance.controls.Player._7.performed += HotBarInput;
-            InputManager.Instance.controls.Player._8.performed += HotBarInput;
-        }
-        else
-        {
-			// Ensure that the input manager exists
-			if (InputManager.Instance == null)
-				return;
+        // Hotbar
+        InputManager.Instance.controls.Player._1.performed += HotBarInput;
+        InputManager.Instance.controls.Player._2.performed += HotBarInput;
+        InputManager.Instance.controls.Player._3.performed += HotBarInput;
+        InputManager.Instance.controls.Player._4.performed += HotBarInput;
+        InputManager.Instance.controls.Player._5.performed += HotBarInput;
+        InputManager.Instance.controls.Player._6.performed += HotBarInput;
+        InputManager.Instance.controls.Player._7.performed += HotBarInput;
+        InputManager.Instance.controls.Player._8.performed += HotBarInput;
+    }
 
-			InputManager.Instance.controls.Permanents.Inventory.performed -= InventoryInput;
+    public void Unsubscribe()
+    {
+        InputManager.Instance.controls.Permanents.Inventory.performed -= InventoryInput;
 
-            // Favourites wheel
-            InputManager.Instance.controls.Permanents.FavouritesWheel.performed -= FavouriteWheelInput;
-            InputManager.Instance.controls.Permanents.FavouritesWheel.canceled -= FavouriteWheelInput;
+        // Favourites wheel
+        InputManager.Instance.controls.Permanents.FavouritesWheel.performed -= FavouriteWheelInput;
+        InputManager.Instance.controls.Permanents.FavouritesWheel.canceled -= FavouriteWheelInput;
 
-            // Hotbar
-            InputManager.Instance.controls.Player._1.performed -= HotBarInput;
-            InputManager.Instance.controls.Player._2.performed -= HotBarInput;
-            InputManager.Instance.controls.Player._4.performed -= HotBarInput;
-            InputManager.Instance.controls.Player._5.performed -= HotBarInput;
-            InputManager.Instance.controls.Player._6.performed -= HotBarInput;
-            InputManager.Instance.controls.Player._7.performed -= HotBarInput;
-            InputManager.Instance.controls.Player._8.performed -= HotBarInput;
-        }
+        // Hotbar
+        InputManager.Instance.controls.Player._1.performed -= HotBarInput;
+        InputManager.Instance.controls.Player._2.performed -= HotBarInput;
+        InputManager.Instance.controls.Player._4.performed -= HotBarInput;
+        InputManager.Instance.controls.Player._5.performed -= HotBarInput;
+        InputManager.Instance.controls.Player._6.performed -= HotBarInput;
+        InputManager.Instance.controls.Player._7.performed -= HotBarInput;
+        InputManager.Instance.controls.Player._8.performed -= HotBarInput;
+    }
+
+    public void SetControlsSubscription(bool isInputEnabled)
+    {
+        if (isInputEnabled)
+            Subscribe();
+        else if (InputManager.Instance != null)
+            Unsubscribe();
     }
 
     /// <summary>
@@ -214,11 +213,15 @@ public class PlayerInventoryComponent : InventoryComponent
         // Check if the selected slots item is equippable
         if (selectedSlot.GetSlotsItem() is IEquippableItem equippableItem)
         {
+            Debug.Log("Try Unequip");
+
             // Find the slots items type
             if (selectedSlot.GetSlotsItem() is Weapon_Item)
             {
                 // Clear the established pairing
                 _heldItemSlot.ClearPairedSlot();
+
+                Debug.Log("Clear Pairing");
             }
             else if (selectedSlot.GetSlotsItem() is Armour_Item armourItem)
             {

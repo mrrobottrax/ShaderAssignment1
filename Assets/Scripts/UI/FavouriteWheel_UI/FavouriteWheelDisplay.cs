@@ -30,8 +30,26 @@ public class FavouriteWheelDisplay : MenuDisplayBase
 
     #region Input Methods
 
+    public override void Subscribe()
+    {
+        // Reset the axis when controls are enabled
+        axisRaw = Vector2.zero;
+
+        // Look input
+        InputManager.Instance.controls.UI.LookAxis.performed += LookInput;
+    }
+
+    public override void Unsubscribe()
+    {
+        // Look input
+        InputManager.Instance.controls.UI.LookAxis.performed -= LookInput;
+
+        // Select the last slice the player was over
+        SelectSlice(currentSlice);
+    }
+
     public override void SetControlsSubscription(bool isInputEnabled)
-	{
+    {
         if (isInputEnabled)
             Subscribe();
         else if (InputManager.Instance != null)
@@ -51,27 +69,8 @@ public class FavouriteWheelDisplay : MenuDisplayBase
         {
             // Since mouse pos is delta rather than axis, we need to get the direction the mouse is in from the center of the UI.
             axisRaw = (Input.mousePosition - _wheelDisplayRect.position).normalized;
-
             return;
         }
-    }
-
-    public override void Subscribe()
-    {
-        // Reset the axis when controls are enabled
-        axisRaw = Vector2.zero;
-
-        // Look input
-        InputManager.Instance.controls.Player.Look.performed += LookInput;
-    }
-
-    public override void Unsubscribe()
-    {
-        // Look input
-        InputManager.Instance.controls.Player.Look.performed -= LookInput;
-
-        // Select the last slice the player was over
-        SelectSlice(currentSlice);
     }
 
     #endregion

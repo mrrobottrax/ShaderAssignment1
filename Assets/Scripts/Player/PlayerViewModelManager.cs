@@ -94,7 +94,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
 
         // Update the animator
         animator.SetBool("IsHoldingNothing", true);
-        prevAttackGroup = null;
+        prevAttackGroup = "";
         SetActionChain(0);
 
         // Finish the ongoing attack

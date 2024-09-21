@@ -475,6 +475,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "LookAxis",
+                    "type": "PassThrough",
+                    "id": "1ee17be6-4b58-4947-b399-ab8a8027b4c5",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ScrollWheel",
                     "type": "PassThrough",
                     "id": "b4a47055-b056-4271-b332-e58f54a71245",
@@ -790,6 +799,28 @@
                     "action": "Navigate",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "90c3456f-d5d0-454f-a2ef-82a1bc83999f",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookAxis",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8a5dc334-4a0a-462d-82ad-5afea9addf5a",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookAxis",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

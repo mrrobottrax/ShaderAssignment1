@@ -12,6 +12,7 @@ public abstract class ItemData_Base : ScriptableObject
     [field: Header("Item Properties")]
     [field: SerializeField] public int MaxAmount { get; private set; } = 99;
     [field: SerializeField] public int ItemBaseValue { get; private set; } = 0;
+    [field: SerializeField] public float ItemWeight { get; private set; } = 0;
 
     /// <summary>
     /// This method should be implemented by the children and should specify what type of item type should be created
