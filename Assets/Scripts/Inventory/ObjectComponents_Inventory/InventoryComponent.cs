@@ -5,6 +5,7 @@ public class InventoryComponent : MonoBehaviour
 {
     public Inventory Inventory => inventory;
     protected Inventory inventory;
+
     [SerializeField] private int _inventorySize;    
 
     protected virtual void Awake()

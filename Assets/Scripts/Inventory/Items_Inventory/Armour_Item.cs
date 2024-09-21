@@ -15,11 +15,13 @@ public class Armour_Item : Item_Base, IEquippableItem
     public void Equip()
     {
         isEquipped = true;
+        OnItemChanged?.Invoke();
     }
 
     public void UnEquip()
     {
         isEquipped = false;
+        OnItemChanged?.Invoke();
     }
 
     public override void SlotCleared(InventorySlot itemsSlot)

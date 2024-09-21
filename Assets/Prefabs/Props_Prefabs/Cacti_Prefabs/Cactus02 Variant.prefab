@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2564644862961971328
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 566986569375168831, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_Size
+      value: 2.0327034
+      objectReference: {fileID: 0}
+    - target: {fileID: 566986569375168831, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalReferencePoint.x
+      value: -0.072562814
+      objectReference: {fileID: 0}
+    - target: {fileID: 566986569375168831, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalReferencePoint.y
+      value: 1.0163517
+      objectReference: {fileID: 0}
+    - target: {fileID: 566986569375168831, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalReferencePoint.z
+      value: 0.022330523
+      objectReference: {fileID: 0}
+    - target: {fileID: 566986569375168831, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LODs.Array.data[0].renderers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 566986569375168831, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LODs.Array.data[1].renderers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 566986569375168831, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LODs.Array.data[2].renderers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779435234969116683, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4210777565772772678, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_Name
+      value: Cactus02 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838065621729437600, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -95044144544770149, guid: 7a9c58a9202233f41b233425422f4507, type: 3}
+    - target: {fileID: 4838065621729437600, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226932752909646118, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_Name
+      value: Cactus02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8871395707895194792, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -95044144544770149, guid: 7a9c58a9202233f41b233425422f4507, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a2e6ea2481e43974f88b193385a1e90a, type: 3}

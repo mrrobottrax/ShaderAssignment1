@@ -3939,7 +3939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayElement: {fileID: 8169083510101033221}
-  uIManager: {fileID: 0}
+  uIManager: {fileID: 7987615675197120178}
   _amountSlider: {fileID: 6548423212860307057}
   _amountFeild: {fileID: 615214757454069564}
   _primaryButton: {fileID: 2901530410967145958}

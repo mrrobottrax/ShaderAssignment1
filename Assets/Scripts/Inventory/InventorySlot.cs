@@ -25,18 +25,6 @@ public class InventorySlot
     }
 
     /// <summary>
-    /// This method either adds or overrides a slot
-    /// </summary>
-    public void AssignSlotData(InventorySlot assignedData)
-    {
-        // Add to item
-        if (slotsItem == assignedData.slotsItem)
-            slotsItem.AddAmount(assignedData.GetSlotsItem().GetAmount());
-        else // Override
-            AssignItem(assignedData.GetSlotsItem(), assignedData.GetSlotsItem().GetAmount());
-    }
-
-    /// <summary>
     /// This method clears the slots data
     /// </summary>
     public void ClearSlot()

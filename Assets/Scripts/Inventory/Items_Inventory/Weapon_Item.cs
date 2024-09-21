@@ -23,6 +23,7 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
     public void Equip()
     {
         isEquipped = true;
+        OnItemChanged?.Invoke();
 
         // Set the current view model
         Player.Instance.GetViewModelManager().SetViewModel(this);
@@ -31,6 +32,9 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
     public void UnEquip()
     {
         isEquipped = false;
+        OnItemChanged?.Invoke();
+
+        Debug.Log("Dude I am not here");
 
         // Clear the current view model
         Player.Instance.GetViewModelManager().ClearCurrentViewModel();
@@ -39,6 +43,7 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
     public void FavouriteItem(int favouriteSlotID)
     {
         isItemFavourited = true;
+        OnItemChanged?.Invoke();
 
         // Store pointer ref
         favouriteSlotPointerID = favouriteSlotID;
@@ -49,6 +54,7 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
         favouriteSlotID = favouriteSlotPointerID;
 
         isItemFavourited = false;
+        OnItemChanged?.Invoke();
 
         // Reset the pointer ID
         favouriteSlotPointerID = 0;
