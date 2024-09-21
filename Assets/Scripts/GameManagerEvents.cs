@@ -4,11 +4,11 @@ public class GameManagerEvents : ScriptableObject
 {
 	public void StartHosting()
 	{
-		PropHuntGameManager.StartHosting();
+		GameManager.StartHosting();
 	}
 
 	public void StartPropHunt()
 	{
-		PropHuntGameManager.StartGame();
+		GameManager.GoToTestLevel();
 	}
 }
