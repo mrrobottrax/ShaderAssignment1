@@ -4,7 +4,10 @@ using UnityEngine.InputSystem;
 
 public class FavouriteWheelDisplay : MenuDisplayBase
 {
-	[Header("UI Elements")]
+    [Header("Components")]
+    [SerializeField] private PlayerInventoryComponent _playerInventoryComponent;
+
+    [Header("UI Elements")]
 	[SerializeField] private Transform _wheelDisplayRect;
 	[SerializeField] private TextMeshProUGUI _itemText;
 	[SerializeField] private string _noItemText;
@@ -134,23 +137,29 @@ public class FavouriteWheelDisplay : MenuDisplayBase
 	/// <param name="slice">The slice to be used for equipping the item.</param>
 	private void SelectSlice(FavouriteWheelSliceDisplay slice)
 	{
-		// Equip the item in the slot that was selected
-		if (slice != null)
-		{
-			// Check if the selected slice has an item to equip in it
-			if (slice.AssignedSlot.GetPairedSlot() != null &&
-				slice.AssignedSlot.GetPairedSlot().GetSlotsItem() != null)
-			{
-				// Use the items favourite function
-				if (slice.AssignedSlot.GetPairedSlot().GetSlotsItem() is IFavouritableItem favouritableItem)
-					favouritableItem.UseFavouritedItem();
-			}
-			else // In the case that an empty slot was selected, leave the player unarmed
-				Player.Instance.GetViewModelManager().ClearCurrentViewModel();
-		}
-		else
-			Player.Instance.GetViewModelManager().ClearCurrentViewModel();
-	}
+        // Equip the item in the slot that was selected
+        if (slice != null)
+        {
+            // Check if the selected slice has an item to equip in it
+            if (slice.AssignedSlot.GetPairedSlot() != null &&
+                slice.AssignedSlot.GetPairedSlot().GetSlotsItem() != null)
+            {
+                // Use the items favourite function
+                if (slice.AssignedSlot.GetPairedSlot().GetSlotsItem() is IFavouritableItem favouritableItem)
+                    favouritableItem.UseFavouritedItem();
+            }
+            else 
+                TryUnequipPlayer();
+        }
+        else 
+            TryUnequipPlayer();
+    }
+
+    private void TryUnequipPlayer()
+    {
+        if (_playerInventoryComponent._heldItemSlot.GetPairedSlot() != null)
+            _playerInventoryComponent.UnequipItem(_playerInventoryComponent._heldItemSlot.GetPairedSlot());
+    }
 
     #region Unity Callbacks
 

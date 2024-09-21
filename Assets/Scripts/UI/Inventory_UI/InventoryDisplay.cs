@@ -396,8 +396,6 @@ public abstract class InventoryDisplay : MenuDisplayBase
     /// </summary>
     public virtual void RefreshSlots()
     {
-        Debug.Log("THIS SHOULD BE HAPPENING");
-
         // Sort slots
         FilterDisplaySlots(currentFilter);
 

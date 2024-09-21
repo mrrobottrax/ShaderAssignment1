@@ -882,7 +882,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 455441835028272783}
-  m_Mesh: {fileID: 8556253635750604653, guid: 4456a3ab3dcb0b045be8b8747b584d65, type: 3}
+  m_Mesh: {fileID: 8556253635750604653, guid: e03afbf522b1b4d4ab38dcb357a56dcc, type: 3}
 --- !u!23 &3293765848365764567
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8451,6 +8451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayElement: {fileID: 4870351663062874365}
+  _playerInventoryComponent: {fileID: 5130311445482006104}
   _wheelDisplayRect: {fileID: 3128065334626748924}
   _itemText: {fileID: 948692862959282862}
   _noItemText: Unarmed
@@ -15165,9 +15166,9 @@ RectTransform:
   - {fileID: 264889396379616019}
   m_Father: {fileID: 5963300777383944593}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -10}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 65.5, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8064477457690877656

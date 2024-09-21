@@ -41,14 +41,9 @@ public class InventorySlotPointer
     protected virtual void PairedSlotChanged(InventorySlot slot)
     {
         // Ensure the changes made were to the same slot as the paired slot
-        if (pairedSlot == slot)
+        if (pairedSlot == slot && pairedSlot.GetSlotsItem() == null)
         {
-            // When the held item changes, check if it has been destroyed
-            if (pairedSlot.GetSlotsItem() == null)
-            {
-                // Clear the slot pairing
-                ClearPairedSlot();
-            }
+            ClearPairedSlot();
         }
     }
 }

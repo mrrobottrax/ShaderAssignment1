@@ -34,8 +34,6 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
         isEquipped = false;
         OnItemChanged?.Invoke();
 
-        Debug.Log("Dude I am not here");
-
         // Clear the current view model
         Player.Instance.GetViewModelManager().ClearCurrentViewModel();
     }

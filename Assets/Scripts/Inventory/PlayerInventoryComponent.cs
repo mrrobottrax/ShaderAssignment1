@@ -4,13 +4,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerInventoryComponent : InventoryComponent, IInputHandler
 {
-    [Header("Equipment Slot Pointers")]
-	private readonly InventorySlotPointer _heldItemSlot = new();
+    [field: Header("Equipment Slot Pointers")]
+    public InventorySlotPointer _heldItemSlot { get; private set; } = new();
 
-	private readonly InventorySlotPointer _headSlot = new();
-    private readonly InventorySlotPointer _chestSlot = new();
-    private readonly InventorySlotPointer _legsSlot = new();
-    private readonly InventorySlotPointer _feetSlot = new();
+	private InventorySlotPointer _headSlot = new();
+    private InventorySlotPointer _chestSlot = new();
+    private InventorySlotPointer _legsSlot = new();
+    private InventorySlotPointer _feetSlot = new();
 
     [Header("Favourited Items")]
     [SerializeField] private int _favouriteSlotsSize = 8;
@@ -123,7 +123,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
         // Display the favourites wheel if it is not active
         if (!playerUIManager.FavouritesWheel.GetDisplayActive())
             playerUIManager.SetActiveDisplay(favouriteWheelDisplay);
-        else playerUIManager.DisableActiveDisplay(); // Disable the faourite wheel display
+        else playerUIManager.DisableActiveDisplay(); // Disable the favourite wheel display
     }
 
     /// <summary>
@@ -145,12 +145,12 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     /// <summary>
     /// This method will attempt to pair a selected slot with the correct pointer slot, based on the items type.
     /// </summary>
-    public void EquipItem(InventorySlot selectedSlot)
+    public void EquipItem(InventorySlot itemsSlot)
     {
         // Check if the selected slots item is equippable
-        if (selectedSlot != null && 
-            selectedSlot.GetSlotsItem() != null && 
-            selectedSlot.GetSlotsItem() is IEquippableItem equippableItem)
+        if (itemsSlot != null && 
+            itemsSlot.GetSlotsItem() != null && 
+            itemsSlot.GetSlotsItem() is IEquippableItem equippableItem)
         {
             InventorySlotPointer slotToPairTo = null;
 
@@ -159,7 +159,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
             {
                 slotToPairTo = _heldItemSlot;
             }
-            else if (selectedSlot.GetSlotsItem() is Armour_Item armourItem)
+            else if (itemsSlot.GetSlotsItem() is Armour_Item armourItem)
             {
                 // Get the armour data of the item
                 Armour_ItemData itemData = armourItem.GetArmourData();
@@ -188,20 +188,17 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
             // Check if a slot was chosen to pair with
             if (slotToPairTo != null)
             {
-                // Try to unequip the previous item if one is present
+                // Try to unequip an item if the selected slot has one
                 if (slotToPairTo.GetPairedSlot()?.GetSlotsItem() != null)
-                    UnequipItem(selectedSlot);
+                    UnequipItem(slotToPairTo.GetPairedSlot());
 
                 // Establish the new slot pairing and equip the item
-                slotToPairTo.SetPairedSlot(selectedSlot);
+                slotToPairTo.SetPairedSlot(itemsSlot);
                 equippableItem.Equip();
             }
         }
-        else // If an item that does not exist was passed in, unequip the current item.
-        {
-            if (_heldItemSlot.GetPairedSlot() != null)
-                UnequipItem(_heldItemSlot.GetPairedSlot());
-        }
+        else if (_heldItemSlot.GetPairedSlot() != null) // If an item that does not exist was passed in, unequip the current item.
+            UnequipItem(_heldItemSlot.GetPairedSlot());
     }
 
     /// <summary>
@@ -215,13 +212,12 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
         {
             Debug.Log("Try Unequip");
 
+            InventorySlotPointer slotToClear = null;
+
             // Find the slots items type
             if (selectedSlot.GetSlotsItem() is Weapon_Item)
             {
-                // Clear the established pairing
-                _heldItemSlot.ClearPairedSlot();
-
-                Debug.Log("Clear Pairing");
+                slotToClear = _heldItemSlot;
             }
             else if (selectedSlot.GetSlotsItem() is Armour_Item armourItem)
             {
@@ -230,25 +226,26 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
                 switch (itemData.ArmorsType)
                 {
                     case Armour_ItemData.ArmorType.HeadPiece:
-                        _headSlot.ClearPairedSlot();
+                        slotToClear = _headSlot;
                         break;
 
                     case Armour_ItemData.ArmorType.ChestPiece:
-                        _chestSlot.ClearPairedSlot();
+                        slotToClear = _chestSlot;
                         break;
 
                     case Armour_ItemData.ArmorType.Legs:
-                        _legsSlot.ClearPairedSlot();
+                        slotToClear = _legsSlot;
                         break;
 
                     case Armour_ItemData.ArmorType.Feet:
-                        _feetSlot.ClearPairedSlot();
+                        slotToClear = _feetSlot;
                         break;
                 }
             }
 
             // Unequip the item
             equippableItem.UnEquip();
+            slotToClear.ClearPairedSlot();
         }
     }
     #endregion
