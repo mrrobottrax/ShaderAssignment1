@@ -393,6 +393,7 @@ MonoBehaviour:
   _interactionRect: {fileID: 6380821746535606822}
   _itemOptions_Display: {fileID: 1182482403094506607}
   _itemDiscription_Display: {fileID: 6583119273387965570}
+  _playerHealth: {fileID: 0}
   _filledSlotsText: {fileID: 5488650982053541185}
   _healthBar: {fileID: 6016252984906617727}
   _goldCounter: {fileID: 0}
@@ -3914,6 +3915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayElement: {fileID: 9151281185589641252}
+  _playerHealth: {fileID: 0}
   _itemQuantityDisplay: {fileID: 2753769124149947050}
   _primaryButtonHolder: {fileID: 9151281185589641252}
   _playerInventoryPrimaryFunction_Button: {fileID: 6496882948065762861}
@@ -3939,7 +3941,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayElement: {fileID: 8169083510101033221}
-  uIManager: {fileID: 7987615675197120178}
+  _uIManager: {fileID: 0}
+  _playerInventoryComponent: {fileID: 0}
   _amountSlider: {fileID: 6548423212860307057}
   _amountFeild: {fileID: 615214757454069564}
   _primaryButton: {fileID: 2901530410967145958}
@@ -4458,6 +4461,7 @@ MonoBehaviour:
   _gatherHurtboxesOnInit: 0
   _hurtBoxes: []
   <PlayerUIManager>k__BackingField: {fileID: 7987615675197120178}
+  <FirstPersonCamera>k__BackingField: {fileID: 0}
 --- !u!54 &87817262759864826
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4512,42 +4516,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb5e36afaa355a741b820934cb8d2b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 6778819629779878474}
-  cameraParent: {fileID: 8545715439917298494}
-  lookSenseYaw: 0.1
-  lookSensePitch: 0.1
-  pitchMin: -85
-  pitchMax: 85
-  foreheadSize: 0.2
-  duckSpeed: 7
-  stepLerpSpeed: 10
-  maxStepLerpDist: 0.6
-  vaultCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  pitch: 0
-  yaw: 0
+  CameraTransform: {fileID: 0}
+  m_followPlayer: {fileID: 0}
+  m_lookSenseYaw: 0.1
+  m_lookSensePitch: 0.1
+  m_pitchMin: -85
+  m_pitchMax: 85
+  m_foreheadSize: 0.2
+  m_duckSpeed: 1
+  m_stepLerpSpeed: 5
+  m_maxStepLerpDist: 0.6
 --- !u!114 &5130311445482006104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4561,6 +4539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inventorySize: 8
+  _playerHealth: {fileID: 0}
   _favouriteSlotsSize: 8
 --- !u!114 &7697778654165656312
 MonoBehaviour:
@@ -8451,6 +8430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayElement: {fileID: 4870351663062874365}
+  _playerHealth: {fileID: 0}
   _playerInventoryComponent: {fileID: 5130311445482006104}
   _wheelDisplayRect: {fileID: 3128065334626748924}
   _itemText: {fileID: 948692862959282862}
@@ -15166,9 +15146,9 @@ RectTransform:
   - {fileID: 264889396379616019}
   m_Father: {fileID: 5963300777383944593}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 65.5, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 10, y: -10}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8064477457690877656
@@ -16019,7 +15999,7 @@ Transform:
   m_GameObject: {fileID: 9222364406917590681}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.00000023841858, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

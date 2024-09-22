@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerController), typeof(PlayerInventoryComponent), typeof(FirstPersonCamera))]
+[RequireComponent(typeof(PlayerController), typeof(PlayerInventoryComponent))]
 public class PlayerHealth : Entity_Base
 { 
     [field: Header("Components")]
