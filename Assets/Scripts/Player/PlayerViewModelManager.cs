@@ -215,7 +215,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
         Debug.Log(chosenGroup);
 
         // Compare the last attack group to the newly chosen one
-        if (chosenGroup.GroupTitle == null || chosenGroup.GroupTitle == prevAttackGroup)
+        if (chosenGroup.GroupTitle == prevAttackGroup)
             viewModelActionChain = 0;
 
         // Check if an item is equipped

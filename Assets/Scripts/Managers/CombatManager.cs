@@ -1,6 +1,5 @@
 using Cinemachine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,9 +7,6 @@ using UnityEngine;
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager Instance { get; private set; }
-
-    [field: Header("Components")]
-    [SerializeField] private CinemachineImpulseSource _cinemachineImpulseSource;
 
     [field: Header("Pool")]
 	// Combat Packets
@@ -25,29 +21,39 @@ public class CombatManager : MonoBehaviour
     [field: Header("Events")]
     public event Action<Entity_Base, CombatPacket> CombatPacketComplete;
 
-	#region Initialization Methods
-	private void Awake()
-	{
+    #region Initialization Methods
 
-		// Initialize combat packets
-		for (int i = 0; i < combatPacketPoolSize; i++)
-		{
-			CombatPacket packet = new CombatPacket();
-			combatPacketPool.Enqueue(packet);
-		}
-	}
+    [RuntimeInitializeOnLoadMethod]
+    static void Initialize()
+    {
+        new GameObject("Combat Manager").AddComponent<CombatManager>();
+    }
 
-	#endregion
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+		Instance = this;
 
-	#region Combat Packet Methods
+        // Initialize combat packets
+        for (int i = 0; i < combatPacketPoolSize; i++)
+        {
+            CombatPacket packet = new CombatPacket();
+            combatPacketPool.Enqueue(packet);
+        }
+    }
 
-	/// <summary>
-	/// This method should be called by an entity when it begins an attack
-	/// </summary>
-	/// <param name="instigator">The instigator of the attack</param>
-	/// <param name="packetID">The ID of the packet returned</param>
-	/// <param name="fetchedPacket">The returned combat packet</param>
-	public CombatPacket BeginCombatPacket(Entity_Base instigator, out int packetID)
+
+    #endregion
+
+    #region Combat Packet Methods
+
+    /// <summary>
+    /// This method should be called by an entity when it begins an attack
+    /// </summary>
+    /// <param name="instigator">The instigator of the attack</param>
+    /// <param name="packetID">The ID of the packet returned</param>
+    /// <param name="fetchedPacket">The returned combat packet</param>
+    public CombatPacket BeginCombatPacket(Entity_Base instigator, out int packetID)
 	{
 		// Dequeue packet from pool
 		CombatPacket packet = ReleaseCombatPacket(instigator);
@@ -56,7 +62,7 @@ public class CombatManager : MonoBehaviour
 		packetID = GeneratePacketID(instigator);
 
 		// Init the packet
-		//packet.Initialize(packetID, instigator);
+		packet.Initialize(packetID, instigator);
 
 		Debug.Log("Packet Dequeued");
 
@@ -239,69 +245,6 @@ public class CombatManager : MonoBehaviour
             // Apply damage result to victem
             victem.TakeDamage(finalDamage);
 		}
-
-		/*
-		// Screen FX
-		if (packet.IsPacketScreenFXSet)
-		{
-			if (packet.Instigator == GameManager.Instance.GetPlayer())
-			{
-				// Create screen shake
-				// The player should be the only one calling screen shake from the combat manager.
-				// Other entities should have local screen shake impulse generators.
-				ShakeScreen(packet.ScreenShakeAmplitude, packet.ScreenShakeDuration);
-
-			}
-		}
-		*/
 	}
-    #endregion
-
-    #region Screen FX
-
-    /// <summary>
-    /// Uses a cinemachine impulse to shake the whole screen without location data
-    /// </summary>
-    /// <param name="ScreenShakeAmplitude">How strong the shake is</param>
-    /// <param name="duration">How long the shake lasts</param>
-    public void ShakeScreen(float ScreenShakeAmplitude, float duration)
-    {
-		_cinemachineImpulseSource.m_ImpulseDefinition.m_ImpulseDuration = duration;
-        _cinemachineImpulseSource.GenerateImpulseWithForce(ScreenShakeAmplitude);
-    }
-
-    /// <summary>
-	/// Pauses the game for a duration before returning to normal
-	/// </summary>
-	/// <param name="duration"></param>
-	/// <returns>The impact pause coroutine</returns>
-    private IEnumerator ImpactPause(float duration)
-    {
-        Time.timeScale = 0f;
-
-        float pauseEndTime = Time.realtimeSinceStartup + duration;
-
-        while (Time.realtimeSinceStartup < pauseEndTime)
-        {
-            yield return 0;
-        }
-
-        Time.timeScale = 1;
-    }
-
-	/// <summary>
-	/// Begins a new impact pause coroutine (cancles the previous one if present)
-	/// </summary>
-	/// <param name="pauseDuration"></param>
-    public void StartImpactPause(float pauseDuration)
-    {
-		// Stop the current impact pause
-		if (impactPause != null)
-			StopCoroutine(impactPause);
-
-        // Start a new impact pause
-        if (pauseDuration > 0)
-            impactPause = StartCoroutine(ImpactPause(pauseDuration));
-    }
     #endregion
 }

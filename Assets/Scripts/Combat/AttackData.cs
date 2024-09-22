@@ -34,8 +34,6 @@ public class AttackData : ScriptableObject
     // Stun at some point  [field: SerializeField] public float StunDuration { get; private set; }
 
     [field: Header("Physical FX"), Space(10)]
-    [field: SerializeField, Tooltip("The amount of seconds that the screen will pause for when the attack hits a target")]
-    public float ImpactPauseDuration { get; private set; }
 
     [field: SerializeField, Tooltip("The magnitude of the screenshake created on impact")]
     public float ScreenShakeAmplitude { get; private set; }

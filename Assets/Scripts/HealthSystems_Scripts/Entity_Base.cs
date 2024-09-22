@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,7 +22,6 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
 
     [field: Header("Components")]
     public StatusEffectComponent StatusEffectComponent { get; private set; }
-    private CombatManager combatManager;
     private Rigidbody rb;
 
     [field: Header("Systems")]
@@ -72,8 +70,6 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
 
     protected virtual void Start()
     {
-        combatManager = CombatManager.Instance;
-
         foreach (Hurtbox i in _hurtBoxes)
             i.Initialize(this);
     }
@@ -113,16 +109,14 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
     /// <param name="attack">The data of the attack that will be performed</param>
     public void EntityBeginAttack()
     {
-        /*
         IsAbleToAttack = false;
         IsAttackInProgress = true;
 
         // Create a combat packet with this entities data
-        combatManager.BeginCombatPacket(this, out int packetID);
+        CombatManager.Instance.BeginCombatPacket(this, out int packetID);
 
         // Store current attacks ID
         ongoingAttackID = packetID;
-        */
     }
 
     /// <summary>
@@ -277,9 +271,8 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
     /// </summary>
     public void FinishAttack()
     {
-        /*
         // Retrieve the combat packet assigned to the ongoing attack
-        CombatPacket packet = combatManager.GetCombatPacket(this, ongoingAttackID);
+        CombatPacket packet = CombatManager.Instance.GetCombatPacket(this, ongoingAttackID);
 
         // Start cooldown
         if (packet.IsCooldownSet)
@@ -290,7 +283,6 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
         CompleteAttack();
 
         IsAttackInProgress = false;
-        */
     }
 
     /// <summary>
