@@ -19,6 +19,12 @@ public class NetworkObject : MonoBehaviour
 	{
 		TickManager.OnLateTick += LateTick;
 
+		// Non-prefabs are always owned by server
+		if (m_prefabIndex == -1)
+		{
+			m_ownerIndentity = NetworkManager.GetServerIdentity();
+		}
+
 		InitNetworkBehaviours();
 	}
 
@@ -27,6 +33,14 @@ public class NetworkObject : MonoBehaviour
 		if (NetworkManager.Mode == ENetworkMode.Host)
 		{
 			ForceRegister();
+		}
+		else if (m_netID == 0)
+		{
+			// Reserve net ID
+			m_netID = NetworkObjectManager.ReserveID(this);
+
+			// Add to list
+			NetworkObjectManager.AddNetworkObjectToList(this);
 		}
 	}
 

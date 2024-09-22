@@ -23,8 +23,7 @@ public static class NetworkManager
 
 	internal static Dictionary<SteamNetworkingIdentity, Peer> m_peers = new(); // all other players
 
-	[RuntimeInitializeOnLoadMethod]
-	static void Initialize()
+	public static void Init()
 	{
 		m_GameRichPresenceJoinRequested = Callback<GameRichPresenceJoinRequested_t>.Create(OnGameRichPresenceJoinRequested);
 
@@ -261,6 +260,20 @@ public static class NetworkManager
 		}
 
 		return players;
+	}
+
+	public static SteamNetworkingIdentity GetServerIdentity()
+	{
+		if (m_mode == ENetworkMode.Host)
+		{
+			return m_localIdentity;
+		}
+		else if (m_mode == ENetworkMode.Client)
+		{
+			return m_localClient.m_serverID;
+		}
+
+		return new SteamNetworkingIdentity();
 	}
 
 	#endregion
