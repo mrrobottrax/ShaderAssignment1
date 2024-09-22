@@ -13,8 +13,6 @@ public class ItemOptionsDisplay : MenuDisplayBase
 	[field: Header("Primary Button")]
 	[SerializeField] private GameObject _primaryButtonHolder;
 
-
-
 	[field: Header("Player Inventory Buttons")]
 	[SerializeField] private Button _playerInventoryPrimaryFunction_Button;
 	[SerializeField] private TextMeshProUGUI _playerInventoryPrimaryFunction_Text;
@@ -25,14 +23,6 @@ public class ItemOptionsDisplay : MenuDisplayBase
 
 	[Space(5)]
 
-	[SerializeField] private Button _favourite_Button;
-	[SerializeField] private TextMeshProUGUI _favourite_Text;
-
-	private const string favouriteText = "Favourite";
-	private const string unfavouriteText = "Unfavourite";
-
-
-
 	[field: Header("Container Primary Button")]
 	[SerializeField] private Button _containerPrimaryFunction_Button;
 	[SerializeField] private TextMeshProUGUI _containerPrimaryFunction_Text;
@@ -40,18 +30,18 @@ public class ItemOptionsDisplay : MenuDisplayBase
 	private const string storeText = "Store";
 	private const string takeText = "Take";
 
+    [Space(5)]
 
-
-	[field: Header("Vendor Primary Button")]
+    [field: Header("Vendor Primary Button")]
 	[SerializeField] private Button _vendorPrimaryFunction_Button;
 	[SerializeField] private TextMeshProUGUI _vendorPrimaryFunction_Text;
 
 	private const string sellText = "Sell";
 	private const string buyText = "Buy";
 
+    [Space(5)]
 
-
-	[field: Header("Buttons")]
+    [field: Header("Buttons")]
 	[SerializeField] private Button _trash_Button;
 	[SerializeField] private Button _back_Button;
 
@@ -140,7 +130,6 @@ public class ItemOptionsDisplay : MenuDisplayBase
 		bool isPInventoryPrimaryAvailable = false;
 		bool isContainerPrimaryAvailable = false;
 		bool isVendorPrimaryAvailable = false;
-		bool isFavouriteToggleAvailable = false;
 		bool isTrashAvailable = false;
 
 		switch (currentDisplayType)
@@ -161,20 +150,6 @@ public class ItemOptionsDisplay : MenuDisplayBase
 
 					// Set the equip text
 					_playerInventoryPrimaryFunction_Text.text = !equipableItem.IsEquipped ? equipText : unequipText;
-				}
-
-				// Check for favouritable items
-				if (item is IFavouritableItem favouriteItem)
-				{
-					// Favourite button
-					// If an item is favourited, the button should be active to unfavourite the item.
-					// Or, it should be active to favorite an item if there are empty slots available.
-					isFavouriteToggleAvailable = (favouriteItem.IsItemFavourited || !favouriteItem.IsItemFavourited &&
-						playerInventoryComponent.GetEmptyFavouriteSlot(out int slotIndex) != null);
-
-					// If the toggle is available, check if the text should say favourite or unfavourite
-					if (isFavouriteToggleAvailable)
-						_favourite_Text.text = !favouriteItem.IsItemFavourited ? favouriteText : unfavouriteText;
 				}
 
 				// Set the trash button as avaiable
@@ -216,9 +191,6 @@ public class ItemOptionsDisplay : MenuDisplayBase
 
 		_vendorPrimaryFunction_Button.gameObject.SetActive(isVendorPrimaryAvailable);
 
-		// Set favourite button enabled based on inventory & item state
-		_favourite_Button.gameObject.SetActive(isFavouriteToggleAvailable);
-
 		// Set trash button enabled based on inventory & item state
 		_trash_Button.gameObject.SetActive(isTrashAvailable);
 	}
@@ -259,19 +231,6 @@ public class ItemOptionsDisplay : MenuDisplayBase
 	{
 		// Open the quantity panel under the transaction context
 		_itemQuantityDisplay.SetItem(currentSlotDisplay, currentInventoryDisplay, ItemQuantityDisplay.EQuantityInteractionType.Transaction);
-
-		// Close this panel
-		Back();
-	}
-
-	/// <summary>
-	/// This button should be called by the favourite button.
-	/// For items that can be equipped, this method toggles if they are favourited or not
-	/// </summary>
-	public void Favourite()
-	{
-		if (currentDisplayType == EInventoryType.PlayerInventory)
-			(currentInventoryDisplay as PlayerInventoryDisplay).TryFavouriteItem(currentSlotDisplay);
 
 		// Close this panel
 		Back();

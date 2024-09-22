@@ -90,36 +90,4 @@ public class PlayerInventoryDisplay : InventoryDisplay
     {
         aid_Item.ConsumeItem(_playerHealth);
     }
-
-    /// <summary>
-    /// This method will attempt to favourite an item in the players inventory if possible.
-    /// </summary>
-    public void TryFavouriteItem(InventorySlotDisplay selectedUISlot)
-    {
-        if (pairedInventoryComponent is PlayerInventoryComponent playerInventory)
-            if (selectedUISlot.AssignedSlot.GetSlotsItem() is IFavouritableItem item)
-            {
-                // Favourite the item
-                if (!item.IsItemFavourited)
-                {
-                    InventorySlotPointer emptySlotPointer = playerInventory.GetEmptyFavouriteSlot(out int slotIndex);
-
-                    // Ensure the slot returned was not null
-                    if(emptySlotPointer != null)
-                    {
-                        // Set the favourite slot pointer to the selected slot
-                        playerInventory.AssignFavouritePointer(slotIndex, selectedUISlot.AssignedSlot);
-                        item.FavouriteItem(slotIndex);
-                    }
-                }
-                else // Unfavourite the item
-                {
-                    item.UnfavouriteItem(out int favouriteSlotID);
-                    playerInventory.ClearFavouritePointer(favouriteSlotID);
-                }
-
-                // Refresh display
-                RefreshSlots();
-            }
-    }
 }

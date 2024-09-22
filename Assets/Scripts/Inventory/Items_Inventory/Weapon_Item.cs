@@ -1,7 +1,7 @@
 using UnityEngine;
 using static UnityEngine.UI.GridLayoutGroup;
 
-public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
+public class Weapon_Item : Item_Base, IEquippableItem
 {
     private Weapon_ItemData baseData;
 
@@ -42,32 +42,6 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
         // Clear the current view model
         owner.GetViewModelManager().ClearCurrentViewModel();
         owner = null;
-    }
-
-    public void FavouriteItem(int favouriteSlotID)
-    {
-        isItemFavourited = true;
-        OnItemChanged?.Invoke();
-
-        // Store pointer ref
-        favouriteSlotPointerID = favouriteSlotID;
-    }
-
-    public void UnfavouriteItem(out int favouriteSlotID)
-    {
-        favouriteSlotID = favouriteSlotPointerID;
-
-        isItemFavourited = false;
-        OnItemChanged?.Invoke();
-
-        // Reset the pointer ID
-        favouriteSlotPointerID = 0;
-    }
-
-    public void UseFavouritedItem(PlayerHealth playerHealth)
-    {
-        PlayerInventoryComponent inventoryComponent = playerHealth.GetPlayerInventory();
-        inventoryComponent.EquipItem(inventoryComponent.GetFavouritePointer(favouriteSlotPointerID).GetPairedSlot());
     }
 
     public override void SlotCleared(InventorySlot itemsSlot)

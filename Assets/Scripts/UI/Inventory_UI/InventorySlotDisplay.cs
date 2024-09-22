@@ -14,7 +14,6 @@ public class InventorySlotDisplay : MonoBehaviour, IPointerEnterHandler, ISelect
 
     [Header("Item State Visuals")]
     [SerializeField] private GameObject _itemEquippedElement;
-    [SerializeField] private GameObject _itemFavouritedElement;
 
     [Header("Assigned Slot")]
     public InventorySlot AssignedSlot;
@@ -99,7 +98,6 @@ public class InventorySlotDisplay : MonoBehaviour, IPointerEnterHandler, ISelect
 
                 // Check if the item is either favourited or equipped
                 _itemEquippedElement?.SetActive(slotsItem is IEquippableItem equipableItem && equipableItem.IsEquipped);
-                _itemFavouritedElement?.SetActive(!_itemEquippedElement.activeInHierarchy && slotsItem is IFavouritableItem favouritableItem && favouritableItem.IsItemFavourited);
 
                 // Allow interactions as the slot is filled
                 SetDisplayInteractable(true);
@@ -118,7 +116,6 @@ public class InventorySlotDisplay : MonoBehaviour, IPointerEnterHandler, ISelect
         if (_valueText != null)
             _valueText.text = "";
 
-        _itemFavouritedElement?.SetActive(false);
         _itemEquippedElement?.SetActive(false);
     }
 

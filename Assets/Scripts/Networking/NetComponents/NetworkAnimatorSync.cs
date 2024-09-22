@@ -6,15 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class NetworkAnimatorSync : NetworkBehaviour
 {
-	Animator m_animator;
+	[SerializeField] private Animator m_animator;
 
 	[NetVar(nameof(OnRcvParams))] byte[] m_paramsBuffer;
 
 
 	private void Awake()
 	{
-		m_animator = GetComponent<Animator>();
-
 		m_paramsBuffer = new byte[m_animator.parameterCount * 4];
 
 		TickManager.OnTick += Tick;

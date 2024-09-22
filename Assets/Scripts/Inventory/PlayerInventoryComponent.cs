@@ -21,7 +21,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
 
     [Header("System")]
     private PlayerUIManager playerUIManager;
-    private FavouriteWheelDisplay favouriteWheelDisplay;
 
     #region Initialization Methods
 
@@ -44,12 +43,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     private void Start()
     {
         SetControlsSubscription(true);
-
-        // Cache ref to favourites wheel
-        favouriteWheelDisplay = playerUIManager.FavouritesWheel;
-
-        // Assign the created favourite slots to the favourite wheel display
-        favouriteWheelDisplay.AssignSlots(favouriteSlots.ToArray());
     }
     #endregion
 
@@ -59,10 +52,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     {
         // Inventory
         InputManager.Instance.Permanents.Inventory.performed += InventoryInput;
-
-        // Favourites wheel
-        InputManager.Instance.Permanents.FavouritesWheel.performed += FavouriteWheelInput;
-        InputManager.Instance.Permanents.FavouritesWheel.canceled += FavouriteWheelInput;
 
         // Hotbar
         InputManager.Instance.Player._1.performed += HotBarInput;
@@ -78,10 +67,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     public void Unsubscribe()
     {
         InputManager.Instance.Permanents.Inventory.performed -= InventoryInput;
-
-        // Favourites wheel
-        InputManager.Instance.Permanents.FavouritesWheel.performed -= FavouriteWheelInput;
-        InputManager.Instance.Permanents.FavouritesWheel.canceled -= FavouriteWheelInput;
 
         // Hotbar
         InputManager.Instance.Player._1.performed -= HotBarInput;
@@ -115,30 +100,13 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     }
 
     /// <summary>
-    /// This method gathers the input necesary to determine if the players favourite wheel display should be toggled on or off. 
-    /// </summary>
-    private void FavouriteWheelInput(InputAction.CallbackContext context)
-    {
-        // Stop the input if another menu is already open
-        if (playerUIManager.GetActiveDisplay() != null && playerUIManager.GetActiveDisplay() != playerUIManager.FavouritesWheel)
-            return;
-
-        // Display the favourites wheel if it is not active
-        if (!playerUIManager.FavouritesWheel.GetDisplayActive())
-            playerUIManager.SetActiveDisplay(favouriteWheelDisplay);
-        else playerUIManager.DisableActiveDisplay(); // Disable the favourite wheel display
-    }
-
-    /// <summary>
     /// This method allows PC users to use a standard hotbar by selecting the slot corresponding to the number value of the key pressed
     /// </summary>
     private void HotBarInput(InputAction.CallbackContext context)
     {
         int key = (int)context.ReadValue<float>();
 
-        // Use the items favourite function
-        if(favouriteSlots[key].GetPairedSlot()?.GetSlotsItem() is IFavouritableItem favouritableItem)
-            favouritableItem.UseFavouritedItem(_playerHealth);
+        
     }
 
     #endregion
