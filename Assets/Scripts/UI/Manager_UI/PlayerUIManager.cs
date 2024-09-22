@@ -7,8 +7,6 @@ public class PlayerUIManager : MonoBehaviour
     [field: SerializeField] public PlayerHUDManager HUDManager { get; private set; }
     [field: SerializeField] public InventoryUI InventoryUI { get; private set; }
     [field: SerializeField] public FavouriteWheelDisplay FavouritesWheel { get; private set; }
-    [field: SerializeField] public LegibleObjectDisplay LegibleObjectDisplay { get; private set; }
-    [field: SerializeField] public DialogueMenuDisplay DialogueMenuDisplay { get; private set; }
 
     [Header("System")]
     private MenuDisplayBase activeDisplay;
