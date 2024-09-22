@@ -140,24 +140,24 @@ public class PlayerController : NetworkBehaviour
 
 	public void Subscribe()
 	{
-		InputManager.Controls.Player.Movement.performed += OnMoveInput;
+		InputManager.Instance.Player.Movement.performed += OnMoveInput;
 
-		InputManager.Controls.Player.Jump.performed += OnJumpInput;
-		InputManager.Controls.Player.Jump.canceled += OnJumpInput;
+		InputManager.Instance.Player.Jump.performed += OnJumpInput;
+		InputManager.Instance.Player.Jump.canceled += OnJumpInput;
 
-		InputManager.Controls.Player.Crouch.performed += OnCrouchInput;
-		InputManager.Controls.Player.Crouch.canceled += OnCrouchInput;
+		InputManager.Instance.Player.Crouch.performed += OnCrouchInput;
+		InputManager.Instance.Player.Crouch.canceled += OnCrouchInput;
 	}
 
 	public void Unsubscribe()
 	{
-		InputManager.Controls.Player.Movement.performed -= OnMoveInput;
+		InputManager.Instance.Player.Movement.performed -= OnMoveInput;
 
-		InputManager.Controls.Player.Jump.performed -= OnJumpInput;
-		InputManager.Controls.Player.Jump.canceled -= OnJumpInput;
+		InputManager.Instance.Player.Jump.performed -= OnJumpInput;
+		InputManager.Instance.Player.Jump.canceled -= OnJumpInput;
 
-		InputManager.Controls.Player.Crouch.performed -= OnCrouchInput;
-		InputManager.Controls.Player.Crouch.canceled -= OnCrouchInput;
+		InputManager.Instance.Player.Crouch.performed -= OnCrouchInput;
+		InputManager.Instance.Player.Crouch.canceled -= OnCrouchInput;
 
 		m_wishMoveDir = Vector2.zero;
 	}

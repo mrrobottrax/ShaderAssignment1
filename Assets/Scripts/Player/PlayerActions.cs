@@ -1,17 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// TODO: This class is pretty nasty. We should either fully commit and have it manage all player input by itself, or have each
-// class manage their own relevant input by themselves. As it exists now it's spaghetti incarnate.
-
-// Is this class not managing its own input? I am pretty sure all classes that have input keep it contained to themselves.
-
-// No, it doesn't. PlayerController used to be the only thing that called SetControlsSubsription and was therefore entirely responsible for
-// this class to function at all, which I just spend 20 minutes to trying to diagnose after replacing PlayerController with a
-// newer version. I've moved it into Start for now.
-// As an aside, the InputManager needs a redo next. Having to check for null all the time is bound to cause problems.
-// There's a new version on the voice branch that is entirely static. This goes for all manager singletons that don't need update loops.
-// They don't need to exist in the game world, and inspector data can be loaded from singleton ScriptableObjects.
 public class PlayerActions : MonoBehaviour, IInputHandler
 {
     [Header("Components")]
@@ -41,39 +30,39 @@ public class PlayerActions : MonoBehaviour, IInputHandler
     public void Subscribe()
     {
         // Fire 1
-        InputManager.Instance.controls.Player.Fire1.performed += OnPressFire1;
+        InputManager.Instance.Player.Fire1.performed += OnPressFire1;
 
-        InputManager.Instance.controls.Player.Fire1.performed += Fire1Input;
-        InputManager.Instance.controls.Player.Fire1.canceled += Fire1Input;
+        InputManager.Instance.Player.Fire1.performed += Fire1Input;
+        InputManager.Instance.Player.Fire1.canceled += Fire1Input;
 
         // Fire 2
-        InputManager.Instance.controls.Player.Fire2.performed += OnPressFire2;
+        InputManager.Instance.Player.Fire2.performed += OnPressFire2;
 
-        InputManager.Instance.controls.Player.Fire2.performed += Fire2Input;
-        InputManager.Instance.controls.Player.Fire2.canceled += Fire2Input;
+        InputManager.Instance.Player.Fire2.performed += Fire2Input;
+        InputManager.Instance.Player.Fire2.canceled += Fire2Input;
 
         // Reload
-        InputManager.Instance.controls.Player.Reload.performed += OnPressReload;
-        InputManager.Instance.controls.Player.Reload.canceled += OnReleaseReload;
+        InputManager.Instance.Player.Reload.performed += OnPressReload;
+        InputManager.Instance.Player.Reload.canceled += OnReleaseReload;
     }
 
     public void Unsubscribe()
     {
         // Fire 1
-        InputManager.Instance.controls.Player.Fire1.performed -= OnPressFire1;
+        InputManager.Instance.Player.Fire1.performed -= OnPressFire1;
 
-        InputManager.Instance.controls.Player.Fire1.performed -= Fire1Input;
-        InputManager.Instance.controls.Player.Fire1.canceled -= Fire1Input;
+        InputManager.Instance.Player.Fire1.performed -= Fire1Input;
+        InputManager.Instance.Player.Fire1.canceled -= Fire1Input;
 
         // Fire 2
-        InputManager.Instance.controls.Player.Fire2.performed -= OnPressFire2;
+        InputManager.Instance.Player.Fire2.performed -= OnPressFire2;
 
-        InputManager.Instance.controls.Player.Fire2.performed -= Fire2Input;
-        InputManager.Instance.controls.Player.Fire2.canceled -= Fire2Input;
+        InputManager.Instance.Player.Fire2.performed -= Fire2Input;
+        InputManager.Instance.Player.Fire2.canceled -= Fire2Input;
 
         // Reload
-        InputManager.Instance.controls.Player.Reload.performed -= OnPressReload;
-        InputManager.Instance.controls.Player.Reload.canceled -= OnReleaseReload;
+        InputManager.Instance.Player.Reload.performed -= OnPressReload;
+        InputManager.Instance.Player.Reload.canceled -= OnReleaseReload;
     }
 
     public void SetControlsSubscription(bool isInputEnabled)

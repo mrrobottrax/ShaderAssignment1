@@ -61,14 +61,14 @@ public class DialogueMenuDisplay : MenuDisplayBase
 
     public override void Subscribe()
     {
-        InputManager.Instance.controls.Permanents.Interact.performed += TryInput;
-        InputManager.Instance.controls.Permanents.Pause.performed += CloseDialogueMenu;
+        InputManager.Instance.Permanents.Interact.performed += TryInput;
+        InputManager.Instance.Permanents.Pause.performed += CloseDialogueMenu;
     }
 
     public override void Unsubscribe()
     {
-        InputManager.Instance.controls.Permanents.Interact.performed -= TryInput;
-        InputManager.Instance.controls.Permanents.Pause.performed -= CloseDialogueMenu;
+        InputManager.Instance.Permanents.Interact.performed -= TryInput;
+        InputManager.Instance.Permanents.Pause.performed -= CloseDialogueMenu;
     }
 
     public void TryInput(InputAction.CallbackContext context)

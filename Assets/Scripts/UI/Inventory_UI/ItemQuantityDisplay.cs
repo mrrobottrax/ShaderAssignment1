@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class ItemQuantityDisplay : MenuDisplayBase
 {
     [Header("Components")]
-    [SerializeField] private PlayerUIManager uIManager;
-    private PlayerInventoryComponent playerInventoryComponent;
+    [SerializeField] private PlayerUIManager _uIManager;
+    [SerializeField] private PlayerInventoryComponent _playerInventoryComponent;
 
     [Header("UI Elements")]
     [SerializeField] private Slider _amountSlider;
@@ -72,17 +72,13 @@ public class ItemQuantityDisplay : MenuDisplayBase
     {
         SetDisplayActive(true);
 
-        // Cache a pointer to the players inventory component
-        if (playerInventoryComponent == null)
-            playerInventoryComponent = GameManager.Instance.GetPlayer().GetPlayerInventory();
-
         // Cache display type and slot
         currentSlotDisplay = slotDisplay;
         currentInventoryDisplay = inventoryDisplay;
         currentDisplayType = quantityPanelType;
 
         // Stop the PlayerInventoryComponent's and InventoryDisplay's controls
-        playerInventoryComponent.SetControlsSubscription(false);
+        _playerInventoryComponent.SetControlsSubscription(false);
         currentInventoryDisplay.SetControlsSubscription(false);
 
         // Reset & clamp the sliders range
@@ -148,7 +144,7 @@ public class ItemQuantityDisplay : MenuDisplayBase
         SetDisplayActive(false);
 
         // Enable the PlayerInventoryComponent's and InventoryDisplay's controls
-        playerInventoryComponent.SetControlsSubscription(true);
+        _playerInventoryComponent.SetControlsSubscription(true);
         currentInventoryDisplay.SetControlsSubscription(true);
 
         // Reset vars to a null state

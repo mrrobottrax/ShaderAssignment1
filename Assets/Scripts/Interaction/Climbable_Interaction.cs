@@ -40,12 +40,12 @@ public class Climbable_Interaction : MonoBehaviour, IInteraction, IInputHandler
 
     public void Subscribe()
     {
-        InputManager.Instance.controls.Permanents.Interact.performed += DismountInput;
+        InputManager.Instance.Permanents.Interact.performed += DismountInput;
     }
 
     public void Unsubscribe()
     {
-        InputManager.Instance.controls.Permanents.Interact.performed -= DismountInput;
+        InputManager.Instance.Permanents.Interact.performed -= DismountInput;
     }
     #endregion
 

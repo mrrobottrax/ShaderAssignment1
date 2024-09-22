@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class FavouriteWheelDisplay : MenuDisplayBase
 {
     [Header("Components")]
+    [SerializeField] private PlayerHealth _playerHealth;
     [SerializeField] private PlayerInventoryComponent _playerInventoryComponent;
 
     [Header("UI Elements")]
@@ -39,13 +40,13 @@ public class FavouriteWheelDisplay : MenuDisplayBase
         axisRaw = Vector2.zero;
 
         // Look input
-        InputManager.Instance.controls.UI.LookAxis.performed += LookInput;
+        InputManager.Instance.UI.LookAxis.performed += LookInput;
     }
 
     public override void Unsubscribe()
     {
         // Look input
-        InputManager.Instance.controls.UI.LookAxis.performed -= LookInput;
+        InputManager.Instance.UI.LookAxis.performed -= LookInput;
 
         // Select the last slice the player was over
         SelectSlice(currentSlice);
@@ -146,7 +147,7 @@ public class FavouriteWheelDisplay : MenuDisplayBase
             {
                 // Use the items favourite function
                 if (slice.AssignedSlot.GetPairedSlot().GetSlotsItem() is IFavouritableItem favouritableItem)
-                    favouritableItem.UseFavouritedItem();
+                    favouritableItem.UseFavouritedItem(_playerHealth);
             }
             else 
                 TryUnequipPlayer();

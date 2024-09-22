@@ -55,12 +55,12 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
     public void Subscribe()
     {
-        InputManager.Instance.controls.Permanents.Interact.performed += TryInteractInput;
+        InputManager.Instance.Permanents.Interact.performed += TryInteractInput;
     }
 
     public void Unsubscribe()
     {
-        InputManager.Instance.controls.Permanents.Interact.performed -= TryInteractInput;
+        InputManager.Instance.Permanents.Interact.performed -= TryInteractInput;
     }
 
     private void TryInteractInput(InputAction.CallbackContext context)

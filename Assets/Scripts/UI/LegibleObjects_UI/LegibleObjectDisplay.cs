@@ -46,12 +46,12 @@ public class LegibleObjectDisplay : MenuDisplayBase
 
     public override void Subscribe()
     {
-        InputManager.Instance.controls.Permanents.Pause.performed += CloseDisplay;
+        InputManager.Instance.Permanents.Pause.performed += CloseDisplay;
     }
 
     public override void Unsubscribe()
     {
-        InputManager.Instance.controls.Permanents.Pause.performed -= CloseDisplay;
+        InputManager.Instance.Permanents.Pause.performed -= CloseDisplay;
     }
 
     public void SetReadableData(ReadableData data)

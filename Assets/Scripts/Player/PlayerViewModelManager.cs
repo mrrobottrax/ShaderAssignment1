@@ -6,7 +6,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
     [SerializeField] private ViewModel_Base[] _viewModelIndex;
 
     [Header("Components")]
-    private Player player;
+    private PlayerHealth player;
     private FirstPersonCamera firstPersonCamera;
 
     [Header("System")]
@@ -22,7 +22,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
         base.Awake();
 
         // Get a refference to the player using the manager bases entity
-        if (Entity is Player player)
+        if (Entity is PlayerHealth player)
             this.player = player;
 
         // Disable all ViewModels on start
@@ -220,7 +220,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
         if (currentViewModel == null)
         {
             // Perform the attack data using the AttackData from the entities AttackList.
-            Entity.EntityPerformOngoingAttack(this, attack.AttackData, attack.AttackPosition.position, firstPersonCamera.GetCamera().forward);
+            Entity.EntityPerformOngoingAttack(this, attack.AttackData, attack.AttackPosition.position, firstPersonCamera.CameraTransform.forward);
         }
         else
         {

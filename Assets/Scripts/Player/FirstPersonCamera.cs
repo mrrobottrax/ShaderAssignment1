@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-	[Header("Player")]
+    [Header("Components")]
+    public Transform CameraTransform;
 	public PlayerController m_followPlayer;
 
 	[Header("Camera Variables")]
@@ -98,7 +99,7 @@ public class FirstPersonCamera : MonoBehaviour
 
 	public void SetControlsSubscription(bool isInputEnabled)
 	{
-		m_lookAction = isInputEnabled ? InputManager.Controls.Player.Look : null;
+		m_lookAction = isInputEnabled ? InputManager.Instance.Player.Look : null;
 	}
 
 	/// <summary>

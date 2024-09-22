@@ -30,7 +30,7 @@ public class RangedWeapon_Item : Weapon_Item
     /// This method removes the weapons ammo type by a specified amount and updates the HUD UI if this item is equipped
     /// </summary>
     /// <param name="amount">Ammo consumed</param>
-    public void ProjectileCreated(Player castor, int amount)
+    public void ProjectileCreated(PlayerHealth castor, int amount)
     {
         RangedWeapon_ItemData rangedItemData = GetItemData() as RangedWeapon_ItemData;
 

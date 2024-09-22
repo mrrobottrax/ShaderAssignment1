@@ -17,7 +17,7 @@ public class NPC : MonoBehaviour, IInteraction
 
     public void Interact(Transform interactor)
     {
-        interactor.TryGetComponent(out Player player);
+        interactor.TryGetComponent(out PlayerHealth player);
         interactor.TryGetComponent(out PlayerInteraction interaction);
 
         interaction?.SetUsingInteractable(true);

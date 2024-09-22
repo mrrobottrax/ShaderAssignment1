@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
 {
@@ -10,6 +11,9 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
         this.baseData = baseData;
     }
 
+    public PlayerHealth Owner => owner;
+    private PlayerHealth owner;
+
     public bool IsEquipped => isEquipped;
     private bool isEquipped;
 
@@ -20,13 +24,14 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
     private int favouriteSlotPointerID;
 
     #region Implemented Methods
-    public void Equip()
+    public void Equip(PlayerHealth playerHealth)
     {
+        owner = playerHealth;
         isEquipped = true;
         OnItemChanged?.Invoke();
 
         // Set the current view model
-        Player.Instance.GetViewModelManager().SetViewModel(this);
+        playerHealth.GetViewModelManager().SetViewModel(this);
     }
 
     public void UnEquip()
@@ -35,7 +40,8 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
         OnItemChanged?.Invoke();
 
         // Clear the current view model
-        Player.Instance.GetViewModelManager().ClearCurrentViewModel();
+        owner.GetViewModelManager().ClearCurrentViewModel();
+        owner = null;
     }
 
     public void FavouriteItem(int favouriteSlotID)
@@ -58,9 +64,9 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
         favouriteSlotPointerID = 0;
     }
 
-    public void UseFavouritedItem()
+    public void UseFavouritedItem(PlayerHealth playerHealth)
     {
-        PlayerInventoryComponent inventoryComponent = Player.Instance.GetPlayerInventory();
+        PlayerInventoryComponent inventoryComponent = playerHealth.GetPlayerInventory();
         inventoryComponent.EquipItem(inventoryComponent.GetFavouritePointer(favouriteSlotPointerID).GetPairedSlot());
     }
 
@@ -69,7 +75,7 @@ public class Weapon_Item : Item_Base, IEquippableItem, IFavouritableItem
         // Unequip this item if it is equipped
         if (isEquipped)
         {
-            PlayerInventoryComponent inventoryComponent = Player.Instance.GetPlayerInventory();
+            PlayerInventoryComponent inventoryComponent = owner.GetPlayerInventory();
             inventoryComponent.UnequipItem(itemsSlot);
         }
     }

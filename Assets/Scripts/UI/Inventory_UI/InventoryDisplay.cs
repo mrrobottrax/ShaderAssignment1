@@ -167,25 +167,25 @@ public abstract class InventoryDisplay : MenuDisplayBase
     public override void Subscribe()
     {
         // Mouse delta
-        InputManager.Instance.controls.Player.Look.performed += MousePos;
+        InputManager.Instance.Player.Look.performed += MousePos;
 
         // Navigation
-        InputManager.Instance.controls.UI.Navigate.performed += Navigate;
+        InputManager.Instance.UI.Navigate.performed += Navigate;
 
         // Mouse scroll
-        InputManager.Instance.controls.UI.ScrollWheel.performed += ScrollMouse;
+        InputManager.Instance.UI.ScrollWheel.performed += ScrollMouse;
     }
 
     public override void Unsubscribe()
     {
         // Mouse delta
-        InputManager.Instance.controls.Player.Look.performed -= MousePos;
+        InputManager.Instance.Player.Look.performed -= MousePos;
 
         // Navigation
-        InputManager.Instance.controls.UI.Navigate.performed -= Navigate;
+        InputManager.Instance.UI.Navigate.performed -= Navigate;
 
         // Mouse scroll
-        InputManager.Instance.controls.Player.Movement.performed -= ScrollMouse;
+        InputManager.Instance.Player.Movement.performed -= ScrollMouse;
     }
     #endregion
 

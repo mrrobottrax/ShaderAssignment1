@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class ItemOptionsDisplay : MenuDisplayBase
 {
 	[field: Header("Components")]
-	[SerializeField] private ItemQuantityDisplay _itemQuantityDisplay;
+    [SerializeField] private PlayerHealth _playerHealth;
+    [SerializeField] private ItemQuantityDisplay _itemQuantityDisplay;
 	private PlayerInventoryComponent playerInventoryComponent;
 
 	[field: Header("Primary Button")]
@@ -112,7 +113,7 @@ public class ItemOptionsDisplay : MenuDisplayBase
 
 		// Cache a pointer to the players inventory component
 		if (playerInventoryComponent == null)
-			playerInventoryComponent = GameManager.Instance.GetPlayer().GetPlayerInventory();
+			playerInventoryComponent = _playerHealth.GetPlayerInventory();
 
 		// Cache slot and display info
 		currentSlotDisplay = slotDisplay;

@@ -85,6 +85,7 @@ public class Projectile : MonoBehaviour, ICombatPacketCompleter
 
     private void OnCollisionEnter(Collision collision)
     {
+        /*
         if (!isIntercepted)
         {
             bool correctColliderHit = false; // Ensure the collision was on the right one to deal damage
@@ -135,10 +136,12 @@ public class Projectile : MonoBehaviour, ICombatPacketCompleter
                     }
                 }
         }
+        */
     }
 
     public void TouchedHurbox(Hurtbox hurtbox)
     {
+        /*
         if (!isIntercepted)
         {
 
@@ -180,6 +183,7 @@ public class Projectile : MonoBehaviour, ICombatPacketCompleter
                     break;
             }
         }
+        */
     }
 
     public void CompleteAttack()

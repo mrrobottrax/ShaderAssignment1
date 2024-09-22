@@ -4,7 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(CaptureCameraComponent))]
 public class PortableCamera_ViewModel : ViewModel_Base
 {
-    private static FirstPersonCamera firstPersonCamera;
     private static CaptureCameraComponent captureCameraComponent;
 
     private void Awake()
@@ -15,17 +14,12 @@ public class PortableCamera_ViewModel : ViewModel_Base
         captureCameraComponent = GetComponent<CaptureCameraComponent>();
     }
 
-    private void Start()
-    {
-        firstPersonCamera = Player.Instance.GetPlayerCamera();
-    }
-
     #region Attack Functions
 
     private class ShootAction : ViewModelAction
     {
 
-        public override void Execute(Player player, PlayerViewModelManager viewModelManager, ViewModel_Base viewModel, Weapon_Item weaponItem, AttackList.Attack attack)
+        public override void Execute(PlayerHealth player, PlayerViewModelManager viewModelManager, ViewModel_Base viewModel, Weapon_Item weaponItem, AttackList.Attack attack)
         {
             Weapon_ItemData weaponData = weaponItem.GetWeaponData();
 

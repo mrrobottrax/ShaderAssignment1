@@ -7,22 +7,10 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-	[Header("Singleton")]
-	private static CombatManager instance;
-	public static CombatManager Instance
-	{
-		get
-		{
-			if (!instance)
-				instance = GameManager.Instance.GetComponent<CombatManager>();
+    public static CombatManager Instance { get; private set; }
 
-			return instance;
-		}
-	}
-
-	[field: Header("Components")]
+    [field: Header("Components")]
     [SerializeField] private CinemachineImpulseSource _cinemachineImpulseSource;
-    private GameManager gameManager;
 
     [field: Header("Pool")]
 	// Combat Packets
@@ -40,7 +28,6 @@ public class CombatManager : MonoBehaviour
 	#region Initialization Methods
 	private void Awake()
 	{
-		instance = this;
 
 		// Initialize combat packets
 		for (int i = 0; i < combatPacketPoolSize; i++)
@@ -50,10 +37,6 @@ public class CombatManager : MonoBehaviour
 		}
 	}
 
-	private void Start()
-	{
-		gameManager = GetComponent<GameManager>();
-	}
 	#endregion
 
 	#region Combat Packet Methods
@@ -73,7 +56,7 @@ public class CombatManager : MonoBehaviour
 		packetID = GeneratePacketID(instigator);
 
 		// Init the packet
-		packet.Initialize(packetID, instigator);
+		//packet.Initialize(packetID, instigator);
 
 		Debug.Log("Packet Dequeued");
 
@@ -211,7 +194,7 @@ public class CombatManager : MonoBehaviour
 
 		combatPacket.OnPacketAddVictem -= EvaluatePacketOnVictem;
 
-        combatPacket.ResetPacket();
+        //combatPacket.ResetPacket();
 
 		// Return the packet to the packet pool
 		combatPacketPool.Enqueue(combatPacket);
@@ -257,6 +240,7 @@ public class CombatManager : MonoBehaviour
             victem.TakeDamage(finalDamage);
 		}
 
+		/*
 		// Screen FX
 		if (packet.IsPacketScreenFXSet)
 		{
@@ -267,16 +251,9 @@ public class CombatManager : MonoBehaviour
 				// Other entities should have local screen shake impulse generators.
 				ShakeScreen(packet.ScreenShakeAmplitude, packet.ScreenShakeDuration);
 
-				// Create an impact pause
-				StartImpactPause(packet.ImpactPauseDuration);
 			}
-			/* When enemys are added they should derive from a base enemy class that implements Entity_Base. This class should require a screen shake generator
-            else if (packet.Instigator is Enemy enemy)
-            {
-
-            }
-            */
 		}
+		*/
 	}
     #endregion
 

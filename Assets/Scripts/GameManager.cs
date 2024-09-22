@@ -14,12 +14,12 @@ public static class GameManager
 	public static EGameState GameState { get { return m_gameState; } }
 
 
-	public static Action onGameStateChange;
+	public static Action OnGameStateChange;
 
 	private static void ChangeGameState(EGameState state)
 	{
 		m_gameState = state;
-		onGameStateChange?.Invoke();
+		OnGameStateChange?.Invoke();
 
 		if (state == EGameState.InLobby)
 		{

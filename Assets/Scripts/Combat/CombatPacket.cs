@@ -40,6 +40,7 @@ public class CombatPacket
     public float ScreenShakeDuration { get; private set; }
     public float ImpactPauseDuration { get; private set; }
 
+    /*
     #region Packet Management Methods
 
     /// <summary>
@@ -207,4 +208,5 @@ public class CombatPacket
     }
 
     #endregion
+    */
 }

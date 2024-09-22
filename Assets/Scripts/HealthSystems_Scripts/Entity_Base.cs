@@ -113,6 +113,7 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
     /// <param name="attack">The data of the attack that will be performed</param>
     public void EntityBeginAttack()
     {
+        /*
         IsAbleToAttack = false;
         IsAttackInProgress = true;
 
@@ -121,6 +122,7 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
 
         // Store current attacks ID
         ongoingAttackID = packetID;
+        */
     }
 
     /// <summary>
@@ -135,6 +137,8 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
     public virtual void EntityPerformOngoingAttack(EntityAnimationManager_Base entityAnimationManager, AttackData attackData,
         Vector3 attackPosition, Vector3 attackDir, int baseDamage = 0, float damageMultiplier = 0, float baseRange = 0)
     {
+        /*
+
         // Return if EntityBeginAttack was not called first
         if (!IsAttackInProgress)
             return;
@@ -265,6 +269,7 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
             attackData.ProjectileCreated.CreateProjectileInstance(packet, attackPosition, attackDir, totalRange, attackData.AffectedLayers, rb.velocity);
             packet.SetPacketDamageVars(damage: totalDamage + attackData.ProjectileCreated.Damage);// Use the base damage, plus the attacks, plus projectiles base damage.
         }
+        */
     }
 
     /// <summary>
@@ -272,6 +277,7 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
     /// </summary>
     public void FinishAttack()
     {
+        /*
         // Retrieve the combat packet assigned to the ongoing attack
         CombatPacket packet = combatManager.GetCombatPacket(this, ongoingAttackID);
 
@@ -284,6 +290,7 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
         CompleteAttack();
 
         IsAttackInProgress = false;
+        */
     }
 
     /// <summary>

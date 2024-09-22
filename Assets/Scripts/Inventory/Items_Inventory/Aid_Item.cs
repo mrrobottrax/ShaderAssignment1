@@ -55,9 +55,9 @@ public class Aid_Item : Item_Base, IFavouritableItem
         favouriteSlotPointerID = 0;
     }
 
-    public void UseFavouritedItem()
+    public void UseFavouritedItem(PlayerHealth playerHealth)
     {
-        ConsumeItem(GameManager.Instance.GetPlayer());
+        ConsumeItem(playerHealth);
     }
     #endregion
 }

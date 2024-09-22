@@ -4,6 +4,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerInventoryComponent : InventoryComponent, IInputHandler
 {
+    [field: Header("Components")]
+    [SerializeField] private PlayerHealth _playerHealth;
+
     [field: Header("Equipment Slot Pointers")]
     public InventorySlotPointer _heldItemSlot { get; private set; } = new();
 
@@ -55,39 +58,39 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     public void Subscribe()
     {
         // Inventory
-        InputManager.Instance.controls.Permanents.Inventory.performed += InventoryInput;
+        InputManager.Instance.Permanents.Inventory.performed += InventoryInput;
 
         // Favourites wheel
-        InputManager.Instance.controls.Permanents.FavouritesWheel.performed += FavouriteWheelInput;
-        InputManager.Instance.controls.Permanents.FavouritesWheel.canceled += FavouriteWheelInput;
+        InputManager.Instance.Permanents.FavouritesWheel.performed += FavouriteWheelInput;
+        InputManager.Instance.Permanents.FavouritesWheel.canceled += FavouriteWheelInput;
 
         // Hotbar
-        InputManager.Instance.controls.Player._1.performed += HotBarInput;
-        InputManager.Instance.controls.Player._2.performed += HotBarInput;
-        InputManager.Instance.controls.Player._3.performed += HotBarInput;
-        InputManager.Instance.controls.Player._4.performed += HotBarInput;
-        InputManager.Instance.controls.Player._5.performed += HotBarInput;
-        InputManager.Instance.controls.Player._6.performed += HotBarInput;
-        InputManager.Instance.controls.Player._7.performed += HotBarInput;
-        InputManager.Instance.controls.Player._8.performed += HotBarInput;
+        InputManager.Instance.Player._1.performed += HotBarInput;
+        InputManager.Instance.Player._2.performed += HotBarInput;
+        InputManager.Instance.Player._3.performed += HotBarInput;
+        InputManager.Instance.Player._4.performed += HotBarInput;
+        InputManager.Instance.Player._5.performed += HotBarInput;
+        InputManager.Instance.Player._6.performed += HotBarInput;
+        InputManager.Instance.Player._7.performed += HotBarInput;
+        InputManager.Instance.Player._8.performed += HotBarInput;
     }
 
     public void Unsubscribe()
     {
-        InputManager.Instance.controls.Permanents.Inventory.performed -= InventoryInput;
+        InputManager.Instance.Permanents.Inventory.performed -= InventoryInput;
 
         // Favourites wheel
-        InputManager.Instance.controls.Permanents.FavouritesWheel.performed -= FavouriteWheelInput;
-        InputManager.Instance.controls.Permanents.FavouritesWheel.canceled -= FavouriteWheelInput;
+        InputManager.Instance.Permanents.FavouritesWheel.performed -= FavouriteWheelInput;
+        InputManager.Instance.Permanents.FavouritesWheel.canceled -= FavouriteWheelInput;
 
         // Hotbar
-        InputManager.Instance.controls.Player._1.performed -= HotBarInput;
-        InputManager.Instance.controls.Player._2.performed -= HotBarInput;
-        InputManager.Instance.controls.Player._4.performed -= HotBarInput;
-        InputManager.Instance.controls.Player._5.performed -= HotBarInput;
-        InputManager.Instance.controls.Player._6.performed -= HotBarInput;
-        InputManager.Instance.controls.Player._7.performed -= HotBarInput;
-        InputManager.Instance.controls.Player._8.performed -= HotBarInput;
+        InputManager.Instance.Player._1.performed -= HotBarInput;
+        InputManager.Instance.Player._2.performed -= HotBarInput;
+        InputManager.Instance.Player._4.performed -= HotBarInput;
+        InputManager.Instance.Player._5.performed -= HotBarInput;
+        InputManager.Instance.Player._6.performed -= HotBarInput;
+        InputManager.Instance.Player._7.performed -= HotBarInput;
+        InputManager.Instance.Player._8.performed -= HotBarInput;
     }
 
     public void SetControlsSubscription(bool isInputEnabled)
@@ -135,7 +138,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
 
         // Use the items favourite function
         if(favouriteSlots[key].GetPairedSlot()?.GetSlotsItem() is IFavouritableItem favouritableItem)
-            favouritableItem.UseFavouritedItem();
+            favouritableItem.UseFavouritedItem(_playerHealth);
     }
 
     #endregion
@@ -194,7 +197,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
 
                 // Establish the new slot pairing and equip the item
                 slotToPairTo.SetPairedSlot(itemsSlot);
-                equippableItem.Equip();
+                equippableItem.Equip(_playerHealth);
             }
         }
         else if (_heldItemSlot.GetPairedSlot() != null) // If an item that does not exist was passed in, unequip the current item.

@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class GlobalWindManager : Singleton<GlobalWindManager>
+public class GlobalWindManager : MonoBehaviour
 {
+    /*
     [Header("Wind change parameters")]
     [SerializeField, Range(1, 1000)] float _directionTimerMin, _directionTimerMax;
     [SerializeField, Range(1, 90)] float _angleChange;
@@ -119,4 +120,5 @@ public class GlobalWindManager : Singleton<GlobalWindManager>
                 RandomlyChangeDir();
         }
     }
+    */
 }

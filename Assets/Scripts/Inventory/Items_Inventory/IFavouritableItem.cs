@@ -9,7 +9,7 @@ public interface IFavouritableItem
     /// <remarks>
     /// This method should contain the logic for using a favorited item, specific to the child class implementation.
     /// </remarks>
-    public abstract void UseFavouritedItem();
+    public abstract void UseFavouritedItem(PlayerHealth playerHealth);
 
     /// <summary>
     /// Abstract method to be implemented by child classes for favouriting an item.

@@ -12,11 +12,11 @@ public class PlayerUIManager : MonoBehaviour
 
     [Header("System")]
     private MenuDisplayBase activeDisplay;
-    private Player player;
+    private PlayerHealth playerHealth;
 
     private void Awake()
     {
-        player = GetComponentInParent<Player>();
+        playerHealth = GetComponentInParent<PlayerHealth>();
     }
 
     /// <summary>
@@ -31,14 +31,14 @@ public class PlayerUIManager : MonoBehaviour
         activeDisplay = newDisplay;
         activeDisplay.SetDisplayActive(true);
 
-        InputManager.Instance.ControlMode(InputManager.ControlType.UI);
+        InputManager.SetControlMode(InputManager.ControlType.UI);
 
         // Disable camera & player movement
-        player.GetPlayerCamera().EnableFirstPersonCamera(false);
-        player.GetPlayerController().SetControlsSubscription(false);
+        playerHealth.GetPlayerCamera().EnableFirstPersonCamera(false);
+        playerHealth.GetPlayerController().SetControlsSubscription(false);
 
         // Disable interaction system
-        PlayerInteraction interaction = player.GetComponent<PlayerInteraction>();
+        PlayerInteraction interaction = playerHealth.GetComponent<PlayerInteraction>();
         interaction.enabled = false;
         interaction.ClearCurrentInteractable();
     }
@@ -52,14 +52,14 @@ public class PlayerUIManager : MonoBehaviour
         activeDisplay?.SetDisplayActive(false);
         activeDisplay = null;
 
-        InputManager.Instance.ControlMode(InputManager.ControlType.Player);
+        InputManager.SetControlMode(InputManager.ControlType.Player);
 
         // Enable camera & player movement
-        player.GetPlayerCamera().EnableFirstPersonCamera(true);
-        player.GetPlayerController().SetControlsSubscription(true);
+        playerHealth.GetPlayerCamera().EnableFirstPersonCamera(true);
+        playerHealth.GetPlayerController().SetControlsSubscription(true);
 
         // Enable interaction system
-        PlayerInteraction interaction = player.GetComponent<PlayerInteraction>();
+        PlayerInteraction interaction = playerHealth.GetComponent<PlayerInteraction>();
         interaction.enabled = true;
     }
 

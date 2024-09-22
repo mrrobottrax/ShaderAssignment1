@@ -26,7 +26,7 @@ public abstract class ViewModel_Base : MonoBehaviour
     /// <param name="weaponItem">The weapon item involved in the action.</param>
     /// <param name="attack">The attack data for the action.</param>
     /// <param name="actionTitle">The title of the action to execute.</param>
-    public void TryModelFunction(Player player, PlayerViewModelManager viewModelManager, Weapon_Item weaponItem, AttackList.Attack attack, string actionTitle)
+    public void TryModelFunction(PlayerHealth player, PlayerViewModelManager viewModelManager, Weapon_Item weaponItem, AttackList.Attack attack, string actionTitle)
     {
         Debug.Log(actionTitle);
 
@@ -91,7 +91,7 @@ public abstract class ViewModel_Base : MonoBehaviour
         /// <param name="viewModel">The view model this action originates from</param>
         /// <param name="weaponItem">The item this action represents </param>
         /// <param name="attack">The attack data used. This is taken from the view models AttackList</param>
-        public abstract void Execute(Player player, PlayerViewModelManager viewModelManager, ViewModel_Base viewModel, Weapon_Item weaponItem, AttackList.Attack attack);
+        public abstract void Execute(PlayerHealth player, PlayerViewModelManager viewModelManager, ViewModel_Base viewModel, Weapon_Item weaponItem, AttackList.Attack attack);
     }
 }
 

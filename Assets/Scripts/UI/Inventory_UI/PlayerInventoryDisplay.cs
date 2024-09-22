@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 public class PlayerInventoryDisplay : InventoryDisplay
 {
+    [Header("Components")]
+    [SerializeField] private PlayerHealth _playerHealth;
+
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI _filledSlotsText;
     [SerializeField] private Slider _healthBar;
@@ -15,7 +18,7 @@ public class PlayerInventoryDisplay : InventoryDisplay
         base.OnEnableDisplay();
 
         // Update player stats
-        _healthBar.value = GameManager.Instance.GetPlayer().Health;
+        _healthBar.value = _playerHealth.Health;
     }
 
     protected override void OnDisableDisplay()
@@ -85,7 +88,7 @@ public class PlayerInventoryDisplay : InventoryDisplay
     /// </summary>
     private void ConsumeAidItem(Aid_Item aid_Item)
     {
-        aid_Item.ConsumeItem(GameManager.Instance.GetPlayer());
+        aid_Item.ConsumeItem(_playerHealth);
     }
 
     /// <summary>

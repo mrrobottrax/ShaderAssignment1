@@ -1,16 +1,14 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerController), typeof(PlayerInventoryComponent), typeof(FirstPersonCamera))]
-public class Player : Entity_Base
-{
-    public static Player Instance;
-
+public class PlayerHealth : Entity_Base
+{ 
     [field: Header("Components")]
     [field: SerializeField] public PlayerUIManager PlayerUIManager { get; private set; }
+    [field: SerializeField] public FirstPersonCamera FirstPersonCamera { get; private set; }
 
     private PlayerController playerController;
     private PlayerInventoryComponent playerInventoryComponent;
-    private FirstPersonCamera firstPersonCamera;
     private PlayerViewModelManager playerViewModelManager;
 
     #region Initialization Methods
@@ -18,17 +16,12 @@ public class Player : Entity_Base
     {
         base.Awake();
 
-        Instance = this;
-
         // Cahce player components
         playerController = GetComponent<PlayerController>();
         playerInventoryComponent = GetComponent<PlayerInventoryComponent>();
-        firstPersonCamera = GetComponent<FirstPersonCamera>();
+        FirstPersonCamera = GetComponent<FirstPersonCamera>();
         playerViewModelManager = GetComponentInChildren<PlayerViewModelManager>();
         PlayerUIManager = GetComponentInChildren<PlayerUIManager>();
-
-        // Send a reference to the player to the GameManager
-        GameManager.Instance.SetPlayer(this);
     }
 
     protected override void Start()
@@ -57,7 +50,7 @@ public class Player : Entity_Base
 
     public FirstPersonCamera GetPlayerCamera()
     {
-        return firstPersonCamera;
+        return FirstPersonCamera;
     }
 
     public PlayerViewModelManager GetViewModelManager()

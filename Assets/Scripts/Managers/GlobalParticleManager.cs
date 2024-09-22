@@ -3,8 +3,9 @@ using UnityEngine;
 /// <summary>
 /// This manager should be used for particle systems that need to follow the player on a global scale like wind and dust motes.
 /// </summary>
-public class GlobalParticleManager : Singleton<GlobalParticleManager>
+public class GlobalParticleManager : MonoBehaviour
 {
+    /*
     [SerializeField] private Transform _globalParitlcesParent;
 
     [SerializeField] private Transform _globalWindParitlces;
@@ -41,4 +42,5 @@ public class GlobalParticleManager : Singleton<GlobalParticleManager>
         _globalParitlcesParent.transform.position = cameraRef.transform.position;
     }
     #endregion
+    */
 }

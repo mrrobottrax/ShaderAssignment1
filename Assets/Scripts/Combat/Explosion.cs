@@ -57,6 +57,7 @@ public class Explosion : MonoBehaviour, ICombatPacketCompleter
         Vector3 explosionPos = transform.position;
         Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionData.BlastRadius, affectedLayers, QueryTriggerInteraction.Collide);
 
+        /*
         foreach (Collider hit in colliders)
         {
             // Add damage to each victem
@@ -67,6 +68,7 @@ public class Explosion : MonoBehaviour, ICombatPacketCompleter
             if (hit.TryGetComponent(out Rigidbody rb))
                 rb.AddExplosionForce(explosionData.BlastForce, explosionPos, explosionData.BlastRadius);
         }
+        */
 
         // Invoke the packet complete event
         if (packetRef != null)
