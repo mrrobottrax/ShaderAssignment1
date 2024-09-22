@@ -29,11 +29,10 @@ public class ExplosionData : ScriptableObject
             // Begin a packet 
             CombatPacket combatPacket = CombatManager.Instance.BeginCombatPacket(instigator, out int packetID);
 
-            /*
             // Set the packets values
             combatPacket.SetPacketDamageVars(DamageType, ExplosionDamage, BlastForce, AppliedEffects);
             combatPacket.SetPacketCompleter(explosion);
-            */
+
             // Start the explosion
             explosion.Initialize(this, combatPacket, affectedLayers: affectedLayers);
         }

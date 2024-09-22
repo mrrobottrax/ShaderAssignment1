@@ -39,13 +39,11 @@ public class ProjectileData : ScriptableObject
         // Instantiate then init the projectile
         Projectile projectile = Instantiate(ProjectilePrefab, null);
 
-        /*
         // Set the packets damage type
         combatPacket.SetPacketDamageVars(damageType: DamageType, statusEffects: AppliedEffects);
 
         // Move the packet completer to the projectile
         combatPacket.SetPacketCompleter(projectile);
-        */
 
         // Start the projectile
         projectile.Initialize(this, startPos, dir, force, combatPacket, affectedLayers);

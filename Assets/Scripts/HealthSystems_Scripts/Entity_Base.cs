@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -131,14 +132,12 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
     public virtual void EntityPerformOngoingAttack(EntityAnimationManager_Base entityAnimationManager, AttackData attackData,
         Vector3 attackPosition, Vector3 attackDir, int baseDamage = 0, float damageMultiplier = 0, float baseRange = 0)
     {
-        /*
-
         // Return if EntityBeginAttack was not called first
         if (!IsAttackInProgress)
             return;
 
         // Retrieve the combat packet assigned to the ongoing attack
-        CombatPacket packet = combatManager.GetCombatPacket(this, ongoingAttackID);
+        CombatPacket packet = CombatManager.Instance.GetCombatPacket(this, ongoingAttackID);
 
         // Ensure a packet with this instigator and ongoing attack ID exists
         if (packet == null)
@@ -167,7 +166,7 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
         {
             // Set the packets damage type
             packet.SetPacketDamageVars(attackData.DamageType);
-            packet.SetPacketScreenFX(attackData.ScreenShakeAmplitude, attackData.ScreenShakeDuration, attackData.ImpactPauseDuration);
+            packet.SetPacketScreenFX(attackData.ScreenShakeAmplitude, attackData.ScreenShakeDuration);
 
             // Set the completer of the attack to the entity animator
             // The packet will complete on animation finish
@@ -263,7 +262,6 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
             attackData.ProjectileCreated.CreateProjectileInstance(packet, attackPosition, attackDir, totalRange, attackData.AffectedLayers, rb.velocity);
             packet.SetPacketDamageVars(damage: totalDamage + attackData.ProjectileCreated.Damage);// Use the base damage, plus the attacks, plus projectiles base damage.
         }
-        */
     }
 
     /// <summary>

@@ -185,14 +185,12 @@ public class CombatPacket
     /// </summary>
     /// <param name="screenShakeAmplitude">How strong the screen shake generated on impact is</param>
     /// <param name="screenShakeDuration">How long the screen shake generated on impact lasts</param>
-    /// <param name="impactPauseDuration">How long the game will pause for on impact</param>
-    public void SetPacketScreenFX(float screenShakeAmplitude, float screenShakeDuration, float impactPauseDuration)
+    public void SetPacketScreenFX(float screenShakeAmplitude, float screenShakeDuration)
     {
         IsPacketScreenFXSet = true;
 
         ScreenShakeAmplitude = screenShakeAmplitude;
         ScreenShakeDuration = screenShakeDuration;
-        ImpactPauseDuration = impactPauseDuration;
     }
 
     /// <summary>
