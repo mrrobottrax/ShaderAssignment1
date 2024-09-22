@@ -108,7 +108,7 @@ internal class VoiceManager : MonoBehaviour
 			if (Time.time - m_lastMessageTime >= k_seperateMessageThreshold)
 			{
 				voiceDataMessage.m_isSeperate = true;
-				Debug.Log("New message");
+				//Debug.Log("New message");
 			}
 			else
 			{
@@ -135,17 +135,17 @@ internal class VoiceManager : MonoBehaviour
 				NetworkManager.SendMessageAll(EMessageType.VoiceData, pData, data.Length, ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable);
 
 				// loopback
-				{
-					SteamNetworkingMessage_t message1 = new()
-					{
-						m_pData = pData - 1,
-						m_cbSize = data.Length + 1
-					};
+				//{
+				//	SteamNetworkingMessage_t message1 = new()
+				//	{
+				//		m_pData = pData - 1,
+				//		m_cbSize = data.Length + 1
+				//	};
 
-					SteamNetworkingSockets.GetIdentity(out SteamNetworkingIdentity identity);
-					Peer peer = new(new HSteamNetConnection(), identity, NetworkManager.GetLocalPlayer());
-					ReceiveVoice(message1, peer);
-				}
+				//	SteamNetworkingSockets.GetIdentity(out SteamNetworkingIdentity identity);
+				//	Peer peer = new(new HSteamNetConnection(), identity, NetworkManager.GetLocalPlayer());
+				//	ReceiveVoice(message1, peer);
+				//}
 				//Debug.Log("Send");
 			}
 			finally

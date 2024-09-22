@@ -34,6 +34,14 @@ public class NetworkObject : MonoBehaviour
 		{
 			ForceRegister();
 		}
+		else if (m_netID == 0)
+		{
+			// Reserve net ID
+			m_netID = NetworkObjectManager.ReserveID(this);
+
+			// Add to list
+			NetworkObjectManager.AddNetworkObjectToList(this);
+		}
 	}
 
 	private void OnDestroy()
