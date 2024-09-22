@@ -2,34 +2,34 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
+[RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(Animator))]
 public class PlayerController : NetworkBehaviour
 {
-	[Header("Movement")]
-	[SerializeField] PlayerMovementData m_movementData;
-	public PlayerMovementData MvmtData { get => m_movementData; }
-
 	// Constants
 	const float k_hitEpsilon = 0.015f; // Min distance to wall
 	const float k_groundCheckDist = 0.03f;
-	const float k_stopEpsilon = 0.001f; // Stop when <= this speed
+	const float k_stopEpsilon = 0.0001f; // Stop when <= this speed
 	const int k_maxBumps = 8; // Max number of iterations per frame
 	const int k_maxPlanes = 8; // Max number of planes to collide with at once
+
+	[Header("Movement")]
+	[SerializeField] PlayerMovementData m_movementData;
+	public PlayerMovementData MvmtData { get => m_movementData; }
 
 	// Components
 	[Header("Components")]
 	[SerializeField] FirstPersonCamera m_fpsCamera;
 	Rigidbody m_rigidbody;
 	BoxCollider m_collider;
+	Animator m_animator;
 
 	// System
 	public bool IsCrouching { get; private set; }
+	public bool IsGrounded { get; private set; }
 
 	Vector2 m_wishMoveDir;
 	Vector3 m_velocity;
 	Vector3 m_position;
-
-	bool m_isGrounded;
 
 	bool m_isCrouchPressed;
 	bool m_isJumpPressed;
@@ -52,6 +52,7 @@ public class PlayerController : NetworkBehaviour
 	{
 		m_rigidbody = GetComponent<Rigidbody>();
 		m_collider = GetComponent<BoxCollider>();
+		m_animator = GetComponent<Animator>();
 
 		m_rigidbody.isKinematic = true;
 		m_rigidbody.freezeRotation = true;
@@ -60,10 +61,11 @@ public class PlayerController : NetworkBehaviour
 		m_collider.excludeLayers = ~m_movementData.m_layerMask;
 		m_collider.includeLayers = m_movementData.m_layerMask;
 
-		UpdateCollider();
-
 		Assert.IsNotNull(m_movementData);
 		Assert.IsNotNull(m_fpsCamera);
+
+
+		UpdateCollider();
 	}
 
 	void Start()
@@ -127,7 +129,7 @@ public class PlayerController : NetworkBehaviour
 	{
 		m_isJumpPressed = context.ReadValueAsButton();
 
-		if (m_isJumpPressed && m_isGrounded)
+		if (m_isJumpPressed && IsGrounded)
 			Jump();
 	}
 
@@ -168,26 +170,41 @@ public class PlayerController : NetworkBehaviour
 		if (isAttemptingCrouch)
 		{
 			IsCrouching = true;
+
+			if (!IsGrounded)
+			{
+				m_position += Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+			}
 		}
 		else
 		{
 			// Make sure there is room
+			// todo: box cast in air so we can uncrouch close to ground
 			IsCrouching = false;
+			if (!IsGrounded)
+			{
+				m_position -= Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+			}
+
 			bool hasRoom = !CheckHull();
 
 			if (!hasRoom)
 			{
 				IsCrouching = true;
+				if (!IsGrounded)
+				{
+					m_position += Vector3.up * ((m_movementData.m_standingHeight - m_movementData.m_crouchingHeight) / 1.5f);
+				}
 			}
 		}
 
-		UpdateCollider();
+		m_animator.SetBool("Crouched", IsCrouching);
 	}
 
 	private void Jump()
 	{
 		m_velocity.y += m_movementData.m_jumpForce;
-		m_isGrounded = false;
+		IsGrounded = false;
 	}
 
 	#endregion
@@ -231,7 +248,7 @@ public class PlayerController : NetworkBehaviour
 		float halfHeight = GetColliderHeight() / 2f;
 		Collider[] colliders = Physics.OverlapBox(
 			m_position + Vector3.up * halfHeight,
-			new Vector3(m_movementData.m_horizontalSize / 2f, halfHeight, m_movementData.m_horizontalSize / 2f),
+			new Vector3(m_movementData.m_horizontalSize / 2f - k_hitEpsilon, halfHeight - k_hitEpsilon, m_movementData.m_horizontalSize / 2f - k_hitEpsilon),
 			Quaternion.identity,
 			m_movementData.m_layerMask,
 			QueryTriggerInteraction.Ignore
@@ -424,7 +441,7 @@ public class PlayerController : NetworkBehaviour
 		// Allow for force to knock off the ground
 		if (m_velocity.y > m_movementData.m_knockUpThreshold)
 		{
-			m_isGrounded = false;
+			IsGrounded = false;
 			return;
 		}
 
@@ -432,16 +449,16 @@ public class PlayerController : NetworkBehaviour
 		{
 			if (hit.normal.y > Mathf.Cos(Mathf.Deg2Rad * m_movementData.m_maxWalkableAngle))
 			{
-				m_isGrounded = true;
+				IsGrounded = true;
 			}
 			else
 			{
-				m_isGrounded = false;
+				IsGrounded = false;
 			}
 		}
 		else
 		{
-			m_isGrounded = false;
+			IsGrounded = false;
 		}
 	}
 
@@ -456,7 +473,10 @@ public class PlayerController : NetworkBehaviour
 	void Friction(float friction)
 	{
 		float speed = m_velocity.magnitude;
-		float newSpeed = Mathf.Max(speed - friction * Time.fixedDeltaTime, 0);
+
+		float control = Mathf.Max(speed, m_movementData.m_stopSpeed);
+
+		float newSpeed = Mathf.Max(speed - (control * friction * Time.fixedDeltaTime), 0);
 
 		if (speed != 0)
 		{
@@ -467,7 +487,7 @@ public class PlayerController : NetworkBehaviour
 
 	void Accelerate(Vector3 direction, float acceleration, float maxSpeed)
 	{
-		float add = acceleration * Time.fixedDeltaTime;
+		float add = acceleration * maxSpeed * Time.fixedDeltaTime;
 
 		// Clamp added velocity in acceleration direction
 		float speed = Vector3.Dot(direction, m_velocity);
@@ -498,9 +518,12 @@ public class PlayerController : NetworkBehaviour
 			}
 		}
 		else if (IsCrouching)
+		{
 			TryCrouch(false);
+		}
 
-		if (m_isGrounded)
+		// Pick movement method
+		if (IsGrounded)
 		{
 			GroundMove(globalWishDir);
 		}
@@ -515,8 +538,8 @@ public class PlayerController : NetworkBehaviour
 		m_velocity.y = 0;
 
 		float moveSpeed = IsCrouching ? m_movementData.m_crouchingSpeed : m_movementData.m_walkingSpeed;
-		float acceleration = IsCrouching ? m_movementData.m_crouchingAcceleration : m_movementData.m_acceleration;
-		float friction = IsCrouching ? m_movementData.m_crouchingFriction : m_movementData.m_friction;
+		float acceleration = m_movementData.m_acceleration;
+		float friction = m_movementData.m_friction;
 
 		// Friction
 		Friction(friction);
@@ -578,7 +601,7 @@ public class PlayerController : NetworkBehaviour
 		// Either reset to the on ground move results, or keep the step move results
 
 		// If we stepped onto air, just do the regular move
-		if (!m_isGrounded)
+		if (!IsGrounded)
 		{
 			m_position = downPosition;
 			m_velocity = downVelocity;
@@ -602,6 +625,11 @@ public class PlayerController : NetworkBehaviour
 		m_velocity.y -= (m_movementData.m_gravity * Time.fixedDeltaTime) / 2f;
 		CollideAndSlide();
 		m_velocity.y -= (m_movementData.m_gravity * Time.fixedDeltaTime) / 2f;
+	}
+
+	public void Teleport(Vector3 position)
+	{
+		m_position = position;
 	}
 
 	#endregion

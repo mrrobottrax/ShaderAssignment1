@@ -19,10 +19,10 @@ TagManager:
   - Vault
   - Viewmodels
   - Player
-  - ShipTrigger
+  - 
   - DigSite
   - Reflective
-  - 
+  - CameraTarget
   - 
   - 
   - 

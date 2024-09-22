@@ -16,7 +16,8 @@ internal class NetworkData : ScriptableObject
 
 	[SerializeField] int m_ticksPerSecond = 24;
 
-	public const int k_playerPrefabIndex = -256;
+	internal const int k_playerPrefabIndex = -256;
+	internal const int k_maxMessages = 64;
 
 	[SerializeField] GameObject m_playerPrefab;
 	[SerializeField] GameObject[] m_networkPrefabs;
@@ -26,8 +27,11 @@ internal class NetworkData : ScriptableObject
 	{
 #if UNITY_EDITOR
 		// Player gets a special index
-		m_playerPrefab.GetComponent<NetworkObject>().m_prefabIndex = k_playerPrefabIndex;
-		EditorUtility.SetDirty(m_playerPrefab);
+		if (m_playerPrefab != null)
+		{
+			m_playerPrefab.GetComponent<NetworkObject>().m_prefabIndex = k_playerPrefabIndex;
+			EditorUtility.SetDirty(m_playerPrefab);
+		}
 
 		if (m_networkPrefabs != null)
 		{

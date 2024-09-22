@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Steamworks;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -10,13 +11,92 @@ public class NetworkObject : MonoBehaviour
 	internal int m_prefabIndex = -1; // Only used by spawned prefabs
 
 	internal int m_netID = 0;
-	internal int m_ownerID = 0; // 0 = server owned
+	internal SteamNetworkingIdentity m_ownerIndentity;
 
 	internal NetworkBehaviour[] m_networkBehaviours;
 
 	private void Awake()
 	{
-		// Init all NetworkBehaviours
+		TickManager.OnLateTick += LateTick;
+
+		// Non-prefabs are always owned by server
+		if (m_prefabIndex == -1)
+		{
+			m_ownerIndentity = NetworkManager.GetServerIdentity();
+		}
+
+		InitNetworkBehaviours();
+	}
+
+	private void Start()
+	{
+		if (NetworkManager.Mode == ENetworkMode.Host)
+		{
+			ForceRegister();
+		}
+		else if (m_netID == 0)
+		{
+			// Reserve net ID
+			m_netID = NetworkObjectManager.ReserveID(this);
+
+			// Add to list
+			NetworkObjectManager.AddNetworkObjectToList(this);
+		}
+	}
+
+	private void OnDestroy()
+	{
+		TickManager.OnLateTick -= LateTick;
+
+		// Notify clients of destruction
+		if (NetworkManager.Mode == ENetworkMode.Host)
+		{
+			SendFunctions.SendDestroyGameObject(m_netID);
+		}
+
+		// Remove from list
+		NetworkObjectManager.RemoveNetworkObjectFromList(this);
+	}
+
+	void LateTick()
+	{
+		if (NetworkManager.LocalIdentity.Equals(m_ownerIndentity))
+		{
+			// Scan NetworkBehaviours for changes
+			foreach (var net in m_networkBehaviours)
+			{
+				byte[] newBytes = net.GetNetVarBytes();
+
+				if (!Enumerable.SequenceEqual(net.m_netVarBuffer, newBytes))
+				{
+					// Change detected
+					net.m_netVarBuffer = newBytes;
+
+					SendFunctions.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);
+				}
+			}
+		}
+	}
+
+	// Get NetID and add to lists and all that
+	public void ForceRegister()
+	{
+		if (m_netID == 0)
+		{
+			// Reserve net ID
+			m_netID = NetworkObjectManager.ReserveID(this);
+
+			// Add to list
+			NetworkObjectManager.AddNetworkObjectToList(this);
+
+			// Notify peers of object creation
+			SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, NetworkManager.m_localIdentity);
+			SendFunctions.SendObjectSnapshot(this);
+		}
+	}
+
+	void InitNetworkBehaviours()
+	{
 		m_networkBehaviours = gameObject.GetComponentsInChildren<NetworkBehaviour>();
 
 		for (int i = 0; i < m_networkBehaviours.Length; ++i)
@@ -37,16 +117,33 @@ public class NetworkObject : MonoBehaviour
 
 			// Iterate NetVars
 			int size = 0;
-			int index = 0;
-			foreach (var field in net.m_netVarFields)
+			for (int index = 0; index < net.m_netVarFields.Length; ++index)
 			{
+				FieldInfo field = net.m_netVarFields[index];
+
 				if (field.FieldType.IsByRef)
 				{
 					throw new InvalidOperationException($"NetVars cannot be reference types");
 				}
 
-				// Get size of all NetVars
-				size += Marshal.SizeOf(field.FieldType);
+				if (field.FieldType.IsArray)
+				{
+					// Get size of array
+					Array array = (Array)field.GetValue(net);
+					Type elementType = field.FieldType.GetElementType();
+
+					size += array.Length * Marshal.SizeOf(elementType);
+				}
+				else if (field.FieldType.IsEnum)
+				{
+					Type underlyingType = Enum.GetUnderlyingType(field.FieldType);
+					size += Marshal.SizeOf(underlyingType);
+				}
+				else
+				{
+					// Get size of NetVar
+					size += Marshal.SizeOf(field.FieldType);
+				}
 
 				// Set callbacks
 				string callbackName = field.GetCustomAttribute<NetVarAttribute>().m_callback;
@@ -59,129 +156,11 @@ public class NetworkObject : MonoBehaviour
 				{
 					net.m_netVarCallbacks[index] = null;
 				}
-
-				++index;
 			}
 
 			// Apply to array
 			net.m_netVarBuffer = new byte[size];
 			net.m_netVarBuffer = net.GetNetVarBytes();
-		}
-	}
-
-	private void Start()
-	{
-		ForceRegister();
-	}
-
-	// Get NetID and add to lists and all that
-	public void ForceRegister()
-	{
-		if (NetworkManager.Mode != ENetworkMode.Client)
-		{
-			if (m_netID == 0)
-			{
-				// Reserve net ID
-				m_netID = NetworkObjectManager.ReserveID(this);
-
-				// Notify clients of object creation
-				foreach (var client in Host.GetClients())
-				{
-					client.SendSpawnPrefab(m_netID, m_prefabIndex, m_ownerID);
-					SendAllNetworkBehaviourData(client);
-				}
-
-				// Add to list
-				NetworkObjectManager.AddNetworkObjectToList(this);
-			}
-		}
-	}
-
-	internal void SendAllNetworkBehaviourData(RemoteClient client)
-	{
-		foreach (var net in m_networkBehaviours)
-		{
-			client.SendNetworkBehaviourUpdate(m_netID, net.m_index, net.GetNetVarBytes());
-		}
-	}
-
-	private void OnDestroy()
-	{
-		if (NetworkManager.Mode == ENetworkMode.Host)
-		{
-			// Notify clients of object destruction
-			foreach (var client in Host.GetClients())
-			{
-				client.SendDestroyGameObject(m_netID);
-			}
-		}
-
-		// Remove from list
-		NetworkObjectManager.RemoveNetworkObjectFromList(this);
-	}
-
-	public int GetNetID()
-	{
-		return m_netID;
-	}
-
-	private void Update()
-	{
-		if (TickManager.ShouldTick())
-			Tick();
-	}
-
-	void Tick()
-	{
-		if (NetworkManager.GetPlayerNetID() == m_ownerID)
-		{
-			// Scan NetworkBehaviours for changes
-			foreach (var net in m_networkBehaviours)
-			{
-				byte[] newBytes = net.GetNetVarBytes();
-
-				if (!Enumerable.SequenceEqual(net.m_netVarBuffer, newBytes))
-				{
-					// Change detected
-					net.m_netVarBuffer = newBytes;
-
-					// Broadcast new NetVars
-					if (NetworkManager.Mode == ENetworkMode.Host)
-					{
-						// Send to all clients
-						foreach (var client in Host.GetClients())
-						{
-							client.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);
-						}
-					}
-					else
-					{
-						// Send to host
-						byte[] buffer = NetworkBehaviour.CreateMessageBuffer(m_netID, net.m_index, newBytes);
-
-						// Pin the buffer in memory
-						GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-						try
-						{
-							// Get the pointer to the buffer
-							IntPtr pMessage = handle.AddrOfPinnedObject();
-
-							// Send the message
-							NetworkManager.SendMessage(
-								ESnapshotMessageType.NetworkBehaviourUpdate,
-								pMessage, buffer.Length,
-								ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable,
-								LocalClient.m_hConn
-							); ;
-						}
-						finally
-						{
-							// Free the pinned object
-							handle.Free();
-						}
-					}
-				}
-			}
 		}
 	}
 }

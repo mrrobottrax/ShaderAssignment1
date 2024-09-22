@@ -6,56 +6,59 @@ using UnityEngine.SceneManagement;
 
 internal class LocalClient : MonoBehaviour
 {
-	protected Callback<SteamNetConnectionStatusChangedCallback_t> m_SteamNetConnectionStatusChanged;
+	Callback<SteamNetConnectionStatusChangedCallback_t> m_SteamNetConnectionStatusChanged;
 
-	private SteamNetworkingIdentity m_server;
-	internal static HSteamNetConnection m_hConn;
+	HSteamListenSocket m_listenSocket;
 
-	internal static int m_playerObjectID;
+	internal SteamNetworkingIdentity m_serverID;
 
-	#region Initialization
-	private void OnEnable()
+	internal NetworkObject m_player;
+
+	private void Awake()
 	{
-		if (!SteamManager.Initialized)
-			return;
-
 		m_SteamNetConnectionStatusChanged = Callback<SteamNetConnectionStatusChangedCallback_t>.Create(OnSteamNetConnectionStatusChanged);
 	}
 
-	private void OnDisable()
+	private void OnDestroy()
 	{
+		// Close connections
+		if (!SteamManager.Initialized) return;
 		m_SteamNetConnectionStatusChanged.Dispose();
+
+		SteamNetworkingSockets.CloseListenSocket(m_listenSocket);
+		foreach (Peer peer in NetworkManager.m_peers.Values)
+		{
+			SteamNetworkingSockets.CloseConnection(peer.m_hConn, 0, null, true);
+		}
+
 	}
 
-	public void Init(SteamNetworkingIdentity server)
-	{
-		m_server = server;
-	}
+	#region External Calls
 
-	private void Start()
+	internal void Connect(SteamNetworkingIdentity host)
 	{
-		SteamNetworkingSockets.ConnectP2P(ref m_server, 0, 0, null);
+		m_serverID = host;
+		SteamNetworkingSockets.ConnectP2P(ref host, 0, 0, null);
+
+		m_listenSocket = SteamNetworkingSockets.CreateListenSocketP2P(0, 0, null);
 	}
-	#endregion
 
 	private void Update()
 	{
-		ReceiveMessages();
-	}
-
-	private void LateUpdate()
-	{
-		if (TickManager.ShouldTick())
+		foreach (var peer in NetworkManager.m_peers.Values)
 		{
-			SteamNetworkingSockets.FlushMessagesOnConnection(m_hConn);
+			ReceiveMessages(peer);
+			SteamNetworkingSockets.FlushMessagesOnConnection(peer.m_hConn);
 		}
 	}
 
-	private void ReceiveMessages()
-	{
-		IntPtr[] pMessages = new IntPtr[64];
+	#endregion
 
-		int messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(m_hConn, pMessages, pMessages.Length);
+	void ReceiveMessages(Peer peer)
+	{
+		IntPtr[] pMessages = new IntPtr[NetworkData.k_maxMessages];
+
+		int messageCount = SteamNetworkingSockets.ReceiveMessagesOnConnection(peer.m_hConn, pMessages, pMessages.Length);
 
 		if (messageCount <= 0)
 		{
@@ -67,43 +70,60 @@ internal class LocalClient : MonoBehaviour
 		{
 			SteamNetworkingMessage_t message = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pMessages[i]);
 
-			ProcessMessage(message);
+			ProcessMessage(message, peer);
 
 			// Free data
 			SteamNetworkingMessage_t.Release(pMessages[i]);
 		}
 	}
 
-	private void ProcessMessage(SteamNetworkingMessage_t message)
+	void ProcessMessage(SteamNetworkingMessage_t message, Peer sender)
 	{
-		ESnapshotMessageType type = (ESnapshotMessageType)Marshal.ReadByte(message.m_pData);
+		EMessageType type = (EMessageType)Marshal.ReadByte(message.m_pData);
 
 		switch (type)
 		{
-			case ESnapshotMessageType.SceneChange:
+			// Load scene
+			case EMessageType.SceneChange:
 				SceneChangeMessage sceneChange = Marshal.PtrToStructure<SceneChangeMessage>(message.m_pData + 1);
+				Debug.Log("Scene change " + sceneChange.m_sceneIndex);
 
-				m_playerObjectID = sceneChange.m_playerObjectID;
 				SceneManager.LoadScene(sceneChange.m_sceneIndex);
-				Debug.Log("Scene change " + sceneChange.m_playerObjectID);
 				break;
 
-			case ESnapshotMessageType.SpawnPrefab:
+			// Spawn a network prefab
+			case EMessageType.SpawnPrefab:
 				SpawnPrefabMessage spawnPrefab = Marshal.PtrToStructure<SpawnPrefabMessage>(message.m_pData + 1);
+				Debug.Log("Object spawn " + spawnPrefab.m_networkID + " : " + spawnPrefab.m_prefabIndex);
 
-				NetworkObjectManager.SpawnNetworkPrefab(spawnPrefab);
-				Debug.Log("Object spawn");
+				NetworkObjectManager.SpawnNetworkPrefab(spawnPrefab, sender);
 				break;
 
-			case ESnapshotMessageType.RemoveGameObject:
+			// Delete a network object
+			case EMessageType.RemoveGameObject:
 				RemoveObjectMessage removeObject = Marshal.PtrToStructure<RemoveObjectMessage>(message.m_pData + 1);
+				Debug.Log("Remove object " + removeObject.m_networkID);
 
 				NetworkObjectManager.RemoveObject(removeObject);
-				Debug.Log("Remove object");
 				break;
 
-			case ESnapshotMessageType.NetworkBehaviourUpdate:
+			// Update a network behaviour
+			case EMessageType.NetworkBehaviourUpdate:
 				NetworkBehaviour.ProcessUpdateMessage(message);
+				break;
+
+			// Connect to another peer
+			case EMessageType.AddPeer:
+				AddPeerMessage connectMessage = Marshal.PtrToStructure<AddPeerMessage>(message.m_pData + 1);
+				Debug.LogWarning("Connecting to peer " + connectMessage.m_steamIdentity.GetSteamID64());
+
+				SteamNetworkingSockets.ConnectP2P(ref connectMessage.m_steamIdentity, 0, 0, null);
+				break;
+
+			// Receive voice
+			case EMessageType.VoiceData:
+				if (VoiceManager.Instance != null)
+					VoiceManager.Instance.ReceiveVoice(message, sender);
 				break;
 
 			default:
@@ -112,7 +132,8 @@ internal class LocalClient : MonoBehaviour
 		}
 	}
 
-	private void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t pCallback)
+
+	void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t pCallback)
 	{
 		Debug.Log("Connection state changed to " + pCallback.m_info.m_eState);
 
@@ -121,9 +142,16 @@ internal class LocalClient : MonoBehaviour
 		{
 			// New connection request, accept it blindly
 			Debug.Log("Accepting connection request from " + pCallback.m_info.m_identityRemote.GetSteamID64());
-			SteamNetworkingSockets.AcceptConnection(pCallback.m_hConn);
 
-			m_hConn = pCallback.m_hConn;
+			SteamNetworkingSockets.AcceptConnection(pCallback.m_hConn);
+			SteamNetworkingSockets.FlushMessagesOnConnection(pCallback.m_hConn);
+		}
+
+		if (pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected)
+		{
+			Peer peer = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, null);
+			NetworkManager.m_peers.Add(pCallback.m_info.m_identityRemote, peer);
+			Debug.LogWarning("Peer added from client");
 		}
 	}
 }

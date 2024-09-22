@@ -19,7 +19,7 @@ public class FirstPersonCamera : MonoBehaviour
 	// System
 	float m_pitch = 0;
 	float m_yaw = 0;
-	float m_crouchProgress = 1;
+	float m_standProgress = 1;
 	float m_stepOffset = 0; // Offset camera to smooth out steps
 
 	Vector3 m_lastPosition; // Positions are in world space
@@ -73,8 +73,15 @@ public class FirstPersonCamera : MonoBehaviour
 		}
 
 		// Update crouching
-		m_crouchProgress += Time.fixedDeltaTime * m_duckSpeed * (m_followPlayer.IsCrouching ? -1 : 1);
-		m_crouchProgress = Mathf.Clamp01(m_crouchProgress);
+		if (m_followPlayer.IsGrounded)
+		{
+			m_standProgress += Time.fixedDeltaTime * m_duckSpeed * (m_followPlayer.IsCrouching ? -1 : 1);
+			m_standProgress = Mathf.Clamp01(m_standProgress);
+		}
+		else
+		{
+			m_standProgress = (m_followPlayer.IsCrouching ? 0 : 1);
+		}
 
 		// Update smooth stepping
 		m_stepOffset -= 0.5f * m_stepOffset * Time.fixedDeltaTime * m_stepLerpSpeed;
@@ -147,7 +154,7 @@ public class FirstPersonCamera : MonoBehaviour
 		height = Mathf.Lerp(
 			m_followPlayer.MvmtData.m_crouchingHeight,
 			m_followPlayer.MvmtData.m_standingHeight,
-			m_crouchProgress
+			m_standProgress
 		) - m_foreheadSize;
 
 		height += m_stepOffset;

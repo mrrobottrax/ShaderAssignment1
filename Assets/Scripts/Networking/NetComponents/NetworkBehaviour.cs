@@ -27,16 +27,46 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		{
 			object value = field.GetValue(this);
 
-			var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-			try
+			if (field.FieldType.IsEnum)
 			{
-				Marshal.Copy(handle.AddrOfPinnedObject(), buffer, offset, Marshal.SizeOf(field.FieldType));
+				Type underlying = Enum.GetUnderlyingType(field.FieldType);
+				int size = Marshal.SizeOf(underlying);
+
+				IntPtr pData = Marshal.AllocHGlobal(size);
+				try
+				{
+
+					Marshal.StructureToPtr(value, pData, false);
+					Marshal.Copy(pData, buffer, offset, size);
+				}
+				finally
+				{
+					Marshal.FreeHGlobal(pData);
+				}
+
+				offset += size;
 			}
-			finally
+			else if (!field.FieldType.IsArray)
 			{
-				handle.Free();
+				var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
+				try
+				{
+					Marshal.Copy(handle.AddrOfPinnedObject(), buffer, offset, Marshal.SizeOf(field.FieldType));
+				}
+				finally
+				{
+					handle.Free();
+				}
+
+				offset += Marshal.SizeOf(field.FieldType);
 			}
-			offset += Marshal.SizeOf(field.FieldType);
+			else
+			{
+				Array arr = (Array)value;
+
+				Array.Copy(arr, 0, buffer, offset, arr.Length);
+				offset += arr.Length;
+			}
 		}
 
 		return buffer;
@@ -47,16 +77,22 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		// Read message from buffer
 		NetworkBehaviourUpdateMessage behaviourUpdate = Marshal.PtrToStructure<NetworkBehaviourUpdateMessage>(message.m_pData + 1);
 
+		// Copy new data into fields
+		NetworkObject obj = NetworkObjectManager.GetNetworkObject(behaviourUpdate.m_networkID);
+		NetworkBehaviour comp = obj.m_networkBehaviours[behaviourUpdate.m_componentIndex];
+
+		if (!obj)
+		{
+			Debug.LogWarning($"Network object {behaviourUpdate.m_networkID} doesn't exist yet");
+			return;
+		}
+
 		// Read new data from buffer
 		int cbStart = 1 + Marshal.SizeOf<NetworkBehaviourUpdateMessage>();
 		int cbBuffer = message.m_cbSize - cbStart;
 
 		byte[] buffer = new byte[cbBuffer];
 		Marshal.Copy(message.m_pData + cbStart, buffer, 0, cbBuffer);
-
-		// Copy new data into fields
-		NetworkObject obj = NetworkObjectManager.GetNetworkObject(behaviourUpdate.m_networkID);
-		NetworkBehaviour comp = obj.m_networkBehaviours[behaviourUpdate.m_componentIndex];
 
 		comp.m_netVarBuffer = buffer;
 
@@ -72,17 +108,30 @@ public abstract class NetworkBehaviour : MonoBehaviour
 			{
 				IntPtr pFieldData = pBuffer + offset;
 
-				object value = Marshal.PtrToStructure(pFieldData, field.FieldType);
-
-				if (!field.GetValue(comp).Equals(value))
+				if (!field.FieldType.IsArray)
 				{
-					field.SetValue(comp, value);
+					object value = Marshal.PtrToStructure(pFieldData, field.FieldType);
+
+					if (!field.GetValue(comp).Equals(value))
+					{
+						field.SetValue(comp, value);
+
+						// Run value change function if set
+						comp.m_netVarCallbacks[index]?.Invoke(comp, null);
+					}
+
+					offset += Marshal.SizeOf(field.FieldType);
+				}
+				else
+				{
+					byte[] arr = (byte[])field.GetValue(comp);
+					Marshal.Copy(pFieldData, arr, 0, arr.Length);
 
 					// Run value change function if set
 					comp.m_netVarCallbacks[index]?.Invoke(comp, null);
-				}
 
-				offset += Marshal.SizeOf(field.FieldType);
+					offset += arr.Length * Marshal.SizeOf(field.FieldType.GetElementType());
+				}
 
 				++index;
 			}

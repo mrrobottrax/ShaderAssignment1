@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+// Allows calling these events from buttons and such without
+// needing to add a script to the world
 public class GameManagerEvents : ScriptableObject
 {
 	public void StartHosting()
@@ -7,7 +9,7 @@ public class GameManagerEvents : ScriptableObject
 		GameManager.StartHosting();
 	}
 
-	public void GoToTestLevel()
+	public void StartPropHunt()
 	{
 		GameManager.GoToTestLevel();
 	}

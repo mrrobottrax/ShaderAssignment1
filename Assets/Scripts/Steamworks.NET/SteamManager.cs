@@ -25,9 +25,7 @@ public class SteamManager : MonoBehaviour
 #if !DISABLESTEAMWORKS
 	protected static bool s_EverInitialized = false;
 
-	// Breaks if you load it any earlier :(
-	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-	static void OnRuntimeStart()
+	public static void Init()
 	{
 		s_instance = new GameObject("Steam Manager").AddComponent<SteamManager>();
 	}
