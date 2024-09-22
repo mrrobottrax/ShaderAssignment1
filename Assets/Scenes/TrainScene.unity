@@ -1025,7 +1025,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 80abba67a98f96d4aafe1e4df33baa67, type: 2}
         m_TargetAssemblyTypeName: GameManagerEvents, Assembly-CSharp
-        m_MethodName: StartPropHunt
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

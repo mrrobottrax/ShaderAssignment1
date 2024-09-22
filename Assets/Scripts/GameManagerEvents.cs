@@ -9,7 +9,7 @@ public class GameManagerEvents : ScriptableObject
 		GameManager.StartHosting();
 	}
 
-	public void StartPropHunt()
+	public void StartGame()
 	{
 		GameManager.GoToTestLevel();
 	}
