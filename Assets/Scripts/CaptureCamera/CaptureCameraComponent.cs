@@ -80,8 +80,10 @@ namespace CaptureCamera
             _camera.targetTexture = renderTexture;
 
             // Render the camera's view
+            _camera.enabled = true;
             _camera.Render();
-        
+            _camera.enabled = false;
+
             // Set the active RenderTexture so we can read pixels from it
             RenderTexture.active = renderTexture;
         
