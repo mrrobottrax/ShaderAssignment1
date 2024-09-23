@@ -10,15 +10,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     [field: Header("Equipment Slot Pointers")]
     public InventorySlotPointer _heldItemSlot { get; private set; } = new();
 
-	private InventorySlotPointer _headSlot = new();
-    private InventorySlotPointer _chestSlot = new();
-    private InventorySlotPointer _legsSlot = new();
-    private InventorySlotPointer _feetSlot = new();
-
-    [Header("Favourited Items")]
-    [SerializeField] private int _favouriteSlotsSize = 8;
-    private List<InventorySlotPointer> favouriteSlots;
-
     [Header("System")]
     private PlayerUIManager playerUIManager;
 
@@ -27,16 +18,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     protected override void Awake()
     {
         base.Awake();
-
-        // Make the new slots list
-        favouriteSlots = new List<InventorySlotPointer>(_favouriteSlotsSize);
-
-        // Fill the list
-        for (int i = 0; i < _favouriteSlotsSize; i++)
-        {
-            InventorySlotPointer slot = new();
-            favouriteSlots.Add(slot);
-        }
 
         playerUIManager = GetComponentInChildren<PlayerUIManager>();
     }
@@ -57,11 +38,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
         InputManager.Instance.Player._1.performed += HotBarInput;
         InputManager.Instance.Player._2.performed += HotBarInput;
         InputManager.Instance.Player._3.performed += HotBarInput;
-        InputManager.Instance.Player._4.performed += HotBarInput;
-        InputManager.Instance.Player._5.performed += HotBarInput;
-        InputManager.Instance.Player._6.performed += HotBarInput;
-        InputManager.Instance.Player._7.performed += HotBarInput;
-        InputManager.Instance.Player._8.performed += HotBarInput;
     }
 
     public void Unsubscribe()
@@ -71,11 +47,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
         // Hotbar
         InputManager.Instance.Player._1.performed -= HotBarInput;
         InputManager.Instance.Player._2.performed -= HotBarInput;
-        InputManager.Instance.Player._4.performed -= HotBarInput;
-        InputManager.Instance.Player._5.performed -= HotBarInput;
-        InputManager.Instance.Player._6.performed -= HotBarInput;
-        InputManager.Instance.Player._7.performed -= HotBarInput;
-        InputManager.Instance.Player._8.performed -= HotBarInput;
+        InputManager.Instance.Player._3.performed -= HotBarInput;
     }
 
     public void SetControlsSubscription(bool isInputEnabled)
@@ -94,7 +66,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
         InventoryUI inventoryUI = playerUIManager.InventoryUI;
 
         // Display the players inventory if it is not already active
-        if (!inventoryUI.GetPlayerInventoryDisplay().GetDisplayActive())
+        if (!inventoryUI.ToolBeltDisplay.GetDisplayActive())
             inventoryUI.DisplayInventory(this);
         else playerUIManager.DisableActiveDisplay(); // Disable the inventory display
     }
@@ -106,7 +78,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     {
         int key = (int)context.ReadValue<float>();
 
-        
+        TryEquipItem(Inventory.Slots[key]);
     }
 
     #endregion
@@ -116,55 +88,23 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     /// <summary>
     /// This method will attempt to pair a selected slot with the correct pointer slot, based on the items type.
     /// </summary>
-    public void EquipItem(InventorySlot itemsSlot)
+    public void TryEquipItem(InventorySlot itemsSlot)
     {
         // Check if the selected slots item is equippable
         if (itemsSlot != null && 
             itemsSlot.GetSlotsItem() != null && 
             itemsSlot.GetSlotsItem() is IEquippableItem equippableItem)
         {
-            InventorySlotPointer slotToPairTo = null;
-
-            // Find the slots items type to establish a pairing with a pointer for future references
-            if (equippableItem is Weapon_Item)
-            {
-                slotToPairTo = _heldItemSlot;
-            }
-            else if (itemsSlot.GetSlotsItem() is Armour_Item armourItem)
-            {
-                // Get the armour data of the item
-                Armour_ItemData itemData = armourItem.GetArmourData();
-
-                // Find the equipment slot based on the armour type
-                switch (itemData.ArmorsType)
-                {
-                    case Armour_ItemData.ArmorType.HeadPiece:
-                        slotToPairTo = _headSlot;
-                        break;
-
-                    case Armour_ItemData.ArmorType.ChestPiece:
-                        slotToPairTo = _chestSlot;
-                        break;
-
-                    case Armour_ItemData.ArmorType.Legs:
-                        slotToPairTo = _legsSlot;
-                        break;
-
-                    case Armour_ItemData.ArmorType.Feet:
-                        slotToPairTo = _feetSlot;
-                        break;
-                }
-            }
 
             // Check if a slot was chosen to pair with
-            if (slotToPairTo != null)
+            if (_heldItemSlot != null)
             {
                 // Try to unequip an item if the selected slot has one
-                if (slotToPairTo.GetPairedSlot()?.GetSlotsItem() != null)
-                    UnequipItem(slotToPairTo.GetPairedSlot());
+                if (_heldItemSlot.GetPairedSlot()?.GetSlotsItem() != null)
+                    UnequipItem(_heldItemSlot.GetPairedSlot());
 
                 // Establish the new slot pairing and equip the item
-                slotToPairTo.SetPairedSlot(itemsSlot);
+                _heldItemSlot.SetPairedSlot(itemsSlot);
                 equippableItem.Equip(_playerHealth);
             }
         }
@@ -183,113 +123,10 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
         {
             Debug.Log("Try Unequip");
 
-            InventorySlotPointer slotToClear = null;
-
-            // Find the slots items type
-            if (selectedSlot.GetSlotsItem() is Weapon_Item)
-            {
-                slotToClear = _heldItemSlot;
-            }
-            else if (selectedSlot.GetSlotsItem() is Armour_Item armourItem)
-            {
-                Armour_ItemData itemData = armourItem.GetArmourData();
-
-                switch (itemData.ArmorsType)
-                {
-                    case Armour_ItemData.ArmorType.HeadPiece:
-                        slotToClear = _headSlot;
-                        break;
-
-                    case Armour_ItemData.ArmorType.ChestPiece:
-                        slotToClear = _chestSlot;
-                        break;
-
-                    case Armour_ItemData.ArmorType.Legs:
-                        slotToClear = _legsSlot;
-                        break;
-
-                    case Armour_ItemData.ArmorType.Feet:
-                        slotToClear = _feetSlot;
-                        break;
-                }
-            }
-
             // Unequip the item
             equippableItem.UnEquip();
-            slotToClear.ClearPairedSlot();
+            _heldItemSlot.ClearPairedSlot();
         }
     }
-    #endregion
-
-    #region Favourited Items Methods
-
-    /// <summary>
-    /// This method searches for an empty spot to place a favourited item, returns the slot, and its index.
-    /// </summary>
-    public InventorySlotPointer GetEmptyFavouriteSlot(out int slotIndex)
-    {
-        slotIndex = favouriteSlots.FindIndex(i => i.GetPairedSlot() == null);
-        return slotIndex != -1 ? favouriteSlots[slotIndex] : null;
-    }
-
-    /// <summary>
-    /// This method pairs a favourite slot with a specified ID to a InventorySlot.
-    /// </summary>
-    public void AssignFavouritePointer(int index, InventorySlot slot)
-    {
-        favouriteSlots[index].SetPairedSlot(slot);
-    }
-
-    /// <summary>
-    ///  This method clears a favourite slots pairing with a specified ID.
-    /// </summary>
-    public void ClearFavouritePointer(int index)
-    {
-        favouriteSlots[index].ClearPairedSlot();
-    }
-    #endregion
-
-    #region Helper Methods
-
-    /// <summary>
-    /// This method returns the favourite pointer at a specified index value
-    /// </summary>
-    public InventorySlotPointer GetFavouritePointer(int index)
-    {
-        return favouriteSlots[index];
-    }
-
-    /// <summary>
-    /// This method returns the head slot pointer.
-    /// </summary>
-    public InventorySlotPointer GetHeadSlotPointer()
-    {
-        return _headSlot;
-    }
-
-    /// <summary>
-    /// This method returns the chest slot pointer.
-    /// </summary>
-    public InventorySlotPointer GetChestSlotPointer()
-    {
-        return _chestSlot;
-    }
-
-    /// <summary>
-    /// This method returns the legs slot pointer.
-    /// </summary>
-    public InventorySlotPointer GetLegsSlotPointer()
-    {
-        return _legsSlot;
-    }
-
-    /// <summary>
-    /// This method returns the feet slot pointer.
-    /// </summary>
-    public InventorySlotPointer GetFeetSlotPointer()
-    {
-        return _feetSlot;
-    }
-
     #endregion
 }

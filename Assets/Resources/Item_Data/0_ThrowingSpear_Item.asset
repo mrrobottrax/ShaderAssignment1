@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ItemID>k__BackingField: 0
   <ItemName>k__BackingField: Throwing Spear
-  <ItemSprite>k__BackingField: {fileID: 0}
+  <ItemSprite>k__BackingField: {fileID: 21300000, guid: 28f3870423875fa45aaf9f05fbf083c0, type: 3}
   <ItemDescription>k__BackingField: A large harpoon designed to be thrown.
   <MaxAmount>k__BackingField: 99
   <ItemBaseValue>k__BackingField: 6
+  <ItemWeight>k__BackingField: 0
   <BaseDamage>k__BackingField: 5
   <BaseWeaponRange>k__BackingField: 2
   <ViewModelID>k__BackingField: 0

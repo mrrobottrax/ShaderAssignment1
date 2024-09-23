@@ -5,13 +5,12 @@ public class InventoryUI : MonoBehaviour
     [Header("Components")]
     [SerializeField] private PlayerUIManager _playerUIManager;
 
-    [Header("Display Types")]
-    [SerializeField] private ContainerInventoryDisplay _containerInventoryDisplay;
-    [SerializeField] private PlayerInventoryDisplay _playerInventoryDisplay;
+    [field: Header("Display Types")]
+    [field: SerializeField] public ToolbeltDisplay ToolBeltDisplay { get; private set; }
 
     public void Start()
     {
-        _playerInventoryDisplay.SetDisplayActive(false);
+        ToolBeltDisplay.SetDisplayActive(false);
     }
 
     /// <summary>
@@ -21,17 +20,8 @@ public class InventoryUI : MonoBehaviour
     {
         if(inventory is PlayerInventoryComponent)
         {
-            _playerInventoryDisplay.AssignInventory(inventory);
-            _playerUIManager.SetActiveDisplay(_playerInventoryDisplay);
+            ToolBeltDisplay.AssignInventory(inventory);
+            _playerUIManager.SetActiveDisplay(ToolBeltDisplay);
         }
-        else
-        {
-            //_containerInventoryDisplay.SetInventoryDisplayActive(true);
-        }
-    }
-
-    public PlayerInventoryDisplay GetPlayerInventoryDisplay()
-    {
-        return _playerInventoryDisplay;
     }
 }
