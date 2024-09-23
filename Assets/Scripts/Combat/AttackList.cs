@@ -17,10 +17,10 @@ public class AttackList
         foreach (AttackGroup group in AttackGroups)
         {
             if (group.GroupTitle == groupTitle)
-            {
                 return group;
-            }
         }
+
+        Debug.Log("NOTHING FOUND");
         return null; // Return null if no group with the given title is found
     }
 

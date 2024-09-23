@@ -1,4 +1,3 @@
-using Cinemachine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +14,6 @@ public class CombatManager : MonoBehaviour
 
 	[field: Header("System")]
 	private Dictionary<Entity_Base, List<CombatPacket>> activePackets = new Dictionary<Entity_Base, List<CombatPacket>>();
-
-	private Coroutine impactPause;
 
     [field: Header("Events")]
     public event Action<Entity_Base, CombatPacket> CombatPacketComplete;
@@ -41,7 +38,6 @@ public class CombatManager : MonoBehaviour
             combatPacketPool.Enqueue(packet);
         }
     }
-
 
     #endregion
 
@@ -200,7 +196,7 @@ public class CombatManager : MonoBehaviour
 
 		combatPacket.OnPacketAddVictem -= EvaluatePacketOnVictem;
 
-        //combatPacket.ResetPacket();
+        combatPacket.ResetPacket();
 
 		// Return the packet to the packet pool
 		combatPacketPool.Enqueue(combatPacket);

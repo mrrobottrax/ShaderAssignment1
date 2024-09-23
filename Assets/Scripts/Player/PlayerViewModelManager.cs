@@ -14,7 +14,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
     private ViewModel_Base currentViewModel;
 
     private string prevAttackGroup;
-    private int viewModelActionChain = 0;// The current increment in an attack chain
+    private int currentChain = 0;// The current increment in an attack chain
 
     #region Initialization Methods
     protected override void Awake()
@@ -80,11 +80,10 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
 
             // Stop the animator from using the view models animation set
             animator.SetBool(currentViewModel.AnimationSet, false);
-
-            // Transition to the none clip
-            int layerIndex = animator.GetLayerIndex(currentViewModel.AnimationLayer);
-            animator.Play("None", layerIndex, 0f);
         }
+
+        // Transition to the none clip
+        TriggerHolster();
 
         // Clear current item data
         currentItem = null;
@@ -183,7 +182,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
     /// <param name="value">The new value of the view model's attack chain.</param>
     private void SetActionChain(int value)
     {
-        viewModelActionChain = value;
+        currentChain = value;
 
         // Set the chain value on the animator
         animator.SetInteger("ViewModelActionChain", value);
@@ -205,18 +204,16 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
         int attackChainLength;
 
         // Store attack source
-        var attackSource = currentViewModel == null ? entityAttacks : currentViewModel.ViewModelAttacks;
         bool isUsingViewModel = currentViewModel != null;
+        AttackList attackSourceList = isUsingViewModel ? currentViewModel.ViewModelAttacks : entityAttacks;
 
         // Determine the attack group and chosen attack
-        chosenGroup = attackSource.GetAttackGroup(attackGroup);
-        attack = attackSource.GetAttackFromGroup(chosenGroup, viewModelActionChain);
-
-        Debug.Log(chosenGroup);
+        chosenGroup = attackSourceList.GetAttackGroup(attackGroup);
+        attack = attackSourceList.GetAttackFromGroup(chosenGroup, currentChain);
 
         // Compare the last attack group to the newly chosen one
-        if (chosenGroup.GroupTitle == prevAttackGroup)
-            viewModelActionChain = 0;
+        if (chosenGroup.GroupTitle != prevAttackGroup)
+            currentChain = 0;
 
         // Check if an item is equipped
         if (currentViewModel == null)
@@ -237,7 +234,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
             attackChainLength = chosenGroup.Attacks.Length;
 
             // Increment the action chain, and loop back to zero if it reaches the end of the chain.
-            SetActionChain((viewModelActionChain + 1) % attackChainLength);
+            SetActionChain((currentChain + 1) % attackChainLength);
 
             // Set the prev attack group
             prevAttackGroup = chosenGroup.GroupTitle;
