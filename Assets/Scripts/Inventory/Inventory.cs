@@ -39,8 +39,6 @@ public class Inventory
     /// </summary>
     private void SlotChangedAction(InventorySlot slotUpdated)
     {
-        SortInventory();
-
         OnSlotChanged?.Invoke();
     }
     #endregion
@@ -138,37 +136,10 @@ public class Inventory
         {
             // Add the item then sort the inventory
             emptySlot.AssignItem(addedItem.CreateItemInstance(), amount);
-            SortInventory();
-
             return true;
         }
 
         return false;
-    }
-
-    /// <summary>
-    /// This method condenses all of the slots in the inventory by ordering via ID and ensuring that all empty slots are moved to the back.
-    /// </summary>
-    private void SortInventory()
-    {
-        // Sort the slots by item name, and then by whether the slot is empty or not
-        _slots.Sort((slot1, slot2) =>
-        {
-            // If both slots are empty, maintain their order
-            if (slot1.GetSlotsItem() == null && slot2.GetSlotsItem() == null)
-                return 0;
-
-            // If slot1 is empty and slot2 is not, move slot1 to the end
-            if (slot1.GetSlotsItem() == null && slot2.GetSlotsItem() != null)
-                return 1;
-
-            // If slot1 is not empty and slot2 is empty, keep slot1 in its position
-            if (slot1.GetSlotsItem() != null && slot2.GetSlotsItem() == null)
-                return -1;
-
-            // If both slots are not empty, compare their item names
-            return string.Compare(slot1.GetSlotsItem().GetItemData().ItemName, slot2.GetSlotsItem().GetItemData().ItemName);
-        });
     }
     #endregion
 
