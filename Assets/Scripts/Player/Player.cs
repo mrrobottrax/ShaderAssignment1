@@ -19,6 +19,8 @@ public class Player : NetworkBehaviour
 		{
 			SetLocalOnlyStuffEnabled(true);
 			SceneManager.activeSceneChanged += OnSceneLoad;
+
+			OnSceneLoad(SceneManager.GetSceneAt(0), SceneManager.GetActiveScene());
 		}
 		else
 		{

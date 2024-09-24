@@ -46,6 +46,6 @@ public static class GameManager
 	public static void GoToTestLevel()
 	{
 		ChangeGameState(EGameState.InGame);
-		SceneManager.LoadScene(2);
+		SceneManager.LoadScene("Test Level");
 	}
 }

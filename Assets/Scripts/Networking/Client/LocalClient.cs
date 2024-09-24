@@ -14,6 +14,8 @@ internal class LocalClient : MonoBehaviour
 
 	internal NetworkObject m_player;
 
+	bool m_pauseRcv = false;
+
 	private void Awake()
 	{
 		m_SteamNetConnectionStatusChanged = Callback<SteamNetConnectionStatusChangedCallback_t>.Create(OnSteamNetConnectionStatusChanged);
@@ -45,6 +47,8 @@ internal class LocalClient : MonoBehaviour
 
 	private void Update()
 	{
+		if (m_pauseRcv) return;
+
 		foreach (var peer in NetworkManager.m_peers.Values)
 		{
 			ReceiveMessages(peer);
@@ -77,6 +81,12 @@ internal class LocalClient : MonoBehaviour
 		}
 	}
 
+	void UnpauseOnLoad(Scene scene, LoadSceneMode mode)
+	{
+		m_pauseRcv = false;
+		SceneManager.sceneLoaded -= UnpauseOnLoad;
+	}
+
 	void ProcessMessage(SteamNetworkingMessage_t message, Peer sender)
 	{
 		EMessageType type = (EMessageType)Marshal.ReadByte(message.m_pData);
@@ -88,7 +98,9 @@ internal class LocalClient : MonoBehaviour
 				SceneChangeMessage sceneChange = Marshal.PtrToStructure<SceneChangeMessage>(message.m_pData + 1);
 				Debug.Log("Scene change " + sceneChange.m_sceneIndex);
 
+				m_pauseRcv = true;
 				SceneManager.LoadScene(sceneChange.m_sceneIndex);
+				SceneManager.sceneLoaded += UnpauseOnLoad;
 				break;
 
 			// Spawn a network prefab
