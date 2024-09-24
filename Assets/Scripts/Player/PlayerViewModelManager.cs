@@ -12,6 +12,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
     [Header("System")]
     private Weapon_Item currentItem;
     private ViewModel_Base currentViewModel;
+    private bool isTransitionInProgress;
 
     private string prevAttackGroup;
     private int currentChain = 0;// The current increment in an attack chain
@@ -73,7 +74,7 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
     /// </summary>
     public void ClearCurrentViewModel()
     {
-        if(currentViewModel != null)
+        if (currentViewModel != null)
         {
             // Disable the view models meshes
             currentViewModel.SetViewModelMeshesActive(false);
@@ -85,10 +86,8 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
         // Transition to the none clip
         TriggerHolster();
 
-        // Clear current item data
+        // Clear current item data & view model
         currentItem = null;
-
-        // Clear the view model data
         currentViewModel = null;
 
         // Update the animator

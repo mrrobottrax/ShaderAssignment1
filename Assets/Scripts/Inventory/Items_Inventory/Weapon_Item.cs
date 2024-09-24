@@ -44,7 +44,7 @@ public class Weapon_Item : Item_Base, IEquippableItem
         owner = null;
     }
 
-    public override void SlotCleared(InventorySlot itemsSlot)
+    public override void ItemsSlotCleared(InventorySlot itemsSlot)
     {
         // Unequip this item if it is equipped
         if (isEquipped)

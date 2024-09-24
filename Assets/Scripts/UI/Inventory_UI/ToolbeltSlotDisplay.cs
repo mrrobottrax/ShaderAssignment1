@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ToolbeltSlotDisplay : MonoBehaviour
+public class InventorySlotDisplay : MonoBehaviour
 {
     [Header("Slot Visuals")]
     [SerializeField] private TextMeshProUGUI _amountText;
@@ -17,7 +17,7 @@ public class ToolbeltSlotDisplay : MonoBehaviour
 
     [Header("Assigned Slot")]
     public InventorySlot AssignedSlot;
-    private ToolbeltDisplay toolbeltDisplay;
+    private InventoryDisplay toolbeltDisplay;
 
     #region Button Listeners
     public void OnEnable()
@@ -53,7 +53,7 @@ public class ToolbeltSlotDisplay : MonoBehaviour
     /// <summary>
     /// This method pairs this display slot to an inventory slot
     /// </summary>
-    public void PairSlot(InventorySlot slotAssigned, ToolbeltDisplay toolbeltDisplay)
+    public void PairSlot(InventorySlot slotAssigned, InventoryDisplay toolbeltDisplay)
     {
         // Pair slot
         AssignedSlot = slotAssigned;
@@ -90,13 +90,9 @@ public class ToolbeltSlotDisplay : MonoBehaviour
 
                 _slotImage.color = (slotsItem is IEquippableItem equipableItem && equipableItem.IsEquipped) ? _highlightedColour : _defaultColour;
 
-                // Allow interactions as the slot is filled
-                SetDisplayInteractable(true);
                 return;
             }
         }
-
-        SetDisplayInteractable(false);
 
         if (_amountText != null)
             _amountText.text = "";

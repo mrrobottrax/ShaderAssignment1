@@ -155,7 +155,7 @@ public class PlayerActions : MonoBehaviour, IInputHandler
         timeReloadHeld = 0;
     }
 
-    private void SetPlayerReady(bool isReady)
+    public void SetPlayerReady(bool isReady)
     {
         isPlayerReady = isReady;
 

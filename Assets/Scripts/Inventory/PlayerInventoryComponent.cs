@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +5,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
 {
     [field: Header("Components")]
     [SerializeField] private PlayerHealth _playerHealth;
+    [SerializeField] private PlayerActions _playerActions;
 
     [field: Header("Equipment Slot Pointers")]
     public InventorySlotPointer _heldItemSlot { get; private set; } = new();
@@ -24,6 +24,8 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     private void Start()
     {
         SetControlsSubscription(true);
+
+        _heldItemSlot.GetPairedSlot().OnSlotChanged += HeldItemSwitch;
     }
     #endregion
 
@@ -78,7 +80,22 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     {
         int key = (int)context.ReadValue<float>();
 
-        TryEquipItem(Inventory.Slots[key]);
+        if (Inventory.Slots[key].GetSlotsItem() != null)
+        {
+            TryEquipItem(Inventory.Slots[key]);
+            _playerActions.SetPlayerReady(true);
+
+            return;
+        }
+        else if (_heldItemSlot.GetPairedSlot() != null)
+        {
+            UnequipItem(_heldItemSlot.GetPairedSlot());
+            return;
+        }
+
+        // Pull out arms since an empty slot was pressed
+        _playerActions.SetPlayerReady(true);
+
     }
 
     #endregion
@@ -92,6 +109,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     {
         // Check if the selected slots item is equippable
         if (itemsSlot != null && 
+            itemsSlot != _heldItemSlot.GetPairedSlot() &&
             itemsSlot.GetSlotsItem() != null && 
             itemsSlot.GetSlotsItem() is IEquippableItem equippableItem)
         {
@@ -108,8 +126,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
                 equippableItem.Equip(_playerHealth);
             }
         }
-        else if (_heldItemSlot.GetPairedSlot() != null) // If an item that does not exist was passed in, unequip the current item.
-            UnequipItem(_heldItemSlot.GetPairedSlot());
     }
 
     /// <summary>
@@ -127,6 +143,18 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
             equippableItem.UnEquip();
             _heldItemSlot.ClearPairedSlot();
         }
+    }
+
+    private void HeldItemSwitch(InventorySlot selectedSlot)
+    {
+        if (selectedSlot.GetSlotsItem() != null)
+        {
+            // Unequip the prev item, then equip the new one.
+            UnequipItem(selectedSlot);
+            TryEquipItem(selectedSlot);
+        }
+        else UnequipItem(selectedSlot);
+
     }
     #endregion
 }

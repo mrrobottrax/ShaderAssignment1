@@ -32,7 +32,7 @@ public class Armour_Item : Item_Base, IEquippableItem
         owner = null;
     }
 
-    public override void SlotCleared(InventorySlot itemsSlot)
+    public override void ItemsSlotCleared(InventorySlot itemsSlot)
     {
 
     }

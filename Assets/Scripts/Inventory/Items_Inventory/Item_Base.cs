@@ -36,7 +36,7 @@ public abstract class Item_Base
     /// This method should be called from the slot when it is cleared
     /// </summary>
     /// <param name="itemsSlot">The slot that is being cleared</param>
-    public abstract void SlotCleared(InventorySlot itemsSlot);
+    public abstract void ItemsSlotCleared(InventorySlot itemsSlot);
 
     /// <summary>
     /// Adds a specified amount to the stack

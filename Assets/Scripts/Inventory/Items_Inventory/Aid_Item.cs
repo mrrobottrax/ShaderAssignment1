@@ -30,6 +30,6 @@ public class Aid_Item : Item_Base
 
     #region Implemented Methods
 
-    public override void SlotCleared(InventorySlot itemsSlot) { /*Nothing special for this item type*/ }
+    public override void ItemsSlotCleared(InventorySlot itemsSlot) { /*Nothing special for this item type*/ }
     #endregion
 }

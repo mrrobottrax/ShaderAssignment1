@@ -30,12 +30,14 @@ public class InventorySlot
     public void ClearSlot()
     {
         // Call the items cleared logic
-        slotsItem.SlotCleared(this);
+        slotsItem.ItemsSlotCleared(this);
 
         // Unsub inventory from item changes
         slotsItem.OnItemChanged -= SlotChanged;
 
         slotsItem = null;
+
+        OnSlotChanged.Invoke(this);
     }
     #endregion
 

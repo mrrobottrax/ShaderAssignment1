@@ -6,7 +6,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private PlayerUIManager _playerUIManager;
 
     [field: Header("Display Types")]
-    [field: SerializeField] public ToolbeltDisplay ToolBeltDisplay { get; private set; }
+    [field: SerializeField] public InventoryDisplay ToolBeltDisplay { get; private set; }
 
     public void Start()
     {

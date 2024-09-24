@@ -3,10 +3,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class ToolbeltDisplay : MenuDisplayBase
+public class InventoryDisplay : MenuDisplayBase
 {
     [Header("Slots")]
-    [SerializeField] private ToolbeltSlotDisplay[] _displaySlots;
+    [SerializeField] private InventorySlotDisplay[] _displaySlots;
 
     [Header("UI Elements")]
     protected CanvasGroup canvasGroup;
@@ -15,6 +15,10 @@ public class ToolbeltDisplay : MenuDisplayBase
     protected InventoryComponent pairedInventoryComponent;// Inventory and locally organized slots
     public InventoryComponent PairedInventoryComponent => pairedInventoryComponent;
     protected Inventory pairedInventory;
+
+
+    private InventorySlotDisplay highlightedSlot;
+    private InventorySlotDisplay prevPressedSlot;
 
     #region Initialization Methods
 
@@ -108,18 +112,52 @@ public class ToolbeltDisplay : MenuDisplayBase
     /// <summary>
     /// This method should be called by a slot display when it is selected (Same as highlighting but for non mouse navigation)
     /// </summary>
-    public void SlotSelected(ToolbeltSlotDisplay selectedSlot)
+    public void SlotSelected(InventorySlotDisplay selectedSlot)
     {
-        
+        highlightedSlot = selectedSlot;
     }
 
     /// <summary>
     /// This method should be called by a slot display when it is pressed
     /// Depending on the inventory display type, buttons on the item options display will be changed before enabling.
     /// </summary>
-    public void SlotPressed(ToolbeltSlotDisplay selectedSlotDisplay)
+    public void SlotPressed(InventorySlotDisplay selectedSlotDisplay)
     {
         // Transfer item to mouse
+        if(prevPressedSlot == null)
+        {
+            prevPressedSlot = selectedSlotDisplay;
+            selectedSlotDisplay.SetDisplayInteractable(false);
+
+            return;
+        }
+        else
+        {
+            // When a slot is selected and the transfer slot has an item, try to place it.
+            if (selectedSlotDisplay.AssignedSlot.GetSlotsItem() == null)
+            {
+                Item_Base item = prevPressedSlot.AssignedSlot.GetSlotsItem();
+
+                selectedSlotDisplay.AssignedSlot.AssignItem(item, item.GetAmount());
+
+                prevPressedSlot.AssignedSlot.ClearSlot();
+                prevPressedSlot.SetDisplayInteractable(true);
+            }
+            else
+            {
+                // Swap the selected slot with the
+
+                Item_Base prevItem = prevPressedSlot.AssignedSlot.GetSlotsItem();
+                Item_Base SelectedItem = selectedSlotDisplay.AssignedSlot.GetSlotsItem();
+
+                prevPressedSlot.AssignedSlot.AssignItem(SelectedItem, SelectedItem.GetAmount());
+                selectedSlotDisplay.AssignedSlot.AssignItem(prevItem, prevItem.GetAmount());
+
+                prevPressedSlot.SetDisplayInteractable(true);
+            }
+
+            prevPressedSlot = null;
+        }
     }
 
     /// <summary>
@@ -131,7 +169,7 @@ public class ToolbeltDisplay : MenuDisplayBase
         for (int i = 0; i < _displaySlots.Length; i++)
         {
             // Cache the display slot
-            ToolbeltSlotDisplay displaySlot = _displaySlots[i];
+            InventorySlotDisplay displaySlot = _displaySlots[i];
 
             displaySlot.PairSlot(pairedInventory.Slots[i], this);
         }
