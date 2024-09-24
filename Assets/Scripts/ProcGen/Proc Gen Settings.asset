@@ -12,3 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bbc7de4791bd954c9fef2d942749bc0, type: 3}
   m_Name: Proc Gen Settings
   m_EditorClassIdentifier: 
+  m_tiles:
+  - m_prefab: {fileID: 8179856160841986466, guid: d189e2f633dbe534dafc56cd8ba00780, type: 3}
+    m_weight: 1
+  - m_prefab: {fileID: 5361773098791997364, guid: 42b2caea089ac36459b20695f028f9cf, type: 3}
+    m_weight: 1
+  - m_prefab: {fileID: 3382058036634003115, guid: 28e0c8ce1bec1a249a7adfa2dff8462a, type: 3}
+    m_weight: 0.5
+  - m_prefab: {fileID: 705262408038562511, guid: c249b084896b3244a9d960743af26e0e, type: 3}
+    m_weight: 0.005
+  m_width: 20
+  m_depth: 30

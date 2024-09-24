@@ -2,9 +2,9 @@
 
 public class ProcGenTile : MonoBehaviour
 {
-	[Header("Connection Flags")]
-	[SerializeField] bool m_connectUp;
-	[SerializeField] bool m_connectDown;
-	[SerializeField] bool m_connectLeft;
-	[SerializeField] bool m_connectRight;
+	[Header("Connection Points")]
+	public bool m_connectNorth;
+	public bool m_connectSouth;
+	public bool m_connectEast;
+	public bool m_connectWest;
 }
