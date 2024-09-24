@@ -217,7 +217,7 @@ public static class NetworkManager
 	public static void JoinGame(SteamNetworkingIdentity server)
 	{
 		m_mode = ENetworkMode.Client;
-		OnModeChange.Invoke(m_mode);
+		OnModeChange?.Invoke(m_mode);
 
 		// Create client script
 		ClearHostAndClient();

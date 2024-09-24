@@ -41,6 +41,8 @@ public class NetworkObject : MonoBehaviour
 
 			// Add to list
 			NetworkObjectManager.AddNetworkObjectToList(this);
+
+			Debug.Log(m_netID);
 		}
 	}
 

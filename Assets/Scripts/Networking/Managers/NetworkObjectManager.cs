@@ -115,6 +115,12 @@ internal static class NetworkObjectManager
 			sender.m_player = netObj;
 		}
 
+		// Check if local player
+		if (netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity))
+		{
+			NetworkManager.m_localClient.m_player = netObj;
+		}
+
 		// Add to list
 		AddNetworkObjectToList(netObj);
 
