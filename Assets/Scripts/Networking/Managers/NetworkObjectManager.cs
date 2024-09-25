@@ -26,11 +26,6 @@ internal static class NetworkObjectManager
 	internal static void AddNetworkObjectToList(NetworkObject networkObject)
 	{
 		// Find which dict this object goes in
-		if (networkObject.m_prefabIndex == -1)
-		{
-			Debug.LogError("Only network prefabs can be spawned");
-			return;
-		}
 
 		if (networkObject.gameObject.scene.buildIndex == -1)
 		{
@@ -118,6 +113,12 @@ internal static class NetworkObjectManager
 		if (netObj.m_ownerIndentity.Equals(sender.m_identity))
 		{
 			sender.m_player = netObj;
+		}
+
+		// Check if local player
+		if (netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity))
+		{
+			NetworkManager.m_localClient.m_player = netObj;
 		}
 
 		// Add to list
