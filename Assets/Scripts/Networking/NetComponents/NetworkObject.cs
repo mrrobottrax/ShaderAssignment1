@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
 
 public class NetworkObject : MonoBehaviour
@@ -10,7 +11,9 @@ public class NetworkObject : MonoBehaviour
 	[SerializeField, HideInInspector]
 	internal int m_prefabIndex = -1; // Only used by spawned prefabs
 
+	[SerializeField, HideInInspector]
 	internal int m_netID = 0;
+
 	internal SteamNetworkingIdentity m_ownerIndentity;
 
 	internal NetworkBehaviour[] m_networkBehaviours;
@@ -58,6 +61,27 @@ public class NetworkObject : MonoBehaviour
 
 		// Remove from list
 		NetworkObjectManager.RemoveNetworkObjectFromList(this);
+	}
+
+	private void OnValidate()
+	{
+		// Don't run in play mode
+		if (EditorApplication.isPlaying)
+		{
+			return;
+		}
+
+		// Don't run when switching to play mode
+		if (EditorApplication.isPlayingOrWillChangePlaymode)
+		{
+			return;
+		}
+
+		if (!NetworkData.HasSceneGameObject(this) && gameObject.scene.buildIndex != -1)
+		{
+			m_netID = NetworkData.AddSceneObject(this);
+			Debug.Log($"Generating ID for {gameObject.name}. ID: {m_netID}");
+		}
 	}
 
 	void LateTick()

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 internal class NetworkData : ScriptableObject
@@ -12,6 +13,13 @@ internal class NetworkData : ScriptableObject
 	{
 		s_instance = Resources.LoadAll<NetworkData>("")[0];
 	}
+
+	[InitializeOnLoadMethod]
+	static void OnEditorLoad()
+	{
+		s_instance = Resources.LoadAll<NetworkData>("")[0];
+		Debug.Log("Loaded singleton");
+	}
 	#endregion
 
 	[SerializeField] int m_ticksPerSecond = 24;
@@ -19,9 +27,13 @@ internal class NetworkData : ScriptableObject
 	internal const int k_playerPrefabIndex = -256;
 	internal const int k_maxMessages = 64;
 
+	const int k_minSpawnedObjectIDCount = 2000;
+
 	[SerializeField] GameObject m_playerPrefab;
 	[SerializeField] GameObject[] m_networkPrefabs;
 
+
+	[SerializeField] Dictionary<int, NetworkObject> m_reservedNetIDs = new();
 
 	private void OnValidate()
 	{
@@ -62,5 +74,45 @@ internal class NetworkData : ScriptableObject
 	public static float GetTickDelta()
 	{
 		return 1.0f / s_instance.m_ticksPerSecond;
+	}
+
+
+	public static int AddSceneObject(NetworkObject obj)
+	{
+		// Try IDs from int.max
+		for (int i = int.MaxValue; i > k_minSpawnedObjectIDCount; i--)
+		{
+			if (s_instance.m_reservedNetIDs.TryGetValue(i, out NetworkObject obj2))
+			{
+				if (obj2 == null)
+				{
+					s_instance.m_reservedNetIDs[i] = obj;
+					return i;
+				}
+
+				continue;
+			}
+
+			s_instance.m_reservedNetIDs.Add(i, obj);
+			return i;
+		}
+
+		Debug.LogError("Out of IDs for scene objects. This is really fucked up.");
+		return 0;
+	}
+
+	public static bool HasSceneGameObject(NetworkObject obj)
+	{
+		if (s_instance.m_reservedNetIDs.TryGetValue(obj.m_netID, out NetworkObject obj2))
+		{
+			if (obj2.Equals(obj))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		return false;
 	}
 }
