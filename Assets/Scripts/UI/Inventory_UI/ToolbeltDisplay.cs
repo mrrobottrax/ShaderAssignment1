@@ -40,6 +40,20 @@ public class InventoryDisplay : MenuDisplayBase
     }
 
     /// <summary>
+    /// Pairs the display slots with an inventories slots based on the start and end indices
+    /// </summary>
+    public void PairDisplaySlots()
+    {
+        // Loop through each display slot
+        for (int i = 0; i < _displaySlots.Length; i++)
+        {
+            // Cache the display slot
+            InventorySlotDisplay displaySlot = _displaySlots[i];
+            displaySlot.PairSlotToDisplay(pairedInventory.Slots[i], this);
+        }
+    }
+
+    /// <summary>
     /// This method clears the pairing with an inventory and resets the highlighted slot
     /// </summary>
     public void ClearInventoryPairing()
@@ -49,6 +63,14 @@ public class InventoryDisplay : MenuDisplayBase
             pairedInventory.OnSlotChanged -= RefreshSlots;
             pairedInventoryComponent = null;
             pairedInventory = null;
+        }
+
+        // Loop through each display slot
+        for (int i = 0; i < _displaySlots.Length; i++)
+        {
+            // Cache the display slot
+            InventorySlotDisplay displaySlot = _displaySlots[i];
+            displaySlot.ClearDisplayPairing();
         }
     }
     #endregion
@@ -103,10 +125,6 @@ public class InventoryDisplay : MenuDisplayBase
     }
     #endregion
 
-    #region Scroll Methods
-
-    #endregion
-
     #region Slot Display Methods
 
     /// <summary>
@@ -123,6 +141,10 @@ public class InventoryDisplay : MenuDisplayBase
     /// </summary>
     public void SlotPressed(InventorySlotDisplay selectedSlotDisplay)
     {
+        // Ignore clicks on empty slots if there is no previously pressed slot
+        if (prevPressedSlot == null && selectedSlotDisplay.AssignedSlot?.GetSlotsItem() == null)
+            return;
+
         // Transfer item to mouse
         if(prevPressedSlot == null)
         {
@@ -157,21 +179,6 @@ public class InventoryDisplay : MenuDisplayBase
             }
 
             prevPressedSlot = null;
-        }
-    }
-
-    /// <summary>
-    /// Pairs the display slots with an inventories slots based on the start and end indices
-    /// </summary>
-    public void PairDisplaySlots()
-    {
-        // Loop through each display slot
-        for (int i = 0; i < _displaySlots.Length; i++)
-        {
-            // Cache the display slot
-            InventorySlotDisplay displaySlot = _displaySlots[i];
-
-            displaySlot.PairSlot(pairedInventory.Slots[i], this);
         }
     }
     #endregion

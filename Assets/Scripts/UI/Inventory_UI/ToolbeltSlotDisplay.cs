@@ -19,7 +19,7 @@ public class InventorySlotDisplay : MonoBehaviour
     public InventorySlot AssignedSlot;
     private InventoryDisplay toolbeltDisplay;
 
-    #region Button Listeners
+    #region Unity Callbacks
     public void OnEnable()
     {
         _slotsButton?.onClick.AddListener(OnSlotClick);
@@ -43,17 +43,17 @@ public class InventorySlotDisplay : MonoBehaviour
         if (_slotsButton.interactable)
             toolbeltDisplay?.SlotSelected(this);
     }
+    #endregion
 
     public void OnSlotClick()
     {
         toolbeltDisplay?.SlotPressed(this);
     }
-    #endregion
 
     /// <summary>
     /// This method pairs this display slot to an inventory slot
     /// </summary>
-    public void PairSlot(InventorySlot slotAssigned, InventoryDisplay toolbeltDisplay)
+    public void PairSlotToDisplay(InventorySlot slotAssigned, InventoryDisplay toolbeltDisplay)
     {
         // Pair slot
         AssignedSlot = slotAssigned;
@@ -64,6 +64,17 @@ public class InventorySlotDisplay : MonoBehaviour
         // Update visuals
         RefreshContents();
     }
+
+    public void ClearDisplayPairing()
+    {
+        // Remove slot pairing
+        AssignedSlot = null;
+
+        // Update visuals
+        RefreshContents();
+    }
+
+    #region Helper Methods
 
     /// <summary>
     /// This method refreshes the slots visuals to match its contents
@@ -78,7 +89,7 @@ public class InventorySlotDisplay : MonoBehaviour
             {
                 Item_Base slotsItem = AssignedSlot.GetSlotsItem();
 
-                if(_amountText != null)
+                if (_amountText != null)
                 {
                     if (AssignedSlot.GetSlotsItem().GetAmount() > 1)
                         _amountText.text = AssignedSlot.GetSlotsItem().GetAmount().ToString();
@@ -100,8 +111,6 @@ public class InventorySlotDisplay : MonoBehaviour
         _itemImage.gameObject.SetActive(false);
         _itemImage.sprite = null;
     }
-
-    #region Helper Methods
 
     public void SetDisplayInteractable(bool enable)
     {

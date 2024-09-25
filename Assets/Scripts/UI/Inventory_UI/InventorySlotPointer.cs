@@ -1,6 +1,9 @@
+using System;
+
 public class InventorySlotPointer
 {
     private InventorySlot pairedSlot;
+    public Action<InventorySlotPointer> OnPointerChanged;
 
     /// <summary>
     /// Gets the paired inventory slot.
@@ -45,5 +48,7 @@ public class InventorySlotPointer
         {
             ClearPairedSlot();
         }
+
+        OnPointerChanged?.Invoke(this);
     }
 }

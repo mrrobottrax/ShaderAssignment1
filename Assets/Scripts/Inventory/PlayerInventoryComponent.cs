@@ -25,7 +25,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     {
         SetControlsSubscription(true);
 
-        _heldItemSlot.GetPairedSlot().OnSlotChanged += HeldItemSwitch;
+        _heldItemSlot.OnPointerChanged += HeldItemSwitch;
     }
     #endregion
 
@@ -145,16 +145,21 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
         }
     }
 
-    private void HeldItemSwitch(InventorySlot selectedSlot)
+    /// <summary>
+    /// Handles the switching of held items
+    /// </summary>
+    private void HeldItemSwitch(InventorySlotPointer pointer)
     {
-        if (selectedSlot.GetSlotsItem() != null)
+        if (pointer.GetPairedSlot() != null)
         {
-            // Unequip the prev item, then equip the new one.
-            UnequipItem(selectedSlot);
-            TryEquipItem(selectedSlot);
+            if (pointer.GetPairedSlot().GetSlotsItem() != null)
+            {
+                // Unequip the prev item, then equip the new one.
+                UnequipItem(pointer.GetPairedSlot());
+                TryEquipItem(pointer.GetPairedSlot());
+            }
+            else UnequipItem(pointer.GetPairedSlot());
         }
-        else UnequipItem(selectedSlot);
-
     }
     #endregion
 }
