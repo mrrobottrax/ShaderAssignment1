@@ -77,10 +77,12 @@ public class NetworkObject : MonoBehaviour
 			return;
 		}
 
-		if (!NetworkData.HasSceneGameObject(this) && gameObject.scene.buildIndex != -1)
+		if (gameObject.scene.name != null && !NetworkData.HasSceneGameObject(this))
 		{
 			m_netID = NetworkData.AddSceneObject(this);
-			Debug.Log($"Generating ID for {gameObject.name}. ID: {m_netID}");
+			Debug.Log($"Generating ID for \"{gameObject.name}\". ID: {m_netID}");
+			EditorUtility.SetDirty(gameObject);
+			PrefabUtility.RecordPrefabInstancePropertyModifications(gameObject);
 		}
 	}
 

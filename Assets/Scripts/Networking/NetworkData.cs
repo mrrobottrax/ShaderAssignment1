@@ -18,7 +18,15 @@ internal class NetworkData : ScriptableObject
 	static void OnEditorLoad()
 	{
 		s_instance = Resources.LoadAll<NetworkData>("")[0];
-		Debug.Log("Loaded singleton");
+		//Debug.Log("Loaded singleton");
+
+		// Copy lists into dict
+		s_instance.m_unsavedDict = new();
+		for (int i = 0; i < s_instance.m_savedIDs.Count; i++)
+		{
+			GlobalObjectId.TryParse(s_instance.m_savedGlobalIDs[i], out GlobalObjectId id);
+			s_instance.m_unsavedDict.Add(s_instance.m_savedIDs[i],  id);
+		}
 	}
 	#endregion
 
@@ -27,13 +35,15 @@ internal class NetworkData : ScriptableObject
 	internal const int k_playerPrefabIndex = -256;
 	internal const int k_maxMessages = 64;
 
-	const int k_minSpawnedObjectIDCount = 2000;
+	const int k_minSpawnedObjectIDCount = 10000;
 
 	[SerializeField] GameObject m_playerPrefab;
 	[SerializeField] GameObject[] m_networkPrefabs;
 
+	[SerializeField, HideInInspector] List<int> m_savedIDs = new();
+	[SerializeField, HideInInspector] List<string> m_savedGlobalIDs = new();
 
-	[SerializeField] Dictionary<int, NetworkObject> m_reservedNetIDs = new();
+	Dictionary<int, GlobalObjectId> m_unsavedDict = new();
 
 	private void OnValidate()
 	{
@@ -79,22 +89,28 @@ internal class NetworkData : ScriptableObject
 
 	public static int AddSceneObject(NetworkObject obj)
 	{
-		// Try IDs from int.max
-		for (int i = int.MaxValue; i > k_minSpawnedObjectIDCount; i--)
+		// Find a free ID
+		for (int id = int.MaxValue; id > k_minSpawnedObjectIDCount; --id)
 		{
-			if (s_instance.m_reservedNetIDs.TryGetValue(i, out NetworkObject obj2))
+			// Check if there is an entry here
+			if (s_instance.m_unsavedDict.ContainsKey(id))
 			{
-				if (obj2 == null)
-				{
-					s_instance.m_reservedNetIDs[i] = obj;
-					return i;
-				}
-
 				continue;
 			}
 
-			s_instance.m_reservedNetIDs.Add(i, obj);
-			return i;
+			s_instance.m_unsavedDict.Add(id, GlobalObjectId.GetGlobalObjectIdSlow(obj));
+
+			// Save scene objects
+			s_instance.m_savedIDs.Clear();
+			s_instance.m_savedGlobalIDs.Clear();
+			foreach (var item in s_instance.m_unsavedDict)
+			{
+				s_instance.m_savedIDs.Add(item.Key);
+				s_instance.m_savedGlobalIDs.Add(item.Value.ToString());
+			}
+
+			EditorUtility.SetDirty(s_instance);
+			return id;
 		}
 
 		Debug.LogError("Out of IDs for scene objects. This is really fucked up.");
@@ -103,14 +119,14 @@ internal class NetworkData : ScriptableObject
 
 	public static bool HasSceneGameObject(NetworkObject obj)
 	{
-		if (s_instance.m_reservedNetIDs.TryGetValue(obj.m_netID, out NetworkObject obj2))
-		{
-			if (obj2.Equals(obj))
-			{
-				return true;
-			}
+		if (s_instance == null) return true;
 
-			return false;
+		if (s_instance.m_unsavedDict.TryGetValue(obj.m_netID, out GlobalObjectId globalID))
+		{
+			// Check if this is really the same object
+			GlobalObjectId realID = GlobalObjectId.GetGlobalObjectIdSlow(obj);
+
+			if (globalID.Equals(realID)) return true;
 		}
 
 		return false;

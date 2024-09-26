@@ -97,6 +97,7 @@ internal static class SendFunctions
 				AddPeerMessage message = new()
 				{
 					m_steamIdentity = client.m_identity,
+					m_networkID = client.m_player.m_netID
 				};
 
 				NetworkManager.SendMessage(

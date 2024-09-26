@@ -15,12 +15,12 @@ internal class VoiceManager : MonoBehaviour
 	static VoiceManager s_instance;
 	public static VoiceManager Instance { get { return s_instance; } }
 
-	//[RuntimeInitializeOnLoadMethod]
-	//static void Init()
-	//{
-	//	s_instance = new GameObject("Voice Manager").AddComponent<VoiceManager>();
-	//	DontDestroyOnLoad(s_instance);
-	//}
+	[RuntimeInitializeOnLoadMethod]
+	static void Init()
+	{
+		s_instance = new GameObject("Voice Manager").AddComponent<VoiceManager>();
+		DontDestroyOnLoad(s_instance);
+	}
 
 	class PlayerBuffer
 	{
@@ -297,5 +297,6 @@ internal class VoiceManager : MonoBehaviour
 	void OnPCMSetPos(int pos, PlayerBuffer playBuffer)
 	{
 		_ = pos;
+		_ = playBuffer;
 	}
 }
