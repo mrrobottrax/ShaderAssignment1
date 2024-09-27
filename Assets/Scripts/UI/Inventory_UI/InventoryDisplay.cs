@@ -128,10 +128,10 @@ public class InventoryDisplay : MenuDisplayBase
 
     private void OnMousePos(InputAction.CallbackContext context)
     {
-        Vector2 mousePosition = context.ReadValue<Vector2>() + _cursorOffset;
-        mousePosition = _playerCamera.ScreenToWorldPoint(mousePosition);
+        Vector2 mousePosition = context.ReadValue<Vector2>();
+        Camera.main.ScreenToWorldPoint(mousePosition);
 
-        _inventoryCursor.SetCursorPos(mousePosition);
+        _inventoryCursor.SetCursorPos(mousePosition + _cursorOffset);
     }
     #endregion
 
@@ -162,7 +162,10 @@ public class InventoryDisplay : MenuDisplayBase
         if(prevPressedSlot == null)
         {
             prevPressedSlot = selectedSlotDisplay;
+
+            // Stop interactions with the 
             selectedSlotDisplay.SetDisplayInteractable(false);
+            _inventoryCursor.AssignItem(prevPressedSlot.AssignedSlot.GetSlotsItem());
 
             return;
         }
@@ -173,10 +176,15 @@ public class InventoryDisplay : MenuDisplayBase
             {
                 Item_Base item = prevPressedSlot.AssignedSlot.GetSlotsItem();
 
+                // Assign the item to the newly selected slot
                 selectedSlotDisplay.AssignedSlot.AssignItem(item, item.GetAmount());
 
+                // Clear the previously selected slot
                 prevPressedSlot.AssignedSlot.ClearSlot();
                 prevPressedSlot.SetDisplayInteractable(true);
+
+                // Clear inventory cursor
+                _inventoryCursor.ClearCursor();
             }
             else
             {
@@ -185,10 +193,16 @@ public class InventoryDisplay : MenuDisplayBase
                 Item_Base prevItem = prevPressedSlot.AssignedSlot.GetSlotsItem();
                 Item_Base SelectedItem = selectedSlotDisplay.AssignedSlot.GetSlotsItem();
 
+                // Assign the item from the newly selected slot to the previous slot
                 prevPressedSlot.AssignedSlot.AssignItem(SelectedItem, SelectedItem.GetAmount());
+                prevPressedSlot.SetDisplayInteractable(true);
+
+                // Assign the item from the previous slot to the nely selected one
                 selectedSlotDisplay.AssignedSlot.AssignItem(prevItem, prevItem.GetAmount());
 
-                prevPressedSlot.SetDisplayInteractable(true);
+                // Clear inventory cursor
+                _inventoryCursor.ClearCursor();
+
             }
 
             prevPressedSlot = null;
