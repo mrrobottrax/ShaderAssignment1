@@ -15,6 +15,7 @@ public class InventorySlotDisplay : MonoBehaviour
     [SerializeField] private Image _slotImage;
     [SerializeField] private Color32 _defaultColour;
     [SerializeField] private Color32 _highlightedColour;
+    [SerializeField] private Color32 _selectedColour;
 
     [field: Header("Assigned Slot")]
     public InventorySlot AssignedSlot { get; private set; }
@@ -71,6 +72,9 @@ public class InventorySlotDisplay : MonoBehaviour
         RefreshContents();
     }
 
+    /// <summary>
+    /// Removes a display slots pairing to an inventory slot
+    /// </summary>
     public void ClearDisplayPairing()
     {
         // Remove slot pairing
@@ -89,7 +93,7 @@ public class InventorySlotDisplay : MonoBehaviour
     {
         // Display if a slot is the highlighted slot
         if (playerInventoryComponent?.HeldItemSlot != null)
-            _slotImage.color = (playerInventoryComponent.HeldItemSlot == AssignedSlot) ? _highlightedColour : _defaultColour;
+            _slotImage.color = (playerInventoryComponent.HeldItemSlot == AssignedSlot) ? _selectedColour : _defaultColour;
 
         // Check for the slots item to match the display data
         if (AssignedSlot?.GetSlotsItem() != null)

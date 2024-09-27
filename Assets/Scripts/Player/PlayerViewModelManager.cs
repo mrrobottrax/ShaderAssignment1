@@ -12,7 +12,6 @@ public class PlayerViewModelManager : EntityAnimationManager_Base
     [Header("System")]
     private Weapon_Item currentItem;
     private ViewModel_Base currentViewModel;
-    private bool isTransitionInProgress;
 
     private string prevAttackGroup;
     private int currentChain = 0;// The current increment in an attack chain
