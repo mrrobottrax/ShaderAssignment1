@@ -11,13 +11,29 @@ internal class NetworkData : ScriptableObject
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
 	static void OnRuntimeLoad()
 	{
-		s_instance = Resources.LoadAll<NetworkData>("")[0];
+		NetworkData[] data = Resources.LoadAll<NetworkData>("");
+
+		if (data == null)
+		{
+			Debug.LogError("No NetworkData found");
+			return;
+		}
+
+		s_instance = data[0];
 	}
 
 	[InitializeOnLoadMethod]
 	static void OnEditorLoad()
 	{
-		s_instance = Resources.LoadAll<NetworkData>("")[0];
+		NetworkData[] data = Resources.LoadAll<NetworkData>("");
+
+		if (data == null)
+		{
+			Debug.Log("No NetworkData found");
+			return;
+		}
+
+		s_instance = data[0];
 		//Debug.Log("Loaded singleton");
 
 		// Copy lists into dict
