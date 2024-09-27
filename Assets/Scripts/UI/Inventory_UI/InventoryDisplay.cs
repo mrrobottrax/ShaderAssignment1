@@ -16,7 +16,7 @@ public class InventoryDisplay : MenuDisplayBase
     public InventoryComponent PairedInventoryComponent => pairedInventoryComponent;
     protected Inventory pairedInventory;
 
-    private InventorySlotDisplay highlightedSlot;
+    private InventorySlotDisplay prevHighlightedSlot;
     private InventorySlotDisplay prevPressedSlot;
 
     #region Initialization Methods
@@ -57,6 +57,8 @@ public class InventoryDisplay : MenuDisplayBase
     /// </summary>
     public void ClearInventoryPairing()
     {
+        prevHighlightedSlot?.SetDisplayHighlighted(false);
+
         if (pairedInventory != null)
         {
             pairedInventory.OnSlotChanged -= RefreshSlots;
@@ -131,7 +133,10 @@ public class InventoryDisplay : MenuDisplayBase
     /// </summary>
     public void SlotSelected(InventorySlotDisplay selectedSlot)
     {
-        highlightedSlot = selectedSlot;
+        prevHighlightedSlot?.SetDisplayHighlighted(false);
+
+        selectedSlot.SetDisplayHighlighted(true);
+        prevHighlightedSlot = selectedSlot;
     }
 
     /// <summary>

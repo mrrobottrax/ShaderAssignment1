@@ -1,10 +1,9 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlotDisplay : MonoBehaviour
+public class InventorySlotDisplay : MonoBehaviour, IPointerEnterHandler
 {
     [Header("Slot Visuals")]
     [SerializeField] private TextMeshProUGUI _amountText;
@@ -14,8 +13,8 @@ public class InventorySlotDisplay : MonoBehaviour
     [Header("Item State Visuals")]
     [SerializeField] private Image _slotImage;
     [SerializeField] private Color32 _defaultColour;
-    [SerializeField] private Color32 _highlightedColour;
-    [SerializeField] private Color32 _selectedColour;
+    [SerializeField] private Color32 _selectedColour;// Player is using this slot
+    [SerializeField] private Image _highlightOutline;
 
     [field: Header("Assigned Slot")]
     public InventorySlot AssignedSlot { get; private set; }
@@ -24,6 +23,7 @@ public class InventorySlotDisplay : MonoBehaviour
 
 
     #region Unity Callbacks
+
     public void OnEnable()
     {
         _slotsButton?.onClick.AddListener(OnSlotClick);
@@ -47,12 +47,10 @@ public class InventorySlotDisplay : MonoBehaviour
         if (_slotsButton.interactable)
             inventoryDisplay?.SlotSelected(this);
     }
+
     #endregion
 
-    public void OnSlotClick()
-    {
-        inventoryDisplay?.SlotPressed(this);
-    }
+    #region Display Slot Paring Methods
 
     /// <summary>
     /// This method pairs this display slot to an inventory slot
@@ -84,7 +82,30 @@ public class InventorySlotDisplay : MonoBehaviour
         RefreshContents();
     }
 
+    #endregion
+
     #region Helper Methods
+
+    public void OnSlotClick()
+    {
+        inventoryDisplay?.SlotPressed(this);
+    }
+
+    /// <summary>
+    /// Toggles the slot display outline based on if a slot is selected or not.
+    /// </summary>
+    public void SetDisplaySelected(bool isHighlighted)
+    {
+        _highlightOutline.gameObject.SetActive(isHighlighted);
+    }
+
+    /// <summary>
+    /// Changes the slot display colour based on if a slot is highlighted or not.
+    /// </summary>
+    public void SetDisplayHighlighted(bool isSelected)
+    {
+        _slotImage.color = isSelected ? _selectedColour : _defaultColour;
+    }
 
     /// <summary>
     /// This method refreshes the slots visuals to match its contents
@@ -92,8 +113,7 @@ public class InventorySlotDisplay : MonoBehaviour
     private void RefreshContents()
     {
         // Display if a slot is the highlighted slot
-        if (playerInventoryComponent?.HeldItemSlot != null)
-            _slotImage.color = (playerInventoryComponent.HeldItemSlot == AssignedSlot) ? _selectedColour : _defaultColour;
+        SetDisplaySelected(playerInventoryComponent?.HeldItemSlot == AssignedSlot);
 
         // Check for the slots item to match the display data
         if (AssignedSlot?.GetSlotsItem() != null)

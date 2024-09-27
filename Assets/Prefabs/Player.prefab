@@ -621,7 +621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1119213420201043709
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5982,7 +5982,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMin.x
@@ -5990,7 +5990,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6030,11 +6030,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 614.868
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -128
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6051,10 +6051,6 @@ PrefabInstance:
     - target: {fileID: 985970362793341175, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_Name
       value: ToolbeltSlot01
-      objectReference: {fileID: 0}
-    - target: {fileID: 6978472416599673552, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
-      propertyPath: _highlightedColour.rgba
-      value: 4290230199
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6099,7 +6095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMin.x
@@ -6107,7 +6103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6147,11 +6143,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 966.868
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -128
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6169,9 +6165,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToolbeltSlot02
       objectReference: {fileID: 0}
+    - target: {fileID: 5080893091548791670, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080893091548791670, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080893091548791670, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6978472416599673552, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: _highlightedColour.rgba
-      value: 4290230199
+      value: 3776847390
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6216,7 +6224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMin.x
@@ -6224,7 +6232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6264,11 +6272,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1318.8679
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -128
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 275167735315327637, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6286,9 +6294,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToolbeltSlot03
       objectReference: {fileID: 0}
+    - target: {fileID: 5080893091548791670, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080893091548791670, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080893091548791670, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6978472416599673552, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: _highlightedColour.rgba
-      value: 4290230199
+      value: 3776847390
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
