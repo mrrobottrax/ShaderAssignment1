@@ -6,11 +6,11 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private PlayerUIManager _playerUIManager;
 
     [field: Header("Display Types")]
-    [field: SerializeField] public InventoryDisplay ToolBeltDisplay { get; private set; }
+    [field: SerializeField] public InventoryDisplay InventoryDisplay { get; private set; }
 
     public void Start()
     {
-        ToolBeltDisplay.SetDisplayActive(false);
+        InventoryDisplay.SetDisplayActive(false);
     }
 
     /// <summary>
@@ -20,8 +20,8 @@ public class InventoryUI : MonoBehaviour
     {
         if(inventory is PlayerInventoryComponent)
         {
-            ToolBeltDisplay.AssignInventory(inventory);
-            _playerUIManager.SetActiveDisplay(ToolBeltDisplay);
+            InventoryDisplay.AssignInventory(inventory);
+            _playerUIManager.SetActiveDisplay(InventoryDisplay);
         }
     }
 }

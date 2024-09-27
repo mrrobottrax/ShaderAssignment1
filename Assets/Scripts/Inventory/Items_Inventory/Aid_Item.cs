@@ -27,9 +27,4 @@ public class Aid_Item : Item_Base
     {
         return aidData;
     }
-
-    #region Implemented Methods
-
-    public override void ItemsSlotCleared(InventorySlot itemsSlot) { /*Nothing special for this item type*/ }
-    #endregion
 }

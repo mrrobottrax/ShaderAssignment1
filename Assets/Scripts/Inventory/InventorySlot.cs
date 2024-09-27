@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 [Serializable]
@@ -22,6 +23,7 @@ public class InventorySlot
 
         // Subscribe inventory to item changes
         slotsItem.OnItemChanged += SlotChanged;
+        OnSlotChanged.Invoke(this);
     }
 
     /// <summary>
@@ -29,9 +31,6 @@ public class InventorySlot
     /// </summary>
     public void ClearSlot()
     {
-        // Call the items cleared logic
-        slotsItem.ItemsSlotCleared(this);
-
         // Unsub inventory from item changes
         slotsItem.OnItemChanged -= SlotChanged;
 
@@ -63,6 +62,7 @@ public class InventorySlot
             if (total <= 0)
             {
                 ClearSlot();
+                return;
             }
         }
 

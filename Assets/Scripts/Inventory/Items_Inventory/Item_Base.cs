@@ -33,12 +33,6 @@ public abstract class Item_Base
     }
 
     /// <summary>
-    /// This method should be called from the slot when it is cleared
-    /// </summary>
-    /// <param name="itemsSlot">The slot that is being cleared</param>
-    public abstract void ItemsSlotCleared(InventorySlot itemsSlot);
-
-    /// <summary>
     /// Adds a specified amount to the stack
     /// </summary>
     public void AddAmount(int amount)
@@ -73,7 +67,6 @@ public abstract class Item_Base
     }
 
     #region Helper Methods
-
 
     /// <summary>
     /// Gets the item data associated with the current item.

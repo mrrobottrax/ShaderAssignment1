@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,9 +16,11 @@ public class InventorySlotDisplay : MonoBehaviour
     [SerializeField] private Color32 _defaultColour;
     [SerializeField] private Color32 _highlightedColour;
 
-    [Header("Assigned Slot")]
-    public InventorySlot AssignedSlot;
-    private InventoryDisplay toolbeltDisplay;
+    [field: Header("Assigned Slot")]
+    public InventorySlot AssignedSlot { get; private set; }
+    private InventoryDisplay inventoryDisplay;
+    private PlayerInventoryComponent playerInventoryComponent;
+
 
     #region Unity Callbacks
     public void OnEnable()
@@ -34,32 +37,35 @@ public class InventorySlotDisplay : MonoBehaviour
     {
         // Ensure the button can be interacted with before updating anything
         if (_slotsButton.interactable)
-            toolbeltDisplay?.SlotSelected(this);
+            inventoryDisplay?.SlotSelected(this);
     }
 
     public void OnSelect(BaseEventData eventData)
     {
         // Ensure the button can be interacted with before updating anything
         if (_slotsButton.interactable)
-            toolbeltDisplay?.SlotSelected(this);
+            inventoryDisplay?.SlotSelected(this);
     }
     #endregion
 
     public void OnSlotClick()
     {
-        toolbeltDisplay?.SlotPressed(this);
+        inventoryDisplay?.SlotPressed(this);
     }
 
     /// <summary>
     /// This method pairs this display slot to an inventory slot
     /// </summary>
-    public void PairSlotToDisplay(InventorySlot slotAssigned, InventoryDisplay toolbeltDisplay)
+    public void PairSlotToDisplay(int indexVal, Inventory inventory, InventoryDisplay inventoryDisplay)
     {
         // Pair slot
-        AssignedSlot = slotAssigned;
+        AssignedSlot = inventory.Slots[indexVal];
 
         // Cache the inventory display this slot is apart of
-       this.toolbeltDisplay = toolbeltDisplay;
+        this.inventoryDisplay = inventoryDisplay;
+
+        if (inventoryDisplay.PairedInventoryComponent is PlayerInventoryComponent inventoryComponent)
+            playerInventoryComponent = inventoryComponent;
 
         // Update visuals
         RefreshContents();
@@ -81,35 +87,33 @@ public class InventorySlotDisplay : MonoBehaviour
     /// </summary>
     private void RefreshContents()
     {
-        // Ensure this display represents a slot
-        if (AssignedSlot != null)
+        // Display if a slot is the highlighted slot
+        if (playerInventoryComponent?.HeldItemSlot != null)
+            _slotImage.color = (playerInventoryComponent.HeldItemSlot == AssignedSlot) ? _highlightedColour : _defaultColour;
+
+        // Check for the slots item to match the display data
+        if (AssignedSlot?.GetSlotsItem() != null)
         {
-            // Check for the slots item to match the display data
-            if (AssignedSlot.GetSlotsItem() != null)
+            Item_Base slotsItem = AssignedSlot.GetSlotsItem();
+
+            if (_amountText != null)
             {
-                Item_Base slotsItem = AssignedSlot.GetSlotsItem();
-
-                if (_amountText != null)
-                {
-                    if (AssignedSlot.GetSlotsItem().GetAmount() > 1)
-                        _amountText.text = AssignedSlot.GetSlotsItem().GetAmount().ToString();
-                    else _amountText.text = "";
-                }
-
-                _itemImage.sprite = slotsItem.GetItemData().ItemSprite;
-                _itemImage.gameObject.SetActive(true);
-
-                _slotImage.color = (slotsItem is IEquippableItem equipableItem && equipableItem.IsEquipped) ? _highlightedColour : _defaultColour;
-
-                return;
+                if (AssignedSlot.GetSlotsItem().GetAmount() > 1)
+                    _amountText.text = AssignedSlot.GetSlotsItem().GetAmount().ToString();
+                else _amountText.text = "";
             }
+
+            _itemImage.sprite = slotsItem.GetItemData().ItemSprite;
+            _itemImage.gameObject.SetActive(true);
         }
+        else
+        {
+            if (_amountText != null)
+                _amountText.text = "";
 
-        if (_amountText != null)
-            _amountText.text = "";
-
-        _itemImage.gameObject.SetActive(false);
-        _itemImage.sprite = null;
+            _itemImage.gameObject.SetActive(false);
+            _itemImage.sprite = null;
+        }
     }
 
     public void SetDisplayInteractable(bool enable)

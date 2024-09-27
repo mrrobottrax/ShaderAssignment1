@@ -888,6 +888,38 @@ Transform:
   - {fileID: 4081844261828485022}
   m_Father: {fileID: 4653229487973127625}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1483236619561103466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3204570376259778646}
+  m_Layer: 0
+  m_Name: DefinedPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3204570376259778646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483236619561103466}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3076484646958613752}
+  m_Father: {fileID: 508637453519708516}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1560111972455433883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,7 +1524,7 @@ MonoBehaviour:
     - <GroupTitle>k__BackingField: Spear_Throw
       <Attacks>k__BackingField:
       - <AttackData>k__BackingField: {fileID: 11400000, guid: ee1252ec5b558c8419fcf46d6226e4cd, type: 2}
-        <AttackPosition>k__BackingField: {fileID: 0}
+        <AttackPosition>k__BackingField: {fileID: 3076484646958613752}
 --- !u!1 &2332926557876443484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,6 +1556,7 @@ Transform:
   m_Children:
   - {fileID: 1106333749806880464}
   - {fileID: 5429972038137249699}
+  - {fileID: 3204570376259778646}
   m_Father: {fileID: 6727032766827451354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2362428166198945096
@@ -1922,6 +1955,37 @@ Transform:
   m_Children:
   - {fileID: 3945979946760884598}
   m_Father: {fileID: 982453568559543212}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3339631229834806900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3076484646958613752}
+  m_Layer: 0
+  m_Name: SpearThrowPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3076484646958613752
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3339631229834806900}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 1.29}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3204570376259778646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3508623651108395246
 GameObject:
@@ -3373,7 +3437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2abb2c53cfae81e429a36d263cb4ec4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inventorySize: 8
+  _inventorySize: 3
   _playerHealth: {fileID: 5234002548523702153}
   _playerActions: {fileID: 7960464521660854823}
 --- !u!114 &4644058051439156076
@@ -4301,7 +4365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerUIManager: {fileID: 3946763282805279098}
-  <ToolBeltDisplay>k__BackingField: {fileID: 1057811029725686539}
+  <InventoryDisplay>k__BackingField: {fileID: 1057811029725686539}
 --- !u!225 &5529644260982396414
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -5988,6 +6052,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToolbeltSlot01
       objectReference: {fileID: 0}
+    - target: {fileID: 6978472416599673552, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: _highlightedColour.rgba
+      value: 4290230199
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6101,6 +6169,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToolbeltSlot02
       objectReference: {fileID: 0}
+    - target: {fileID: 6978472416599673552, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: _highlightedColour.rgba
+      value: 4290230199
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6213,6 +6285,10 @@ PrefabInstance:
     - target: {fileID: 985970362793341175, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
       propertyPath: m_Name
       value: ToolbeltSlot03
+      objectReference: {fileID: 0}
+    - target: {fileID: 6978472416599673552, guid: 45f118c31f4a6f84b876a1c800fab3ad, type: 3}
+      propertyPath: _highlightedColour.rgba
+      value: 4290230199
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -16,7 +16,6 @@ public class InventoryDisplay : MenuDisplayBase
     public InventoryComponent PairedInventoryComponent => pairedInventoryComponent;
     protected Inventory pairedInventory;
 
-
     private InventorySlotDisplay highlightedSlot;
     private InventorySlotDisplay prevPressedSlot;
 
@@ -49,7 +48,7 @@ public class InventoryDisplay : MenuDisplayBase
         {
             // Cache the display slot
             InventorySlotDisplay displaySlot = _displaySlots[i];
-            displaySlot.PairSlotToDisplay(pairedInventory.Slots[i], this);
+            displaySlot.PairSlotToDisplay(i, pairedInventory, this);
         }
     }
 

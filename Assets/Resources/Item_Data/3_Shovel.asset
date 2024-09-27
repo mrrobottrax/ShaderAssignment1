@@ -15,9 +15,11 @@ MonoBehaviour:
   <ItemID>k__BackingField: 3
   <ItemName>k__BackingField: Shovel
   <ItemSprite>k__BackingField: {fileID: 21300000, guid: 28f3870423875fa45aaf9f05fbf083c0, type: 3}
+  <ItemPrefab>k__BackingField: {fileID: 7377304451960411583, guid: 191167055b00c794580a1193c2061b01, type: 3}
   <ItemDescription>k__BackingField: A shovel with a sturdy iron scoop.
   <MaxAmount>k__BackingField: 1
   <ItemBaseValue>k__BackingField: 50
+  <ItemWeight>k__BackingField: 0
   <BaseDamage>k__BackingField: 10
   <BaseWeaponRange>k__BackingField: 1.5
   <ViewModelID>k__BackingField: 1

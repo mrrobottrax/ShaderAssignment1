@@ -47,8 +47,8 @@ public class RangedWeapon_Item : Weapon_Item
                 RemoveAmount(amount);
 
                 // Update the ammo display
-                if (IsEquipped)
-                    castor.PlayerUIManager.HUDManager.AmmoDisplay.SetDisplay(false, 0, 0, GetAmount());// Show how much is remaining in the stack
+                //if (IsEquipped)
+                   // castor.PlayerUIManager.HUDManager.AmmoDisplay.SetDisplay(false, 0, 0, GetAmount());// Show how much is remaining in the stack
 
                 break;
         }

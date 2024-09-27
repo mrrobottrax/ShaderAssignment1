@@ -8,7 +8,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     [SerializeField] private PlayerActions _playerActions;
 
     [field: Header("Equipment Slot Pointers")]
-    public InventorySlotPointer _heldItemSlot { get; private set; } = new();
+    public InventorySlot HeldItemSlot { get; private set; }
 
     [Header("System")]
     private PlayerUIManager playerUIManager;
@@ -24,8 +24,6 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     private void Start()
     {
         SetControlsSubscription(true);
-
-        _heldItemSlot.OnPointerChanged += HeldItemSwitch;
     }
     #endregion
 
@@ -68,7 +66,7 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
         InventoryUI inventoryUI = playerUIManager.InventoryUI;
 
         // Display the players inventory if it is not already active
-        if (!inventoryUI.ToolBeltDisplay.GetDisplayActive())
+        if (!inventoryUI.InventoryDisplay.GetDisplayActive())
             inventoryUI.DisplayInventory(this);
         else playerUIManager.DisableActiveDisplay(); // Disable the inventory display
     }
@@ -80,22 +78,22 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     {
         int key = (int)context.ReadValue<float>();
 
-        if (Inventory.Slots[key].GetSlotsItem() != null)
+        InventorySlot newSlot = Inventory.Slots[key];
+
+        if (HeldItemSlot != newSlot)
         {
-            TryEquipItem(Inventory.Slots[key]);
+            // Try to unsubsribe to the previous helditem slot's updates if it changed
+            if (HeldItemSlot != null)
+                HeldItemSlot.OnSlotChanged -= OnHighlightedSlotUpdate;
+
+            // Equip an item if a new slot was selected
+            SetEquipSlot(Inventory.Slots[key]);
+
+            // Subsribe to the new helditem slot's updates
+            HeldItemSlot.OnSlotChanged += OnHighlightedSlotUpdate;
+
             _playerActions.SetPlayerReady(true);
-
-            return;
         }
-        else if (_heldItemSlot.GetPairedSlot() != null)
-        {
-            UnequipItem(_heldItemSlot.GetPairedSlot());
-            return;
-        }
-
-        // Pull out arms since an empty slot was pressed
-        _playerActions.SetPlayerReady(true);
-
     }
 
     #endregion
@@ -105,61 +103,46 @@ public class PlayerInventoryComponent : InventoryComponent, IInputHandler
     /// <summary>
     /// This method will attempt to pair a selected slot with the correct pointer slot, based on the items type.
     /// </summary>
-    public void TryEquipItem(InventorySlot itemsSlot)
+    public void SetEquipSlot(InventorySlot itemsSlot)
     {
+        // Try to unequip an item if the selected slot has one
+        TryUnequipItem();
+
+        HeldItemSlot = itemsSlot;
+
         // Check if the selected slots item is equippable
-        if (itemsSlot != null && 
-            itemsSlot != _heldItemSlot.GetPairedSlot() &&
-            itemsSlot.GetSlotsItem() != null && 
-            itemsSlot.GetSlotsItem() is IEquippableItem equippableItem)
-        {
-
-            // Check if a slot was chosen to pair with
-            if (_heldItemSlot != null)
-            {
-                // Try to unequip an item if the selected slot has one
-                if (_heldItemSlot.GetPairedSlot()?.GetSlotsItem() != null)
-                    UnequipItem(_heldItemSlot.GetPairedSlot());
-
-                // Establish the new slot pairing and equip the item
-                _heldItemSlot.SetPairedSlot(itemsSlot);
-                equippableItem.Equip(_playerHealth);
-            }
-        }
+        if (itemsSlot != null && itemsSlot?.GetSlotsItem() is IEquippableItem equippableItem)
+            equippableItem.Equip(_playerHealth);
     }
 
     /// <summary>
     /// Unequips the item from the specified inventory slot and clears any established pairings.
     /// </summary>
     /// <param name="selectedSlot">The slot containing the item to be unequipped.</param>
-    public void UnequipItem(InventorySlot selectedSlot)
+    public void TryUnequipItem()
     {
         // Check if the selected slots item is equippable
-        if (selectedSlot.GetSlotsItem() is IEquippableItem equippableItem)
+        if (HeldItemSlot != null && HeldItemSlot.GetSlotsItem() is IEquippableItem equippableItem)
         {
-            Debug.Log("Try Unequip");
-
             // Unequip the item
-            equippableItem.UnEquip();
-            _heldItemSlot.ClearPairedSlot();
+            equippableItem.UnEquip(_playerHealth);
         }
-    }
-
-    /// <summary>
-    /// Handles the switching of held items
-    /// </summary>
-    private void HeldItemSwitch(InventorySlotPointer pointer)
-    {
-        if (pointer.GetPairedSlot() != null)
-        {
-            if (pointer.GetPairedSlot().GetSlotsItem() != null)
-            {
-                // Unequip the prev item, then equip the new one.
-                UnequipItem(pointer.GetPairedSlot());
-                TryEquipItem(pointer.GetPairedSlot());
-            }
-            else UnequipItem(pointer.GetPairedSlot());
-        }
+        else // Slot is emppty, clear view model.
+            _playerHealth.GetViewModelManager().ClearCurrentViewModel();
     }
     #endregion
+
+    /// <summary>
+    /// Listens for changes in the held items slots state.
+    /// </summary>
+    private void OnHighlightedSlotUpdate(InventorySlot updatedSlot)
+    {
+        if (updatedSlot == HeldItemSlot && HeldItemSlot.GetSlotsItem() != null)
+        {
+            SetEquipSlot(updatedSlot);
+            return;
+        }
+
+        TryUnequipItem();
+    }
 }

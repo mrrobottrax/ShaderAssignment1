@@ -7,7 +7,7 @@ public abstract class ItemData_Base : ScriptableObject
     [field: SerializeField] public int ItemID { get; private set; }
     [field: SerializeField] public string ItemName { get; private set; }
     [field: SerializeField] public Sprite ItemSprite { get; private set; }
-    [field: SerializeField] public GameObject ItemPrefab { get; private set; }
+    [field: SerializeField] public ItemComponent ItemPrefab { get; private set; }
     [field: SerializeField][field: TextArea(10, 15)] public string ItemDescription { get; private set; }
 
     [field: Header("Item Properties")]
