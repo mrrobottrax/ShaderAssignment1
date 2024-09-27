@@ -19,7 +19,7 @@ public class InventorySlotDisplay : MonoBehaviour, IPointerEnterHandler
     [field: Header("Assigned Slot")]
     public InventorySlot AssignedSlot { get; private set; }
     private InventoryDisplay inventoryDisplay;
-    private PlayerInventoryComponent playerInventoryComponent;
+    private InventoryComponent inventoryComponent;
 
 
     #region Unity Callbacks
@@ -62,9 +62,7 @@ public class InventorySlotDisplay : MonoBehaviour, IPointerEnterHandler
 
         // Cache the inventory display this slot is apart of
         this.inventoryDisplay = inventoryDisplay;
-
-        if (inventoryDisplay.PairedInventoryComponent is PlayerInventoryComponent inventoryComponent)
-            playerInventoryComponent = inventoryComponent;
+        inventoryComponent = inventoryDisplay.PairedInventoryComponent;
 
         // Update visuals
         RefreshContents();
@@ -113,7 +111,7 @@ public class InventorySlotDisplay : MonoBehaviour, IPointerEnterHandler
     private void RefreshContents()
     {
         // Display if a slot is the highlighted slot
-        SetDisplaySelected(playerInventoryComponent?.HeldItemSlot == AssignedSlot);
+        SetDisplaySelected(inventoryComponent?.HeldItemSlot == AssignedSlot);
 
         // Check for the slots item to match the display data
         if (AssignedSlot?.GetSlotsItem() != null)

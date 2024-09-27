@@ -11,10 +11,15 @@ public class InventoryDisplay : MenuDisplayBase
     [Header("UI Elements")]
     protected CanvasGroup canvasGroup;
 
-    [field: Header("System")]
-    protected InventoryComponent pairedInventoryComponent;// Inventory and locally organized slots
-    public InventoryComponent PairedInventoryComponent => pairedInventoryComponent;
-    protected Inventory pairedInventory;
+    [Header("Held Item")]
+    [SerializeField] private InventoryCursor _inventoryCursor;
+    [SerializeField] private Vector2 _cursorOffset;
+
+    [Header("Components")]
+    [SerializeField] private Camera _playerCamera;
+
+    // System
+    public InventoryComponent PairedInventoryComponent { get; private set; }
 
     private InventorySlotDisplay prevHighlightedSlot;
     private InventorySlotDisplay prevPressedSlot;
@@ -32,10 +37,8 @@ public class InventoryDisplay : MenuDisplayBase
     public void AssignInventory(InventoryComponent inventoryComp)
     {
         // Store the newly paired inventory
-        pairedInventoryComponent = inventoryComp;
-        pairedInventory = inventoryComp.Inventory;
-
-        pairedInventory.OnSlotChanged += RefreshSlots;
+        PairedInventoryComponent = inventoryComp;
+        PairedInventoryComponent.Inventory.OnSlotChanged += RefreshSlots;
     }
 
     /// <summary>
@@ -48,7 +51,7 @@ public class InventoryDisplay : MenuDisplayBase
         {
             // Cache the display slot
             InventorySlotDisplay displaySlot = _displaySlots[i];
-            displaySlot.PairSlotToDisplay(i, pairedInventory, this);
+            displaySlot.PairSlotToDisplay(i, PairedInventoryComponent.Inventory, this);
         }
     }
 
@@ -59,11 +62,10 @@ public class InventoryDisplay : MenuDisplayBase
     {
         prevHighlightedSlot?.SetDisplayHighlighted(false);
 
-        if (pairedInventory != null)
+        if (PairedInventoryComponent != null)
         {
-            pairedInventory.OnSlotChanged -= RefreshSlots;
-            pairedInventoryComponent = null;
-            pairedInventory = null;
+            PairedInventoryComponent.Inventory.OnSlotChanged -= RefreshSlots;
+            PairedInventoryComponent = null;
         }
 
         // Loop through each display slot
@@ -114,15 +116,22 @@ public class InventoryDisplay : MenuDisplayBase
             Unsubscribe();
     }
 
-
     public override void Subscribe()
     {
-        
+        InputManager.Instance.UI.LookAxis.performed += OnMousePos;
     }
 
     public override void Unsubscribe()
     {
-        
+        InputManager.Instance.UI.LookAxis.performed -= OnMousePos;
+    }
+
+    private void OnMousePos(InputAction.CallbackContext context)
+    {
+        Vector2 mousePosition = context.ReadValue<Vector2>() + _cursorOffset;
+        mousePosition = _playerCamera.ScreenToWorldPoint(mousePosition);
+
+        _inventoryCursor.SetCursorPos(mousePosition);
     }
     #endregion
 

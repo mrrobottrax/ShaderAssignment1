@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerController), typeof(PlayerInventoryComponent))]
+[RequireComponent(typeof(PlayerController), typeof(InventoryComponent))]
 public class PlayerHealth : Entity_Base
 { 
     [field: Header("Components")]
@@ -8,7 +8,7 @@ public class PlayerHealth : Entity_Base
     [field: SerializeField] public FirstPersonCamera FirstPersonCamera { get; private set; }
 
     [field: SerializeField] private PlayerController playerController;
-    [field: SerializeField] private PlayerInventoryComponent playerInventoryComponent;
+    [field: SerializeField] private InventoryComponent inventoryComponent;
     [field: SerializeField] private PlayerViewModelManager playerViewModelManager;
 
     #region Initialization Methods
@@ -36,9 +36,9 @@ public class PlayerHealth : Entity_Base
         return playerController;
     }
 
-    public PlayerInventoryComponent GetPlayerInventory()
+    public InventoryComponent GetPlayerInventory()
     {
-        return playerInventoryComponent;
+        return inventoryComponent;
     }
 
     public FirstPersonCamera GetPlayerCamera()

@@ -18,7 +18,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public void DisplayInventory(InventoryComponent inventory)
     {
-        if(inventory is PlayerInventoryComponent)
+        if(inventory is InventoryComponent)
         {
             InventoryDisplay.AssignInventory(inventory);
             _playerUIManager.SetActiveDisplay(InventoryDisplay);
