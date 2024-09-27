@@ -12,11 +12,18 @@ public class InventoryCursor : MonoBehaviour
         ClearCursor();
     }
 
+    /// <summary>
+    /// Sets the inventory cursors positon
+    /// </summary>
+    /// <param name="pos"></param>
     public void SetCursorPos(Vector3 pos)
     {
         transform.position = pos;
     }
 
+    /// <summary>
+    /// Assigns an items properties to the cursor UI
+    /// </summary>
     public void AssignItem(Item_Base item)
     {
         _amountText.text = item.GetAmount().ToString();
@@ -24,6 +31,9 @@ public class InventoryCursor : MonoBehaviour
         _itemImage.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Clears an items properties from the cursor UI
+    /// </summary>
     public void ClearCursor()
     {
         _amountText.text = "";
