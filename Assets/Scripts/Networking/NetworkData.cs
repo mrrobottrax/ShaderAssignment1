@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 internal class NetworkData : ScriptableObject
@@ -41,7 +42,7 @@ internal class NetworkData : ScriptableObject
 		for (int i = 0; i < s_instance.m_savedIDs.Count; i++)
 		{
 			GlobalObjectId.TryParse(s_instance.m_savedGlobalIDs[i], out GlobalObjectId id);
-			s_instance.m_unsavedDict.Add(s_instance.m_savedIDs[i],  id);
+			s_instance.m_unsavedDict.Add(s_instance.m_savedIDs[i], id);
 		}
 	}
 	#endregion
@@ -102,6 +103,18 @@ internal class NetworkData : ScriptableObject
 		return 1.0f / s_instance.m_ticksPerSecond;
 	}
 
+	static void SaveDict()
+	{
+		s_instance.m_savedIDs.Clear();
+		s_instance.m_savedGlobalIDs.Clear();
+		foreach (var item in s_instance.m_unsavedDict)
+		{
+			s_instance.m_savedIDs.Add(item.Key);
+			s_instance.m_savedGlobalIDs.Add(item.Value.ToString());
+		}
+
+		EditorUtility.SetDirty(s_instance);
+	}
 
 	public static int AddSceneObject(NetworkObject obj)
 	{
@@ -116,16 +129,8 @@ internal class NetworkData : ScriptableObject
 
 			s_instance.m_unsavedDict.Add(id, GlobalObjectId.GetGlobalObjectIdSlow(obj));
 
-			// Save scene objects
-			s_instance.m_savedIDs.Clear();
-			s_instance.m_savedGlobalIDs.Clear();
-			foreach (var item in s_instance.m_unsavedDict)
-			{
-				s_instance.m_savedIDs.Add(item.Key);
-				s_instance.m_savedGlobalIDs.Add(item.Value.ToString());
-			}
+			SaveDict();
 
-			EditorUtility.SetDirty(s_instance);
 			return id;
 		}
 
@@ -146,5 +151,69 @@ internal class NetworkData : ScriptableObject
 		}
 
 		return false;
+	}
+
+	[MenuItem("NetCode/Remove unused IDs")]
+	// todo: re-assign ids to be sequential
+	public static void CleanupIDs()
+	{
+		if (s_instance == null) return;
+
+		HashSet<string> scenes = new();
+		HashSet<string> startingScenes = new();
+
+		// Add all open scenes to set
+		for (int i = 0; i < EditorSceneManager.sceneCount; ++i)
+		{
+			scenes.Add(EditorSceneManager.GetSceneAt(i).path);
+			startingScenes.Add(EditorSceneManager.GetSceneAt(i).path);
+		}
+
+		List<int> removedKeys = new();
+
+		// Check if each object exists
+		foreach (var kv in s_instance.m_unsavedDict)
+		{
+			if (kv.Value.identifierType != 2)
+			{
+				Debug.Log($"{GlobalObjectId.GlobalObjectIdentifierToObjectSlow(kv.Value)} is not a scene object. Removing.");
+				s_instance.m_unsavedDict.Remove(kv.Key);
+				continue;
+			}
+
+			// Load it's scene if it isn't already
+			string scenePath = AssetDatabase.GUIDToAssetPath(kv.Value.assetGUID);
+			if (!scenes.Contains(scenePath))
+			{
+				EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+				scenes.Add(scenePath);
+
+				//Debug.Log($"Loading scene {scenePath}");
+			}
+
+			object obj = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(kv.Value);
+
+			if (obj == null)
+			{
+				Debug.Log($"Removing object from scene: {scenePath}");
+				removedKeys.Add(kv.Key);
+			}
+		}
+
+		foreach (var key in removedKeys)
+		{
+			s_instance.m_unsavedDict.Remove(key);
+		}
+
+		// Unload all scenes except original
+		foreach (string scenePath in scenes)
+		{
+			if (!startingScenes.Contains(scenePath))
+				EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByPath(scenePath), true);
+		}
+
+		SaveDict();
+
+		return;
 	}
 }
