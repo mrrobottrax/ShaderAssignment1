@@ -522,6 +522,24 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""980e2074-2767-40b0-b206-7c4084ee5e34"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire1"",
+                    ""type"": ""Button"",
+                    ""id"": ""c2cf47f7-3c79-4f9d-a1a7-bf2dd5bc2a57"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -843,6 +861,39 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""LookAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfcb59c9-8f35-4858-85ae-16c8d63f19d6"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bae3dae5-fe53-475d-8141-3a5753e1c648"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0cbfc718-1bfa-400b-9b0d-2a14674e1502"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -983,6 +1034,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_UI_LookAxis = m_UI.FindAction("LookAxis", throwIfNotFound: true);
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
+        m_UI_Drop = m_UI.FindAction("Drop", throwIfNotFound: true);
+        m_UI_Fire1 = m_UI.FindAction("Fire1", throwIfNotFound: true);
         // Permanents
         m_Permanents = asset.FindActionMap("Permanents", throwIfNotFound: true);
         m_Permanents_Pause = m_Permanents.FindAction("Pause", throwIfNotFound: true);
@@ -1220,6 +1273,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_LookAxis;
     private readonly InputAction m_UI_ScrollWheel;
     private readonly InputAction m_UI_Navigate;
+    private readonly InputAction m_UI_Drop;
+    private readonly InputAction m_UI_Fire1;
     public struct UIActions
     {
         private @Controls m_Wrapper;
@@ -1228,6 +1283,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @LookAxis => m_Wrapper.m_UI_LookAxis;
         public InputAction @ScrollWheel => m_Wrapper.m_UI_ScrollWheel;
         public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
+        public InputAction @Drop => m_Wrapper.m_UI_Drop;
+        public InputAction @Fire1 => m_Wrapper.m_UI_Fire1;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1249,6 +1306,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Navigate.started += instance.OnNavigate;
             @Navigate.performed += instance.OnNavigate;
             @Navigate.canceled += instance.OnNavigate;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
+            @Fire1.started += instance.OnFire1;
+            @Fire1.performed += instance.OnFire1;
+            @Fire1.canceled += instance.OnFire1;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1265,6 +1328,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Navigate.started -= instance.OnNavigate;
             @Navigate.performed -= instance.OnNavigate;
             @Navigate.canceled -= instance.OnNavigate;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
+            @Fire1.started -= instance.OnFire1;
+            @Fire1.performed -= instance.OnFire1;
+            @Fire1.canceled -= instance.OnFire1;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1377,6 +1446,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnLookAxis(InputAction.CallbackContext context);
         void OnScrollWheel(InputAction.CallbackContext context);
         void OnNavigate(InputAction.CallbackContext context);
+        void OnDrop(InputAction.CallbackContext context);
+        void OnFire1(InputAction.CallbackContext context);
     }
     public interface IPermanentsActions
     {

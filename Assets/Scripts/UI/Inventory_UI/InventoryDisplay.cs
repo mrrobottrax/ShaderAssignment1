@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +9,8 @@ public class InventoryDisplay : MenuDisplayBase
 
     [Header("UI Elements")]
     protected CanvasGroup canvasGroup;
+    [SerializeField] private RectTransform _dropRect;
+    [SerializeField] private CanvasGroup _dropDisplayAlpha;
 
     [Header("Held Item")]
     [SerializeField] private InventoryCursor _inventoryCursor;
@@ -17,6 +18,7 @@ public class InventoryDisplay : MenuDisplayBase
 
     [Header("Components")]
     [SerializeField] private Camera _playerCamera;
+    [SerializeField] private Transform _dropPoint;
 
     // System
     public InventoryComponent PairedInventoryComponent { get; private set; }
@@ -29,6 +31,7 @@ public class InventoryDisplay : MenuDisplayBase
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+        SetDropRectActive(false);
     }
 
     /// <summary>
@@ -100,6 +103,8 @@ public class InventoryDisplay : MenuDisplayBase
         base.OnDisableDisplay();
 
         ClearInventoryPairing();
+
+        SetDropRectActive(false);
     }
     #endregion
 
@@ -119,19 +124,94 @@ public class InventoryDisplay : MenuDisplayBase
     public override void Subscribe()
     {
         InputManager.Instance.UI.LookAxis.performed += OnMousePos;
+
+        InputManager.Instance.UI.Fire1.performed += OnDropInput;
+        InputManager.Instance.UI.Drop.performed += OnDropInput;
     }
 
     public override void Unsubscribe()
     {
         InputManager.Instance.UI.LookAxis.performed -= OnMousePos;
+
+        InputManager.Instance.UI.Fire1.performed -= OnDropInput;
+        InputManager.Instance.UI.Drop.performed -= OnDropInput;
     }
 
+    /// <summary>
+    /// Updates the mouse pos
+    /// </summary>
     private void OnMousePos(InputAction.CallbackContext context)
     {
         Vector2 mousePosition = context.ReadValue<Vector2>();
         Camera.main.ScreenToWorldPoint(mousePosition);
 
+        // Update cursor pos
         _inventoryCursor.SetCursorPos(mousePosition + _cursorOffset);
+
+        // Update drop rect
+        if (_inventoryCursor.HasItem)
+            SetDropRectActive(RectTransformUtility.RectangleContainsScreenPoint(_dropRect, mousePosition));
+    }
+
+    private void OnDropInput(InputAction.CallbackContext context)
+    {
+        bool tryDrop = context.ReadValueAsButton();
+
+        if(tryDrop)
+        {
+            // Check if the mouse is within the rect for Fire1
+            if (_inventoryCursor.HasItem &&
+                _dropDisplayAlpha.alpha == 1 &&
+                context.action == InputManager.Instance.UI.Fire1)
+            {
+                // Mouse drop
+                prevPressedSlot.AssignedSlot.GetSlotsItem().GetItemData().CreateItemObject
+                    (
+                    PairedInventoryComponent.DropPoint.position, 
+                    PairedInventoryComponent.DropPoint.rotation,
+                    prevPressedSlot.AssignedSlot.GetSlotsItem().GetAmount()
+                    );
+
+                // Clear slot
+                prevPressedSlot.AssignedSlot.ClearSlot();
+                prevPressedSlot.SetDisplayInteractable(true);
+
+                prevPressedSlot?.SetDisplayHighlighted(false);
+                prevPressedSlot = null;
+
+                prevHighlightedSlot?.SetDisplayHighlighted(false);
+                prevHighlightedSlot = null;
+
+                RefreshSlots();
+
+                _inventoryCursor.ClearCursor();
+            }
+            else if (prevHighlightedSlot?.AssignedSlot.GetSlotsItem() != null && 
+                context.action == InputManager.Instance.UI.Drop)
+            {
+                // Quick drop
+                prevHighlightedSlot.AssignedSlot.GetSlotsItem().GetItemData().CreateItemObject
+                    (
+                    PairedInventoryComponent.DropPoint.position,
+                    PairedInventoryComponent.DropPoint.rotation,
+                    prevHighlightedSlot.AssignedSlot.GetSlotsItem().GetAmount()
+                    );
+
+                // Clear slot
+                prevHighlightedSlot.AssignedSlot.ClearSlot();
+                prevHighlightedSlot.SetDisplayInteractable(true);
+
+                prevPressedSlot?.SetDisplayHighlighted(false);
+                prevPressedSlot = null;
+
+                prevHighlightedSlot?.SetDisplayHighlighted(false);
+                prevHighlightedSlot = null;
+
+                RefreshSlots();
+
+                _inventoryCursor.ClearCursor();
+            }
+        }
     }
     #endregion
 
@@ -208,6 +288,16 @@ public class InventoryDisplay : MenuDisplayBase
             prevPressedSlot = null;
         }
     }
+    #endregion
+
+    #region Drop Rect Methods
+    
+    private void SetDropRectActive(bool isActive)
+    {
+        _dropDisplayAlpha.alpha = isActive ? 1 : 0;
+    }
+
+
     #endregion
 
     #region Helper Methods

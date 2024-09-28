@@ -19,4 +19,10 @@ public abstract class ItemData_Base : ScriptableObject
     /// This method should be implemented by the children and should specify what type of item type should be created
     /// </summary>
     public abstract Item_Base CreateItemInstance();
+
+    public void CreateItemObject(Vector3 pos, Quaternion rot, int amount)
+    {
+        ItemComponent itemComponent = Instantiate(ItemPrefab, pos, rot, null);
+        itemComponent.SetItemAmount(amount);
+    }
 }

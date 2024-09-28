@@ -10,6 +10,7 @@ public class InventoryComponent : MonoBehaviour
     [SerializeField] private int _inventorySize;    
 
     [field: Header("Components")]
+    [field: SerializeField] public Transform DropPoint { get; private set; }
     [SerializeField] private PlayerHealth _playerHealth;
     [SerializeField] private PlayerActions _playerActions;
 

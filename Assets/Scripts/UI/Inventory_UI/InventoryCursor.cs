@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class InventoryCursor : MonoBehaviour
 {
+    public bool HasItem { get; private set; }
     [SerializeField] private TextMeshProUGUI _amountText;
     [SerializeField] private Image _itemImage;
 
@@ -29,6 +30,8 @@ public class InventoryCursor : MonoBehaviour
         _amountText.text = item.GetAmount().ToString();
         _itemImage.sprite = item.GetItemData().ItemSprite;
         _itemImage.gameObject.SetActive(true);
+
+        HasItem = true;
     }
 
     /// <summary>
@@ -39,5 +42,7 @@ public class InventoryCursor : MonoBehaviour
         _amountText.text = "";
         _itemImage.sprite = null;
         _itemImage.gameObject.SetActive(false);
+
+        HasItem = false;
     }
 }

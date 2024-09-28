@@ -39,4 +39,13 @@ public class ItemComponent : MonoBehaviour, IInteraction
     {
         interactionEnabled = enabled;
     }
+
+    /// <summary>
+    /// Sets the stack size for a physical item to add when picked up
+    /// </summary>
+    /// <param name="amount"></param>
+    public void SetItemAmount(int amount)
+    {
+        _amount = amount;
+    }
 }

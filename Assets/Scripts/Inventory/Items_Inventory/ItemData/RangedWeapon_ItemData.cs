@@ -4,8 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Item", menuName = "Items/Ranged Weapon", order = 3)]
 public class RangedWeapon_ItemData : Weapon_ItemData
 {
-    [field: Space(10)]
-
     [field: Header("Ranged Properites Data")]
     [field: SerializeField] public EConsumeOnFire AmmoType { get; private set; }
     public enum EConsumeOnFire
@@ -33,6 +31,7 @@ public class RangedWeapon_ItemDataEditor : Editor
     SerializedProperty itemID;
     SerializedProperty itemName;
     SerializedProperty itemSprite;
+    SerializedProperty itemPrefab;
     SerializedProperty itemDescription;
     SerializedProperty maxAmount;
     SerializedProperty itemBaseValue;
@@ -54,6 +53,7 @@ public class RangedWeapon_ItemDataEditor : Editor
         itemID = serializedObject.FindProperty("<ItemID>k__BackingField");
         itemName = serializedObject.FindProperty("<ItemName>k__BackingField");
         itemSprite = serializedObject.FindProperty("<ItemSprite>k__BackingField");
+        itemPrefab = serializedObject.FindProperty("<ItemPrefab>k__BackingField");
         itemDescription = serializedObject.FindProperty("<ItemDescription>k__BackingField");
         maxAmount = serializedObject.FindProperty("<MaxAmount>k__BackingField");
         itemBaseValue = serializedObject.FindProperty("<ItemBaseValue>k__BackingField");
@@ -77,6 +77,7 @@ public class RangedWeapon_ItemDataEditor : Editor
         EditorGUILayout.PropertyField(itemID);
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(itemSprite);
+        EditorGUILayout.PropertyField(itemPrefab);
         EditorGUILayout.PropertyField(itemDescription);
         EditorGUILayout.PropertyField(maxAmount);
         EditorGUILayout.PropertyField(itemBaseValue);

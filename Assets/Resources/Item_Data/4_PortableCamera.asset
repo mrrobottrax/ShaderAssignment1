@@ -15,7 +15,7 @@ MonoBehaviour:
   <ItemID>k__BackingField: 4
   <ItemName>k__BackingField: Portable Camera
   <ItemSprite>k__BackingField: {fileID: 21300000, guid: 6bceb9126abd2be41b087ae020d6802e, type: 3}
-  <ItemPrefab>k__BackingField: {fileID: 0}
+  <ItemPrefab>k__BackingField: {fileID: 3097350759587792720, guid: e179357f14036d24ea5051657a1d64dd, type: 3}
   <ItemDescription>k__BackingField: 'A small wooden portable camera that prints polaroid
     photos out of the front. '
   <MaxAmount>k__BackingField: 1
