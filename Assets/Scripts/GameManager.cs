@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public enum EGameState
@@ -39,13 +40,14 @@ public static class GameManager
 
 	public static void GoToLobby()
 	{
-		SceneManager.LoadScene(1);
+		SceneManager.LoadSceneAsync(1);
 		ChangeGameState(EGameState.InLobby);
 	}
 
 	public static void GoToTestLevel()
 	{
 		ChangeGameState(EGameState.InGame);
-		SceneManager.LoadScene("Test Level");
+		SceneManager.LoadSceneAsync("Test Level");
+		Debug.Log("SCENE CHANGE");
 	}
 }

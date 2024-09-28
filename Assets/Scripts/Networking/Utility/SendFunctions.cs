@@ -3,13 +3,14 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using Steamworks;
+using UnityEditor.PackageManager;
 
 internal static class SendFunctions
 {
 	// Send NetVars of a NetworkBehaviour
 	public static void SendNetworkBehaviourUpdate(int networkID, int componentIndex, byte[] data, Peer recepient = null)
 	{
-		byte[] buffer = NetworkBehaviour.CreateMessageBuffer(networkID, componentIndex, data);
+		byte[] buffer = NetworkBehaviour.CreateMessage(networkID, componentIndex, data);
 
 		// Pin the buffer in memory
 		GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
@@ -78,13 +79,22 @@ internal static class SendFunctions
 				ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable
 			);
 		}
+	}
 
-		// Send new objects not included in scene file
-		// todo: this is just all of them
-		foreach (var networkObject in NetworkObjectManager.GetNetObjects())
+	public static void SendFullSnapshot(Peer client = null)
+	{
+		foreach (var obj in NetworkObjectManager.GetSceneNetObjects())
 		{
-			SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerIndentity, client);
-			SendObjectSnapshot(networkObject, client);
+			// Check if this object is part of the scene
+			if (obj.m_prefabIndex == -1)
+			{
+				SendObjectSnapshot(obj, client);
+			}
+			else
+			{
+				SendSpawnPrefab(obj.m_netID, obj.m_prefabIndex, obj.m_ownerIndentity, client);
+				SendObjectSnapshot(obj, client);
+			}
 		}
 	}
 
@@ -114,7 +124,7 @@ internal static class SendFunctions
 	{
 		if (prefabIndex == -1)
 		{
-			//Debug.Log("Trying to spawn NetworkObject not added as a prefab!");
+			Debug.LogError("Trying to spawn NetworkObject not added as a prefab!");
 			return;
 		}
 

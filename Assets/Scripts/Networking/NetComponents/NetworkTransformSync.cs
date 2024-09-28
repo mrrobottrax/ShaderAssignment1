@@ -19,16 +19,20 @@ public class NetworkTransformSync : NetworkBehaviour
 	/// </summary>
 	public bool overrideTransform = false;
 
-	private void Awake()
+	private void Start()
 	{
 		if (IsOwner)
+		{
 			TickManager.OnTick += Tick;
+		}
 	}
 
 	private void OnDestroy()
 	{
 		if (IsOwner)
+		{
 			TickManager.OnTick -= Tick;
+		}
 	}
 
 	private void Tick()

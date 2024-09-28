@@ -35,6 +35,7 @@ public class PlayerController : NetworkBehaviour
 	bool m_isJumpPressed;
 
 	int m_framesStuck = 0;
+	bool m_justJumped;
 
 
 	enum EMovementMode
@@ -64,14 +65,11 @@ public class PlayerController : NetworkBehaviour
 		Assert.IsNotNull(m_movementData);
 		Assert.IsNotNull(m_fpsCamera);
 
-
 		UpdateCollider();
 	}
 
 	void Start()
 	{
-		m_position = transform.position;
-
 		SetControlsSubscription(true);
 	}
 
@@ -205,6 +203,7 @@ public class PlayerController : NetworkBehaviour
 	{
 		m_velocity.y += m_movementData.m_jumpForce;
 		IsGrounded = false;
+		m_justJumped = true;
 	}
 
 	#endregion
@@ -438,6 +437,12 @@ public class PlayerController : NetworkBehaviour
 
 	void GroundCheck()
 	{
+		if (m_justJumped)
+		{
+			IsGrounded = false;
+			return;
+		}
+
 		// Allow for force to knock off the ground
 		if (m_velocity.y > m_movementData.m_knockUpThreshold)
 		{
@@ -531,6 +536,8 @@ public class PlayerController : NetworkBehaviour
 		{
 			AirMove(globalWishDir);
 		}
+
+		m_justJumped = false;
 	}
 
 	private void GroundMove(Vector3 moveDir)
@@ -615,6 +622,7 @@ public class PlayerController : NetworkBehaviour
 		else
 		{
 			m_fpsCamera.Step(m_position.y - startPosition.y);
+			m_velocity.y = Mathf.Max(m_velocity.y, downVelocity.y); // funny quake ramp jumps
 		}
 	}
 
@@ -630,6 +638,7 @@ public class PlayerController : NetworkBehaviour
 	public void Teleport(Vector3 position)
 	{
 		m_position = position;
+		transform.position = m_position;
 	}
 
 	#endregion

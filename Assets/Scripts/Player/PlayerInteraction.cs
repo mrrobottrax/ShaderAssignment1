@@ -17,8 +17,14 @@ public class PlayerInteraction : MonoBehaviour
 	private void Awake()
 	{
 		m_useAction = InputManager.Controls.Player.Use;
+		m_useAction.performed += Use;
 
 		m_uiText.text = null;
+	}
+
+	private void OnDestroy()
+	{
+		m_useAction.performed -= Use;
 	}
 
 	private void Update()
@@ -37,12 +43,25 @@ public class PlayerInteraction : MonoBehaviour
 			if (hit.transform.gameObject.TryGetComponent(out GenericInteractable interactable))
 			{
 				m_uiText.text = interactable.m_text;
+			}
+		}
+	}
 
-				if (m_useAction.ReadValue<float>() > 0)
-				{
-					interactable.OnUse();
-					interactable.m_onUse.Invoke();
-				}
+	void Use(InputAction.CallbackContext ctx)
+	{
+		if (Physics.Raycast(
+			m_camera.position,
+			m_camera.forward,
+			out RaycastHit hit,
+			m_maxDist,
+			m_layerMask,
+			QueryTriggerInteraction.Collide
+		))
+		{
+			if (hit.transform.gameObject.TryGetComponent(out GenericInteractable interactable))
+			{
+				interactable.OnUse();
+				interactable.m_onUse.Invoke();
 			}
 		}
 	}

@@ -18,9 +18,11 @@ public class NetworkObject : MonoBehaviour
 
 	internal NetworkBehaviour[] m_networkBehaviours;
 
+	bool m_initialized = false;
+
 	private void Awake()
 	{
-		TickManager.OnLateTick += LateTick;
+		TickManager.OnSend += Send;
 
 		// Non-prefabs are always owned by server
 		if (m_prefabIndex == -1)
@@ -28,30 +30,30 @@ public class NetworkObject : MonoBehaviour
 			m_ownerIndentity = NetworkManager.GetServerIdentity();
 		}
 
-		InitNetworkBehaviours();
+		// Add to list if a scene object
+		if (m_netID != 0)
+		{
+			NetworkObjectManager.AddNetworkObjectToList(this);
+		}
 	}
 
 	private void Start()
 	{
+		InitNetworkBehaviours();
+
 		if (NetworkManager.Mode == ENetworkMode.Host)
 		{
 			ForceRegister();
 		}
 		else if (m_netID == 0)
 		{
-			// Reserve net ID
-			m_netID = NetworkObjectManager.ReserveID(this);
-
-			// Add to list
-			NetworkObjectManager.AddNetworkObjectToList(this);
-
-			Debug.Log(m_netID);
+			Debug.LogWarning("What");
 		}
 	}
 
 	private void OnDestroy()
 	{
-		TickManager.OnLateTick -= LateTick;
+		TickManager.OnSend -= Send;
 
 		// Notify clients of destruction
 		if (NetworkManager.Mode == ENetworkMode.Host)
@@ -77,6 +79,7 @@ public class NetworkObject : MonoBehaviour
 			return;
 		}
 
+		// Run when in a scene and hasn't run yet
 		if (gameObject.scene.name != null && !NetworkData.HasSceneGameObject(this))
 		{
 			m_netID = NetworkData.AddSceneObject(this);
@@ -86,7 +89,7 @@ public class NetworkObject : MonoBehaviour
 		}
 	}
 
-	void LateTick()
+	void Send()
 	{
 		if (NetworkManager.LocalIdentity.Equals(m_ownerIndentity))
 		{
@@ -109,6 +112,8 @@ public class NetworkObject : MonoBehaviour
 	// Get NetID and add to lists and all that
 	public void ForceRegister()
 	{
+		InitNetworkBehaviours();
+
 		if (m_netID == 0)
 		{
 			// Reserve net ID
@@ -125,6 +130,9 @@ public class NetworkObject : MonoBehaviour
 
 	void InitNetworkBehaviours()
 	{
+		if (m_initialized) return;
+		m_initialized = true;
+
 		m_networkBehaviours = gameObject.GetComponentsInChildren<NetworkBehaviour>();
 
 		for (int i = 0; i < m_networkBehaviours.Length; ++i)

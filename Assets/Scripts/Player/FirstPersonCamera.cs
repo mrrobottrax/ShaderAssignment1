@@ -11,7 +11,7 @@ public class FirstPersonCamera : MonoBehaviour
 	[SerializeField, Range(0.01f, 1)] float m_lookSensePitch = .1f;
 	[SerializeField] float m_pitchMin = -85;
 	[SerializeField] float m_pitchMax = 85;
-	[SerializeField] float m_foreheadSize = 0.2f; // Sinks the camera town from the top of the head
+	[SerializeField] float m_foreheadSize = 0.2f; // Sinks the camera down from the top of the head
 	[SerializeField] float m_duckSpeed = 1;
 	[SerializeField] float m_stepLerpSpeed = 5;
 	[SerializeField] float m_maxStepLerpDist = 0.6f;
@@ -31,8 +31,8 @@ public class FirstPersonCamera : MonoBehaviour
 
 	private void Start()
 	{
-		m_lastPosition = m_followPlayer.GetPosition();
-		m_position = m_followPlayer.GetPosition();
+		m_lastPosition = CalcCameraPos();
+		m_position = m_lastPosition;
 
 		EnableFirstPersonCamera(true);
 	}
@@ -159,6 +159,6 @@ public class FirstPersonCamera : MonoBehaviour
 
 		height += m_stepOffset;
 
-		return m_followPlayer.transform.localToWorldMatrix * new Vector4(0, height, 0, 1);
+		return m_followPlayer.GetPosition() + new Vector3(0, height, 0);
 	}
 }
