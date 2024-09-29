@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class Player : NetworkBehaviour
 {
+	[SerializeField] GameObject m_uiPrefab;
+
 	[SerializeField] GameObject[] m_firstPersonObjects;
 	[SerializeField] GameObject[] m_thirdPersonObjects;
 
@@ -19,6 +21,8 @@ public class Player : NetworkBehaviour
 		{
 			SetLocalOnlyStuffEnabled(true);
 			SceneManager.activeSceneChanged += OnSceneLoad;
+
+			Instantiate(m_uiPrefab, transform);
 
 			TrySpawn();
 		}

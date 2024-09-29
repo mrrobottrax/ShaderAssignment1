@@ -17,15 +17,10 @@ public class InventoryComponent : MonoBehaviour
     [field: Header("Equipment Slot Pointers")]
     public InventorySlot HeldItemSlot { get; private set; }
 
-    [Header("System")]
-    private PlayerUIManager playerUIManager;
-
     #region Initialization Methods
 
     private void Awake()
     {
-        playerUIManager = GetComponentInChildren<PlayerUIManager>();
-
         inventory = new Inventory(_inventorySize);
     }
 
@@ -71,12 +66,12 @@ public class InventoryComponent : MonoBehaviour
     /// </summary>
     private void InventoryInput(InputAction.CallbackContext context)
     {
-        InventoryUI inventoryUI = playerUIManager.InventoryUI;
+        InventoryUI inventoryUI = PlayerUIManager.InventoryUI;
 
         // Display the players inventory if it is not already active
         if (!inventoryUI.InventoryDisplay.GetDisplayActive())
             inventoryUI.DisplayInventory(this);
-        else playerUIManager.DisableActiveDisplay(); // Disable the inventory display
+        else PlayerUIManager.DisableActiveDisplay(); // Disable the inventory display
     }
 
     /// <summary>

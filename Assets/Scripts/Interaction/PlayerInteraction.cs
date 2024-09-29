@@ -10,7 +10,6 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 	[Header("Componenets")]
     [SerializeField] Transform _cameraTransform;
-	private PlayerUIManager playerUIManager;
 	private InteractionDisplay promptDisplay;
 	private PlayerController playerController;
 
@@ -26,7 +25,6 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	private void Awake()
 	{
 		playerController = GetComponent<PlayerController>();
-		playerUIManager = GetComponentInChildren<PlayerUIManager>();
 
         sqrInteractionRange = _interactionRange * _interactionRange;
 
@@ -39,7 +37,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		SetControlsSubscription(true);
 
 		// Cache prompt display
-		promptDisplay = playerUIManager.InteractionPromptDisplay;
+		promptDisplay = PlayerUIManager.InteractionPromptDisplay;
 	}
     #endregion
 
@@ -107,7 +105,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 					hitInteractable = hit.collider.GetComponentInParent<Interactable>();
 
 				// Compare the new interactable to the previous
-				if (hitInteractable.GetInteractions(out bool isUsingCenterApproach).Length > 0 && prevInteractable != hitInteractable)
+				if (hitInteractable.GetInteractions(out bool _).Length > 0 && prevInteractable != hitInteractable)
 					SetCurrentInteractable(hitInteractable);
 			}
 		}
@@ -170,6 +168,10 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	/// <param name="rot">The rotation</param>
 	public void UseInvolvedInteractable(Transform interactionParent = null, Vector3? offset = null, Quaternion? rot = null)
 	{
+		_ = interactionParent;
+		_ = offset;
+		_ = rot;
+
 		SetUsingInteractable(true);
 		//playerController.BeginUsingInvolvedInteractable(interactionParent, offset, rot);
 	}
@@ -181,6 +183,9 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	/// <param name="rot">The rotation they will have after leaving</param>
 	public void LeaveInvolvedInteractable(Vector3? offset = null, Quaternion? rot = null)
 	{
+		_ = offset;
+		_ = rot;
+
 		SetUsingInteractable(false);
 		//playerController.EndUsingInvolvedInteractable(offset, rot);
 	}

@@ -3,68 +3,83 @@ using UnityEngine;
 public class PlayerUIManager : MonoBehaviour
 {
 
-    [field: SerializeField] public InteractionDisplay InteractionPromptDisplay { get; private set; }
-    [field: SerializeField] public PlayerHUDManager HUDManager { get; private set; }
-    [field: SerializeField] public InventoryUI InventoryUI { get; private set; }
+	[SerializeField] InteractionDisplay interactionPromptDisplay;
+	[SerializeField] PlayerHUDManager hudManager;
+	[SerializeField] InventoryUI inventoryUI;
 
-    [Header("System")]
-    private MenuDisplayBase activeDisplay;
-    private PlayerHealth playerHealth;
+	public static InteractionDisplay InteractionPromptDisplay { get { return instance.interactionPromptDisplay; } }
+	public static PlayerHUDManager HUDManager { get { return instance.hudManager; } }
+	public static InventoryUI InventoryUI { get { return instance.inventoryUI; } }
 
-    private void Awake()
-    {
-        playerHealth = GetComponentInParent<PlayerHealth>();
-    }
+	// System
+	private MenuDisplayBase activeDisplay;
+	private PlayerHealth playerHealth;
+	private static PlayerUIManager instance;
 
-    /// <summary>
-    /// This method changes from the active display to a different display
-    /// </summary>
-    public void SetActiveDisplay(MenuDisplayBase newDisplay)
-    {
-        // Disable previous Diplay
-        activeDisplay?.SetDisplayActive(false);
+	private void Awake()
+	{
+		playerHealth = GetComponentInParent<PlayerHealth>();
 
-        // Set new display and execute its activation logic
-        activeDisplay = newDisplay;
-        activeDisplay.SetDisplayActive(true);
+		if (!instance)
+		{
+			instance = this;
+		}
+		else
+		{
+			Debug.LogWarning("Multiple UI managers is scene");
+		}
 
-        InputManager.SetControlMode(InputManager.ControlType.UI);
+	}
 
-        // Disable camera & player movement
-        playerHealth.GetPlayerCamera().EnableFirstPersonCamera(false);
-        playerHealth.GetPlayerController().SetControlsSubscription(false);
+	/// <summary>
+	/// This method changes from the active display to a different display
+	/// </summary>
+	public static void SetActiveDisplay(MenuDisplayBase newDisplay)
+	{
+		// Disable previous Diplay
+		if (instance.activeDisplay) instance.activeDisplay.SetDisplayActive(false);
 
-        // Disable interaction system
-        PlayerInteraction interaction = playerHealth.GetComponent<PlayerInteraction>();
-        interaction.enabled = false;
-        interaction.ClearCurrentInteractable();
-    }
+		// Set new display and execute its activation logic
+		instance.activeDisplay = newDisplay;
+		instance.activeDisplay.SetDisplayActive(true);
 
-    /// <summary>
-    /// This method resets, disables, then clears the active UI Display
-    /// </summary>
-    public void DisableActiveDisplay()
-    {
-        // Execute the disable logic then clear
-        activeDisplay?.SetDisplayActive(false);
-        activeDisplay = null;
+		InputManager.SetControlMode(InputManager.ControlType.UI);
 
-        InputManager.SetControlMode(InputManager.ControlType.Player);
+		// Disable camera & player movement
+		instance.playerHealth.GetPlayerCamera().EnableFirstPersonCamera(false);
+		instance.playerHealth.GetPlayerController().SetControlsSubscription(false);
 
-        // Enable camera & player movement
-        playerHealth.GetPlayerCamera().EnableFirstPersonCamera(true);
-        playerHealth.GetPlayerController().SetControlsSubscription(true);
+		// Disable interaction system
+		PlayerInteraction interaction = instance.playerHealth.GetComponent<PlayerInteraction>();
+		interaction.enabled = false;
+		interaction.ClearCurrentInteractable();
+	}
 
-        // Enable interaction system
-        PlayerInteraction interaction = playerHealth.GetComponent<PlayerInteraction>();
-        interaction.enabled = true;
-    }
+	/// <summary>
+	/// This method resets, disables, then clears the active UI Display
+	/// </summary>
+	public static void DisableActiveDisplay()
+	{
+		// Execute the disable logic then clear
+		if (instance.activeDisplay) instance.activeDisplay.SetDisplayActive(false);
+		instance.activeDisplay = null;
 
-    /// <summary>
-    /// This method returns the active display
-    /// </summary>
-    public MenuDisplayBase GetActiveDisplay()
-    {
-        return activeDisplay;
-    }
+		InputManager.SetControlMode(InputManager.ControlType.Player);
+
+		// Enable camera & player movement
+		instance.playerHealth.GetPlayerCamera().EnableFirstPersonCamera(true);
+		instance.playerHealth.GetPlayerController().SetControlsSubscription(true);
+
+		// Enable interaction system
+		PlayerInteraction interaction = instance.playerHealth.GetComponent<PlayerInteraction>();
+		interaction.enabled = true;
+	}
+
+	/// <summary>
+	/// This method returns the active display
+	/// </summary>
+	public static MenuDisplayBase GetActiveDisplay()
+	{
+		return instance.activeDisplay;
+	}
 }
