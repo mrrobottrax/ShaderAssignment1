@@ -2,6 +2,7 @@
 using Steamworks;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System;
 
 public enum ENetworkMode
 {
@@ -15,7 +16,7 @@ public static class NetworkManager
 	static Callback<GameRichPresenceJoinRequested_t> m_GameRichPresenceJoinRequested;
 
 	internal static Host m_host;
-	internal static LocalClient m_localClient;
+	internal static Client m_localClient;
 	internal static ENetworkMode m_mode;
 	internal static SteamNetworkingIdentity m_localIdentity;
 
@@ -68,20 +69,18 @@ public static class NetworkManager
 
 	public static void SendMessageAll<T>(EMessageType messageType, T message, ESteamNetworkingSend sendType) where T : struct
 	{
-		// Pin the message object in memory
-		GCHandle handle = GCHandle.Alloc(message, GCHandleType.Pinned);
+		IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
+
 		try
 		{
-			// Get the pointer to the message object
-			System.IntPtr pMessage = handle.AddrOfPinnedObject();
+			Marshal.StructureToPtr(message, ptr, false);
 
 			// Send the message
-			SendMessageAll(messageType, pMessage, Marshal.SizeOf(message), sendType);
+			SendMessageAll(messageType, ptr, Marshal.SizeOf(message), sendType);
 		}
 		finally
 		{
-			// Free the pinned object
-			handle.Free();
+			Marshal.FreeHGlobal(ptr);
 		}
 	}
 
@@ -111,7 +110,6 @@ public static class NetworkManager
 					SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
 				}
 			}
-
 		}
 		finally
 		{
@@ -121,20 +119,18 @@ public static class NetworkManager
 
 	public static void SendMessage<T>(EMessageType messageType, T message, ESteamNetworkingSend sendType, HSteamNetConnection hConn) where T : struct
 	{
-		// Pin the message object in memory
-		GCHandle handle = GCHandle.Alloc(message, GCHandleType.Pinned);
+		IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
+
 		try
 		{
-			// Get the pointer to the message object
-			System.IntPtr pMessage = handle.AddrOfPinnedObject();
+			Marshal.StructureToPtr(message, ptr, false);
 
 			// Send the message
-			SendMessage(messageType, pMessage, Marshal.SizeOf(message), sendType, hConn);
+			SendMessage(messageType, ptr, Marshal.SizeOf(message), sendType, hConn);
 		}
 		finally
 		{
-			// Free the pinned object
-			handle.Free();
+			Marshal.FreeHGlobal(ptr);
 		}
 	}
 
@@ -166,7 +162,6 @@ public static class NetworkManager
 	}
 
 	#endregion
-
 
 	#region API
 
@@ -202,7 +197,7 @@ public static class NetworkManager
 		}
 	}
 
-	public static void StartHosting()
+	public static void StartHosting(bool spawnPlayerImmediate = false)
 	{
 		m_mode = ENetworkMode.Host;
 		OnModeChange?.Invoke(m_mode);
@@ -212,6 +207,9 @@ public static class NetworkManager
 
 		m_host = new GameObject("Host Logic").AddComponent<Host>();
 		UnityEngine.Object.DontDestroyOnLoad(m_host.gameObject);
+
+		if (spawnPlayerImmediate)
+			m_host.AddPlayer();
 	}
 
 	public static void JoinGame(SteamNetworkingIdentity server)
@@ -222,7 +220,7 @@ public static class NetworkManager
 		// Create client script
 		ClearHostAndClient();
 
-		m_localClient = new GameObject("Client Logic").AddComponent<LocalClient>();
+		m_localClient = new GameObject("Client Logic").AddComponent<Client>();
 		UnityEngine.Object.DontDestroyOnLoad(m_localClient.gameObject);
 
 		m_localClient.Connect(server);

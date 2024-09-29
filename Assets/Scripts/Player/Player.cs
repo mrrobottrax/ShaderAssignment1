@@ -20,7 +20,7 @@ public class Player : NetworkBehaviour
 			SetLocalOnlyStuffEnabled(true);
 			SceneManager.activeSceneChanged += OnSceneLoad;
 
-			OnSceneLoad(SceneManager.GetSceneAt(0), SceneManager.GetActiveScene());
+			TrySpawn();
 		}
 		else
 		{
@@ -51,8 +51,19 @@ public class Player : NetworkBehaviour
 
 	void OnSceneLoad(Scene old, Scene newScene)
 	{
+		TrySpawn();
+	}
+
+	void TrySpawn()
+	{
 		GameObject spawn = GameObject.FindGameObjectWithTag("Player Spawn");
 		if (spawn != null)
-			m_controller.Teleport(spawn.transform.position);
+		{
+			m_controller.Teleport(spawn.transform.position + Vector3.up * 0.05f);
+		}
+		else
+		{
+			Debug.LogWarning("No spawn found in level");
+		}
 	}
 }

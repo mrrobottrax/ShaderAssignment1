@@ -1,6 +1,6 @@
-﻿using Steamworks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 internal static class NetworkObjectManager
 {
@@ -10,6 +10,15 @@ internal static class NetworkObjectManager
 	readonly static Dictionary<int, NetworkObject> m_netObjects = new();
 	readonly static Dictionary<int, NetworkObject> m_persistentNetObjects = new(); // DontDestroyOnLoad, includes players
 
+	public static void Init()
+	{
+		SceneManager.activeSceneChanged += SceneChange;
+	}
+
+	static void SceneChange(Scene oldScene, Scene newScene)
+	{
+		m_lastID = 0;
+	}
 
 	public static NetworkObject GetNetworkObject(int networkID)
 	{
@@ -39,7 +48,14 @@ internal static class NetworkObjectManager
 
 	internal static void RemoveNetworkObjectFromList(NetworkObject networkObject)
 	{
-		GetNetworkObject(networkObject.m_netID);
+		if (networkObject.m_netID < 0)
+		{
+			m_persistentNetObjects.Remove(networkObject.m_netID);
+		}
+		else
+		{
+			m_netObjects.Remove(networkObject.m_netID);
+		}
 	}
 
 	internal static int ReserveID(NetworkObject networkObject)
@@ -67,7 +83,7 @@ internal static class NetworkObjectManager
 		m_lastPersistentID = 0;
 	}
 
-	internal static Dictionary<int, NetworkObject>.ValueCollection GetNetObjects()
+	internal static Dictionary<int, NetworkObject>.ValueCollection GetSceneNetObjects()
 	{
 		return m_netObjects.Values;
 	}
@@ -108,6 +124,8 @@ internal static class NetworkObjectManager
 		{
 			Object.DontDestroyOnLoad(goPrefab);
 		}
+
+		netObj.InitNetworkBehaviours();
 
 		// Players get added to dictionary
 		if (netObj.m_ownerIndentity.Equals(sender.m_identity))

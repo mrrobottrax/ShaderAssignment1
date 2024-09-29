@@ -16,11 +16,12 @@ public enum ESteamNetworkingSend : int
 	k_nSteamNetworkingSend_ReliableNoNagle = k_nSteamNetworkingSend_Reliable | k_nSteamNetworkingSend_NoNagle
 }
 
-public class Peer
+internal class Peer
 {
 	internal HSteamNetConnection m_hConn;
 	internal SteamNetworkingIdentity m_identity;
 	internal NetworkObject m_player;
+	internal bool m_loading = true;
 
 	public Peer(HSteamNetConnection hConn, SteamNetworkingIdentity identity, NetworkObject player)
 	{

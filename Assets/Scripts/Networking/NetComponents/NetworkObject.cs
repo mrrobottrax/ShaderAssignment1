@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
 
 public class NetworkObject : MonoBehaviour
@@ -10,14 +11,18 @@ public class NetworkObject : MonoBehaviour
 	[SerializeField, HideInInspector]
 	internal int m_prefabIndex = -1; // Only used by spawned prefabs
 
+	[SerializeField, HideInInspector]
 	internal int m_netID = 0;
+
 	internal SteamNetworkingIdentity m_ownerIndentity;
 
 	internal NetworkBehaviour[] m_networkBehaviours;
 
+	bool m_initialized = false;
+
 	private void Awake()
 	{
-		TickManager.OnLateTick += LateTick;
+		TickManager.OnSend += Send;
 
 		// Non-prefabs are always owned by server
 		if (m_prefabIndex == -1)
@@ -25,30 +30,26 @@ public class NetworkObject : MonoBehaviour
 			m_ownerIndentity = NetworkManager.GetServerIdentity();
 		}
 
-		InitNetworkBehaviours();
+		// Add to list if a scene object
+		if (m_netID != 0)
+		{
+			NetworkObjectManager.AddNetworkObjectToList(this);
+		}
 	}
 
 	private void Start()
 	{
+		InitNetworkBehaviours();
+
 		if (NetworkManager.Mode == ENetworkMode.Host)
 		{
 			ForceRegister();
-		}
-		else if (m_netID == 0)
-		{
-			// Reserve net ID
-			m_netID = NetworkObjectManager.ReserveID(this);
-
-			// Add to list
-			NetworkObjectManager.AddNetworkObjectToList(this);
-
-			Debug.Log(m_netID);
 		}
 	}
 
 	private void OnDestroy()
 	{
-		TickManager.OnLateTick -= LateTick;
+		TickManager.OnSend -= Send;
 
 		// Notify clients of destruction
 		if (NetworkManager.Mode == ENetworkMode.Host)
@@ -60,7 +61,31 @@ public class NetworkObject : MonoBehaviour
 		NetworkObjectManager.RemoveNetworkObjectFromList(this);
 	}
 
-	void LateTick()
+	private void OnValidate()
+	{
+		// Don't run in play mode
+		if (EditorApplication.isPlaying)
+		{
+			return;
+		}
+
+		// Don't run when switching to play mode
+		if (EditorApplication.isPlayingOrWillChangePlaymode)
+		{
+			return;
+		}
+
+		// Run when in a scene and hasn't run yet
+		if (gameObject.scene.name != null && !NetworkData.HasSceneGameObject(this))
+		{
+			m_netID = NetworkData.AddSceneObject(this);
+			Debug.Log($"Generating ID for \"{gameObject.name}\". ID: {m_netID}");
+			EditorUtility.SetDirty(gameObject);
+			PrefabUtility.RecordPrefabInstancePropertyModifications(gameObject);
+		}
+	}
+
+	void Send()
 	{
 		if (NetworkManager.LocalIdentity.Equals(m_ownerIndentity))
 		{
@@ -83,6 +108,8 @@ public class NetworkObject : MonoBehaviour
 	// Get NetID and add to lists and all that
 	public void ForceRegister()
 	{
+		InitNetworkBehaviours();
+
 		if (m_netID == 0)
 		{
 			// Reserve net ID
@@ -97,8 +124,11 @@ public class NetworkObject : MonoBehaviour
 		}
 	}
 
-	void InitNetworkBehaviours()
+	internal void InitNetworkBehaviours()
 	{
+		if (m_initialized) return;
+		m_initialized = true;
+
 		m_networkBehaviours = gameObject.GetComponentsInChildren<NetworkBehaviour>();
 
 		for (int i = 0; i < m_networkBehaviours.Length; ++i)

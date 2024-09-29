@@ -7,7 +7,7 @@ internal static class EditorAutoHost
 	{
 #if UNITY_EDITOR
 		if (SceneManager.GetActiveScene().buildIndex != 0)
-			NetworkManager.StartHosting();
+			NetworkManager.StartHosting(true);
 #endif
 	}
 }

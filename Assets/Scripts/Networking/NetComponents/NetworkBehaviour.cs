@@ -35,7 +35,6 @@ public abstract class NetworkBehaviour : MonoBehaviour
 				IntPtr pData = Marshal.AllocHGlobal(size);
 				try
 				{
-
 					Marshal.StructureToPtr(value, pData, false);
 					Marshal.Copy(pData, buffer, offset, size);
 				}
@@ -142,7 +141,7 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		}
 	}
 
-	internal static byte[] CreateMessageBuffer(int networkID, int componentIndex, byte[] data)
+	internal static byte[] CreateMessage(int networkID, int componentIndex, byte[] data)
 	{
 		NetworkBehaviourUpdateMessage message = new()
 		{

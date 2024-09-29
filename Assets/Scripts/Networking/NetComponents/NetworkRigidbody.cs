@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class NetworkRigidbody : NetworkBehaviour
 {
 	Rigidbody m_rigidbody;
