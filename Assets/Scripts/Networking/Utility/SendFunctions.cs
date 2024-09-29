@@ -124,7 +124,7 @@ internal static class SendFunctions
 	{
 		if (prefabIndex == -1)
 		{
-			Debug.LogError("Trying to spawn NetworkObject not added as a prefab!");
+			Debug.LogError($"Trying to spawn NetworkObject not added as a prefab! {prefabIndex} : {networkID}");
 			return;
 		}
 

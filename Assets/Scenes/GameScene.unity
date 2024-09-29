@@ -673,9 +673,9 @@ GameObject:
   - component: {fileID: 2009111441}
   - component: {fileID: 2009111440}
   - component: {fileID: 2009111446}
-  - component: {fileID: 2009111445}
   - component: {fileID: 2009111444}
   - component: {fileID: 2009111447}
+  - component: {fileID: 2009111448}
   m_Layer: 0
   m_Name: Synced Object
   m_TagString: Untagged
@@ -782,20 +782,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overrideTransform: 0
---- !u!114 &2009111445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2009111439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a07c115402beb8419e366061c756f6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_prefabIndex: -1
-  m_netID: 2147483647
 --- !u!54 &2009111446
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -835,6 +821,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91674231dac9db848a0db9612a37160f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2009111448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009111439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a07c115402beb8419e366061c756f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_prefabIndex: -1
+  m_netID: 2147483645
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
