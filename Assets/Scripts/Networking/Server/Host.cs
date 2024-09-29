@@ -114,8 +114,6 @@ internal class Host : MonoBehaviour
 
 	private void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t pCallback)
 	{
-		Debug.Log("Connection state changed to " + pCallback.m_info.m_eState);
-
 		if (pCallback.m_eOldState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_None &&
 			pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connecting)
 		{
@@ -134,7 +132,6 @@ internal class Host : MonoBehaviour
 				NetworkObject player = SpawnPlayer(pCallback.m_info.m_identityRemote);
 				client = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, player);
 				NetworkManager.m_peers.Add(pCallback.m_info.m_identityRemote, client);
-				Debug.LogWarning("Peer added from host");
 			}
 			else
 			{
@@ -199,8 +196,8 @@ internal class Host : MonoBehaviour
 				}
 				else
 				{
-					Debug.Log($"Client {sender.m_identity} is stupid and on the wrong scene. Correct scene is " +
-						$"{SceneManager.GetActiveScene().buildIndex}. Client is on {sceneChange.m_sceneIndex}.");
+					Debug.LogWarning($"Client {sender.m_identity} is stupid and on the wrong scene. Correct scene is " +
+						$"{SceneManager.GetActiveScene().buildIndex}. Client is on {sceneChange.m_sceneIndex}. Report if you see this.");
 				}
 				break;
 

@@ -1,5 +1,6 @@
 ﻿using Steamworks;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEditor.PackageManager;
@@ -12,7 +13,8 @@ internal class Client : MonoBehaviour
 
 	HSteamListenSocket m_listenSocket;
 	bool m_ignoreObjectUpdates = false;
-	Queue<SteamNetworkingMessage_t> m_messageBackup = new();
+
+	Queue<Tuple<IntPtr, Peer>> m_messageBackup = new();
 
 	internal SteamNetworkingIdentity m_serverID;
 
@@ -62,7 +64,24 @@ internal class Client : MonoBehaviour
 
 	private void OnSceneLoad(Scene scene, LoadSceneMode mode)
 	{
+		StartCoroutine(FinishLoadingNextFrame());
+	}
+
+	// Has to wait for Awake and Start
+	IEnumerator FinishLoadingNextFrame()
+	{
+		yield return null;
+
 		m_ignoreObjectUpdates = false;
+
+		// Run through queue
+		while (m_messageBackup.TryDequeue(out var message))
+		{
+			SteamNetworkingMessage_t mess = Marshal.PtrToStructure<SteamNetworkingMessage_t>(message.Item1);
+			ProcessMessage(mess, message.Item2);
+
+			SteamNetworkingMessage_t.Release(message.Item1);
+		}
 
 		// Tell the server we've loaded
 		// (if we don't have a player yet, the load message is sent when we spawn)
@@ -83,14 +102,19 @@ internal class Client : MonoBehaviour
 		{
 			SteamNetworkingMessage_t message = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pMessages[i]);
 
-			ProcessMessage(message, sender);
-
-			// Free data
-			SteamNetworkingMessage_t.Release(pMessages[i]);
+			if (ProcessMessage(message, sender))
+			{
+				// Free data
+				SteamNetworkingMessage_t.Release(pMessages[i]);
+			}
+			else
+			{
+				m_messageBackup.Enqueue(new Tuple<IntPtr, Peer>(pMessages[i], sender));
+			}
 		}
 	}
 
-	void ProcessMessage(SteamNetworkingMessage_t message, Peer sender)
+	bool ProcessMessage(SteamNetworkingMessage_t message, Peer sender)
 	{
 		EMessageType type = (EMessageType)Marshal.ReadByte(message.m_pData);
 
@@ -99,15 +123,13 @@ internal class Client : MonoBehaviour
 			// Load scene
 			case EMessageType.SceneChange:
 				SceneChangeMessage sceneChange = Marshal.PtrToStructure<SceneChangeMessage>(message.m_pData + 1);
-				Debug.Log("Scene change " + sceneChange.m_sceneIndex);
-
 				SceneManager.LoadSceneAsync(sceneChange.m_sceneIndex);
 				m_ignoreObjectUpdates = true;
 				break;
 
 			// Spawn a network prefab
 			case EMessageType.SpawnPrefab:
-				if (m_ignoreObjectUpdates) { m_messageBackup.Enqueue(message); break; }
+				if (m_ignoreObjectUpdates) return false;
 
 				SpawnPrefabMessage spawnPrefab = Marshal.PtrToStructure<SpawnPrefabMessage>(message.m_pData + 1);
 				Debug.Log("Object spawn " + spawnPrefab.m_networkID + " : " + spawnPrefab.m_prefabIndex);
@@ -126,7 +148,7 @@ internal class Client : MonoBehaviour
 
 			// Delete a network object
 			case EMessageType.RemoveGameObject:
-				if (m_ignoreObjectUpdates) { m_messageBackup.Enqueue(message); break; }
+				if (m_ignoreObjectUpdates) return false;
 
 				RemoveObjectMessage removeObject = Marshal.PtrToStructure<RemoveObjectMessage>(message.m_pData + 1);
 				Debug.Log("Remove object " + removeObject.m_networkID);
@@ -136,7 +158,7 @@ internal class Client : MonoBehaviour
 
 			// Update a network behaviour
 			case EMessageType.NetworkBehaviourUpdate:
-				if (m_ignoreObjectUpdates) { m_messageBackup.Enqueue(message); break; }
+				if (m_ignoreObjectUpdates) return false;
 
 				NetworkBehaviour.ProcessUpdateMessage(message);
 				break;
@@ -144,7 +166,7 @@ internal class Client : MonoBehaviour
 			// Connect to another peer
 			case EMessageType.AddPeer:
 				AddPeerMessage connectMessage = Marshal.PtrToStructure<AddPeerMessage>(message.m_pData + 1);
-				Debug.LogWarning("Connecting to peer " + connectMessage.m_steamIdentity.GetSteamID64());
+				Debug.Log("Connecting to peer " + connectMessage.m_steamIdentity.GetSteamID64());
 
 				SteamNetworkingSockets.ConnectP2P(ref connectMessage.m_steamIdentity, 0, 0, null);
 				break;
@@ -159,12 +181,12 @@ internal class Client : MonoBehaviour
 				Debug.LogWarning("Unknown message type " + type);
 				break;
 		}
+
+		return true;
 	}
 
 	void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t pCallback)
 	{
-		Debug.Log("Connection state changed to " + pCallback.m_info.m_eState);
-
 		if (pCallback.m_eOldState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_None &&
 			pCallback.m_info.m_eState == ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connecting)
 		{
@@ -179,7 +201,6 @@ internal class Client : MonoBehaviour
 		{
 			Peer peer = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, null);
 			NetworkManager.m_peers.Add(pCallback.m_info.m_identityRemote, peer);
-			Debug.LogWarning("Peer added from client");
 		}
 	}
 

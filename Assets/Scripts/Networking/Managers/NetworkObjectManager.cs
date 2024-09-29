@@ -125,6 +125,8 @@ internal static class NetworkObjectManager
 			Object.DontDestroyOnLoad(goPrefab);
 		}
 
+		netObj.InitNetworkBehaviours();
+
 		// Players get added to dictionary
 		if (netObj.m_ownerIndentity.Equals(sender.m_identity))
 		{

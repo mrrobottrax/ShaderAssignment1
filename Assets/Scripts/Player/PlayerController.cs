@@ -21,7 +21,7 @@ public class PlayerController : NetworkBehaviour
 	[SerializeField] FirstPersonCamera m_fpsCamera;
 	Rigidbody m_rigidbody;
 	BoxCollider m_collider;
-	Animator m_animator;
+	NetworkAnimator m_animator;
 
 	// System
 	public bool IsCrouching { get; private set; }
@@ -53,7 +53,7 @@ public class PlayerController : NetworkBehaviour
 	{
 		m_rigidbody = GetComponent<Rigidbody>();
 		m_collider = GetComponent<BoxCollider>();
-		m_animator = GetComponent<Animator>();
+		m_animator = GetComponent<NetworkAnimator>();
 
 		m_rigidbody.isKinematic = true;
 		m_rigidbody.freezeRotation = true;

@@ -45,10 +45,6 @@ public class NetworkObject : MonoBehaviour
 		{
 			ForceRegister();
 		}
-		else if (m_netID == 0)
-		{
-			Debug.LogWarning("What");
-		}
 	}
 
 	private void OnDestroy()
@@ -128,7 +124,7 @@ public class NetworkObject : MonoBehaviour
 		}
 	}
 
-	void InitNetworkBehaviours()
+	internal void InitNetworkBehaviours()
 	{
 		if (m_initialized) return;
 		m_initialized = true;

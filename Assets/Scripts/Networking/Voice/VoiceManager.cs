@@ -68,7 +68,7 @@ internal class VoiceManager : MonoBehaviour
 
 	public void StartRecording()
 	{
-		Debug.Log("Start recording");
+		Debug.Log("Start recording voice");
 
 		SteamUser.StartVoiceRecording();
 		m_sampleRate = SteamUser.GetVoiceOptimalSampleRate();
@@ -82,7 +82,7 @@ internal class VoiceManager : MonoBehaviour
 
 	public void StopRecording()
 	{
-		Debug.Log("Stop recording");
+		Debug.Log("Stop recording voice");
 
 		SteamUser.StopVoiceRecording();
 		m_recording = false;
