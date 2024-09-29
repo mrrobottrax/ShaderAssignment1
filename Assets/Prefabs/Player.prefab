@@ -2508,7 +2508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_prefabIndex: -256
-  m_netID: 2147483643
+  m_netID: 2147483621
 --- !u!114 &2965891379874120525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2554,7 +2554,6 @@ MonoBehaviour:
   maxHealth: 100
   _gatherHurtboxesOnInit: 0
   _hurtBoxes: []
-  <PlayerUIManager>k__BackingField: {fileID: 0}
   <FirstPersonCamera>k__BackingField: {fileID: 3701271248387694150}
   playerController: {fileID: 2944094973486998542}
   inventoryComponent: {fileID: 6881243833106477115}

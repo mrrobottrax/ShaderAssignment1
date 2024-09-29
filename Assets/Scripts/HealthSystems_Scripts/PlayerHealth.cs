@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerHealth : Entity_Base
 { 
     [field: Header("Components")]
-    [field: SerializeField] public PlayerUIManager PlayerUIManager { get; private set; }
     [field: SerializeField] public FirstPersonCamera FirstPersonCamera { get; private set; }
 
     [field: SerializeField] private PlayerController playerController;

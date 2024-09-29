@@ -9,14 +9,12 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	[SerializeField] private LayerMask _interactionLayer;
 
 	[Header("Componenets")]
-    [SerializeField] Transform _cameraTransform;
+	[SerializeField] Transform _cameraTransform;
 	private InteractionDisplay promptDisplay;
 	private PlayerController playerController;
 
-
-	[Header("Systems")]
+	[Header("System")]
 	private float sqrInteractionRange;
-	public bool IsUsingInteractable { get; private set; }
 	private Interactable currentInteractable;
 	private InteractionOptionDisplay interactionOptions;
 
@@ -26,7 +24,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	{
 		playerController = GetComponent<PlayerController>();
 
-        sqrInteractionRange = _interactionRange * _interactionRange;
+		sqrInteractionRange = _interactionRange * _interactionRange;
 
 		Assert.IsNotNull(_cameraTransform);
 	}
@@ -39,54 +37,54 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		// Cache prompt display
 		promptDisplay = PlayerUIManager.InteractionPromptDisplay;
 	}
-    #endregion
+	#endregion
 
-    #region Input Methods
+	#region Input Methods
 
-    public void SetControlsSubscription(bool isInputEnabled)
-    {
-        if (isInputEnabled)
-            Subscribe();
-        else if (InputManager.Instance != null)
-            Unsubscribe();
-    }
+	public void SetControlsSubscription(bool isInputEnabled)
+	{
+		if (isInputEnabled)
+			Subscribe();
+		else if (InputManager.Instance != null)
+			Unsubscribe();
+	}
 
-    public void Subscribe()
-    {
-        InputManager.Instance.Permanents.Interact.performed += TryInteractInput;
-    }
+	public void Subscribe()
+	{
+		InputManager.Instance.Permanents.Interact.performed += TryInteractInput;
+	}
 
-    public void Unsubscribe()
-    {
-        InputManager.Instance.Permanents.Interact.performed -= TryInteractInput;
-    }
+	public void Unsubscribe()
+	{
+		InputManager.Instance.Permanents.Interact.performed -= TryInteractInput;
+	}
 
-    private void TryInteractInput(InputAction.CallbackContext context)
-    {
-        // Gets if the button is pressed
-        bool isInteractPressed = context.ReadValueAsButton();
+	private void TryInteractInput(InputAction.CallbackContext context)
+	{
+		// Gets if the button is pressed
+		bool isInteractPressed = context.ReadValueAsButton();
 
-        // Ensure that interact was pressed, there is a current interactable, an option is highlighted, and both display types are valid.
-        if (isInteractPressed && currentInteractable != null && interactionOptions != null)
-            Interact(interactionOptions.GetInteractionData());
-    }
+		// Ensure that interact was pressed, there is a current interactable, an option is highlighted, and both display types are valid.
+		if (isInteractPressed && currentInteractable != null && interactionOptions != null)
+			Interact(interactionOptions.GetInteractionData());
+	}
 
-    #endregion
+	#endregion
 
-    #region Unity Callbacks
+	#region Unity Callbacks
 
-    private void OnEnable()
-    {
-        SetControlsSubscription(true);
-    }
+	private void OnEnable()
+	{
+		SetControlsSubscription(true);
+	}
 
 
-    private void OnDisable()
-    {
-        SetControlsSubscription(false);
-    }
+	private void OnDisable()
+	{
+		SetControlsSubscription(false);
+	}
 
-    private void Update()
+	private void Update()
 	{
 		// Cache what the player was just looking at
 		Interactable prevInteractable = currentInteractable;
@@ -94,16 +92,18 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		Debug.DrawRay(_cameraTransform.position, _cameraTransform.forward);
 
 		// Send out a raycast
-		if (!IsUsingInteractable && Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, _interactionRange,
+		if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, _interactionRange,
 			_interactionLayer))
 		{
 			// Ensure an interactable was hit
-			if (hit.collider.TryGetComponent(out Interactable hitInteractable) || hit.collider.GetComponentInParent<Interactable>() != null)
+			if (!hit.collider.TryGetComponent(out Interactable hitInteractable))
 			{
 				// If it was not on the collider hit, check the parent.
-				if (hitInteractable == null)
-					hitInteractable = hit.collider.GetComponentInParent<Interactable>();
+				hitInteractable = hit.collider.GetComponentInParent<Interactable>();
+			}
 
+			if (hitInteractable != null)
+			{
 				// Compare the new interactable to the previous
 				if (hitInteractable.GetInteractions(out bool _).Length > 0 && prevInteractable != hitInteractable)
 					SetCurrentInteractable(hitInteractable);
@@ -116,18 +116,18 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 			ClearCurrentInteractable();
 		}
 	}
-    #endregion
+	#endregion
 
-    #region Current Interactable Methods
+	#region Current Interactable Methods
 
-    /// <summary>
-    /// Enables interaction options for an interactable
-    /// </summary>
-    /// <remarks>
-    /// This should be called when a player looks at an interactable
-    /// </remarks>
-    /// <param name="interactable">The interactable chosen</param>
-    public void SetCurrentInteractable(Interactable interactable)
+	/// <summary>
+	/// Enables interaction options for an interactable
+	/// </summary>
+	/// <remarks>
+	/// This should be called when a player looks at an interactable
+	/// </remarks>
+	/// <param name="interactable">The interactable chosen</param>
+	public void SetCurrentInteractable(Interactable interactable)
 	{
 		// Clear the prev interactable
 		if (currentInteractable != null)
@@ -155,57 +155,23 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		ClearInteractionOptions();
 	}
 
-	public void SetUsingInteractable(bool usingInteractable)
-	{
-		IsUsingInteractable = usingInteractable;
-	}
+	#endregion
+
+	#region Interaction Methods
 
 	/// <summary>
-	/// Puts the player into an interacting state and sets their parenting, position and rotation.
+	/// Sets the currently interaction options
 	/// </summary>
-	/// <param name="interactionParent">The new parent</param>
-	/// <param name="offset">The positional offset</param>
-	/// <param name="rot">The rotation</param>
-	public void UseInvolvedInteractable(Transform interactionParent = null, Vector3? offset = null, Quaternion? rot = null)
-	{
-		_ = interactionParent;
-		_ = offset;
-		_ = rot;
-
-		SetUsingInteractable(true);
-		//playerController.BeginUsingInvolvedInteractable(interactionParent, offset, rot);
-	}
-
-	/// <summary>
-	/// Removes the players parenting from an interactable
-	/// </summary>
-	/// <param name="offset">The position they will be at after leaving</param>
-	/// <param name="rot">The rotation they will have after leaving</param>
-	public void LeaveInvolvedInteractable(Vector3? offset = null, Quaternion? rot = null)
-	{
-		_ = offset;
-		_ = rot;
-
-		SetUsingInteractable(false);
-		//playerController.EndUsingInvolvedInteractable(offset, rot);
-	}
-    #endregion
-
-    #region Interaction Methods
-
-    /// <summary>
-    /// Sets the currently interaction options
-    /// </summary>
-    /// <param name="interaction">The interact</param>
-    public void SetInteractionOptions(InteractionOptionDisplay interaction)
+	/// <param name="interaction">The interact</param>
+	public void SetInteractionOptions(InteractionOptionDisplay interaction)
 	{
 		interactionOptions = interaction;
 	}
 
-    /// <summary>
-    /// Clear the current interaction options
-    /// </summary>
-    public void ClearInteractionOptions()
+	/// <summary>
+	/// Clear the current interaction options
+	/// </summary>
+	public void ClearInteractionOptions()
 	{
 		interactionOptions = null;
 	}
@@ -223,16 +189,4 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		ClearInteractionOptions();
 	}
 	#endregion
-
-	#region Helper Methods
-
-	/// <summary>
-	/// Returns the player controller for interactions that need it
-	/// </summary>
-	/// <returns>PlayerController ref</returns>
-	public PlayerController GetPlayerController()
-	{
-		return playerController;
-	}
-    #endregion
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StatusEffectComponent : MonoBehaviour
 {
-    private List<StatusEffectObject> activeEffects = new List<StatusEffectObject>();
+	private readonly List<StatusEffectObject> activeEffects = new();
     private IHealthComponent healthBase;
 
     private void Awake()
