@@ -52,7 +52,7 @@ public class PlayerUIManager : MonoBehaviour
 		// Disable interaction system
 		PlayerInteraction interaction = instance.playerHealth.GetComponent<PlayerInteraction>();
 		interaction.enabled = false;
-		interaction.ClearCurrentInteractable();
+		interaction.ClearHoveredInteractable();
 	}
 
 	/// <summary>

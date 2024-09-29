@@ -106,32 +106,26 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 			{
 				// Compare the new interactable to the previous
 				if (hitInteractable.GetInteractions(out bool _).Length > 0 && prevInteractable != hitInteractable)
-					SetCurrentInteractable(hitInteractable);
+					SetHoveredViewedInteractable(hitInteractable);
 			}
 		}
 		// If nothing was hit, the player has a current interactable, the player is cursor is not within the interaction display or the player out of the interaction range
 		else if (currentInteractable != null && (!promptDisplay.ValidateInteraction() || (currentInteractable.transform.position - transform.position).sqrMagnitude > sqrInteractionRange))
 		{
 			// Nothing was hit so clear the current interactable
-			ClearCurrentInteractable();
+			ClearHoveredInteractable();
 		}
 	}
 	#endregion
 
 	#region Current Interactable Methods
 
-	/// <summary>
-	/// Enables interaction options for an interactable
-	/// </summary>
-	/// <remarks>
-	/// This should be called when a player looks at an interactable
-	/// </remarks>
-	/// <param name="interactable">The interactable chosen</param>
-	public void SetCurrentInteractable(Interactable interactable)
+	// This should be called when a player looks at an interactable
+	public void SetHoveredViewedInteractable(Interactable interactable)
 	{
 		// Clear the prev interactable
 		if (currentInteractable != null)
-			ClearCurrentInteractable();
+			ClearHoveredInteractable();
 
 		// Set the new current interactable
 		currentInteractable = interactable;
@@ -143,7 +137,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	/// <summary>
 	/// Clears the current interactable and resets the system
 	/// </summary>
-	public void ClearCurrentInteractable()
+	public void ClearHoveredInteractable()
 	{
 		// Set to null
 		currentInteractable = null;
@@ -185,7 +179,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		interaction.Interact(transform);
 
 		// Clear current interactions
-		ClearCurrentInteractable();
+		ClearHoveredInteractable();
 		ClearInteractionOptions();
 	}
 	#endregion

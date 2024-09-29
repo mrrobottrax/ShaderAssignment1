@@ -15,10 +15,7 @@ MonoBehaviour:
   m_ticksPerSecond: 24
   m_playerPrefab: {fileID: 5067302201104481768, guid: 92df18e89889a354392a0b32775ab300, type: 3}
   m_networkPrefabs: []
-  m_savedIDs: feffff7ffdffff7fffffff7ffcffff7ffbffff7f
+  m_savedIDs: feffff7ffdffff7f
   m_savedGlobalIDs:
   - GlobalObjectId_V1-2-8c41d7e223edfe7499a2f5714838cb46-6983167952682972710-4416342002148600654
   - GlobalObjectId_V1-2-219adcd57a4bc064fa636e0d38b1e6af-2009111448-0
-  - GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-  - GlobalObjectId_V1-2-00000000000000000000000000000000-6268959342658083007-0
-  - GlobalObjectId_V1-2-00000000000000000000000000000000-6268959342658083007-0

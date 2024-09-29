@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class NetworkObject : MonoBehaviour
@@ -71,6 +72,12 @@ public class NetworkObject : MonoBehaviour
 
 		// Don't run when switching to play mode
 		if (EditorApplication.isPlayingOrWillChangePlaymode)
+		{
+			return;
+		}
+
+		// Don't run when editing a prefab
+		if (PrefabStageUtility.GetCurrentPrefabStage() != null)
 		{
 			return;
 		}
