@@ -3,11 +3,11 @@ using UnityEngine;
 public class PlayerUIManager : MonoBehaviour
 {
 
-	[SerializeField] InteractionDisplay interactionPromptDisplay;
+	[SerializeField] InteractionUIManager interactionPromptDisplay;
 	[SerializeField] PlayerHUDManager hudManager;
 	[SerializeField] InventoryUI inventoryUI;
 
-	public static InteractionDisplay InteractionPromptDisplay { get { return instance.interactionPromptDisplay; } }
+	public static InteractionUIManager InteractionPromptDisplay { get { return instance.interactionPromptDisplay; } }
 	public static PlayerHUDManager HUDManager { get { return instance.hudManager; } }
 	public static InventoryUI InventoryUI { get { return instance.inventoryUI; } }
 
@@ -44,15 +44,6 @@ public class PlayerUIManager : MonoBehaviour
 		instance.activeDisplay.SetDisplayActive(true);
 
 		InputManager.SetControlMode(InputManager.ControlType.UI);
-
-		// Disable camera & player movement
-		instance.playerHealth.GetPlayerCamera().EnableFirstPersonCamera(false);
-		instance.playerHealth.GetPlayerController().SetControlsSubscription(false);
-
-		// Disable interaction system
-		PlayerInteraction interaction = instance.playerHealth.GetComponent<PlayerInteraction>();
-		interaction.enabled = false;
-		interaction.ClearHoveredInteractable();
 	}
 
 	/// <summary>

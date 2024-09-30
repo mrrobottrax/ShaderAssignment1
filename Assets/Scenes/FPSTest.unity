@@ -2597,7 +2597,6 @@ GameObject:
   - component: {fileID: 2137593206}
   - component: {fileID: 2137593205}
   - component: {fileID: 2137593204}
-  - component: {fileID: 2137593207}
   - component: {fileID: 2137593203}
   m_Layer: 8
   m_Name: Treasure
@@ -2633,12 +2632,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f790e34659953e042831430cf87329d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionPrompt: BAlls
-  interactSprite: {fileID: 21300000, guid: 4531b62e5b0459441a38ae16a7f65e6e, type: 3}
-  interactionEnabled: 1
-  interactionEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _interactionPoint: {fileID: 0}
+  _interactions: []
 --- !u!65 &2137593204
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2710,20 +2705,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137593201}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2137593207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2137593201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a306e69852114b4aa2738feaa29c810, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ignoreInteractionPoint: 0
-  _interactionPoint: {fileID: 2137593202}
 --- !u!4 &6635368814431106200 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4840138933988124633, guid: e179357f14036d24ea5051657a1d64dd, type: 3}

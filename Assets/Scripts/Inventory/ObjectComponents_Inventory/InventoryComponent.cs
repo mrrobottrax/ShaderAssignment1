@@ -35,7 +35,7 @@ public class InventoryComponent : MonoBehaviour
     public void Subscribe()
     {
         // Inventory
-        InputManager.Instance.Permanents.Inventory.performed += InventoryInput;
+        InputManager.Instance.Permanents.Inventory.performed += ToggleInventory;
 
         // Hotbar
         InputManager.Instance.Player._1.performed += HotBarInput;
@@ -45,7 +45,7 @@ public class InventoryComponent : MonoBehaviour
 
     public void Unsubscribe()
     {
-        InputManager.Instance.Permanents.Inventory.performed -= InventoryInput;
+        InputManager.Instance.Permanents.Inventory.performed -= ToggleInventory;
 
         // Hotbar
         InputManager.Instance.Player._1.performed -= HotBarInput;
@@ -61,10 +61,7 @@ public class InventoryComponent : MonoBehaviour
             Unsubscribe();
     }
 
-    /// <summary>
-    /// This method gathers the input necesary to determine if the players inventory display should be toggled on or off. 
-    /// </summary>
-    private void InventoryInput(InputAction.CallbackContext context)
+    private void ToggleInventory(InputAction.CallbackContext context)
     {
         InventoryUI inventoryUI = PlayerUIManager.InventoryUI;
 

@@ -10,13 +10,13 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 	[Header("Componenets")]
 	[SerializeField] Transform _cameraTransform;
-	private InteractionDisplay promptDisplay;
+	private InteractionUIManager interactionUI;
 	private PlayerController playerController;
 
 	[Header("System")]
 	private float sqrInteractionRange;
-	private Interactable currentInteractable;
-	private InteractionOptionDisplay interactionOptions;
+	private Vector3 lastKnownLocalHitPoint;
+	private bool interactableWasNull = false;
 
 	#region Initialization Methods
 
@@ -35,8 +35,9 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		SetControlsSubscription(true);
 
 		// Cache prompt display
-		promptDisplay = PlayerUIManager.InteractionPromptDisplay;
+		interactionUI = PlayerUIManager.InteractionPromptDisplay;
 	}
+
 	#endregion
 
 	#region Input Methods
@@ -65,8 +66,8 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		bool isInteractPressed = context.ReadValueAsButton();
 
 		// Ensure that interact was pressed, there is a current interactable, an option is highlighted, and both display types are valid.
-		if (isInteractPressed && currentInteractable != null && interactionOptions != null)
-			Interact(interactionOptions.GetInteractionData());
+		if (isInteractPressed && interactionUI.HasOptionSelected())
+			Interact(interactionUI.GetSelectedInteraction());
 	}
 
 	#endregion
@@ -86,9 +87,28 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 	private void Update()
 	{
-		// Cache what the player was just looking at
-		Interactable prevInteractable = currentInteractable;
+		Interactable interactable = RaycastForInteractable();
+		if (interactable != interactionUI.GetCurrentInteractable())
+		{
+			interactionUI.SetCurrentInteractable(interactable);
+			interactableWasNull = interactable == null;
+		}
+		// A scene change can make interactionUI.GetCurrentInteractable() null, making it miss deselecting the interactable
+		else if (!interactionUI.GetCurrentInteractable() && !interactableWasNull)
+		{
+			interactionUI.SetCurrentInteractable(null);
+			interactableWasNull = true;
+		}
+	}
+	#endregion
 
+	void Interact(Interaction interaction)
+	{
+		interaction.interact(this);
+	}
+
+	Interactable RaycastForInteractable()
+	{
 		Debug.DrawRay(_cameraTransform.position, _cameraTransform.forward);
 
 		// Send out a raycast
@@ -104,83 +124,33 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 			if (hitInteractable != null)
 			{
-				// Compare the new interactable to the previous
-				if (hitInteractable.GetInteractions(out bool _).Length > 0 && prevInteractable != hitInteractable)
-					SetHoveredViewedInteractable(hitInteractable);
+				// Get the hitpoint in local space
+				lastKnownLocalHitPoint = hit.transform.worldToLocalMatrix * new Vector4(hit.point.x, hit.point.y, hit.point.z, 1);
+				return hitInteractable;
 			}
 		}
-		// If nothing was hit, the player has a current interactable, the player is cursor is not within the interaction display or the player out of the interaction range
-		else if (currentInteractable != null && (!promptDisplay.ValidateInteraction() || (currentInteractable.transform.position - transform.position).sqrMagnitude > sqrInteractionRange))
+
+		// Check if we should keep the current interactable selected.
+		// This can happen when the interaction prompts are larger than the object itself.
+		if (interactionUI.GetCurrentInteractable())
 		{
-			// Nothing was hit so clear the current interactable
-			ClearHoveredInteractable();
+			if (interactionUI.IsCursorInsideRect())
+			{
+				// Check whichever dist is lowest, either from the center or from the last position the raycast hit.
+				// This helps when right on the edge of interacting with an object. The raycast fails because we aren looking
+				// at the interaction prompt, and the distance from the center is longer than the raycast would be.
+				float sqrDist1 = (interactionUI.GetCurrentInteractable().transform.position - _cameraTransform.position).sqrMagnitude;
+
+				Vector3 globalHitpoint = interactionUI.GetCurrentInteractable().transform.localToWorldMatrix *
+					new Vector4(lastKnownLocalHitPoint.x, lastKnownLocalHitPoint.y, lastKnownLocalHitPoint.z, 1);
+
+				float sqrDist2 = (globalHitpoint - _cameraTransform.position).sqrMagnitude;
+
+				if (Mathf.Min(sqrDist1, sqrDist2) <= sqrInteractionRange)
+					return interactionUI.GetCurrentInteractable();
+			}
 		}
+
+		return null;
 	}
-	#endregion
-
-	#region Current Interactable Methods
-
-	// This should be called when a player looks at an interactable
-	public void SetHoveredViewedInteractable(Interactable interactable)
-	{
-		// Clear the prev interactable
-		if (currentInteractable != null)
-			ClearHoveredInteractable();
-
-		// Set the new current interactable
-		currentInteractable = interactable;
-
-		// Enable promopt & outline
-		promptDisplay.SetInteratableOptions(this, currentInteractable.GetInteractionPoint(), currentInteractable);
-	}
-
-	/// <summary>
-	/// Clears the current interactable and resets the system
-	/// </summary>
-	public void ClearHoveredInteractable()
-	{
-		// Set to null
-		currentInteractable = null;
-
-		// Disable prompt & outline
-		promptDisplay.ClearInteractableOptions();
-
-		// Clear the highlighted interaction prompt
-		ClearInteractionOptions();
-	}
-
-	#endregion
-
-	#region Interaction Methods
-
-	/// <summary>
-	/// Sets the currently interaction options
-	/// </summary>
-	/// <param name="interaction">The interact</param>
-	public void SetInteractionOptions(InteractionOptionDisplay interaction)
-	{
-		interactionOptions = interaction;
-	}
-
-	/// <summary>
-	/// Clear the current interaction options
-	/// </summary>
-	public void ClearInteractionOptions()
-	{
-		interactionOptions = null;
-	}
-
-	/// <summary>
-	/// Executes an interactions logic
-	/// </summary>
-	/// <param name="interaction">The interaction with logic to execute</param>
-	private void Interact(IInteraction interaction)
-	{
-		interaction.Interact(transform);
-
-		// Clear current interactions
-		ClearHoveredInteractable();
-		ClearInteractionOptions();
-	}
-	#endregion
 }

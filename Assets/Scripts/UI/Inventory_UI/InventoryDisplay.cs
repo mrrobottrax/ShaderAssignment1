@@ -155,63 +155,63 @@ public class InventoryDisplay : MenuDisplayBase
 
     private void OnDropInput(InputAction.CallbackContext context)
     {
-        bool tryDrop = context.ReadValueAsButton();
+        //bool tryDrop = context.ReadValueAsButton();
 
-        if(tryDrop)
-        {
-            // Check if the mouse is within the rect for Fire1
-            if (_inventoryCursor.HasItem &&
-                _dropDisplayAlpha.alpha == 1 &&
-                context.action == InputManager.Instance.UI.Fire1)
-            {
-                // Mouse drop
-                prevPressedSlot.AssignedSlot.GetSlotsItem().GetItemData().CreateItemObject
-                    (
-                    PairedInventoryComponent.DropPoint.position, 
-                    PairedInventoryComponent.DropPoint.rotation,
-                    prevPressedSlot.AssignedSlot.GetSlotsItem().GetAmount()
-                    );
+        //if(tryDrop)
+        //{
+        //    // Check if the mouse is within the rect for Fire1
+        //    if (_inventoryCursor.HasItem &&
+        //        _dropDisplayAlpha.alpha == 1 &&
+        //        context.action == InputManager.Instance.UI.Fire1)
+        //    {
+        //        // Mouse drop
+        //        prevPressedSlot.AssignedSlot.GetSlotsItem().GetItemData().CreateItemObject
+        //            (
+        //            PairedInventoryComponent.DropPoint.position, 
+        //            PairedInventoryComponent.DropPoint.rotation,
+        //            prevPressedSlot.AssignedSlot.GetSlotsItem().GetAmount()
+        //            );
 
-                // Clear slot
-                prevPressedSlot.AssignedSlot.ClearSlot();
-                prevPressedSlot.SetDisplayInteractable(true);
+        //        // Clear slot
+        //        prevPressedSlot.AssignedSlot.ClearSlot();
+        //        prevPressedSlot.SetDisplayInteractable(true);
 
-                prevPressedSlot?.SetDisplayHighlighted(false);
-                prevPressedSlot = null;
+        //        prevPressedSlot?.SetDisplayHighlighted(false);
+        //        prevPressedSlot = null;
 
-                prevHighlightedSlot?.SetDisplayHighlighted(false);
-                prevHighlightedSlot = null;
+        //        prevHighlightedSlot?.SetDisplayHighlighted(false);
+        //        prevHighlightedSlot = null;
 
-                RefreshSlots();
+        //        RefreshSlots();
 
-                _inventoryCursor.ClearCursor();
-            }
-            else if (prevHighlightedSlot?.AssignedSlot.GetSlotsItem() != null && 
-                context.action == InputManager.Instance.UI.Drop)
-            {
-                // Quick drop
-                prevHighlightedSlot.AssignedSlot.GetSlotsItem().GetItemData().CreateItemObject
-                    (
-                    PairedInventoryComponent.DropPoint.position,
-                    PairedInventoryComponent.DropPoint.rotation,
-                    prevHighlightedSlot.AssignedSlot.GetSlotsItem().GetAmount()
-                    );
+        //        _inventoryCursor.ClearCursor();
+        //    }
+        //    else if (prevHighlightedSlot?.AssignedSlot.GetSlotsItem() != null && 
+        //        context.action == InputManager.Instance.UI.Drop)
+        //    {
+        //        // Quick drop
+        //        prevHighlightedSlot.AssignedSlot.GetSlotsItem().GetItemData().CreateItemObject
+        //            (
+        //            PairedInventoryComponent.DropPoint.position,
+        //            PairedInventoryComponent.DropPoint.rotation,
+        //            prevHighlightedSlot.AssignedSlot.GetSlotsItem().GetAmount()
+        //            );
 
-                // Clear slot
-                prevHighlightedSlot.AssignedSlot.ClearSlot();
-                prevHighlightedSlot.SetDisplayInteractable(true);
+        //        // Clear slot
+        //        prevHighlightedSlot.AssignedSlot.ClearSlot();
+        //        prevHighlightedSlot.SetDisplayInteractable(true);
 
-                prevPressedSlot?.SetDisplayHighlighted(false);
-                prevPressedSlot = null;
+        //        prevPressedSlot?.SetDisplayHighlighted(false);
+        //        prevPressedSlot = null;
 
-                prevHighlightedSlot?.SetDisplayHighlighted(false);
-                prevHighlightedSlot = null;
+        //        prevHighlightedSlot?.SetDisplayHighlighted(false);
+        //        prevHighlightedSlot = null;
 
-                RefreshSlots();
+        //        RefreshSlots();
 
-                _inventoryCursor.ClearCursor();
-            }
-        }
+        //        _inventoryCursor.ClearCursor();
+        //    }
+        //}
     }
     #endregion
 

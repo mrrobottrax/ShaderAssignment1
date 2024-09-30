@@ -53,7 +53,7 @@ public abstract class Item_Base
     /// </summary>
     public bool CheckForRoom(int amount)
     {
-        if (amountInStack + amount <= itemData.MaxAmount) return true;
+        if (amountInStack + amount <= itemData.StackSize) return true;
         else return false;
     }
 
@@ -62,7 +62,7 @@ public abstract class Item_Base
     /// </summary>
     public bool CheckForRoom(int amount, out int roomRemaining)
     {
-        roomRemaining = itemData.MaxAmount - amountInStack;
+        roomRemaining = itemData.StackSize - amountInStack;
         return CheckForRoom(amount);
     }
 

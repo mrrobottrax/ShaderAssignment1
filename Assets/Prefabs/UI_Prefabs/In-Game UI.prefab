@@ -888,13 +888,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1658744849691296322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b332c1f8fe73cff469a64a6cec933b39, type: 3}
+  m_Script: {fileID: 11500000, guid: 3cdfb4e28669fa149b4699acab0e28c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _optionHolder: {fileID: 532281630014784072}
+  _optionHolder: {fileID: 7435141079385002801}
+  keySprite: {fileID: 21300000, guid: 4531b62e5b0459441a38ae16a7f65e6e, type: 3}
   _optionPrefab: {fileID: 3845839989028142343}
-  _crossHair: {fileID: 1693599767501842923}
-  inputSprite: {fileID: 21300000, guid: 4531b62e5b0459441a38ae16a7f65e6e, type: 3}
 --- !u!1 &1693599767501842923
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,7 +1317,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 65.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &32456749173240649
@@ -1408,12 +1407,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3478641908160238973}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 005d99e9047d0c345bdec32bd32dc434, type: 3}
+  m_Script: {fileID: 11500000, guid: f19ff5fd42f7d9c4ea669f4588d8b112, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _promptImage: {fileID: 7538682092319747961}
-  _inputImage: {fileID: 8858814337179676656}
   _promptText: {fileID: 4756204857386065815}
+  _interactImage: {fileID: 7538682092319747961}
+  _interactButtonImage: {fileID: 8858814337179676656}
 --- !u!1 &4170567758294348570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1703,7 +1702,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 95, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &546360124029642421

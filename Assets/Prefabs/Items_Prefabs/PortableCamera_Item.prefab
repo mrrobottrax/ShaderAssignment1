@@ -12,9 +12,8 @@ GameObject:
   - component: {fileID: 7665567235041593733}
   - component: {fileID: 5780149097285770122}
   - component: {fileID: 6485872907347002095}
-  - component: {fileID: 4996446250085629263}
-  - component: {fileID: 3097350759587792720}
   - component: {fileID: 624686043499644218}
+  - component: {fileID: 5764401955769628583}
   m_Layer: 8
   m_Name: PortableCamera_Item
   m_TagString: Item
@@ -116,36 +115,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &4996446250085629263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1100952686543562326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a306e69852114b4aa2738feaa29c810, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ignoreInteractionPoint: 0
-  _interactionPoint: {fileID: 4840138933988124633}
---- !u!114 &3097350759587792720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1100952686543562326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc11f347d485ec945a6a0cabb9adef4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactSprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
-  interactionEnabled: 1
-  _item: {fileID: 11400000, guid: 621025555e5ae994193d44f70ed07f8d, type: 2}
-  _amount: 1
 --- !u!65 &624686043499644218
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -167,3 +136,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.25073135, y: 0.37518707, z: 0.2507314}
   m_Center: {x: 0, y: 0.00000023841858, z: -0.00000011920929}
+--- !u!114 &5764401955769628583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100952686543562326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f951806725c2c4c9abb5fbd1b05c2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactionPoint: {fileID: 0}
+  itemName: Camera
+  pickupIcon: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}

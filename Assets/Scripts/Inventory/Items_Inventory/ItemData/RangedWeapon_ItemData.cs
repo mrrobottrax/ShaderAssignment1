@@ -16,11 +16,6 @@ public class RangedWeapon_ItemData : Weapon_ItemData
     [field: SerializeField] public ItemData_Base AmmoItemData { get; private set; }
 
     [field: SerializeField] public int MagazineSize { get; private set; }
-
-    public override Item_Base CreateItemInstance()
-    {
-        return new RangedWeapon_Item(this);
-    }
 }
 
 #if UNITY_EDITOR

@@ -50,8 +50,9 @@ public class Inventory
     /// </summary>
     public bool ContainsItem(int itemID, out List<InventorySlot> slot)
     {
-        slot = _slots.Where(i => i.GetSlotsItem()?.GetItemData().ItemID == itemID).ToList();
-        return _slots == null ? false : true;
+        throw new System.NotImplementedException();
+        //slot = _slots.Where(i => i.GetSlotsItem()?.GetItemData().ItemID == itemID).ToList();
+        //return _slots == null ? false : true;
     }
 
     /// <summary>
@@ -75,15 +76,16 @@ public class Inventory
     /// </summary>
     public int GetTotalOfItem(int itemID)
     {
-        int count = 0;
-        foreach (InventorySlot i in Slots)
-        {
-            if (i.GetSlotsItem().GetItemData().ItemID != itemID)
-                continue;
-            count += i.GetSlotsItem().GetAmount();
-        }
+        //int count = 0;
+        //foreach (InventorySlot i in Slots)
+        //{
+        //    if (i.GetSlotsItem().GetItemData().ItemID != itemID)
+        //        continue;
+        //    count += i.GetSlotsItem().GetAmount();
+        //}
 
-        return count;
+        //return count;
+        throw new System.NotImplementedException();
     }
 
     /// <summary>
@@ -103,43 +105,45 @@ public class Inventory
     /// </summary>
     public bool AddItem(ItemData_Base addedItem, int amount)
     {
-        // First, check if any slots contain an item of the same type
-        if (ContainsItem(addedItem.ItemID, out List<InventorySlot> slotsWithItems))
-        {
-            foreach (var slot in slotsWithItems)
-            {
-                bool fitsInSlot = slot.GetSlotsItem().CheckForRoom(amount, out int roomRemaining);
+        throw new System.NotImplementedException();
 
-                // For caseses where the amount can fit within the stack
-                if (fitsInSlot)
-                {
-                    slot.GetSlotsItem().AddAmount(amount);
-                    return true;
-                }
-                else if (!fitsInSlot && roomRemaining > 0)// Attempt to fit as much into the stack as possible
-                {
-                    // Fill the stack
-                    slot.GetSlotsItem().AddAmount(roomRemaining);
+        //// First, check if any slots contain an item of the same type
+        //if (ContainsItem(addedItem.ItemID, out List<InventorySlot> slotsWithItems))
+        //{
+        //    foreach (var slot in slotsWithItems)
+        //    {
+        //        bool fitsInSlot = slot.GetSlotsItem().CheckForRoom(amount, out int roomRemaining);
 
-                    // Find how much will be put in the other slot
-                    int leftover = amount - roomRemaining;
+        //        // For caseses where the amount can fit within the stack
+        //        if (fitsInSlot)
+        //        {
+        //            slot.GetSlotsItem().AddAmount(amount);
+        //            return true;
+        //        }
+        //        else if (!fitsInSlot && roomRemaining > 0)// Attempt to fit as much into the stack as possible
+        //        {
+        //            // Fill the stack
+        //            slot.GetSlotsItem().AddAmount(roomRemaining);
 
-                    // Try to find space for the remaning items
-                    AddItem(addedItem, leftover);
-                    return true;
-                }
-            }
-        }
+        //            // Find how much will be put in the other slot
+        //            int leftover = amount - roomRemaining;
 
-        // Check for the first empty slot
-        if (GetEmptySlot(out InventorySlot emptySlot))
-        {
-            // Add the item then sort the inventory
-            emptySlot.AssignItem(addedItem.CreateItemInstance(), amount);
-            return true;
-        }
+        //            // Try to find space for the remaning items
+        //            AddItem(addedItem, leftover);
+        //            return true;
+        //        }
+        //    }
+        //}
 
-        return false;
+        //// Check for the first empty slot
+        //if (GetEmptySlot(out InventorySlot emptySlot))
+        //{
+        //    // Add the item then sort the inventory
+        //    emptySlot.AssignItem(addedItem.CreateItemInstance(), amount);
+        //    return true;
+        //}
+
+        //return false;
     }
     #endregion
 

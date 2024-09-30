@@ -10,9 +10,4 @@ public class Weapon_ItemData : ItemData_Base
 
     [field: Header("View Model")]
     [field: SerializeField] public int ViewModelID { get; private set; }
-
-    public override Item_Base CreateItemInstance()
-    {
-        return new Weapon_Item(this);
-    }
 }
