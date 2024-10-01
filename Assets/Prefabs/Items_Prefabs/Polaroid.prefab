@@ -353,7 +353,7 @@ MonoBehaviour:
   itemName: Polariod
   itemSprite: {fileID: 21300000, guid: d8a020517eb964348968bb4207bd730f, type: 3}
   stackSize: 16
-  animatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
+  animatorController: {fileID: 22100000, guid: f1e973f7d0d57eb40823a45b92fbf38d, type: 2}
   polaroidImage: {fileID: 3971043604760265281}
   vingette: {fileID: 4618028839817805264}
 --- !u!54 &4249204400496774167

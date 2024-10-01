@@ -76,7 +76,7 @@ namespace CaptureCamera
 		public override void Fire1_AnimationEvent()
 		{
 			GameObject photo = PrintPhysicalPhoto();
-			ownerInventory.AddItem(photo.GetComponent<Item>());
+			ownerInventory.AddItem(photo.GetComponent<Item>(), false);
 		}
 
 		#region Photo Capture methods

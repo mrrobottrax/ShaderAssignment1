@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Polaroid : Item
 {
+	[Header("Polaroid")]
 	public RawImage polaroidImage;
 
 	[SerializeField] RawImage vingette;

@@ -4630,7 +4630,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7924759110471528895, guid: 9f9723fcf300b324c8fa7c3a836090cc, type: 3}
       propertyPath: m_Name
-      value: PortableCandle_Item
+      value: Candle_Item
       objectReference: {fileID: 0}
     - target: {fileID: 8261997150446059176, guid: 9f9723fcf300b324c8fa7c3a836090cc, type: 3}
       propertyPath: m_LocalPosition.x

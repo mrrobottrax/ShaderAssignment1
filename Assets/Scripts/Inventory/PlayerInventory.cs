@@ -216,10 +216,10 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		if (item.TryGetComponent(out Rigidbody rb))
 		{
 			rb.velocity = _firstPersonCamera.CameraTransform.forward * _dropForce + _playerController.GetVelocity();
-			rb.Move(_dropPoint.position, Quaternion.identity);
+			rb.Move(_dropPoint.position, _dropPoint.rotation); // we need to set both this and the transform for stupid unity reasons
 		}
 
-		item.transform.SetPositionAndRotation(_dropPoint.position, Quaternion.identity);
+		item.transform.SetPositionAndRotation(_dropPoint.position, _dropPoint.rotation);
 
 		item.Drop();
 	}
@@ -240,7 +240,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		OnAddItem?.Invoke(item, slot);
 	}
 
-	public bool AddItem(Item item)
+	public bool AddItem(Item item, bool allowAutoSelect = true)
 	{
 		// Try first slot with same item type
 		for (int i = 0; i < slots.Length; i++)
@@ -270,7 +270,8 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 			if (slots[i].items == null || slots[i].items.Count == 0)
 			{
 				AddItemToSlot(item, slots[i]);
-				SelectSlot(i);
+				if (allowAutoSelect)
+					SelectSlot(i);
 				return true;
 			}
 		}

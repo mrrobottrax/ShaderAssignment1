@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class Item : Interactable
+public class Item : Interactable
 {
 	[Header("Item")]
 	public string itemName = "Item Name";
