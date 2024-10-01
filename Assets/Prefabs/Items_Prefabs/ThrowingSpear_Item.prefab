@@ -147,5 +147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionPoint: {fileID: 0}
+  interactionEnabled: 1
   itemName: Spear
-  pickupIcon: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+  itemSprite: {fileID: 21300000, guid: 28f3870423875fa45aaf9f05fbf083c0, type: 3}
+  stackSize: 1
+  animatorController: {fileID: 9100000, guid: dafb70b9a2843be4b8bd4586966a2277, type: 2}

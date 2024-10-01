@@ -78,7 +78,16 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "1",
+                    "name": "Drop",
+                    "type": "Button",
+                    "id": "e4383500-ba18-4970-aa3e-8a7a9b36e503",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Slot1",
                     "type": "Value",
                     "id": "3cb25c71-61b5-4b83-9e81-e93f53f8e69e",
                     "expectedControlType": "Integer",
@@ -87,7 +96,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "2",
+                    "name": "Slot2",
                     "type": "Value",
                     "id": "f0201ce3-e5a3-4c8b-b032-f4831bf21fb0",
                     "expectedControlType": "Integer",
@@ -96,7 +105,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "3",
+                    "name": "Slot3",
                     "type": "Value",
                     "id": "81835464-c89a-475d-a7ec-b1396fc94530",
                     "expectedControlType": "Integer",
@@ -105,7 +114,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "4",
+                    "name": "Slot4",
                     "type": "Value",
                     "id": "a4c40f71-2191-4963-b158-b23a68241620",
                     "expectedControlType": "Integer",
@@ -114,7 +123,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "5",
+                    "name": "Slot5",
                     "type": "Value",
                     "id": "56e96d3e-105f-414c-bd4b-88bf991c8aa5",
                     "expectedControlType": "Integer",
@@ -123,7 +132,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "6",
+                    "name": "Slot6",
                     "type": "Value",
                     "id": "c40c2543-a423-4c89-9af8-91447ba444f5",
                     "expectedControlType": "Integer",
@@ -132,7 +141,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "7",
+                    "name": "Slot7",
                     "type": "Value",
                     "id": "a046dacf-884f-4ba8-b05a-1111d5c33b1b",
                     "expectedControlType": "Integer",
@@ -141,9 +150,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "8",
+                    "name": "Slot8",
                     "type": "Value",
                     "id": "3cf16b28-24cb-4f44-a633-086100697ca7",
+                    "expectedControlType": "Integer",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Slot9",
+                    "type": "Value",
+                    "id": "d83aff67-3d96-47cc-8bfe-acc1b1cd883a",
                     "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
@@ -376,9 +394,9 @@
                     "id": "51a22391-216f-4c88-9799-db08676d19d7",
                     "path": "<Keyboard>/1",
                     "interactions": "",
-                    "processors": "Scale(factor=0)",
+                    "processors": "",
                     "groups": "",
-                    "action": "1",
+                    "action": "Slot1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -387,9 +405,9 @@
                     "id": "7fd51a6d-939f-4ce9-821f-eea0430670d2",
                     "path": "<Keyboard>/2",
                     "interactions": "",
-                    "processors": "Scale",
+                    "processors": "",
                     "groups": "",
-                    "action": "2",
+                    "action": "Slot2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -398,9 +416,9 @@
                     "id": "568168e5-bfa3-4b2b-a4eb-695dc46fde40",
                     "path": "<Keyboard>/3",
                     "interactions": "",
-                    "processors": "Scale(factor=2)",
+                    "processors": "",
                     "groups": "",
-                    "action": "3",
+                    "action": "Slot3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -409,9 +427,9 @@
                     "id": "9a56708f-48e9-48c4-8197-55c3fd26a723",
                     "path": "<Keyboard>/4",
                     "interactions": "",
-                    "processors": "Scale(factor=3)",
+                    "processors": "",
                     "groups": "",
-                    "action": "4",
+                    "action": "Slot4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -420,9 +438,9 @@
                     "id": "5109d9dd-2d0f-43e0-9e01-50d03ff5b08b",
                     "path": "<Keyboard>/5",
                     "interactions": "",
-                    "processors": "Scale(factor=4)",
+                    "processors": "",
                     "groups": "",
-                    "action": "5",
+                    "action": "Slot5",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -431,9 +449,9 @@
                     "id": "84e4b9ba-9e87-437e-9b3b-9ee0be1699a2",
                     "path": "<Keyboard>/6",
                     "interactions": "",
-                    "processors": "Scale(factor=5)",
+                    "processors": "",
                     "groups": "",
-                    "action": "6",
+                    "action": "Slot6",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -442,9 +460,9 @@
                     "id": "fb32dada-3b8e-4349-aa56-e6e0ead1ab0b",
                     "path": "<Keyboard>/7",
                     "interactions": "",
-                    "processors": "Scale(factor=6)",
+                    "processors": "",
                     "groups": "",
-                    "action": "7",
+                    "action": "Slot7",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -453,9 +471,31 @@
                     "id": "58bbe4d7-2a95-4c6b-849c-a1faa320b670",
                     "path": "<Keyboard>/8",
                     "interactions": "",
-                    "processors": "Scale(factor=7)",
+                    "processors": "",
                     "groups": "",
-                    "action": "8",
+                    "action": "Slot8",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9406c5fe-9dba-401d-ae7e-384fca67c54f",
+                    "path": "<Keyboard>/8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slot9",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54d9bd88-e878-4313-a37e-ed20ebaded23",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

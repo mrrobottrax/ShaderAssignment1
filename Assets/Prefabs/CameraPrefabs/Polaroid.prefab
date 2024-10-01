@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3144653302307083777}
   - component: {fileID: 3008660900940453102}
   - component: {fileID: 1254940802551958512}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Paper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 8350774782501727708}
   - component: {fileID: 8525551884081202307}
   - component: {fileID: 4618028839817805264}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Vingette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 401182115904968900}
   - component: {fileID: 3837210818555767884}
   - component: {fileID: 3971043604760265281}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Picture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -241,9 +241,9 @@ GameObject:
   - component: {fileID: 2665422338138867814}
   - component: {fileID: 6328081511322441092}
   - component: {fileID: 4249204400496774167}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Polaroid
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -348,6 +348,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2a1e191c8dc804c85b97e4d0771cb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interactionPoint: {fileID: 0}
+  interactionEnabled: 1
+  itemName: Polariod
+  itemSprite: {fileID: 21300000, guid: d8a020517eb964348968bb4207bd730f, type: 3}
+  stackSize: 16
+  animatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
   polaroidImage: {fileID: 3971043604760265281}
   vingette: {fileID: 4618028839817805264}
 --- !u!54 &4249204400496774167
@@ -389,7 +395,7 @@ GameObject:
   - component: {fileID: 7401259723864479826}
   - component: {fileID: 5821509172122545643}
   - component: {fileID: 5123613469032226932}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}

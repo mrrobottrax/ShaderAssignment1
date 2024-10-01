@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8445376716857855823}
   - component: {fileID: 1127390228898752404}
   - component: {fileID: 7218429709225136450}
-  - component: {fileID: 4169773133842223001}
   m_Layer: 8
   m_Name: Coal_Item
   m_TagString: Item
@@ -135,18 +134,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 8506915385024834134, guid: 033721a1cf021b64e8013fcaf4ea5c1a, type: 3}
---- !u!114 &4169773133842223001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6422485911987246955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81f951806725c2c4c9abb5fbd1b05c2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interactionPoint: {fileID: 6345142928683817424}
-  itemName: Coal
-  pickupIcon: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}

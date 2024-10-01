@@ -26,6 +26,7 @@ public class InteractionUIManager : MonoBehaviour
 
 	private void Update()
 	{
+		selectedOption = null;
 		if (currentInteractable == null) return;
 
 		// Follow the object in world space
@@ -39,7 +40,6 @@ public class InteractionUIManager : MonoBehaviour
 		}
 
 		// Check if any options are selected
-		selectedOption = null;
 		foreach (var option in availableOptionsPool)
 		{
 			if (!option.gameObject.activeInHierarchy)
@@ -83,6 +83,12 @@ public class InteractionUIManager : MonoBehaviour
 		// Set up interaction option buttons
 		currentInteractable = interactable;
 		Interaction[] options = interactable.GetInteractions();
+
+		if (options == null)
+		{
+			Debug.LogWarning($"No interactions on object {interactable.gameObject.name}");
+			return;
+		}
 
 		while (availableOptionsPool.Count < options.Length)
 		{

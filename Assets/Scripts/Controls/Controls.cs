@@ -100,7 +100,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""1"",
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""e4383500-ba18-4970-aa3e-8a7a9b36e503"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Slot1"",
                     ""type"": ""Value"",
                     ""id"": ""3cb25c71-61b5-4b83-9e81-e93f53f8e69e"",
                     ""expectedControlType"": ""Integer"",
@@ -109,7 +118,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""2"",
+                    ""name"": ""Slot2"",
                     ""type"": ""Value"",
                     ""id"": ""f0201ce3-e5a3-4c8b-b032-f4831bf21fb0"",
                     ""expectedControlType"": ""Integer"",
@@ -118,7 +127,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""3"",
+                    ""name"": ""Slot3"",
                     ""type"": ""Value"",
                     ""id"": ""81835464-c89a-475d-a7ec-b1396fc94530"",
                     ""expectedControlType"": ""Integer"",
@@ -127,7 +136,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""4"",
+                    ""name"": ""Slot4"",
                     ""type"": ""Value"",
                     ""id"": ""a4c40f71-2191-4963-b158-b23a68241620"",
                     ""expectedControlType"": ""Integer"",
@@ -136,7 +145,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""5"",
+                    ""name"": ""Slot5"",
                     ""type"": ""Value"",
                     ""id"": ""56e96d3e-105f-414c-bd4b-88bf991c8aa5"",
                     ""expectedControlType"": ""Integer"",
@@ -145,7 +154,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""6"",
+                    ""name"": ""Slot6"",
                     ""type"": ""Value"",
                     ""id"": ""c40c2543-a423-4c89-9af8-91447ba444f5"",
                     ""expectedControlType"": ""Integer"",
@@ -154,7 +163,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""7"",
+                    ""name"": ""Slot7"",
                     ""type"": ""Value"",
                     ""id"": ""a046dacf-884f-4ba8-b05a-1111d5c33b1b"",
                     ""expectedControlType"": ""Integer"",
@@ -163,9 +172,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""8"",
+                    ""name"": ""Slot8"",
                     ""type"": ""Value"",
                     ""id"": ""3cf16b28-24cb-4f44-a633-086100697ca7"",
+                    ""expectedControlType"": ""Integer"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Slot9"",
+                    ""type"": ""Value"",
+                    ""id"": ""d83aff67-3d96-47cc-8bfe-acc1b1cd883a"",
                     ""expectedControlType"": ""Integer"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -398,9 +416,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""id"": ""51a22391-216f-4c88-9799-db08676d19d7"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=0)"",
+                    ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""1"",
+                    ""action"": ""Slot1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -409,9 +427,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""id"": ""7fd51a6d-939f-4ce9-821f-eea0430670d2"",
                     ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
-                    ""processors"": ""Scale"",
+                    ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""2"",
+                    ""action"": ""Slot2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -420,9 +438,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""id"": ""568168e5-bfa3-4b2b-a4eb-695dc46fde40"",
                     ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=2)"",
+                    ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""3"",
+                    ""action"": ""Slot3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -431,9 +449,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""id"": ""9a56708f-48e9-48c4-8197-55c3fd26a723"",
                     ""path"": ""<Keyboard>/4"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=3)"",
+                    ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""4"",
+                    ""action"": ""Slot4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -442,9 +460,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""id"": ""5109d9dd-2d0f-43e0-9e01-50d03ff5b08b"",
                     ""path"": ""<Keyboard>/5"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=4)"",
+                    ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""5"",
+                    ""action"": ""Slot5"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -453,9 +471,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""id"": ""84e4b9ba-9e87-437e-9b3b-9ee0be1699a2"",
                     ""path"": ""<Keyboard>/6"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=5)"",
+                    ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""6"",
+                    ""action"": ""Slot6"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -464,9 +482,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""id"": ""fb32dada-3b8e-4349-aa56-e6e0ead1ab0b"",
                     ""path"": ""<Keyboard>/7"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=6)"",
+                    ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""7"",
+                    ""action"": ""Slot7"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -475,9 +493,31 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""id"": ""58bbe4d7-2a95-4c6b-849c-a1faa320b670"",
                     ""path"": ""<Keyboard>/8"",
                     ""interactions"": """",
-                    ""processors"": ""Scale(factor=7)"",
+                    ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""8"",
+                    ""action"": ""Slot8"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9406c5fe-9dba-401d-ae7e-384fca67c54f"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Slot9"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54d9bd88-e878-4313-a37e-ed20ebaded23"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1020,14 +1060,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_Fire1 = m_Player.FindAction("Fire1", throwIfNotFound: true);
         m_Player_Fire2 = m_Player.FindAction("Fire2", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
-        m_Player__1 = m_Player.FindAction("1", throwIfNotFound: true);
-        m_Player__2 = m_Player.FindAction("2", throwIfNotFound: true);
-        m_Player__3 = m_Player.FindAction("3", throwIfNotFound: true);
-        m_Player__4 = m_Player.FindAction("4", throwIfNotFound: true);
-        m_Player__5 = m_Player.FindAction("5", throwIfNotFound: true);
-        m_Player__6 = m_Player.FindAction("6", throwIfNotFound: true);
-        m_Player__7 = m_Player.FindAction("7", throwIfNotFound: true);
-        m_Player__8 = m_Player.FindAction("8", throwIfNotFound: true);
+        m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
+        m_Player_Slot1 = m_Player.FindAction("Slot1", throwIfNotFound: true);
+        m_Player_Slot2 = m_Player.FindAction("Slot2", throwIfNotFound: true);
+        m_Player_Slot3 = m_Player.FindAction("Slot3", throwIfNotFound: true);
+        m_Player_Slot4 = m_Player.FindAction("Slot4", throwIfNotFound: true);
+        m_Player_Slot5 = m_Player.FindAction("Slot5", throwIfNotFound: true);
+        m_Player_Slot6 = m_Player.FindAction("Slot6", throwIfNotFound: true);
+        m_Player_Slot7 = m_Player.FindAction("Slot7", throwIfNotFound: true);
+        m_Player_Slot8 = m_Player.FindAction("Slot8", throwIfNotFound: true);
+        m_Player_Slot9 = m_Player.FindAction("Slot9", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Select = m_UI.FindAction("Select", throwIfNotFound: true);
@@ -1111,14 +1153,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire1;
     private readonly InputAction m_Player_Fire2;
     private readonly InputAction m_Player_Reload;
-    private readonly InputAction m_Player__1;
-    private readonly InputAction m_Player__2;
-    private readonly InputAction m_Player__3;
-    private readonly InputAction m_Player__4;
-    private readonly InputAction m_Player__5;
-    private readonly InputAction m_Player__6;
-    private readonly InputAction m_Player__7;
-    private readonly InputAction m_Player__8;
+    private readonly InputAction m_Player_Drop;
+    private readonly InputAction m_Player_Slot1;
+    private readonly InputAction m_Player_Slot2;
+    private readonly InputAction m_Player_Slot3;
+    private readonly InputAction m_Player_Slot4;
+    private readonly InputAction m_Player_Slot5;
+    private readonly InputAction m_Player_Slot6;
+    private readonly InputAction m_Player_Slot7;
+    private readonly InputAction m_Player_Slot8;
+    private readonly InputAction m_Player_Slot9;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -1131,14 +1175,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Fire1 => m_Wrapper.m_Player_Fire1;
         public InputAction @Fire2 => m_Wrapper.m_Player_Fire2;
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
-        public InputAction @_1 => m_Wrapper.m_Player__1;
-        public InputAction @_2 => m_Wrapper.m_Player__2;
-        public InputAction @_3 => m_Wrapper.m_Player__3;
-        public InputAction @_4 => m_Wrapper.m_Player__4;
-        public InputAction @_5 => m_Wrapper.m_Player__5;
-        public InputAction @_6 => m_Wrapper.m_Player__6;
-        public InputAction @_7 => m_Wrapper.m_Player__7;
-        public InputAction @_8 => m_Wrapper.m_Player__8;
+        public InputAction @Drop => m_Wrapper.m_Player_Drop;
+        public InputAction @Slot1 => m_Wrapper.m_Player_Slot1;
+        public InputAction @Slot2 => m_Wrapper.m_Player_Slot2;
+        public InputAction @Slot3 => m_Wrapper.m_Player_Slot3;
+        public InputAction @Slot4 => m_Wrapper.m_Player_Slot4;
+        public InputAction @Slot5 => m_Wrapper.m_Player_Slot5;
+        public InputAction @Slot6 => m_Wrapper.m_Player_Slot6;
+        public InputAction @Slot7 => m_Wrapper.m_Player_Slot7;
+        public InputAction @Slot8 => m_Wrapper.m_Player_Slot8;
+        public InputAction @Slot9 => m_Wrapper.m_Player_Slot9;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1172,30 +1218,36 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
-            @_1.started += instance.On_1;
-            @_1.performed += instance.On_1;
-            @_1.canceled += instance.On_1;
-            @_2.started += instance.On_2;
-            @_2.performed += instance.On_2;
-            @_2.canceled += instance.On_2;
-            @_3.started += instance.On_3;
-            @_3.performed += instance.On_3;
-            @_3.canceled += instance.On_3;
-            @_4.started += instance.On_4;
-            @_4.performed += instance.On_4;
-            @_4.canceled += instance.On_4;
-            @_5.started += instance.On_5;
-            @_5.performed += instance.On_5;
-            @_5.canceled += instance.On_5;
-            @_6.started += instance.On_6;
-            @_6.performed += instance.On_6;
-            @_6.canceled += instance.On_6;
-            @_7.started += instance.On_7;
-            @_7.performed += instance.On_7;
-            @_7.canceled += instance.On_7;
-            @_8.started += instance.On_8;
-            @_8.performed += instance.On_8;
-            @_8.canceled += instance.On_8;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
+            @Slot1.started += instance.OnSlot1;
+            @Slot1.performed += instance.OnSlot1;
+            @Slot1.canceled += instance.OnSlot1;
+            @Slot2.started += instance.OnSlot2;
+            @Slot2.performed += instance.OnSlot2;
+            @Slot2.canceled += instance.OnSlot2;
+            @Slot3.started += instance.OnSlot3;
+            @Slot3.performed += instance.OnSlot3;
+            @Slot3.canceled += instance.OnSlot3;
+            @Slot4.started += instance.OnSlot4;
+            @Slot4.performed += instance.OnSlot4;
+            @Slot4.canceled += instance.OnSlot4;
+            @Slot5.started += instance.OnSlot5;
+            @Slot5.performed += instance.OnSlot5;
+            @Slot5.canceled += instance.OnSlot5;
+            @Slot6.started += instance.OnSlot6;
+            @Slot6.performed += instance.OnSlot6;
+            @Slot6.canceled += instance.OnSlot6;
+            @Slot7.started += instance.OnSlot7;
+            @Slot7.performed += instance.OnSlot7;
+            @Slot7.canceled += instance.OnSlot7;
+            @Slot8.started += instance.OnSlot8;
+            @Slot8.performed += instance.OnSlot8;
+            @Slot8.canceled += instance.OnSlot8;
+            @Slot9.started += instance.OnSlot9;
+            @Slot9.performed += instance.OnSlot9;
+            @Slot9.canceled += instance.OnSlot9;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1224,30 +1276,36 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
-            @_1.started -= instance.On_1;
-            @_1.performed -= instance.On_1;
-            @_1.canceled -= instance.On_1;
-            @_2.started -= instance.On_2;
-            @_2.performed -= instance.On_2;
-            @_2.canceled -= instance.On_2;
-            @_3.started -= instance.On_3;
-            @_3.performed -= instance.On_3;
-            @_3.canceled -= instance.On_3;
-            @_4.started -= instance.On_4;
-            @_4.performed -= instance.On_4;
-            @_4.canceled -= instance.On_4;
-            @_5.started -= instance.On_5;
-            @_5.performed -= instance.On_5;
-            @_5.canceled -= instance.On_5;
-            @_6.started -= instance.On_6;
-            @_6.performed -= instance.On_6;
-            @_6.canceled -= instance.On_6;
-            @_7.started -= instance.On_7;
-            @_7.performed -= instance.On_7;
-            @_7.canceled -= instance.On_7;
-            @_8.started -= instance.On_8;
-            @_8.performed -= instance.On_8;
-            @_8.canceled -= instance.On_8;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
+            @Slot1.started -= instance.OnSlot1;
+            @Slot1.performed -= instance.OnSlot1;
+            @Slot1.canceled -= instance.OnSlot1;
+            @Slot2.started -= instance.OnSlot2;
+            @Slot2.performed -= instance.OnSlot2;
+            @Slot2.canceled -= instance.OnSlot2;
+            @Slot3.started -= instance.OnSlot3;
+            @Slot3.performed -= instance.OnSlot3;
+            @Slot3.canceled -= instance.OnSlot3;
+            @Slot4.started -= instance.OnSlot4;
+            @Slot4.performed -= instance.OnSlot4;
+            @Slot4.canceled -= instance.OnSlot4;
+            @Slot5.started -= instance.OnSlot5;
+            @Slot5.performed -= instance.OnSlot5;
+            @Slot5.canceled -= instance.OnSlot5;
+            @Slot6.started -= instance.OnSlot6;
+            @Slot6.performed -= instance.OnSlot6;
+            @Slot6.canceled -= instance.OnSlot6;
+            @Slot7.started -= instance.OnSlot7;
+            @Slot7.performed -= instance.OnSlot7;
+            @Slot7.canceled -= instance.OnSlot7;
+            @Slot8.started -= instance.OnSlot8;
+            @Slot8.performed -= instance.OnSlot8;
+            @Slot8.canceled -= instance.OnSlot8;
+            @Slot9.started -= instance.OnSlot9;
+            @Slot9.performed -= instance.OnSlot9;
+            @Slot9.canceled -= instance.OnSlot9;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1431,14 +1489,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnFire1(InputAction.CallbackContext context);
         void OnFire2(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
-        void On_1(InputAction.CallbackContext context);
-        void On_2(InputAction.CallbackContext context);
-        void On_3(InputAction.CallbackContext context);
-        void On_4(InputAction.CallbackContext context);
-        void On_5(InputAction.CallbackContext context);
-        void On_6(InputAction.CallbackContext context);
-        void On_7(InputAction.CallbackContext context);
-        void On_8(InputAction.CallbackContext context);
+        void OnDrop(InputAction.CallbackContext context);
+        void OnSlot1(InputAction.CallbackContext context);
+        void OnSlot2(InputAction.CallbackContext context);
+        void OnSlot3(InputAction.CallbackContext context);
+        void OnSlot4(InputAction.CallbackContext context);
+        void OnSlot5(InputAction.CallbackContext context);
+        void OnSlot6(InputAction.CallbackContext context);
+        void OnSlot7(InputAction.CallbackContext context);
+        void OnSlot8(InputAction.CallbackContext context);
+        void OnSlot9(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

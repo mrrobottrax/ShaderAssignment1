@@ -435,6 +435,12 @@ public class PlayerController : NetworkBehaviour
 		return m_position;
 	}
 
+	public Vector3 GetVelocity()
+	{
+		return m_velocity;
+	}
+
+
 	void GroundCheck()
 	{
 		if (m_justJumped)

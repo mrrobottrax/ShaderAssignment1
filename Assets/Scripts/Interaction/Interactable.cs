@@ -12,7 +12,10 @@ public class Interaction
 
 public abstract class Interactable : MonoBehaviour
 {
+	[Header("Interactable")]
 	[SerializeField] Transform _interactionPoint;
+	public bool interactionEnabled = true;
+
 	public Transform GetInteractionPoint()
 	{
 		return _interactionPoint;

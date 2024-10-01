@@ -46,7 +46,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	{
 		if (isInputEnabled)
 			Subscribe();
-		else if (InputManager.Instance != null)
+		else
 			Unsubscribe();
 	}
 
@@ -66,8 +66,8 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		bool isInteractPressed = context.ReadValueAsButton();
 
 		// Ensure that interact was pressed, there is a current interactable, an option is highlighted, and both display types are valid.
-		if (isInteractPressed && interactionUI.HasOptionSelected())
-			Interact(interactionUI.GetSelectedInteraction());
+		if (isInteractPressed && interactionUI.HasOptionSelected() && interactionUI.GetCurrentInteractable().interactionEnabled)
+			interactionUI.GetSelectedInteraction().interact(this);
 	}
 
 	#endregion
@@ -102,11 +102,6 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	}
 	#endregion
 
-	void Interact(Interaction interaction)
-	{
-		interaction.interact(this);
-	}
-
 	Interactable RaycastForInteractable()
 	{
 		Debug.DrawRay(_cameraTransform.position, _cameraTransform.forward);
@@ -122,7 +117,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 				hitInteractable = hit.collider.GetComponentInParent<Interactable>();
 			}
 
-			if (hitInteractable != null)
+			if (hitInteractable != null && hitInteractable.interactionEnabled)
 			{
 				// Get the hitpoint in local space
 				lastKnownLocalHitPoint = hit.transform.worldToLocalMatrix * new Vector4(hit.point.x, hit.point.y, hit.point.z, 1);
@@ -132,7 +127,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 		// Check if we should keep the current interactable selected.
 		// This can happen when the interaction prompts are larger than the object itself.
-		if (interactionUI.GetCurrentInteractable())
+		if (interactionUI.GetCurrentInteractable() && interactionUI.GetCurrentInteractable().interactionEnabled)
 		{
 			if (interactionUI.IsCursorInsideRect())
 			{

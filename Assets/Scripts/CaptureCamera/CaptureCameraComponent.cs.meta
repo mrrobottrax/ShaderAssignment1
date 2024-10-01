@@ -3,7 +3,12 @@ guid: 96ef7e610f834e4419d8e6fc7a19874a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _interactionPoint: {instanceID: 0}
+  - itemSprite: {fileID: 21300000, guid: 6bceb9126abd2be41b087ae020d6802e, type: 3}
+  - animatorController: {fileID: 9100000, guid: 643db2645b8928c40bc7bb6b80d2e8bb, type: 2}
+  - _camera: {instanceID: 0}
+  - _photoPrefab: {fileID: 6328081511322441092, guid: 4928058026c61a84788d24d2393ca179, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

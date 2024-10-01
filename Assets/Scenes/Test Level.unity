@@ -387,7 +387,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Coal_Item
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4169773133842223001, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -4373,14 +4374,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4840138933988124633, guid: e179357f14036d24ea5051657a1d64dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4996446250085629263, guid: e179357f14036d24ea5051657a1d64dd, type: 3}
-      propertyPath: _interactions.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4996446250085629263, guid: e179357f14036d24ea5051657a1d64dd, type: 3}
-      propertyPath: _interactions.Array.data[0].isInteractionEnabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
