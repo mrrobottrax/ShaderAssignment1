@@ -5,6 +5,14 @@ using UnityEngine;
 
 internal class NetworkData : ScriptableObject
 {
+	class NetworkDataLoader : AssetPostprocessor
+	{
+		private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
+		{
+			NetworkData.OnEditorLoad();
+		}
+	}
+
 	#region Singleton
 	static NetworkData s_instance;
 
@@ -14,7 +22,7 @@ internal class NetworkData : ScriptableObject
 	{
 		NetworkData[] data = Resources.LoadAll<NetworkData>("");
 
-		if (data == null)
+		if (data == null || data.Length == 0)
 		{
 			Debug.LogError("No NetworkData found");
 			return;
@@ -23,19 +31,19 @@ internal class NetworkData : ScriptableObject
 		s_instance = data[0];
 	}
 
-	[InitializeOnLoadMethod]
 	static void OnEditorLoad()
 	{
 		NetworkData[] data = Resources.LoadAll<NetworkData>("");
 
-		if (data == null)
+		if (data == null || data.Length == 0)
 		{
-			Debug.Log("No NetworkData found");
+			Debug.LogError("No NetworkData found");
 			return;
 		}
 
+		//Debug.Log("Loaded NetworkData");
+
 		s_instance = data[0];
-		//Debug.Log("Loaded singleton");
 
 		// Copy lists into dict
 		s_instance.m_unsavedDict = new();
