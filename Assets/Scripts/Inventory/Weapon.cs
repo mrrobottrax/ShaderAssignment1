@@ -1,9 +1,18 @@
-public abstract class Weapon : Item
+public class Weapon : Item
 {
 	protected PlayerViewmodelManager playerViewmodelManager;
 
-	public abstract void Fire1(bool pressed);
-	public virtual void Fire2(bool pressed) { }
+	public virtual void Fire1(bool pressed)
+	{
+		if (!pressed) return;
+		playerViewmodelManager.Animator.SetTrigger("Fire1");
+	}
+
+	public virtual void Fire2(bool pressed)
+	{
+		if (!pressed) return;
+		playerViewmodelManager.Animator.SetTrigger("Fire2");
+	}
 
 	public virtual void Fire1_AnimationEvent() { }
 	public virtual void Fire2_AnimationEvent() { }

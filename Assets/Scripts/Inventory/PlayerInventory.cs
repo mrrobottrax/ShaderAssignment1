@@ -205,7 +205,11 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	void Drop(InputAction.CallbackContext ctx)
 	{
 		_ = ctx;
+		DropActiveItem(_dropForce, Quaternion.identity);
+	}
 
+	public void DropActiveItem(float dropForce, Quaternion rotation)
+	{
 		if (activeSlot.items == null || activeSlot.items.Count == 0) return;
 
 		Item item = activeSlot.items.Pop();
@@ -215,11 +219,11 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 		if (item.TryGetComponent(out Rigidbody rb))
 		{
-			rb.velocity = _firstPersonCamera.CameraTransform.forward * _dropForce + _playerController.GetVelocity();
-			rb.Move(_dropPoint.position, _dropPoint.rotation); // we need to set both this and the transform for stupid unity reasons
+			rb.velocity = _firstPersonCamera.CameraTransform.forward * dropForce + _playerController.GetVelocity();
+			rb.Move(_dropPoint.position, _dropPoint.rotation * rotation); // we need to set both this and the transform for stupid unity reasons
 		}
 
-		item.transform.SetPositionAndRotation(_dropPoint.position, _dropPoint.rotation);
+		item.transform.SetPositionAndRotation(_dropPoint.position, _dropPoint.rotation * rotation);
 
 		item.Drop();
 	}

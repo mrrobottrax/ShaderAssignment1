@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 427707235121894297}
   - component: {fileID: 5092439885962647577}
   - component: {fileID: 2213383416683529951}
+  - component: {fileID: 1088744576527787851}
   m_Layer: 8
   m_Name: ThrowingSpear_Item
   m_TagString: Item
@@ -133,3 +134,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0016249846, y: 0.023673931, z: 0.0006249975}
   m_Center: {x: 0, y: 4.656614e-10, z: 0}
+--- !u!114 &1088744576527787851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5860663832543337747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 365f36a30c5a9d049b724361d2116e55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactionPoint: {fileID: 0}
+  interactionEnabled: 1
+  itemName: Spear
+  itemSprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+  stackSize: 1
+  animatorController: {fileID: 9100000, guid: 23bdc1f2efcf7104fa7d13e36d29752e, type: 2}
+  _throwForce: 10

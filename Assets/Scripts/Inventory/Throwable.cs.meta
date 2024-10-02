@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: eef72b0da9f1a0642a5eed265ebcb6a3
+guid: 365f36a30c5a9d049b724361d2116e55
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
   - _interactionPoint: {instanceID: 0}
-  - itemSprite: {fileID: 21300000, guid: 28f3870423875fa45aaf9f05fbf083c0, type: 3}
-  - animatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
+  - itemSprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+  - animatorController: {fileID: 9100000, guid: 23bdc1f2efcf7104fa7d13e36d29752e, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

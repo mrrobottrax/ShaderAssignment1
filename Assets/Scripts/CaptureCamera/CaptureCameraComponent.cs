@@ -61,13 +61,6 @@ namespace CaptureCamera
 			ownerInventory = null;
 		}
 
-		public override void Fire1(bool pressed)
-		{
-			if (!pressed) return;
-
-			playerViewmodelManager.Animator.SetTrigger("Fire1");
-		}
-
 		public override void Fire2(bool pressed)
 		{
 			playerViewmodelManager.Animator.SetBool("Zoom", pressed);

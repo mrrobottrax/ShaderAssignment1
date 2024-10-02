@@ -720,9 +720,9 @@ ModelImporter:
       curves: []
       events:
       - time: 0.4735379
-        functionName: TryAttack_AnimationEvent
+        functionName: Fire1_AnimationEvent
         data: Shovel_Dig
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: ff299647888bcdb4ca07437416c0b6a3, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -950,24 +950,10 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0
-        functionName: StartAttack_AnimationEvent
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.47956857
-        functionName: TryAttack_AnimationEvent
+        functionName: Fire1_AnimationEvent
         data: Spear_Throw
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 1
-        functionName: FinishAttack_AnimationEvent
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: ff299647888bcdb4ca07437416c0b6a3, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
