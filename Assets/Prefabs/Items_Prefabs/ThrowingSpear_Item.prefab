@@ -153,3 +153,4 @@ MonoBehaviour:
   stackSize: 1
   animatorController: {fileID: 9100000, guid: 23bdc1f2efcf7104fa7d13e36d29752e, type: 2}
   _throwForce: 10
+  _throwOffset: {x: 0, y: 0, z: 0.3}

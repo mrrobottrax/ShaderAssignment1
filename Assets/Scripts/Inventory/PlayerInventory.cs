@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public delegate void OnAddItemDelegate(Item item, InventorySlot slot);
 public delegate void OnSlotChangeDelegate(InventorySlot prev, InventorySlot active);
@@ -205,10 +206,10 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	void Drop(InputAction.CallbackContext ctx)
 	{
 		_ = ctx;
-		DropActiveItem(_dropForce, Quaternion.identity);
+		DropActiveItem(_dropForce, Vector3.zero, Quaternion.Euler(-90, 0, 0));
 	}
 
-	public void DropActiveItem(float dropForce, Quaternion rotation)
+	public void DropActiveItem(float dropForce, Vector3 dropPointOffset, Quaternion rotationOffset)
 	{
 		if (activeSlot.items == null || activeSlot.items.Count == 0) return;
 
@@ -220,10 +221,13 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		if (item.TryGetComponent(out Rigidbody rb))
 		{
 			rb.velocity = _firstPersonCamera.CameraTransform.forward * dropForce + _playerController.GetVelocity();
-			rb.Move(_dropPoint.position, _dropPoint.rotation * rotation); // we need to set both this and the transform for stupid unity reasons
+
+			// we need to set both this and the transform for stupid unity reasons
+			rb.Move(_dropPoint.position + (_dropPoint.rotation * dropPointOffset), _dropPoint.rotation * rotationOffset);
 		}
 
-		item.transform.SetPositionAndRotation(_dropPoint.position, _dropPoint.rotation * rotation);
+		item.transform.SetPositionAndRotation(_dropPoint.position + (_dropPoint.rotation * dropPointOffset), _dropPoint.rotation * rotationOffset);
+		SceneManager.MoveGameObjectToScene(item.gameObject, SceneManager.GetActiveScene());
 
 		item.Drop();
 	}

@@ -5,6 +5,8 @@ using UnityEngine;
 public class Throwable : Weapon
 {
 	[SerializeField] float _throwForce = 10;
+	[SerializeField] Vector3 _throwOffset = new(0, 0, 0.3f);
+
 	PlayerInventory ownerInventory;
 
 	protected override void PickUp(PlayerInteraction interactor)
@@ -26,6 +28,6 @@ public class Throwable : Weapon
 
 	public override void Fire1_AnimationEvent()
 	{
-		ownerInventory.DropActiveItem(_throwForce, Quaternion.Euler(90, 0, 0));
+		ownerInventory.DropActiveItem(_throwForce, _throwOffset, Quaternion.Euler(90, 0, 0));
 	}
 }
