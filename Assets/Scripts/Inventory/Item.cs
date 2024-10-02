@@ -5,9 +5,13 @@ public class Item : Interactable
 {
 	[Header("Item")]
 	public string itemName = "Item Name";
-	public Sprite itemSprite;
 	public int stackSize = 1;
+	public Sprite itemSprite;
 	public RuntimeAnimatorController animatorController;
+
+	[Header("Item Dropping")]
+	public Vector3 dropOffset = Vector3.zero;
+	public Quaternion dropRotationOffset = Quaternion.identity;
 
 	protected Interaction[] interactions;
 

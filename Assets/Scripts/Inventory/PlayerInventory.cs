@@ -206,7 +206,11 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	void Drop(InputAction.CallbackContext ctx)
 	{
 		_ = ctx;
-		DropActiveItem(_dropForce, Vector3.zero, Quaternion.Euler(-90, 0, 0));
+		if (activeSlot.items == null || activeSlot.items.Count == 0) return;
+
+		Item active = GetActiveSlot().items.Peek();
+
+		DropActiveItem(_dropForce, active.dropOffset, active.dropRotationOffset);
 	}
 
 	public void DropActiveItem(float dropForce, Vector3 dropPointOffset, Quaternion rotationOffset)

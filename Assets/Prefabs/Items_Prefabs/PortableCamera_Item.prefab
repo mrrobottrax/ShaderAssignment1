@@ -152,9 +152,11 @@ MonoBehaviour:
   _interactionPoint: {fileID: 0}
   interactionEnabled: 1
   itemName: Portable Camera
-  itemSprite: {fileID: 21300000, guid: 6bceb9126abd2be41b087ae020d6802e, type: 3}
   stackSize: 1
+  itemSprite: {fileID: 21300000, guid: 6bceb9126abd2be41b087ae020d6802e, type: 3}
   animatorController: {fileID: 9100000, guid: 643db2645b8928c40bc7bb6b80d2e8bb, type: 2}
+  dropOffset: {x: 0, y: 0, z: 0}
+  dropRotationOffset: {x: -0.00000003090862, y: -0.70710677, z: -0.70710677, w: 0.00000003090862}
   _camera: {fileID: 7660893289201101480}
   _targetLayers:
     serializedVersion: 2

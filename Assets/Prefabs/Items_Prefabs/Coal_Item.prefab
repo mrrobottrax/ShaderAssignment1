@@ -150,8 +150,10 @@ MonoBehaviour:
   _interactionPoint: {fileID: 0}
   interactionEnabled: 1
   itemName: Coal
-  itemSprite: {fileID: 21300000, guid: 90dd962df2410254ab749d880e73c204, type: 3}
   stackSize: 1
+  itemSprite: {fileID: 21300000, guid: 90dd962df2410254ab749d880e73c204, type: 3}
   animatorController: {fileID: 9100000, guid: 23bdc1f2efcf7104fa7d13e36d29752e, type: 2}
+  dropOffset: {x: 0, y: 0, z: 0}
+  dropRotationOffset: {x: -0.70710677, y: 0, z: 0, w: 0.70710677}
   _throwForce: 10
   _throwOffset: {x: 0, y: 0, z: 0}

@@ -351,9 +351,11 @@ MonoBehaviour:
   _interactionPoint: {fileID: 0}
   interactionEnabled: 1
   itemName: Polariod
-  itemSprite: {fileID: 21300000, guid: d8a020517eb964348968bb4207bd730f, type: 3}
   stackSize: 16
+  itemSprite: {fileID: 21300000, guid: d8a020517eb964348968bb4207bd730f, type: 3}
   animatorController: {fileID: 22100000, guid: f1e973f7d0d57eb40823a45b92fbf38d, type: 2}
+  dropOffset: {x: 0, y: 0, z: 0}
+  dropRotationOffset: {x: 0.21643962, y: 0, z: 0, w: 0.976296}
   polaroidImage: {fileID: 3971043604760265281}
   vingette: {fileID: 4618028839817805264}
 --- !u!54 &4249204400496774167
