@@ -3,6 +3,7 @@ using UnityEngine;
 public static class InputManager
 {
 	public static Controls Instance { get; private set; }
+	public static ControlType ControlMode { get; private set; }
 
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	static void Init()
@@ -13,6 +14,8 @@ public static class InputManager
 
 	public static void SetControlMode(ControlType controlType)
 	{
+		ControlMode = controlType;
+		
 		Instance.UI.Disable();
 		Instance.Player.Disable();
 

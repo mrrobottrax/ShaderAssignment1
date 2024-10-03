@@ -88,6 +88,11 @@ public class PlayerController : NetworkBehaviour
 
 		if (!IsOwner) return;
 
+		if (InputManager.ControlMode != InputManager.ControlType.Player)
+		{
+			m_wishMoveDir = Vector2.zero;
+		}
+
 		switch (m_movementMode)
 		{
 			case EMovementMode.Standard:

@@ -55,14 +55,14 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 			m_pitch = Mathf.Clamp(m_pitch, m_pitchMin, m_pitchMax);
 
 			transform.localRotation = Quaternion.Euler(m_pitch, m_yaw, 0);
-
-			// Interpolate between positions calculated in FixedUpdate
-			// todo: don't interpolate when distance is too large
-#pragma warning disable UNT0004
-			float fract = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
-			transform.position = Vector3.Lerp(m_lastPosition, m_position, fract);
-#pragma warning restore UNT0004
 		}
+
+		// Interpolate between positions calculated in FixedUpdate
+		// todo: don't interpolate when distance is too large
+#pragma warning disable UNT0004
+		float fract = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
+		transform.position = Vector3.Lerp(m_lastPosition, m_position, fract);
+#pragma warning restore UNT0004
 	}
 
 	private void FixedUpdate()
