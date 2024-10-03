@@ -145,10 +145,10 @@ GameObject:
   - component: {fileID: 7604031159286523186}
   - component: {fileID: 4108457210778413470}
   - component: {fileID: 3230647518200630481}
+  - component: {fileID: 761079911741982071}
   - component: {fileID: 2437897042592276567}
-  - component: {fileID: 6296207886168980906}
   m_Layer: 5
-  m_Name: ToolbeltSlot
+  m_Name: HotbarSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,6 +214,29 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &761079911741982071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7492225372784967504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d2449822596b944ba465495dc1ef4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _amountText: {fileID: 5184220907842680841}
+  _itemImage: {fileID: 4394634778551568826}
+  _slotsButton: {fileID: 0}
+  _slotImage: {fileID: 3230647518200630481}
+  _defaultColour:
+    serializedVersion: 2
+    rgba: 3774873600
+  _selectedColour:
+    serializedVersion: 2
+    rgba: 4280427042
+  _highlightOutline: {fileID: 2000391862804413532}
 --- !u!114 &2437897042592276567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,55 +252,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
---- !u!114 &6296207886168980906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7492225372784967504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee8a2e69c12e86849b1780d73adff3ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _amountText: {fileID: 5184220907842680841}
-  _itemImage: {fileID: 4394634778551568826}
-  _slotImage: {fileID: 3230647518200630481}
-  _defaultColour:
-    serializedVersion: 2
-    rgba: 3556769792
-  _selectedColour:
-    serializedVersion: 2
-    rgba: 3527820870
-  _highlightOutline: {fileID: 2000391862804413532}
-  _lerpSpeed: 4
-  _lerpCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  goalPosition: {x: 0, y: 0}
-  disableLerp: 0
 --- !u!1 &8274655656324954521
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ internal class NetworkData : ScriptableObject
 	{
 		private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 		{
-			NetworkData.OnEditorLoad();
+			NetworkData.Load();
 		}
 	}
 
@@ -20,18 +20,10 @@ internal class NetworkData : ScriptableObject
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
 	static void OnRuntimeLoad()
 	{
-		NetworkData[] data = Resources.LoadAll<NetworkData>("");
-
-		if (data == null || data.Length == 0)
-		{
-			Debug.LogError("No NetworkData found");
-			return;
-		}
-
-		s_instance = data[0];
+		Load();
 	}
 
-	static void OnEditorLoad()
+	static void Load()
 	{
 		NetworkData[] data = Resources.LoadAll<NetworkData>("");
 
@@ -131,7 +123,7 @@ internal class NetworkData : ScriptableObject
 		// Check if the saved ID is free
 		if (obj.m_netID > k_minSpawnedObjectIDCount && !s_instance.m_unsavedDict.ContainsKey(obj.m_netID))
 		{
-			Debug.Log("Object saved with an ID but the ID is not present in the dictionary. Most likely NetworkData wasn't saved.");
+			Debug.Log($"Object ({GlobalObjectId.GetGlobalObjectIdSlow(obj)}) saved with an ID ({obj.m_netID}) but the ID is not present in the dictionary. Most likely NetworkData wasn't saved.");
 			s_instance.m_unsavedDict.Add(obj.m_netID, GlobalObjectId.GetGlobalObjectIdSlow(obj));
 			SaveDict();
 			return obj.m_netID;

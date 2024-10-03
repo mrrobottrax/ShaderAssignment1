@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public delegate void OnAddItemDelegate(Item item, InventorySlot slot);
 public delegate void OnSlotChangeDelegate(InventorySlot prev, InventorySlot active);
+public delegate void OnToolbeltToggleDelegate(bool isOpen);
 
 public class InventorySlot
 {
@@ -28,9 +28,13 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	private InventorySlot[] slots;
 	public InventorySlot[] Slots => slots;
 
+	public bool ToolbeltOpen { get; private set; } = false;
+
+	// Delegates
 	public OnAddItemDelegate OnAddItem;
 	public OnAddItemDelegate OnDropItem;
 	public OnSlotChangeDelegate OnActiveSlotChange;
+	public OnToolbeltToggleDelegate OnToolbeltToggle;
 
 	InventorySlot activeSlot;
 
@@ -69,6 +73,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 	public void Subscribe()
 	{
+		InputManager.Instance.Permanents.Inventory.performed += ToggleToolbelt;
 		InputManager.Instance.Player.Drop.performed += Drop;
 		InputManager.Instance.Player.Fire1.performed += Fire1;
 		InputManager.Instance.Player.Fire1.canceled += Fire1;
@@ -89,6 +94,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 	public void Unsubscribe()
 	{
+		InputManager.Instance.Permanents.Inventory.performed -= ToggleToolbelt;
 		InputManager.Instance.Player.Drop.performed -= Drop;
 		InputManager.Instance.Player.Fire1.performed -= Fire1;
 		InputManager.Instance.Player.Fire1.canceled -= Fire1;
@@ -115,7 +121,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 			Unsubscribe();
 	}
 
-	void SelectSlot(int slotIndex)
+	public void SelectSlot(int slotIndex)
 	{
 		if (slotIndex >= slots.Length) return;
 
@@ -141,6 +147,32 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 		if (activeSlot.items.Peek() is Weapon)
 			(activeSlot.items.Peek() as Weapon).Fire2(ctx.performed);
+	}
+
+	void Drop(InputAction.CallbackContext ctx)
+	{
+		_ = ctx;
+		if (activeSlot.items == null || activeSlot.items.Count == 0) return;
+
+		Item active = GetActiveSlot().items.Peek();
+
+		DropActiveItem(_dropForce, active.dropOffset, active.dropRotationOffset);
+	}
+
+	void ToggleToolbelt(InputAction.CallbackContext ctx)
+	{
+		_ = ctx;
+
+		ToolbeltOpen = !ToolbeltOpen;
+
+		_firstPersonCamera.EnableFirstPersonCamera(!ToolbeltOpen);
+
+		if (ToolbeltOpen)
+			InputManager.SetControlMode(InputManager.ControlType.UI);
+		else
+			InputManager.SetControlMode(InputManager.ControlType.Player);
+
+		OnToolbeltToggle?.Invoke(ToolbeltOpen);
 	}
 
 	#region Hotbar Functions
@@ -202,16 +234,6 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	#endregion
 
 	#endregion
-
-	void Drop(InputAction.CallbackContext ctx)
-	{
-		_ = ctx;
-		if (activeSlot.items == null || activeSlot.items.Count == 0) return;
-
-		Item active = GetActiveSlot().items.Peek();
-
-		DropActiveItem(_dropForce, active.dropOffset, active.dropRotationOffset);
-	}
 
 	public void DropActiveItem(float dropForce, Vector3 dropPointOffset, Quaternion rotationOffset)
 	{

@@ -7,7 +7,6 @@ public class InventorySlotDisplay : MonoBehaviour
 	[Header("Slot Visuals")]
 	[SerializeField] private TextMeshProUGUI _amountText;
 	[SerializeField] private Image _itemImage;
-	[SerializeField] private Button _slotsButton;
 
 	[Header("Item State Visuals")]
 	[SerializeField] private Image _slotImage;
@@ -17,7 +16,7 @@ public class InventorySlotDisplay : MonoBehaviour
 
 	InventorySlot assignedSlot;
 
-	private void Awake()
+	protected void Awake()
 	{
 		SetHighlight(false);
 		ItemUpdate();
