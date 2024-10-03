@@ -425,9 +425,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 935967ce1b70f2847a376c88a57b55b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hotbarSlotPrefab: {fileID: 761079911741982071, guid: 312528ccae149ca4c9282f152fa6790e, type: 3}
+  _hotbarSlotPrefab: {fileID: 1155239384526664684, guid: 312528ccae149ca4c9282f152fa6790e, type: 3}
   _hotbarHolder: {fileID: 6510771331851676753}
-  _toolbeltSlotPrefab: {fileID: 6296207886168980906, guid: 535df868707d82a4e9869214aecda756, type: 3}
+  _toolbeltSlotPrefab: {fileID: 570739739830523293, guid: 535df868707d82a4e9869214aecda756, type: 3}
   _toolbeltHolder: {fileID: 3727549841592081598}
 --- !u!225 &1832939220891344722
 CanvasGroup:
@@ -651,7 +651,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0

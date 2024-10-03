@@ -97,17 +97,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1006980095913288448}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81f951806725c2c4c9abb5fbd1b05c2e, type: 3}
+  m_Script: {fileID: 11500000, guid: 83ccd7f8ab2f87b40aa7de3b82348eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionPoint: {fileID: 0}
   interactionEnabled: 1
   itemName: Rail Kit
   stackSize: 1
-  itemSprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+  itemSprite: {fileID: 21300000, guid: 256f0600a5a91f040b4fedae6a65df11, type: 3}
   animatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
   dropOffset: {x: 0, y: 0, z: 0}
-  dropRotationOffset: {x: -0.70090926, y: 0, z: 0, w: 0.71325046}
+  dropRotationOffset: {x: 0.70710677, y: 0, z: 0, w: -0.70710677}
+  m_maxMetresStack: 50
+  m_metresLeft: 50
 --- !u!65 &6603090319548613721
 BoxCollider:
   m_ObjectHideFlags: 0

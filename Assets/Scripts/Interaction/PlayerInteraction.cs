@@ -102,6 +102,11 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	}
 	#endregion
 
+	public void ForceRefresh()
+	{
+		interactionUI.SetCurrentInteractable(null);
+	}
+
 	Interactable RaycastForInteractable()
 	{
 		Debug.DrawRay(_cameraTransform.position, _cameraTransform.forward);

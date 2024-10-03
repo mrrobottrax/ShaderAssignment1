@@ -37,4 +37,6 @@ public class Item : Interactable
 	{
 		return interactions;
 	}
+
+	public virtual string GetCustomStackText() { return null; }
 }

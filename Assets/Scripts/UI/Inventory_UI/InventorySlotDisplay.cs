@@ -9,9 +9,9 @@ public class InventorySlotDisplay : MonoBehaviour
 	[SerializeField] private Image _itemImage;
 
 	[Header("Item State Visuals")]
-	[SerializeField] private Image _slotImage;
-	[SerializeField] private Color32 _defaultColour;
-	[SerializeField] private Color32 _selectedColour; // Player is using this slot
+	[SerializeField] protected Image _slotImage;
+	[SerializeField] protected Color32 _defaultColour;
+	[SerializeField] protected Color32 _selectedColour; // Player is using this slot
 	[SerializeField] private Image _highlightOutline;
 
 	InventorySlot assignedSlot;
@@ -55,7 +55,7 @@ public class InventorySlotDisplay : MonoBehaviour
 
 		if (item.stackSize == 1)
 		{
-			_amountText.text = null;
+			_amountText.text = item.GetCustomStackText();
 		}
 		else
 		{

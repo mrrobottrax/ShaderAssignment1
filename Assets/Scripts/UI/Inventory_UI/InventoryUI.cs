@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -127,6 +129,12 @@ public class InventoryUI : MonoBehaviour
 		{
 			_hotbarHolder.gameObject.SetActive(true);
 			_toolbeltHolder.gameObject.SetActive(false);
+
+			foreach (var slot in toolbeltSlots)
+			{
+				PointerEventData eventData = new(EventSystem.current);
+				slot.OnPointerExit(eventData);
+			}
 		}
 	}
 

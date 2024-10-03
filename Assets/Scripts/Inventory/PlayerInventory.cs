@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Progress;
 
 public delegate void OnAddItemDelegate(Item item, InventorySlot slot);
 public delegate void OnSlotChangeDelegate(InventorySlot prev, InventorySlot active);
@@ -274,6 +275,23 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		OnAddItem?.Invoke(item, slot);
 	}
 
+	public delegate bool ItemSearchDelegate(Item item);
+	public Item FindItemWhere(ItemSearchDelegate searchFunc)
+	{
+		for (int i = 0; i < slots.Length; i++)
+		{
+			if (slots[i].items != null &&
+				slots[i].items.Count > 0 &&
+				searchFunc.Invoke(slots[i].items.Peek())
+				)
+			{
+				return slots[i].items.Peek();
+			}
+		}
+
+		return null;
+	}
+
 	public bool AddItem(Item item, bool allowAutoSelect = true)
 	{
 		// Try first slot with same item type
@@ -281,7 +299,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		{
 			if (slots[i].items != null &&
 				slots[i].items.Count > 0 &&
-				slots[i].items.Peek().GetType() == item.GetType() &&
+				slots[i].items.Peek().itemName == item.itemName &&
 				slots[i].items.Count < item.stackSize
 				)
 			{
