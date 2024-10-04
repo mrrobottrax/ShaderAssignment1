@@ -12,6 +12,10 @@ public static class InputManager
 		Instance.Enable();
 	}
 
+	/// <summary>
+	/// Sets the control scheme that determine which inputs are possible.
+	/// </summary>
+	/// <param name="controlType"></param>
 	public static void SetControlMode(ControlType controlType)
 	{
 		ControlMode = controlType;

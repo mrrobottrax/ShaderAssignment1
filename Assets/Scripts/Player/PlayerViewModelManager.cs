@@ -112,15 +112,15 @@ public class PlayerViewmodelManager : MonoBehaviour
 	{
 		if (_inventory.GetActiveSlot().items.Count == 0) return;
 
-		if (_inventory.GetActiveSlot().items.Peek() is Weapon)
-			(_inventory.GetActiveSlot().items.Peek() as Weapon).Fire1_AnimationEvent();
+		if (_inventory.GetActiveSlot().items.Peek() is Weapon weapon)
+            weapon.Fire1_AnimationEvent();
 	}
 
 	public void Fire2_AnimationEvent()
 	{
 		if (_inventory.GetActiveSlot().items.Count == 0) return;
 
-		if (_inventory.GetActiveSlot().items.Peek() is Weapon)
-			(_inventory.GetActiveSlot().items.Peek() as Weapon).Fire2_AnimationEvent();
+		if (_inventory.GetActiveSlot().items.Peek() is Weapon weapon)
+            weapon.Fire2_AnimationEvent();
 	}
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CaptureCamera
 {
-	public class CaptureCameraComponent : Weapon
+	public class CameraItem : Weapon
 	{
 		[Header("Components")]
 		[SerializeField] Camera _camera;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Progress;
 
 public delegate void OnAddItemDelegate(Item item, InventorySlot slot);
 public delegate void OnSlotChangeDelegate(InventorySlot prev, InventorySlot active);
