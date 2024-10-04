@@ -28,7 +28,7 @@ public class Item : Interactable
 
 	protected virtual void PickUp(PlayerInteraction interactor)
 	{
-		interactor.GetComponent<PlayerInventory>().AddItem(this);
+		interactor.transform.parent.GetComponent<PlayerInventory>().AddItem(this);
 	}
 
 	public virtual void Drop() { }
