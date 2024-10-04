@@ -80,7 +80,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
     void Fire1(InputAction.CallbackContext ctx)
     {
         // Ensure the player is not already attacking before triggering
-        if (!Entity.IsAbleToAttack) return;
+        //if (!Entity.IsAbleToAttack) return;
 
         bool fired = ctx.ReadValueAsButton();
         if (HasParameter("IsHoldingFire1"))
@@ -94,7 +94,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
     void Fire2(InputAction.CallbackContext ctx)
     {
         // Ensure the player is not already attacking before triggering
-        if (!Entity.IsAbleToAttack) return;
+       // if (!Entity.IsAbleToAttack) return;
 
         bool fired = ctx.ReadValueAsButton();
         if (HasParameter("IsHoldingFire2"))
