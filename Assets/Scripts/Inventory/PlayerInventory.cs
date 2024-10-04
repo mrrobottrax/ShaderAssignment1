@@ -137,16 +137,16 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	{
 		if (activeSlot.items.Count == 0) return;
 
-		if (activeSlot.items.Peek() is Weapon)
-			(activeSlot.items.Peek() as Weapon).Fire1(ctx.performed);
+		if (activeSlot.items.Peek() is Weapon weapon)
+            weapon.Fire1(ctx.performed);
 	}
 
 	void Fire2(InputAction.CallbackContext ctx)
 	{
 		if (activeSlot.items.Count == 0) return;
 
-		if (activeSlot.items.Peek() is Weapon)
-			(activeSlot.items.Peek() as Weapon).Fire2(ctx.performed);
+		if (activeSlot.items.Peek() is Weapon weapon)
+            weapon.Fire2(ctx.performed);
 	}
 
 	void Drop(InputAction.CallbackContext ctx)

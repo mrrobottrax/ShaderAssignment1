@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 686905726616776299}
   - component: {fileID: 6011865623749331964}
   - component: {fileID: 6639112356079039154}
-  - component: {fileID: 3244939321998620327}
+  - component: {fileID: 8670198770572760168}
   m_Layer: 8
   m_Name: Shovel_Item
   m_TagString: Item
@@ -29,13 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7377304451960411583}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: -16.381248, y: -1.51875, z: 1.851422}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
 --- !u!33 &5007003379733903862
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -134,7 +134,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0017527163, y: 0.012306386, z: 0.00046874947}
   m_Center: {x: 0.0000000037252903, y: 9.313226e-10, z: -5.2386895e-10}
---- !u!114 &3244939321998620327
+--- !u!114 &8670198770572760168
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7377304451960411583}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eef72b0da9f1a0642a5eed265ebcb6a3, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e358c19ba8df1c4cb4b95f1ccb406ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionPoint: {fileID: 0}
@@ -153,4 +153,11 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 28f3870423875fa45aaf9f05fbf083c0, type: 3}
   animatorController: {fileID: 22100000, guid: 3c1d4e95af3ec7a4ba519538fa6aae2d, type: 2}
   dropOffset: {x: 0, y: 0, z: 0}
-  dropRotationOffset: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
+  dropRotationOffset: {x: 0, y: 0, z: 0, w: 1}
+  <BaseDamage>k__BackingField: 5
+  <BaseWeaponRange>k__BackingField: 2
+  <ViewModelAttacks>k__BackingField:
+    <AttackGroups>k__BackingField:
+    - <GroupTitle>k__BackingField: Shovel_Dig
+      <Attacks>k__BackingField:
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: f2dcb09702de0be4a9eb48f08e3b9145, type: 2}

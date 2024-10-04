@@ -42,8 +42,6 @@ public class AttackList
     {
         // The data associated with this attack
         [field: SerializeField] public AttackData AttackData { get; private set; }
-        // The position in the world where the attack is performed
-        [field: SerializeField] public Transform AttackPosition { get; private set; }
     }
 
     [System.Serializable]

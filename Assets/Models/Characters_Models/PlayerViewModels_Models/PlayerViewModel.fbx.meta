@@ -719,10 +719,10 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.4735379
-        functionName: Fire1_AnimationEvent
+      - time: 0.49521533
+        functionName: TryAttack_AnimationEvent
         data: Shovel_Dig
-        objectReferenceParameter: {fileID: 11500000, guid: ff299647888bcdb4ca07437416c0b6a3, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

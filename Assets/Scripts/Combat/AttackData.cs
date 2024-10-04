@@ -66,7 +66,6 @@ public class AttackData_Editor : Editor
     SerializedProperty projectileCreated;
     SerializedProperty isPhysicalAttack;
     SerializedProperty damageType;
-    SerializedProperty impactPauseDuration;
     SerializedProperty screenShakeAmplitude;
     SerializedProperty screenShakeDuration;
 
@@ -84,7 +83,6 @@ public class AttackData_Editor : Editor
         projectileCreated = serializedObject.FindProperty("<ProjectileCreated>k__BackingField");
         isPhysicalAttack = serializedObject.FindProperty("<IsPhysicalAttack>k__BackingField");
         damageType = serializedObject.FindProperty("<DamageType>k__BackingField");
-        impactPauseDuration = serializedObject.FindProperty("<ImpactPauseDuration>k__BackingField");
         screenShakeAmplitude = serializedObject.FindProperty("<ScreenShakeAmplitude>k__BackingField");
         screenShakeDuration = serializedObject.FindProperty("<ScreenShakeDuration>k__BackingField");
     }
@@ -114,7 +112,6 @@ public class AttackData_Editor : Editor
         if (isPhysicalAttack.boolValue)
         {
             EditorGUILayout.PropertyField(damageType);
-            EditorGUILayout.PropertyField(impactPauseDuration);
 
             EditorGUILayout.PropertyField(screenShakeAmplitude);
             EditorGUILayout.PropertyField(screenShakeDuration);

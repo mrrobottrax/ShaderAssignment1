@@ -5,21 +5,22 @@ namespace CaptureCamera
 	public class CameraItem : Weapon
 	{
 		[Header("Components")]
-		[SerializeField] Camera _camera;
-		[SerializeField] LayerMask _targetLayers;
+		[SerializeField] private Camera _camera;
+		[SerializeField] private LayerMask _targetLayers;
+        [SerializeField] private Polaroid _photoPrefab;
 
-		[Header("Capture Properites")]
-		[SerializeField] int cameraLensWidth = 300; // Width of the captured image
-		[SerializeField] int cameraLensHeight = 300; // Height of the captured image
+        [Header("Capture Properites")]
+		[SerializeField] private int cameraLensWidth = 300; // Width of the captured image
+		[SerializeField] private int cameraLensHeight = 300; // Height of the captured image
 
 		[SerializeField] private float fadeMultiplyer;
 		[SerializeField] private float castStartPoint;
 		[SerializeField] private float cameraRadius;
 
-		[Header("System")]
-		[SerializeField] private Polaroid _photoPrefab;
+		// System
+		private PlayerInventory ownerInventory;
 
-		PlayerInventory ownerInventory;
+		#region Initialization Methods
 
 		new void Awake()
 		{
@@ -28,10 +29,12 @@ namespace CaptureCamera
 			_camera.enabled = false;
 		}
 
-		/// <summary>
-		/// Prints a photo gameobject
-		/// </summary>
-		public GameObject PrintPhysicalPhoto(Vector3 pos, Quaternion rot)
+        #endregion
+
+        /// <summary>
+        /// Prints a photo gameobject
+        /// </summary>
+        public GameObject PrintPhysicalPhoto(Vector3 pos, Quaternion rot)
 		{
 			Polaroid photo = Instantiate(_photoPrefab, pos, Quaternion.identity, null);
 			photo.transform.rotation = rot;

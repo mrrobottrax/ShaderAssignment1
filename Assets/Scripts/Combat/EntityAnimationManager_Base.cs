@@ -7,17 +7,17 @@ using UnityEngine;
 public abstract class EntityAnimationManager_Base : MonoBehaviour
 {
     [field: Header("Components")]
-    public Entity_Base Entity { get; private set; }
-    protected Animator animator { get; private set; }
+    [field: SerializeField] public Entity_Base Entity { get; private set; }
+    [field: SerializeField] protected Animator animator { get; private set; }
 
     [field: Header("Entity Attacks")]
     [field: SerializeField] protected AttackList entityAttacks { get; private set; }
+
     #region Initialization Methods
 
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
-        Entity = GetComponentInParent<Entity_Base>();
     }
 
     #endregion

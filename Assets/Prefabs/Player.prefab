@@ -358,9 +358,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff299647888bcdb4ca07437416c0b6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <HandTransform>k__BackingField: {fileID: 6668338563465551288}
+  <Entity>k__BackingField: {fileID: 5234002548523702153}
+  <animator>k__BackingField: {fileID: 3942988104529243446}
+  <entityAttacks>k__BackingField:
+    <AttackGroups>k__BackingField: []
   _inventory: {fileID: 7647309867230405321}
   _handsAnimatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
+  _firstPersonCamera: {fileID: 3701271248387694150}
+  _attackPos: {fileID: 1106333749806880464}
+  _handTransform: {fileID: 6668338563465551288}
 --- !u!1 &1183810915753594825
 GameObject:
   m_ObjectHideFlags: 0
@@ -1882,8 +1888,8 @@ MonoBehaviour:
   _hurtBoxes: []
   <FirstPersonCamera>k__BackingField: {fileID: 3701271248387694150}
   playerController: {fileID: 2944094973486998542}
-  inventoryComponent: {fileID: 0}
-  playerViewModelManager: {fileID: 0}
+  inventoryComponent: {fileID: 7647309867230405321}
+  playerViewModelManager: {fileID: 3285336454719170954}
 --- !u!114 &2944094973486998542
 MonoBehaviour:
   m_ObjectHideFlags: 0

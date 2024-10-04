@@ -1,18 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ShovelItem : MonoBehaviour
+public class ShovelItem : Weapon
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, AttackList.Attack attack, string actionTitle)
     {
-        
-    }
+        switch (actionTitle)
+        {
+            case "Shovel_Melee":
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+                // Perform the shovels melee attack
+                player.EntityPerformOngoingAttack(viewModelManager, attack.AttackData, attackPos,
+                    player.FirstPersonCamera.CameraTransform.forward, BaseDamage, 0, BaseWeaponRange);
+
+                break;
+
+            case "Shovel_Dig":
+
+                Debug.Log("BALLS");
+
+                // See if the ray hits a digsite
+                RaycastHit hit;
+                if (Physics.Raycast(attackPos, player.FirstPersonCamera.CameraTransform.forward,
+                    out hit, BaseWeaponRange + attack.AttackData.AttackRange, attack.AttackData.AffectedLayers, QueryTriggerInteraction.Collide))
+                {
+                    // Try and advance the digsites stage
+                    if (hit.transform.TryGetComponent(out OreVein digSite))
+                        digSite.SpawnOre(hit.point);
+                }
+
+                break;
+        }
     }
 }
