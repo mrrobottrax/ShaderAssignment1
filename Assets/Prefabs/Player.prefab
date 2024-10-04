@@ -1840,7 +1840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_prefabIndex: -256
-  m_netID: 2147483642
+  m_netID: 0
 --- !u!114 &2965891379874120525
 MonoBehaviour:
   m_ObjectHideFlags: 0

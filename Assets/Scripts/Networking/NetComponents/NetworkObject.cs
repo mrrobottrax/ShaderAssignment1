@@ -12,7 +12,7 @@ public class NetworkObject : MonoBehaviour
 	[SerializeField, HideInInspector]
 	internal int m_prefabIndex = -1; // Only used by spawned prefabs
 
-	[SerializeField, HideInInspector]
+	[SerializeField]
 	internal int m_netID = 0;
 
 	internal SteamNetworkingIdentity m_ownerIndentity;
