@@ -1019,6 +1019,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 508637453519708516}
+  - component: {fileID: 8706210485295321537}
   m_Layer: 0
   m_Name: First Person Only
   m_TagString: Untagged
@@ -1042,6 +1043,23 @@ Transform:
   - {fileID: 1106333749806880464}
   m_Father: {fileID: 6727032766827451354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8706210485295321537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2332926557876443484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ada2f9c070b53084998134cf99497a23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactionRange: 3
+  _interactionLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  _cameraTransform: {fileID: 1106333749806880464}
 --- !u!1 &2362428166198945096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1795,7 +1813,6 @@ GameObject:
   - component: {fileID: 8292569634489466495}
   - component: {fileID: 5234002548523702153}
   - component: {fileID: 2944094973486998542}
-  - component: {fileID: 6699363410023142725}
   - component: {fileID: 7647309867230405321}
   - component: {fileID: 4644058051439156076}
   - component: {fileID: 2771106630496264574}
@@ -1905,23 +1922,6 @@ MonoBehaviour:
   m_movementData: {fileID: 11400000, guid: 6d7665d45ed806b488c3312af5e38744, type: 2}
   m_fpsCamera: {fileID: 3701271248387694150}
   m_movementMode: 0
---- !u!114 &6699363410023142725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5067302201104481768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ada2f9c070b53084998134cf99497a23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interactionRange: 3
-  _interactionLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  _cameraTransform: {fileID: 1106333749806880464}
 --- !u!114 &7647309867230405321
 MonoBehaviour:
   m_ObjectHideFlags: 0
