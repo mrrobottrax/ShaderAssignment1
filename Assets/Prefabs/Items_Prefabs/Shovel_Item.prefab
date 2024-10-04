@@ -160,4 +160,9 @@ MonoBehaviour:
     <AttackGroups>k__BackingField:
     - <GroupTitle>k__BackingField: Shovel_Dig
       <Attacks>k__BackingField:
-      - <AttackData>k__BackingField: {fileID: 11400000, guid: f2dcb09702de0be4a9eb48f08e3b9145, type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 674d28ea91babdb479d9c57e6569de4d, type: 2}
+    - <GroupTitle>k__BackingField: Shovel_Melee
+      <Attacks>k__BackingField:
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 6c31358106b914a4b95f2e1427ebde26, type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 6c31358106b914a4b95f2e1427ebde26, type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 817e5bedb38c10e489e3cdf9886fd592, type: 2}

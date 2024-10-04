@@ -270,7 +270,8 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
         currentChain = value;
 
         // Set the chain value on the animator
-        animator.SetInteger("ViewModelActionChain", value);
+        if (HasParameter("ViewModelActionChain"))
+            animator.SetInteger("ViewModelActionChain", value);
     }
 
     #endregion

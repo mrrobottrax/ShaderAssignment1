@@ -361,7 +361,12 @@ MonoBehaviour:
   <Entity>k__BackingField: {fileID: 5234002548523702153}
   <animator>k__BackingField: {fileID: 3942988104529243446}
   <entityAttacks>k__BackingField:
-    <AttackGroups>k__BackingField: []
+    <AttackGroups>k__BackingField:
+    - <GroupTitle>k__BackingField: Punch
+      <Attacks>k__BackingField:
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 5f37034c38d71a743afb2a8002a5ac10, type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 5f37034c38d71a743afb2a8002a5ac10, type: 2}
+      - <AttackData>k__BackingField: {fileID: 11400000, guid: 7d1062e1fd0866045b392b39c035891d, type: 2}
   _inventory: {fileID: 7647309867230405321}
   _handsAnimatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
   _firstPersonCamera: {fileID: 3701271248387694150}

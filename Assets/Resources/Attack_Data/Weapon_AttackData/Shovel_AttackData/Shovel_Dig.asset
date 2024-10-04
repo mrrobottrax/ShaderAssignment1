@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shovel_Dig
   m_EditorClassIdentifier: 
   <AttackDamage>k__BackingField: 0
-  <AttackRange>k__BackingField: 2
+  <AttackRange>k__BackingField: 0
   <Knockback>k__BackingField: 0
   <Cooldown>k__BackingField: 0
   <ApplicationType>k__BackingField: 0
@@ -24,7 +24,8 @@ MonoBehaviour:
     m_Bits: 16384
   <EffectsApplied>k__BackingField: []
   <ProjectileCreated>k__BackingField: {fileID: 0}
-  <IsPhysicalAttack>k__BackingField: 1
+  <IsPhysicalAttack>k__BackingField: 0
   <DamageType>k__BackingField: 0
+  <ImpactPauseDuration>k__BackingField: 0
   <ScreenShakeAmplitude>k__BackingField: 0
   <ScreenShakeDuration>k__BackingField: 0
