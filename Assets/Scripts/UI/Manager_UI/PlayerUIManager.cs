@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerUIManager : MonoBehaviour
 {
-
 	[SerializeField] InteractionUIManager interactionPromptDisplay;
 	[SerializeField] PlayerHUDManager hudManager;
 	[SerializeField] InventoryUI inventoryUI;
@@ -26,7 +25,7 @@ public class PlayerUIManager : MonoBehaviour
 		}
 		else
 		{
-			Debug.LogWarning("Multiple UI managers is scene");
+			Debug.LogWarning("Multiple UI managers in scene");
 		}
 
 	}

@@ -10,7 +10,6 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 	[Header("Componenets")]
 	[SerializeField] Transform _cameraTransform;
-	private InteractionUIManager interactionUI;
 	private PlayerController playerController;
 
 	[Header("System")]
@@ -33,9 +32,6 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	{
 		// Enable controls
 		SetControlsSubscription(true);
-
-		// Cache prompt display
-		interactionUI = PlayerUIManager.InteractionPromptDisplay;
 	}
 
 	#endregion
@@ -66,8 +62,8 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 		bool isInteractPressed = context.ReadValueAsButton();
 
 		// Ensure that interact was pressed, there is a current interactable, an option is highlighted, and both display types are valid.
-		if (isInteractPressed && interactionUI.HasOptionSelected() && interactionUI.GetCurrentInteractable().interactionEnabled)
-			interactionUI.GetSelectedInteraction().interact(this);
+		if (isInteractPressed && PlayerUIManager.InteractionPromptDisplay && PlayerUIManager.InteractionPromptDisplay.HasOptionSelected() && PlayerUIManager.InteractionPromptDisplay.GetCurrentInteractable().interactionEnabled)
+			PlayerUIManager.InteractionPromptDisplay.GetSelectedInteraction().interact(this);
 	}
 
 	#endregion
@@ -88,15 +84,15 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 	private void Update()
 	{
 		Interactable interactable = RaycastForInteractable();
-		if (interactable != interactionUI.GetCurrentInteractable())
+		if (interactable != PlayerUIManager.InteractionPromptDisplay.GetCurrentInteractable())
 		{
-			interactionUI.SetCurrentInteractable(interactable);
+			PlayerUIManager.InteractionPromptDisplay.SetCurrentInteractable(interactable);
 			interactableWasNull = interactable == null;
 		}
 		// A scene change can make interactionUI.GetCurrentInteractable() null, making it miss deselecting the interactable
-		else if (!interactionUI.GetCurrentInteractable() && !interactableWasNull)
+		else if (!PlayerUIManager.InteractionPromptDisplay.GetCurrentInteractable() && !interactableWasNull)
 		{
-			interactionUI.SetCurrentInteractable(null);
+			PlayerUIManager.InteractionPromptDisplay.SetCurrentInteractable(null);
 			interactableWasNull = true;
 		}
 	}
@@ -104,7 +100,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 	public void ForceRefresh()
 	{
-		interactionUI.SetCurrentInteractable(null);
+		PlayerUIManager.InteractionPromptDisplay.SetCurrentInteractable(null);
 	}
 
 	Interactable RaycastForInteractable()
@@ -132,22 +128,22 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 		// Check if we should keep the current interactable selected.
 		// This can happen when the interaction prompts are larger than the object itself.
-		if (interactionUI.GetCurrentInteractable() && interactionUI.GetCurrentInteractable().interactionEnabled)
+		if (PlayerUIManager.InteractionPromptDisplay.GetCurrentInteractable() && PlayerUIManager.InteractionPromptDisplay.GetCurrentInteractable().interactionEnabled)
 		{
-			if (interactionUI.IsCursorInsideRect())
+			if (PlayerUIManager.InteractionPromptDisplay.IsCursorInsideRect())
 			{
 				// Check whichever dist is lowest, either from the center or from the last position the raycast hit.
 				// This helps when right on the edge of interacting with an object. The raycast fails because we aren looking
 				// at the interaction prompt, and the distance from the center is longer than the raycast would be.
-				float sqrDist1 = (interactionUI.GetCurrentInteractable().transform.position - _cameraTransform.position).sqrMagnitude;
+				float sqrDist1 = (PlayerUIManager.InteractionPromptDisplay.GetCurrentInteractable().transform.position - _cameraTransform.position).sqrMagnitude;
 
-				Vector3 globalHitpoint = interactionUI.GetCurrentInteractable().transform.localToWorldMatrix *
+				Vector3 globalHitpoint = PlayerUIManager.InteractionPromptDisplay.GetCurrentInteractable().transform.localToWorldMatrix *
 					new Vector4(lastKnownLocalHitPoint.x, lastKnownLocalHitPoint.y, lastKnownLocalHitPoint.z, 1);
 
 				float sqrDist2 = (globalHitpoint - _cameraTransform.position).sqrMagnitude;
 
 				if (Mathf.Min(sqrDist1, sqrDist2) <= sqrInteractionRange)
-					return interactionUI.GetCurrentInteractable();
+					return PlayerUIManager.InteractionPromptDisplay.GetCurrentInteractable();
 			}
 		}
 
