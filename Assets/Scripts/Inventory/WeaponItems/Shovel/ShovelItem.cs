@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShovelItem : WeaponItem
 {
-    public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, AttackList.Attack attack, string actionTitle)
+    public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, string actionTitle, AttackList.Attack attack = null)
     {
         switch (actionTitle)
         {

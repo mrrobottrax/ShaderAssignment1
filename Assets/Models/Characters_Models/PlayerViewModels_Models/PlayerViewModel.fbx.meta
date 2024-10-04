@@ -65,7 +65,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.372172
-        functionName: TryAttack_AnimationEvent
+        functionName: TryAction_AnimationEvent
         data: Punch
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -115,7 +115,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.30884504
-        functionName: TryAttack_AnimationEvent
+        functionName: TryAction_AnimationEvent
         data: Punch
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -165,7 +165,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.35738298
-        functionName: TryAttack_AnimationEvent
+        functionName: TryAction_AnimationEvent
         data: Punch
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -440,7 +440,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0.60939336
-        functionName: TryModelFunction
+        functionName: TryAction_AnimationEvent
         data: Capture
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -505,7 +505,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0.6535824
-        functionName: TryModelFunction
+        functionName: TryAction_AnimationEvent
         data: Capture
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -577,7 +577,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.4753654
-        functionName: TryAttack_AnimationEvent
+        functionName: TryAction_AnimationEvent
         data: Shovel_Melee
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -627,7 +627,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.26849413
-        functionName: TryAttack_AnimationEvent
+        functionName: TryAction_AnimationEvent
         data: Shovel_Melee
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -677,7 +677,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.45464167
-        functionName: TryAttack_AnimationEvent
+        functionName: TryAction_AnimationEvent
         data: Shovel_Melee
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -720,7 +720,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0.49521533
-        functionName: TryAttack_AnimationEvent
+        functionName: TryAction_AnimationEvent
         data: Shovel_Dig
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -908,7 +908,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.41396192
-        functionName: TryAttack_AnimationEvent
+        functionName: TryAction_AnimationEvent
         data: Spear_Melee
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0
@@ -951,7 +951,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0.47956857
-        functionName: TryModelFunction
+        functionName: TryAction_AnimationEvent
         data: Throw
         objectReferenceParameter: {fileID: 11500000, guid: 563892a8ed1ea1f4daafebfb7da2b49f, type: 3}
         floatParameter: 0

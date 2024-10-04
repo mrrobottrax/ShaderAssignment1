@@ -52,6 +52,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
     #endregion
 
     #region Input Methods
+
     public void Subscribe()
     {
         InputManager.Instance.Player.Fire1.performed += Fire1;
@@ -78,18 +79,30 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 
     void Fire1(InputAction.CallbackContext ctx)
     {
-        if (_inventory.GetActiveSlot().items.Count == 0) return;
+        // Ensure the player is not already attacking before triggering
+        if (!Entity.IsAbleToAttack) return;
 
-        if (_inventory.GetActiveSlot().items.Peek() is UseableItem weapon)
-            weapon.Fire1(ctx.performed);
+        bool fired = ctx.ReadValueAsButton();
+        if (HasParameter("IsHoldingFire1"))
+            animator.SetBool("IsHoldingFire1", fired);
+
+        // Only trigger fire if the button is pressed, no released
+        if (fired && HasParameter("Fire1"))
+            animator.SetTrigger("Fire1");
     }
 
     void Fire2(InputAction.CallbackContext ctx)
     {
-        if (_inventory.GetActiveSlot().items.Count == 0) return;
+        // Ensure the player is not already attacking before triggering
+        if (!Entity.IsAbleToAttack) return;
 
-        if (_inventory.GetActiveSlot().items.Peek() is UseableItem weapon)
-            weapon.Fire2(ctx.performed);
+        bool fired = ctx.ReadValueAsButton();
+        if (HasParameter("IsHoldingFire2"))
+            animator.SetBool("IsHoldingFire2", fired);
+
+        // Only trigger fire if the button is pressed, no released
+        if (fired && HasParameter("Fire2"))
+            animator.SetTrigger("Fire2");
     }
     #endregion
 
@@ -187,43 +200,65 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
         Entity.EntityBeginAttack();
     }
 
-    public override void TryAttack_AnimationEvent(string attackGroup)
+    public override void TryAction_AnimationEvent(string actionTitle)
     {
 		Vector3 functionPos = _firstPersonCamera.transform.position;
 
-        if (_inventory.GetActiveSlot().items.Peek() is UseableItem usableItem)
+        AttackGroup chosenGroup;
+        Attack attack;
+
+        if (_inventory.GetActiveSlot().items.Count >= 1 &&
+            _inventory.GetActiveSlot().items.Peek() is UseableItem usableItem)
 		{
-            // Store attack source
+
+            // Determine attack data for weapons
             if (_inventory.GetActiveSlot().items.Peek() is WeaponItem weapon)
             {
-                AttackGroup chosenGroup;
-                Attack attack;
-                int attackChainLength;
 
                 // Determine the attack group and chosen attack
-                chosenGroup = weapon.ViewModelAttacks.GetAttackGroup(attackGroup);
+                chosenGroup = weapon.ViewModelAttacks.GetAttackGroup(actionTitle);
                 attack = weapon.ViewModelAttacks.GetAttackFromGroup(chosenGroup, currentChain);
 
-                // Compare the last attack group to the newly chosen one
-                if (chosenGroup.GroupTitle != prevAttackGroup)
-                    currentChain = 0;
-
                 // Perform the attack data using the AttackData from the weapons ViewModels AttackList.
-                weapon.TryModelFunction(Entity as PlayerHealth, this, functionPos, attack, attackGroup);
-
-
-                // Increment the action chain, and loop back to zero if it reaches the end of the chain.
-                attackChainLength = chosenGroup.Attacks.Length;
-                SetActionChain((currentChain + 1) % attackChainLength);
-
-                prevAttackGroup = chosenGroup.GroupTitle;
-
+                PerformAttack(actionTitle, weapon, chosenGroup, attack, functionPos);
 				return;
             }
 
-            usableItem.TryModelFunction(Entity as PlayerHealth, this, functionPos);
+            // Use normal UsableItem functionality
+            usableItem.TryModelFunction(Entity as PlayerHealth, this, functionPos, actionTitle);
 			prevAttackGroup = null;
         }
+        else
+        {
+            // Use fists when unarmed
+            chosenGroup = entityAttacks.GetAttackGroup(actionTitle);
+            attack = entityAttacks.GetAttackFromGroup(chosenGroup, currentChain);
+
+            PerformAttack(actionTitle, null, chosenGroup, attack, functionPos);
+        }
+    }
+
+    private void PerformAttack(string actionTitle, WeaponItem weapon, AttackGroup chosenGroup, Attack attack, Vector3 attackPos)
+    {
+        // Compare the last attack group to the newly chosen one
+        if (chosenGroup.GroupTitle != prevAttackGroup)
+            currentChain = 0;
+
+        if (weapon != null)
+        {
+            // Perform the attack data using the AttackData from the weapons ViewModels AttackList.
+            weapon.TryModelFunction(Entity as PlayerHealth, this, attackPos, actionTitle, attack);
+        }
+        else
+        {
+            // Perform the attack data using the AttackData from the entities AttackList.
+            Entity.EntityPerformOngoingAttack(this, attack.AttackData, attackPos, _firstPersonCamera.CameraTransform.forward);
+        }
+
+        // Increment the action chain, and loop back to zero if it reaches the end of the chain.
+        SetActionChain((currentChain + 1) % chosenGroup.Attacks.Length);
+
+        prevAttackGroup = chosenGroup.GroupTitle;
     }
 
     /// <summary>

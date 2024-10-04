@@ -5,7 +5,7 @@ public class ThrowableItem : UseableItem
 	[SerializeField] float _throwForce = 10;
 	[SerializeField] Vector3 _throwOffset = new(0, 0, 0.3f);
 
-    public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, AttackList.Attack attack, string actionTitle)
+    public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, string actionTitle, AttackList.Attack attack = null)
     {
         if (actionTitle == "Throw")
         {

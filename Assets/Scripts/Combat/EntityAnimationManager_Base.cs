@@ -40,7 +40,7 @@ public abstract class EntityAnimationManager_Base : NetworkBehaviour
     /// The event that calls this method should always come after the attack has started.
     /// </remarks>
     /// <param name="attackGroup">The group that the attack is in</param>
-    public abstract void TryAttack_AnimationEvent(string attackGroup);
+    public abstract void TryAction_AnimationEvent(string attackGroup);
 
     /// <summary>
     /// When implemented, this method should reset the AnimationManager to a state where a new attack can begin
@@ -53,4 +53,19 @@ public abstract class EntityAnimationManager_Base : NetworkBehaviour
         Entity.FinishAttack();
     }
     #endregion
+
+    /// <summary>
+    /// Returns true if this managers animator contains a variable with a string.
+    /// </summary>
+    protected bool HasParameter(string parameterName)
+    {
+        foreach (var param in animator.parameters)
+        {
+            if (param.name == parameterName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

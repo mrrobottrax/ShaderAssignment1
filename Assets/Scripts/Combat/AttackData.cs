@@ -31,7 +31,6 @@ public class AttackData : ScriptableObject
     [field: Header("Physical Attack Properties"), Space(10)]
     [field: SerializeField] public EDamageType DamageType { get; private set; }
 
-    // Stun at some point  [field: SerializeField] public float StunDuration { get; private set; }
 
     [field: Header("Physical FX"), Space(10)]
 

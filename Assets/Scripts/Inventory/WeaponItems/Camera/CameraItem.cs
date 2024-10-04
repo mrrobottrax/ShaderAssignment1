@@ -28,7 +28,7 @@ namespace CaptureCamera
 
 		#endregion
 
-        public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, AttackList.Attack attack, string actionTitle)
+        public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, string actionTitle, AttackList.Attack attack = null)
         {
             if(actionTitle == "Capture")
             {
@@ -36,11 +36,6 @@ namespace CaptureCamera
                 ownerInventory.AddItem(photo.GetComponent<Item>(), false);
             }
         }
-
-        public override void Fire2(bool pressed)
-		{
-			playerViewmodelManager.Animator.SetBool("Zoom", pressed);
-		}
 
 		#region Photo Capture methods
 

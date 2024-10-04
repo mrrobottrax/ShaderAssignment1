@@ -25,21 +25,9 @@ public class UseableItem : Item
 
     #region ViewModel Functionality
 
-    public virtual void Fire1(bool pressed)
-    {
-        if (!pressed) return;
-        playerViewmodelManager.Animator.SetTrigger("Fire1");
-    }
-
-    public virtual void Fire2(bool pressed)
-    {
-        if (!pressed) return;
-        playerViewmodelManager.Animator.SetTrigger("Fire2");
-    }
-
     /// <summary>
     /// This method executes a view model's function based on the action title passed in.
     /// </summary>
-    public virtual void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 functionPos, AttackList.Attack attack = null, string actionTitle = "") { }
+    public virtual void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 functionPos, string actionTitle, AttackList.Attack attack = null) { }
     #endregion
 }
