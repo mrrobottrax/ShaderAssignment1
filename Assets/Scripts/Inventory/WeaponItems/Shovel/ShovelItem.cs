@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShovelItem : Weapon
+public class ShovelItem : WeaponItem
 {
     public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, AttackList.Attack attack, string actionTitle)
     {
@@ -15,8 +15,6 @@ public class ShovelItem : Weapon
                 break;
 
             case "Shovel_Dig":
-
-                Debug.Log("BALLS");
 
                 // See if the ray hits a digsite
                 RaycastHit hit;

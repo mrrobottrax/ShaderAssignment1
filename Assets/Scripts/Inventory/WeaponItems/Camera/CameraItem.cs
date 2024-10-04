@@ -2,23 +2,20 @@ using UnityEngine;
 
 namespace CaptureCamera
 {
-	public class CameraItem : Weapon
-	{
+	public class CameraItem : UseableItem
+    {
 		[Header("Components")]
 		[SerializeField] private Camera _camera;
 		[SerializeField] private LayerMask _targetLayers;
-        [SerializeField] private Polaroid _photoPrefab;
+		[SerializeField] private Polaroid _photoPrefab;
 
-        [Header("Capture Properites")]
+		[Header("Capture Properites")]
 		[SerializeField] private int cameraLensWidth = 300; // Width of the captured image
 		[SerializeField] private int cameraLensHeight = 300; // Height of the captured image
 
 		[SerializeField] private float fadeMultiplyer;
 		[SerializeField] private float castStartPoint;
 		[SerializeField] private float cameraRadius;
-
-		// System
-		private PlayerInventory ownerInventory;
 
 		#region Initialization Methods
 
@@ -29,12 +26,28 @@ namespace CaptureCamera
 			_camera.enabled = false;
 		}
 
-        #endregion
+		#endregion
 
-        /// <summary>
-        /// Prints a photo gameobject
-        /// </summary>
-        public GameObject PrintPhysicalPhoto(Vector3 pos, Quaternion rot)
+        public override void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 attackPos, AttackList.Attack attack, string actionTitle)
+        {
+            if(actionTitle == "Capture")
+            {
+                GameObject photo = PrintPhysicalPhoto(transform.position, transform.rotation);
+                ownerInventory.AddItem(photo.GetComponent<Item>(), false);
+            }
+        }
+
+        public override void Fire2(bool pressed)
+		{
+			playerViewmodelManager.Animator.SetBool("Zoom", pressed);
+		}
+
+		#region Photo Capture methods
+
+		/// <summary>
+		/// Prints a photo gameobject
+		/// </summary>
+		public GameObject PrintPhysicalPhoto(Vector3 pos, Quaternion rot)
 		{
 			Polaroid photo = Instantiate(_photoPrefab, pos, Quaternion.identity, null);
 			photo.transform.rotation = rot;
@@ -45,37 +58,6 @@ namespace CaptureCamera
 
 			return photo.gameObject;
 		}
-
-
-		public GameObject PrintPhysicalPhoto()
-		{
-			return PrintPhysicalPhoto(transform.position, transform.rotation);
-		}
-
-		protected override void PickUp(PlayerInteraction interactor)
-		{
-			base.PickUp(interactor);
-			ownerInventory = interactor.GetComponent<PlayerInventory>();
-		}
-
-		public override void Drop()
-		{
-			base.Drop();
-			ownerInventory = null;
-		}
-
-		public override void Fire2(bool pressed)
-		{
-			playerViewmodelManager.Animator.SetBool("Zoom", pressed);
-		}
-
-		public override void Fire1_AnimationEvent()
-		{
-			GameObject photo = PrintPhysicalPhoto();
-			ownerInventory.AddItem(photo.GetComponent<Item>(), false);
-		}
-
-		#region Photo Capture methods
 
 		private void FindObjectsInView()
 		{
@@ -104,10 +86,11 @@ namespace CaptureCamera
 			}
 		}
 
+
+
 		/// <summary>
 		/// Turns a frame into a texture
 		/// </summary>
-		/// <returns></returns>
 		private Texture2D CaptureFrame(int resolutionWidth, int resolutionHeight)
 		{
 			// Set up a RenderTexture with the desired resolution
@@ -138,6 +121,7 @@ namespace CaptureCamera
 		}
 
 		#endregion
+
 	}
 }
 

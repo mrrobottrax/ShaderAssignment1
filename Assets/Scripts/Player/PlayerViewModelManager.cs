@@ -1,6 +1,8 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static AttackList;
 
-public class PlayerViewmodelManager : EntityAnimationManager_Base
+public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 {
 	[field: Header("Components")]
     public Animator Animator { get; private set; }
@@ -9,7 +11,6 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base
     [SerializeField] private FirstPersonCamera _firstPersonCamera;
 
     [field: Header("Transforms")]
-    [field: SerializeField] private Transform _attackPos;
     [field: SerializeField] private Transform _handTransform;
 
 	// System
@@ -18,24 +19,78 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base
 
     #region Initialization Methods
 
-    private void Awake()
+    protected override void Awake()
 	{
+        base.Awake();
+
 		Animator = GetComponent<Animator>();
 
 		_inventory.OnAddItem += OnAddItem;
 		_inventory.OnDropItem += OnDropItem;
 		_inventory.OnActiveSlotChange += OnActiveSlotChange;
 	}
-	#endregion
 
-	#region Unity Callbacks
+    private void Start()
+    {
+        if (IsOwner)
+            SetControlsSubscription(true);
+    }
+    #endregion
 
-	private void OnDestroy()
+    #region Unity Callbacks
+
+    private void OnDestroy()
 	{
 		_inventory.OnAddItem -= OnAddItem;
 		_inventory.OnDropItem -= OnDropItem;
 		_inventory.OnActiveSlotChange -= OnActiveSlotChange;
-	}
+
+        if (IsOwner)
+            SetControlsSubscription(false);
+    }
+
+    #endregion
+
+    #region Input Methods
+    public void Subscribe()
+    {
+        InputManager.Instance.Player.Fire1.performed += Fire1;
+        InputManager.Instance.Player.Fire1.canceled += Fire1;
+        InputManager.Instance.Player.Fire2.performed += Fire2;
+        InputManager.Instance.Player.Fire2.canceled += Fire2;
+    }
+
+    public void Unsubscribe()
+    {
+        InputManager.Instance.Player.Fire1.performed -= Fire1;
+        InputManager.Instance.Player.Fire1.canceled -= Fire1;
+        InputManager.Instance.Player.Fire2.performed -= Fire2;
+        InputManager.Instance.Player.Fire2.canceled -= Fire2;
+    }
+
+    public void SetControlsSubscription(bool isInputEnabled)
+    {
+        if (isInputEnabled)
+            Subscribe();
+        else
+            Unsubscribe();
+    }
+
+    void Fire1(InputAction.CallbackContext ctx)
+    {
+        if (_inventory.GetActiveSlot().items.Count == 0) return;
+
+        if (_inventory.GetActiveSlot().items.Peek() is UseableItem weapon)
+            weapon.Fire1(ctx.performed);
+    }
+
+    void Fire2(InputAction.CallbackContext ctx)
+    {
+        if (_inventory.GetActiveSlot().items.Count == 0) return;
+
+        if (_inventory.GetActiveSlot().items.Peek() is UseableItem weapon)
+            weapon.Fire2(ctx.performed);
+    }
     #endregion
 
     #region Animator State Methods
@@ -127,22 +182,6 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base
 
     #region Animation Events
 
-    public void Fire1_AnimationEvent()
-	{
-		if (_inventory.GetActiveSlot().items.Count == 0) return;
-
-		if (_inventory.GetActiveSlot().items.Peek() is Weapon weapon)
-			weapon.Fire1_AnimationEvent();
-	}
-
-	public void Fire2_AnimationEvent()
-	{
-		if (_inventory.GetActiveSlot().items.Count == 0) return;
-
-		if (_inventory.GetActiveSlot().items.Peek() is Weapon weapon)
-			weapon.Fire2_AnimationEvent();
-	}
-
     public override void StartAttack_AnimationEvent()
     {
         Entity.EntityBeginAttack();
@@ -150,32 +189,40 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base
 
     public override void TryAttack_AnimationEvent(string attackGroup)
     {
-        AttackList.AttackGroup chosenGroup;
-        AttackList.Attack attack;
-        int attackChainLength;
+		Vector3 functionPos = _firstPersonCamera.transform.position;
 
-        // Store attack source
-		if (_inventory.GetActiveSlot().items.Peek() is Weapon weapon)
+        if (_inventory.GetActiveSlot().items.Peek() is UseableItem usableItem)
 		{
-            // Determine the attack group and chosen attack
-            chosenGroup = weapon.ViewModelAttacks.GetAttackGroup(attackGroup);
-            attack = weapon.ViewModelAttacks.GetAttackFromGroup(chosenGroup, currentChain);
+            // Store attack source
+            if (_inventory.GetActiveSlot().items.Peek() is WeaponItem weapon)
+            {
+                AttackGroup chosenGroup;
+                Attack attack;
+                int attackChainLength;
 
-            // Compare the last attack group to the newly chosen one
-            if (chosenGroup.GroupTitle != prevAttackGroup)
-                currentChain = 0;
+                // Determine the attack group and chosen attack
+                chosenGroup = weapon.ViewModelAttacks.GetAttackGroup(attackGroup);
+                attack = weapon.ViewModelAttacks.GetAttackFromGroup(chosenGroup, currentChain);
 
-            // Perform the attack data using the AttackData from the weapons ViewModels AttackList.
-            weapon.TryModelFunction(Entity as PlayerHealth, this, _attackPos.position, attack, attackGroup);
+                // Compare the last attack group to the newly chosen one
+                if (chosenGroup.GroupTitle != prevAttackGroup)
+                    currentChain = 0;
 
-            // Set the attack chain length to the number of attacks in the chosen attack group
-            attackChainLength = chosenGroup.Attacks.Length;
+                // Perform the attack data using the AttackData from the weapons ViewModels AttackList.
+                weapon.TryModelFunction(Entity as PlayerHealth, this, functionPos, attack, attackGroup);
 
-            // Increment the action chain, and loop back to zero if it reaches the end of the chain.
-            SetActionChain((currentChain + 1) % attackChainLength);
 
-            // Set the prev attack group
-            prevAttackGroup = chosenGroup.GroupTitle;
+                // Increment the action chain, and loop back to zero if it reaches the end of the chain.
+                attackChainLength = chosenGroup.Attacks.Length;
+                SetActionChain((currentChain + 1) % attackChainLength);
+
+                prevAttackGroup = chosenGroup.GroupTitle;
+
+				return;
+            }
+
+            usableItem.TryModelFunction(Entity as PlayerHealth, this, functionPos);
+			prevAttackGroup = null;
         }
     }
 

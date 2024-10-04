@@ -4,7 +4,7 @@ using UnityEngine;
 /// This abstract class should be implemented by classes that are meant to handle an entities animations.
 /// </summary>
 [RequireComponent(typeof(Animator))]
-public abstract class EntityAnimationManager_Base : MonoBehaviour
+public abstract class EntityAnimationManager_Base : NetworkBehaviour
 {
     [field: Header("Components")]
     [field: SerializeField] public Entity_Base Entity { get; private set; }

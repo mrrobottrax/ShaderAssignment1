@@ -75,10 +75,6 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	{
 		InputManager.Instance.Permanents.Inventory.performed += ToggleToolbelt;
 		InputManager.Instance.Player.Drop.performed += Drop;
-		InputManager.Instance.Player.Fire1.performed += Fire1;
-		InputManager.Instance.Player.Fire1.canceled += Fire1;
-		InputManager.Instance.Player.Fire2.performed += Fire2;
-		InputManager.Instance.Player.Fire2.canceled += Fire2;
 
 		// Hotbar
 		InputManager.Instance.Player.Slot1.performed += Slot1;
@@ -96,10 +92,6 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	{
 		InputManager.Instance.Permanents.Inventory.performed -= ToggleToolbelt;
 		InputManager.Instance.Player.Drop.performed -= Drop;
-		InputManager.Instance.Player.Fire1.performed -= Fire1;
-		InputManager.Instance.Player.Fire1.canceled -= Fire1;
-		InputManager.Instance.Player.Fire2.performed -= Fire2;
-		InputManager.Instance.Player.Fire2.canceled -= Fire2;
 
 		// Hotbar
 		InputManager.Instance.Player.Slot1.performed -= Slot1;
@@ -131,22 +123,6 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		if (prevSlot == activeSlot) return;
 
 		OnActiveSlotChange?.Invoke(prevSlot, activeSlot);
-	}
-
-	void Fire1(InputAction.CallbackContext ctx)
-	{
-		if (activeSlot.items.Count == 0) return;
-
-		if (activeSlot.items.Peek() is Weapon weapon)
-            weapon.Fire1(ctx.performed);
-	}
-
-	void Fire2(InputAction.CallbackContext ctx)
-	{
-		if (activeSlot.items.Count == 0) return;
-
-		if (activeSlot.items.Peek() is Weapon weapon)
-            weapon.Fire2(ctx.performed);
 	}
 
 	void Drop(InputAction.CallbackContext ctx)

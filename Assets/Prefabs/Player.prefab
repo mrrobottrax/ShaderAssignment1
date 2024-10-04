@@ -365,7 +365,6 @@ MonoBehaviour:
   _inventory: {fileID: 7647309867230405321}
   _handsAnimatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
   _firstPersonCamera: {fileID: 3701271248387694150}
-  _attackPos: {fileID: 1106333749806880464}
   _handTransform: {fileID: 6668338563465551288}
 --- !u!1 &1183810915753594825
 GameObject:
