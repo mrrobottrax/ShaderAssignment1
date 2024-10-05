@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Item : Interactable
 {
-	[Header("Item")]
+	[Header("Item Properties")]
 	public string itemName = "Item Name";
 	public int stackSize = 1;
 	public Sprite itemSprite;
@@ -15,6 +15,7 @@ public class Item : Interactable
 
 	protected Interaction[] interactions;
 
+	// System
 	protected PlayerInventory ownerInventory;
 
 	protected void Awake()

@@ -4,7 +4,6 @@ public class UseableItem : Item
 {
     // System
     protected PlayerViewmodelManager playerViewmodelManager;
-    protected PlayerInventory ownerInventory;
 
     #region Item Functionality
 
@@ -12,7 +11,6 @@ public class UseableItem : Item
     {
         base.PickUp(interactor);
 
-        ownerInventory = interactor.GetComponent<PlayerInventory>();
         playerViewmodelManager = interactor.GetComponentInChildren<PlayerViewmodelManager>();
     }
 
