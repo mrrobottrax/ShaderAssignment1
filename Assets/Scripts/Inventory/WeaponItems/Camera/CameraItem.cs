@@ -17,8 +17,6 @@ namespace CaptureCamera
 		[SerializeField] private float castStartPoint;
 		[SerializeField] private float cameraRadius;
 
-		// System
-		private PlayerInventory ownerInventory;
 
 		#region Initialization Methods
 
@@ -50,18 +48,6 @@ namespace CaptureCamera
 		public GameObject PrintPhysicalPhoto()
 		{
 			return PrintPhysicalPhoto(transform.position, transform.rotation);
-		}
-
-		protected override void PickUp(PlayerInteraction interactor)
-		{
-			base.PickUp(interactor);
-			ownerInventory = interactor.GetComponent<PlayerInventory>();
-		}
-
-		public override void Drop()
-		{
-			base.Drop();
-			ownerInventory = null;
 		}
 
 		public override void Fire2(bool pressed)

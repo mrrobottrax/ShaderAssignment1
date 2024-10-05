@@ -7,20 +7,6 @@ public class Throwable : Weapon
 	[SerializeField] float _throwForce = 10;
 	[SerializeField] Vector3 _throwOffset = new(0, 0, 0.3f);
 
-	PlayerInventory ownerInventory;
-
-	protected override void PickUp(PlayerInteraction interactor)
-	{
-		base.PickUp(interactor);
-		ownerInventory = interactor.GetComponent<PlayerInventory>();
-	}
-
-	public override void Drop()
-	{
-		base.Drop();
-		ownerInventory = null;
-	}
-
 	public override void Fire1(bool pressed)
 	{
 		playerViewmodelManager.Animator.SetBool("PreparingThrow", pressed);

@@ -15,6 +15,8 @@ public class Item : Interactable
 
 	protected Interaction[] interactions;
 
+	protected PlayerInventory ownerInventory;
+
 	protected void Awake()
 	{
 		interactions = new Interaction[1] {
@@ -28,7 +30,8 @@ public class Item : Interactable
 
 	protected virtual void PickUp(PlayerInteraction interactor)
 	{
-		interactor.transform.parent.GetComponent<PlayerInventory>().AddItem(this);
+		ownerInventory = interactor.transform.parent.GetComponent<PlayerInventory>();
+		ownerInventory.AddItem(this);
 	}
 
 	public virtual void Drop() { }
