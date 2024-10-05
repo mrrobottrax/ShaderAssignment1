@@ -5,7 +5,6 @@ using static AttackList;
 public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 {
 	[field: Header("Components")]
-    public Animator Animator { get; private set; }
     [SerializeField] private PlayerInventory _inventory;
     [SerializeField] private RuntimeAnimatorController _handsAnimatorController;
     [SerializeField] private FirstPersonCamera _firstPersonCamera;
@@ -22,8 +21,6 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
     protected override void Awake()
 	{
         base.Awake();
-
-		Animator = GetComponent<Animator>();
 
 		_inventory.OnAddItem += OnAddItem;
 		_inventory.OnDropItem += OnDropItem;
@@ -84,11 +81,11 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 
         bool fired = ctx.ReadValueAsButton();
         if (HasParameter("IsHoldingFire1"))
-            animator.SetBool("IsHoldingFire1", fired);
+            Animator.SetBool("IsHoldingFire1", fired);
 
         // Only trigger fire if the button is pressed, no released
         if (fired && HasParameter("Fire1"))
-            animator.SetTrigger("Fire1");
+            Animator.SetTrigger("Fire1");
     }
 
     void Fire2(InputAction.CallbackContext ctx)
@@ -98,11 +95,11 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 
         bool fired = ctx.ReadValueAsButton();
         if (HasParameter("IsHoldingFire2"))
-            animator.SetBool("IsHoldingFire2", fired);
+            Animator.SetBool("IsHoldingFire2", fired);
 
         // Only trigger fire if the button is pressed, no released
         if (fired && HasParameter("Fire2"))
-            animator.SetTrigger("Fire2");
+            Animator.SetTrigger("Fire2");
     }
     #endregion
 
@@ -141,7 +138,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 		SetController();
 
 		if (slot == _inventory.GetActiveSlot())
-			Animator.SetTrigger("Equip");
+            Animator.SetTrigger("Equip");
 	}
 
 	void OnDropItem(Item item, InventorySlot slot)
@@ -164,7 +161,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 		if ((prev != null && prev.items != null && prev.items.Count > 0) ||
 			(active.items != null && active.items.Count > 0))
 		{
-			Animator.SetTrigger("Equip");
+            Animator.SetTrigger("Equip");
 		}
 	}
 
@@ -172,11 +169,11 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 	{
 		if (_inventory.GetActiveSlot().items == null || _inventory.GetActiveSlot().items.Count == 0)
 		{
-			Animator.runtimeAnimatorController = _handsAnimatorController;
+            Animator.runtimeAnimatorController = _handsAnimatorController;
 		}
 		else
 		{
-			Animator.runtimeAnimatorController = _inventory.GetActiveSlot().items.Peek().animatorController;
+            Animator.runtimeAnimatorController = _inventory.GetActiveSlot().items.Peek().animatorController;
 		}
 	}
 
@@ -271,7 +268,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 
         // Set the chain value on the animator
         if (HasParameter("ViewModelActionChain"))
-            animator.SetInteger("ViewModelActionChain", value);
+            Animator.SetInteger("ViewModelActionChain", value);
     }
 
     #endregion

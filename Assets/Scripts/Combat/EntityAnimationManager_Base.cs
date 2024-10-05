@@ -8,7 +8,7 @@ public abstract class EntityAnimationManager_Base : NetworkBehaviour
 {
     [field: Header("Components")]
     [field: SerializeField] public Entity_Base Entity { get; private set; }
-    [field: SerializeField] protected Animator animator { get; private set; }
+    [field: SerializeField] public Animator Animator { get; private set; }
 
     [field: Header("Entity Attacks")]
     [field: SerializeField] protected AttackList entityAttacks { get; private set; }
@@ -17,7 +17,7 @@ public abstract class EntityAnimationManager_Base : NetworkBehaviour
 
     protected virtual void Awake()
     {
-        animator = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
     }
 
     #endregion
@@ -59,7 +59,7 @@ public abstract class EntityAnimationManager_Base : NetworkBehaviour
     /// </summary>
     protected bool HasParameter(string parameterName)
     {
-        foreach (var param in animator.parameters)
+        foreach (var param in Animator.parameters)
         {
             if (param.name == parameterName)
             {
