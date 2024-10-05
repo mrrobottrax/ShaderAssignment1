@@ -11,7 +11,7 @@ public abstract class EntityAnimationManager_Base : NetworkBehaviour
     [field: SerializeField] public Animator Animator { get; private set; }
 
     [field: Header("Entity Attacks")]
-    [field: SerializeField] protected AttackList entityAttacks { get; private set; }
+    [field: SerializeField] protected AttackList EntityAttacks { get; private set; }
 
     #region Initialization Methods
 

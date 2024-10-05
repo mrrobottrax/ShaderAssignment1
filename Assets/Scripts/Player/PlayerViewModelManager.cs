@@ -228,8 +228,8 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
         else
         {
             // Use fists when unarmed
-            chosenGroup = entityAttacks.GetAttackGroup(actionTitle);
-            attack = entityAttacks.GetAttackFromGroup(chosenGroup, currentChain);
+            chosenGroup = EntityAttacks.GetAttackGroup(actionTitle);
+            attack = EntityAttacks.GetAttackFromGroup(chosenGroup, currentChain);
 
             PerformAttack(actionTitle, null, chosenGroup, attack, functionPos);
         }
