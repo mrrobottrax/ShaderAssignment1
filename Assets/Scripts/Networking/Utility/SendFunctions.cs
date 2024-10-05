@@ -3,7 +3,6 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using Steamworks;
-using UnityEditor.PackageManager;
 
 internal static class SendFunctions
 {

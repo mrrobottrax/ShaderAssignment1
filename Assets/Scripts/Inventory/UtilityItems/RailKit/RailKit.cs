@@ -33,7 +33,7 @@ public class RailKit : Item
 
 	protected override void PickUp(PlayerInteraction interactor)
 	{
-		PlayerInventory inventory = interactor.GetComponent<PlayerInventory>();
+		PlayerInventory inventory = interactor.transform.parent.GetComponent<PlayerInventory>();
 
 		if (inventory.FindItemWhere(IsNotFull) != null)
 		{
