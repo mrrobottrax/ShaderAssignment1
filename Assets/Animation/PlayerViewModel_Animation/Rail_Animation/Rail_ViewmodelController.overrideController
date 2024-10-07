@@ -6,7 +6,7 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Rail_ViewmodelController 1
+  m_Name: Rail_ViewmodelController
   m_Controller: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 2058311921545556368, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}

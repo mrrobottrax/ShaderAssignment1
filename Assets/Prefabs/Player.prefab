@@ -335,7 +335,7 @@ Animator:
   m_GameObject: {fileID: 1099407379474606418}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: f1e973f7d0d57eb40823a45b92fbf38d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Entity>k__BackingField: {fileID: 5234002548523702153}
-  <Animator>k__BackingField: {fileID: 0}
+  <Animator>k__BackingField: {fileID: 3942988104529243446}
   <EntityAttacks>k__BackingField:
     <AttackGroups>k__BackingField:
     - <GroupTitle>k__BackingField: Punch
