@@ -33,7 +33,7 @@ namespace CaptureCamera
             if(actionTitle == "Capture")
             {
                 GameObject photo = PrintPhysicalPhoto(transform.position, transform.rotation);
-                ownerInventory.AddItem(photo.GetComponent<Item>(), false);
+                ownerInventory.AddItem(photo.GetComponent<Item>(), out _, false);
             }
         }
 

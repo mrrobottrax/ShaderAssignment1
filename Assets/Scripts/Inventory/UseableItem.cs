@@ -10,15 +10,11 @@ public class UseableItem : Item
     protected override void PickUp(PlayerInteraction interactor)
     {
         base.PickUp(interactor);
-
         playerViewmodelManager = interactor.GetComponentInChildren<PlayerViewmodelManager>();
     }
 
-    public override void Drop()
-    {
-        base.Drop();
-        ownerInventory = null;
-    }
+    public virtual void Fire1(bool pressed) { }
+    public virtual void Fire2(bool pressed) { }
     #endregion
 
     #region ViewModel Functionality

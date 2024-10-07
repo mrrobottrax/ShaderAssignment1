@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d72f4c3635fe3449a5f7a90c50c4f31, type: 3}
+  m_Name: Rail Generator
+  m_EditorClassIdentifier: 
+  m_railExtents: {x: 0.78, y: 0.1, z: 1}
+  m_segmentDensity: 2
+  m_handleLength: 30.2
+  m_railProfile:
+  - {x: -0.16, y: -0.1, z: 0}
+  - {x: -0.16, y: 0.02, z: 0}
+  - {x: -0.1, y: 0.02, z: 0}
+  - {x: -0.1, y: 0.12, z: 0}
+  - {x: -0.14, y: 0.12, z: 0}
+  - {x: -0.14, y: 0.2, z: 0}
+  - {x: 0.14, y: 0.2, z: 0}
+  - {x: 0.14, y: 0.12, z: 0}
+  - {x: 0.1, y: 0.12, z: 0}
+  - {x: 0.1, y: 0.02, z: 0}
+  - {x: 0.16, y: 0.02, z: 0}
+  - {x: 0.16, y: -0.1, z: 0}
+  m_metalMat: {fileID: 5711957343023700216, guid: ce99f6cada81ad145b8b8e851e0e16d7, type: 3}

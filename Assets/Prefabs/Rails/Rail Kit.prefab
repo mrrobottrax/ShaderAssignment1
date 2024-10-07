@@ -105,11 +105,27 @@ MonoBehaviour:
   itemName: Rail Kit
   stackSize: 1
   itemSprite: {fileID: 21300000, guid: 256f0600a5a91f040b4fedae6a65df11, type: 3}
-  animatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
+  animatorController: {fileID: 22100000, guid: f5340fa2984240a42a2705d6938efe1c, type: 2}
   dropOffset: {x: 0, y: 0, z: 0}
   dropRotationOffset: {x: 0.70710677, y: 0, z: 0, w: -0.70710677}
   m_maxMetresStack: 50
   m_metresLeft: 50
+  m_maxRaycastDist: 5
+  m_trackBlockLayers:
+    serializedVersion: 2
+    m_Bits: 118733
+  m_maxAngle: 50
+  m_tangentCheckDist: 3
+  m_tangentCheckAngle: 90
+  m_minDistAway: 1
+  m_generator: {fileID: 11400000, guid: 50b1999b772023d419b1ac57040ca672, type: 2}
+  m_railNodePrefab: {fileID: 1859391036647035626, guid: 10b6654c812c6b348a835ff4491f63e6, type: 3}
+  m_snappingLayer:
+    serializedVersion: 2
+    m_Bits: 262144
+  m_previewMaterial: {fileID: 2100000, guid: ff0d35439d28db54c824590bfaddcd23, type: 2}
+  m_goodPreviewColour: {r: 0.003915994, g: 0.8301887, b: 0.8301887, a: 0.5803922}
+  m_badPreviewColour: {r: 0.7830189, g: 0.19092497, b: 0.15143289, a: 0.64705884}
 --- !u!65 &6603090319548613721
 BoxCollider:
   m_ObjectHideFlags: 0

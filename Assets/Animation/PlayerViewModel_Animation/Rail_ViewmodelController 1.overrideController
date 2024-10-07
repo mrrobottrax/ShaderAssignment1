@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Rail_ViewmodelController 1
+  m_Controller: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 2058311921545556368, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}
+    m_OverrideClip: {fileID: 7616039358703320698, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}
+  - m_OriginalClip: {fileID: 4757779050544533633, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}
+    m_OverrideClip: {fileID: -7143872537825730545, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}
+  - m_OriginalClip: {fileID: 8051840945890250515, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}
+    m_OverrideClip: {fileID: -1573396194745028235, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}
+  - m_OriginalClip: {fileID: 3910832870394343291, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}
+    m_OverrideClip: {fileID: 7616039358703320698, guid: 0c547da5c6441894c9a841a3b9adfbd7, type: 3}

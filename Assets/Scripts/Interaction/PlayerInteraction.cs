@@ -105,7 +105,7 @@ public class PlayerInteraction : MonoBehaviour, IInputHandler
 
 	Interactable RaycastForInteractable()
 	{
-		Debug.DrawRay(_cameraTransform.position, _cameraTransform.forward);
+		//Debug.DrawRay(_cameraTransform.position, _cameraTransform.forward);
 
 		// Send out a raycast
 		if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, _interactionRange,

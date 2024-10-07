@@ -86,7 +86,15 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
         // Only trigger fire if the button is pressed, no released
         if (fired && HasParameter("Fire1"))
             Animator.SetTrigger("Fire1");
-    }
+
+		if (_inventory.GetActiveSlot().items.TryPeek(out Item item))
+		{
+			if (item is UseableItem)
+			{
+				(item as UseableItem).Fire1(fired);
+			}
+		}
+	}
 
     void Fire2(InputAction.CallbackContext ctx)
     {
@@ -100,6 +108,14 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
         // Only trigger fire if the button is pressed, no released
         if (fired && HasParameter("Fire2"))
             Animator.SetTrigger("Fire2");
+
+        if (_inventory.GetActiveSlot().items.TryPeek(out Item item))
+        {
+            if (item is UseableItem)
+            {
+                (item as UseableItem).Fire2(fired);
+            }
+        }
     }
     #endregion
 

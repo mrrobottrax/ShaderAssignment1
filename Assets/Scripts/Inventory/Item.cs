@@ -14,9 +14,8 @@ public class Item : Interactable
 	public Quaternion dropRotationOffset = Quaternion.identity;
 
 	protected Interaction[] interactions;
-
-	// System
 	protected PlayerInventory ownerInventory;
+	protected InventorySlot ownerSlot;
 
 	protected void Awake()
 	{
@@ -29,13 +28,31 @@ public class Item : Interactable
 		};
 	}
 
-	protected virtual void PickUp(PlayerInteraction interactor)
+	protected void OnDestroy()
 	{
-		ownerInventory = interactor.transform.parent.GetComponent<PlayerInventory>();
-		ownerInventory.AddItem(this);
+		if (ownerInventory != null)
+		{
+			ownerSlot.items.Pop();
+			ownerSlot.itemUpdate?.Invoke();
+		}
 	}
 
-	public virtual void Drop() { }
+	protected PlayerInventory GetInventoryComponent(PlayerInteraction interactor)
+	{
+		return interactor.transform.parent.GetComponent<PlayerInventory>();
+	}
+
+	protected virtual void PickUp(PlayerInteraction interactor)
+	{
+		ownerInventory = GetInventoryComponent(interactor);
+		if (!ownerInventory.AddItem(this, out ownerSlot))
+			ownerInventory = null;
+	}
+
+	public virtual void Drop()
+	{
+		ownerInventory = null;
+	}
 
 	public override Interaction[] GetInteractions()
 	{
@@ -43,4 +60,12 @@ public class Item : Interactable
 	}
 
 	public virtual string GetCustomStackText() { return null; }
+
+	public void SetOwnerInventory(PlayerInventory ownerInventory)
+	{
+		this.ownerInventory = ownerInventory;
+	}
+
+	public virtual void Equip() { }
+	public virtual void UnEquip() { }
 }

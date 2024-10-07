@@ -122,6 +122,16 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 		if (prevSlot == activeSlot) return;
 
+		if (prevSlot != null && prevSlot.items.TryPeek(out var item))
+		{
+			item.UnEquip();
+		}
+
+		if (activeSlot.items.TryPeek(out var item1))
+		{
+			item1.Equip();
+		}
+
 		OnActiveSlotChange?.Invoke(prevSlot, activeSlot);
 	}
 
@@ -213,16 +223,21 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 	public void DropActiveItem(float dropForce, Vector3 dropPointOffset, Quaternion rotationOffset)
 	{
-		if (activeSlot.items == null || activeSlot.items.Count == 0) return;
+		DropFromSlot(activeSlot, dropForce, dropPointOffset, rotationOffset);
+	}
 
-		Item item = activeSlot.items.Pop();
+	private void DropFromSlot(InventorySlot slot, float dropForce, Vector3 dropPointOffset, Quaternion rotationOffset)
+	{
+		if (slot.items == null || slot.items.Count == 0) return;
 
-		OnDropItem?.Invoke(item, activeSlot);
-		activeSlot.itemUpdate?.Invoke();
+		Item item = slot.items.Pop();
+
+		OnDropItem?.Invoke(item, slot);
+		slot.itemUpdate?.Invoke();
 
 		if (item.TryGetComponent(out Rigidbody rb))
 		{
-			rb.velocity = _firstPersonCamera.CameraTransform.forward * dropForce + _playerController.GetVelocity();
+			rb.velocity = _firstPersonCamera.transform.forward * dropForce + _playerController.GetVelocity();
 
 			// we need to set both this and the transform for stupid unity reasons
 			rb.Move(_dropPoint.position + (_dropPoint.rotation * dropPointOffset), _dropPoint.rotation * rotationOffset);
@@ -231,6 +246,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		item.transform.SetPositionAndRotation(_dropPoint.position + (_dropPoint.rotation * dropPointOffset), _dropPoint.rotation * rotationOffset);
 		SceneManager.MoveGameObjectToScene(item.gameObject, SceneManager.GetActiveScene());
 
+		item.UnEquip();
 		item.Drop();
 	}
 
@@ -246,6 +262,13 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 		slot.items.Push(item);
 		slot.itemUpdate?.Invoke();
+
+		item.SetOwnerInventory(this);
+
+		if (activeSlot == slot)
+		{
+			item.Equip();
+		}
 
 		OnAddItem?.Invoke(item, slot);
 	}
@@ -267,7 +290,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		return null;
 	}
 
-	public bool AddItem(Item item, bool allowAutoSelect = true)
+	public bool AddItem(Item item, out InventorySlot slot, bool allowAutoSelect = true)
 	{
 		// Try first slot with same item type
 		for (int i = 0; i < slots.Length; i++)
@@ -279,6 +302,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 				)
 			{
 				AddItemToSlot(item, slots[i]);
+				slot = slots[i];
 				return true;
 			}
 		}
@@ -288,6 +312,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 			(activeSlot.items.Peek().GetType() == item.GetType() && activeSlot.items.Count < item.stackSize))
 		{
 			AddItemToSlot(item, activeSlot);
+			slot = activeSlot;
 			return true;
 		}
 
@@ -299,15 +324,22 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 				AddItemToSlot(item, slots[i]);
 				if (allowAutoSelect)
 					SelectSlot(i);
+				slot = slots[i];
 				return true;
 			}
 		}
 
+		slot = null;
 		return false;
 	}
 
 	public InventorySlot GetActiveSlot()
 	{
 		return activeSlot;
+	}
+
+	public FirstPersonCamera GetCamera()
+	{
+		return _firstPersonCamera;
 	}
 }

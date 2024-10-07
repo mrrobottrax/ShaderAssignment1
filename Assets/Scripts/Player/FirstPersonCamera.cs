@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 
 public class FirstPersonCamera : MonoBehaviour, IInputHandler
 {
-    [Header("Components")]
-    public Transform CameraTransform;
+	[field: Header("Components")]
+	public Transform CameraTransform { get; private set; }
 	public PlayerController m_followPlayer;
 
 	[Header("Camera Variables")]
@@ -34,6 +34,7 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 	{
 		m_lastPosition = CalcCameraPos();
 		m_position = m_lastPosition;
+		CameraTransform = transform;
 
 		EnableFirstPersonCamera(true);
 	}
@@ -93,27 +94,27 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 
 		m_stepOffset -= 0.5f * m_stepOffset * Time.fixedDeltaTime * m_stepLerpSpeed; // we do this in 2 parts for more accurate integration
 	}
-    #endregion
+	#endregion
 
-    #region Input Methods
+	#region Input Methods
 
-    public void Subscribe()
-    {
-		m_lookAction = InputManager.Instance.Player.Look;
-    }
-
-    public void Unsubscribe()
-    {
-        m_lookAction = null;
-    }
-
-    public void SetControlsSubscription(bool isInputEnabled)
+	public void Subscribe()
 	{
-        if (isInputEnabled)
-            Subscribe();
-        else
-            Unsubscribe();
-    }
+		m_lookAction = InputManager.Instance.Player.Look;
+	}
+
+	public void Unsubscribe()
+	{
+		m_lookAction = null;
+	}
+
+	public void SetControlsSubscription(bool isInputEnabled)
+	{
+		if (isInputEnabled)
+			Subscribe();
+		else
+			Unsubscribe();
+	}
 
 	/// <summary>
 	/// Enables or disables the first-person camera mode by locking and hiding the cursor,

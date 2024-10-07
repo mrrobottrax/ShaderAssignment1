@@ -359,8 +359,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Entity>k__BackingField: {fileID: 5234002548523702153}
-  <animator>k__BackingField: {fileID: 3942988104529243446}
-  <entityAttacks>k__BackingField:
+  <Animator>k__BackingField: {fileID: 0}
+  <EntityAttacks>k__BackingField:
     <AttackGroups>k__BackingField:
     - <GroupTitle>k__BackingField: Punch
       <Attacks>k__BackingField:
@@ -920,7 +920,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb5e36afaa355a741b820934cb8d2b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraTransform: {fileID: 1106333749806880464}
   m_followPlayer: {fileID: 2944094973486998542}
   m_lookSenseYaw: 0.1
   m_lookSensePitch: 0.1
