@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 1127390228898752404}
   - component: {fileID: 7218429709225136450}
   - component: {fileID: 1180447363939942243}
+  - component: {fileID: 3360877811843743943}
+  - component: {fileID: 1210471432069328032}
+  - component: {fileID: 7918162532460625256}
   m_Layer: 8
   m_Name: Coal_Item
   m_TagString: Item
@@ -157,3 +160,42 @@ MonoBehaviour:
   dropRotationOffset: {x: -0.70710677, y: 0, z: 0, w: 0.70710677}
   _throwForce: 10
   _throwOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &3360877811843743943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6422485911987246955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a07c115402beb8419e366061c756f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_prefabIndex: 1
+  m_netID: 0
+--- !u!114 &1210471432069328032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6422485911987246955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a9dd8b3b3306e4f8e2c4f8f01f9baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideTransform: 0
+--- !u!114 &7918162532460625256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6422485911987246955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91674231dac9db848a0db9612a37160f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

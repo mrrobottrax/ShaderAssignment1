@@ -8,295 +8,312 @@ using UnityEngine;
 internal class NetworkData : ScriptableObject
 {
 #if UNITY_EDITOR
-    class NetworkDataLoader : AssetPostprocessor
-    {
-        private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
-        {
-            NetworkData.Load();
-        }
-    }
+	class NetworkDataLoader : AssetPostprocessor
+	{
+		private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
+		{
+			NetworkData.Load();
+		}
+	}
 #endif
 
-    #region Singleton
-    static NetworkData s_instance;
+	#region Singleton
+	static NetworkData s_instance;
+	static NetworkData Instance
+	{
+		get
+		{
+			if (s_instance == null)
+			{
+				Load();
+			}
+			return s_instance;
+		}
+	}
 
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-    static void OnRuntimeLoad()
-    {
-        Load();
-    }
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+	static void OnRuntimeLoad()
+	{
+		Load();
+	}
 
-    static void Load()
-    {
-        NetworkData[] data = Resources.LoadAll<NetworkData>("");
+	static void Load()
+	{
+		NetworkData[] data = Resources.LoadAll<NetworkData>("");
 
-        if (data == null || data.Length == 0)
-        {
-            Debug.LogError("No NetworkData found");
-            return;
-        }
+		if (data == null || data.Length == 0)
+		{
+			Debug.LogError("No NetworkData found");
+			return;
+		}
 
-        //Debug.Log("Loaded NetworkData");
+		//Debug.Log("Loaded NetworkData");
 
-        s_instance = data[0];
+		s_instance = data[0];
 
-        // Copy lists into dict
-        s_instance.m_unsavedDict = new();
-        for (int i = 0; i < s_instance.m_savedIDs.Count; i++)
-        {
 #if UNITY_EDITOR
-            GlobalObjectId.TryParse(s_instance.m_savedGlobalIDs[i], out GlobalObjectId id);
-            s_instance.m_unsavedDict.Add(s_instance.m_savedIDs[i], id);
-#else
-            s_instance.m_unsavedDict.Add(s_instance.m_savedIDs[i], s_instance.m_savedGlobalIDs[i]);
+		// Copy lists into dict
+		s_instance.m_unsavedDict = new();
+		for (int i = 0; i < s_instance.m_savedIDs.Count; i++)
+		{
+			GlobalObjectId.TryParse(s_instance.m_savedGlobalIDs[i], out GlobalObjectId id);
+			s_instance.m_unsavedDict.Add(s_instance.m_savedIDs[i], id);
+		}
 #endif
-        }
-    }
-    #endregion
+	}
+	#endregion
 
-    [SerializeField] int m_ticksPerSecond = 24;
+	[SerializeField] int m_ticksPerSecond = 24;
 
-    internal const int k_playerPrefabIndex = -256;
-    internal const int k_maxMessages = 64;
+	internal const int k_playerPrefabIndex = -256;
+	internal const int k_maxMessages = 64;
 
-    const int k_minSpawnedObjectIDCount = 10000;
+	const int k_minSpawnedObjectIDCount = 10000;
 
-    [SerializeField] GameObject m_playerPrefab;
-    [SerializeField] GameObject[] m_networkPrefabs;
+	[SerializeField] GameObject m_playerPrefab;
+	[SerializeField] GameObject[] m_networkPrefabs;
 
-    [SerializeField, HideInInspector] List<int> m_savedIDs = new();
-    [SerializeField, HideInInspector] List<string> m_savedGlobalIDs = new();
-
-#if UNITY_EDITOR
-    Dictionary<int, GlobalObjectId> m_unsavedDict = new();
-#else
-    Dictionary<int, string> m_unsavedDict = new();
-#endif
-
-    bool m_disableIdCreation = false;
-
-    private void OnValidate()
-    {
-#if UNITY_EDITOR
-        // Player gets a special index
-        if (m_playerPrefab != null)
-        {
-            m_playerPrefab.GetComponent<NetworkObject>().m_prefabIndex = k_playerPrefabIndex;
-            EditorUtility.SetDirty(m_playerPrefab);
-        }
-
-        if (m_networkPrefabs != null)
-        {
-            // Set prefab indices
-            for (int i = 0; i < m_networkPrefabs.Length; ++i)
-            {
-                if (m_networkPrefabs[i] != null)
-                {
-                    m_networkPrefabs[i].GetComponent<NetworkObject>().m_prefabIndex = i;
-                    EditorUtility.SetDirty(m_networkPrefabs[i]);
-                }
-            }
-        }
-#endif
-    }
-
-
-    public static GameObject GetPlayerPrefab()
-    {
-        return s_instance.m_playerPrefab;
-    }
-
-    public static GameObject[] GetNetworkPrefabs()
-    {
-        return s_instance.m_networkPrefabs;
-    }
-
-    public static float GetTickDelta()
-    {
-        return 1.0f / s_instance.m_ticksPerSecond;
-    }
+	[SerializeField, HideInInspector] List<int> m_savedIDs = new();
+	[SerializeField, HideInInspector] List<string> m_savedGlobalIDs = new();
 
 #if UNITY_EDITOR
-    static void SaveDict()
-    {
-        s_instance.m_savedIDs.Clear();
-        s_instance.m_savedGlobalIDs.Clear();
-        foreach (var item in s_instance.m_unsavedDict)
-        {
-            s_instance.m_savedIDs.Add(item.Key);
-            s_instance.m_savedGlobalIDs.Add(item.Value.ToString());
-        }
-
-        EditorUtility.SetDirty(s_instance);
-    }
+	Dictionary<int, GlobalObjectId> m_unsavedDict = new();
 #endif
 
+	bool m_disableIdCreation = false;
+
 #if UNITY_EDITOR
-    public static int AddSceneObject(NetworkObject obj)
-    {
-        // Check if the saved ID is free
-        if (obj.m_netID > k_minSpawnedObjectIDCount && !s_instance.m_unsavedDict.ContainsKey(obj.m_netID))
-        {
-            Debug.Log($"Object ({GlobalObjectId.GetGlobalObjectIdSlow(obj)}) saved with an ID ({obj.m_netID}) but the ID is not present in the dictionary. Most likely NetworkData wasn't saved.");
-            s_instance.m_unsavedDict.Add(obj.m_netID, GlobalObjectId.GetGlobalObjectIdSlow(obj));
-            SaveDict();
-            return obj.m_netID;
-        }
+	private void OnValidate()
+	{
+		// Player gets a special index
+		if (m_playerPrefab != null)
+		{
+			m_playerPrefab.GetComponent<NetworkObject>().m_prefabIndex = k_playerPrefabIndex;
+			m_playerPrefab.GetComponent<NetworkObject>().m_netID = 0;
+			EditorUtility.SetDirty(m_playerPrefab);
+		}
 
-        // Find a free ID
-        for (int id = int.MaxValue; id > k_minSpawnedObjectIDCount; --id)
-        {
-            // Check if there is an entry here
-            if (s_instance.m_unsavedDict.ContainsKey(id))
-            {
-                continue;
-            }
+		if (m_networkPrefabs != null)
+		{
+			// Set prefab indices
+			for (int i = 0; i < m_networkPrefabs.Length; ++i)
+			{
+				if (m_networkPrefabs[i] != null)
+				{
+					if (!m_networkPrefabs[i].TryGetComponent<NetworkObject>(out var obj))
+					{
+						Debug.LogWarning($"Network prefab {obj.gameObject.name} doesn't have a NetworkObject");
+						continue;
+					}
 
-            s_instance.m_unsavedDict.Add(id, GlobalObjectId.GetGlobalObjectIdSlow(obj));
+					obj.m_prefabIndex = i;
+					obj.m_netID = 0;
+					EditorUtility.SetDirty(m_networkPrefabs[i]);
+				}
+			}
+		}
+	}
+#endif
 
-            SaveDict();
 
-            return id;
-        }
+	public static GameObject GetPlayerPrefab()
+	{
+		return Instance.m_playerPrefab;
+	}
 
-        Debug.LogError("Out of IDs for scene objects. This is really fucked up.");
-        return 0;
-    }
+	public static GameObject[] GetNetworkPrefabs()
+	{
+		return Instance.m_networkPrefabs;
+	}
+
+	public static float GetTickDelta()
+	{
+		return 1.0f / Instance.m_ticksPerSecond;
+	}
+
+#if UNITY_EDITOR
+	static void SaveDict()
+	{
+		Instance.m_savedIDs.Clear();
+		Instance.m_savedGlobalIDs.Clear();
+		foreach (var item in Instance.m_unsavedDict)
+		{
+			Instance.m_savedIDs.Add(item.Key);
+			Instance.m_savedGlobalIDs.Add(item.Value.ToString());
+		}
+
+		EditorUtility.SetDirty(Instance);
+	}
 #endif
 
 #if UNITY_EDITOR
-    public static bool HasSceneGameObject(NetworkObject obj)
-    {
-        if (s_instance == null) return true;
-        if (s_instance.m_disableIdCreation) return true;
+	public static int AddSceneObject(NetworkObject obj)
+	{
+		// Check if the saved ID is free
+		if (obj.m_netID > k_minSpawnedObjectIDCount && !Instance.m_unsavedDict.ContainsKey(obj.m_netID))
+		{
+			Debug.Log($"Object ({GlobalObjectId.GetGlobalObjectIdSlow(obj)}) saved with an ID ({obj.m_netID}) but the ID is not present in the dictionary. Most likely NetworkData wasn't saved.");
+			Instance.m_unsavedDict.Add(obj.m_netID, GlobalObjectId.GetGlobalObjectIdSlow(obj));
+			SaveDict();
+			return obj.m_netID;
+		}
 
-        //Debug.Log($"Looking for {obj.m_netID}");
-        if (s_instance.m_unsavedDict.TryGetValue(obj.m_netID, out GlobalObjectId globalID))
-        {
-            // Check if this is really the same object
-            GlobalObjectId realID = GlobalObjectId.GetGlobalObjectIdSlow(obj);
+		// Find a free ID
+		for (int id = int.MaxValue; id > k_minSpawnedObjectIDCount; --id)
+		{
+			// Check if there is an entry here
+			if (Instance.m_unsavedDict.ContainsKey(id))
+			{
+				continue;
+			}
 
-            //Debug.Log($"Checking if {globalID} == {realID}");
-            if (globalID.Equals(realID)) return true;
-        }
+			Instance.m_unsavedDict.Add(id, GlobalObjectId.GetGlobalObjectIdSlow(obj));
 
-        return false;
-    }
+			SaveDict();
+
+			return id;
+		}
+
+		Debug.LogError("Out of IDs for scene objects. This is really fucked up.");
+		return 0;
+	}
 #endif
 
 #if UNITY_EDITOR
-    [MenuItem("NetCode/Remove unused IDs")]
-    // todo: re-assign ids to be sequential
-    public static void CleanupIDs()
-    {
-        if (s_instance == null) return;
+	public static bool HasSceneGameObject(NetworkObject obj)
+	{
+		if (Instance == null) return true;
+		if (Instance.m_disableIdCreation) return true;
 
-        Debug.Log("Cleaning IDs...");
+		//Debug.Log($"Looking for {obj.m_netID}");
+		if (Instance.m_unsavedDict.TryGetValue(obj.m_netID, out GlobalObjectId globalID))
+		{
+			// Check if this is really the same object
+			GlobalObjectId realID = GlobalObjectId.GetGlobalObjectIdSlow(obj);
 
-        s_instance.m_disableIdCreation = true;
+			//Debug.Log($"Checking if {globalID} == {realID}");
+			if (globalID.Equals(realID)) return true;
+		}
 
-        try
-        {
-            HashSet<string> scenes = new();
-            HashSet<string> startingScenes = new();
+		return false;
+	}
+#endif
 
-            // Add all open scenes to set
-            for (int i = 0; i < EditorSceneManager.sceneCount; ++i)
-            {
-                scenes.Add(EditorSceneManager.GetSceneAt(i).path);
-                startingScenes.Add(EditorSceneManager.GetSceneAt(i).path);
-            }
+#if UNITY_EDITOR
+	[MenuItem("NetCode/Remove unused IDs")]
+	// todo: re-assign ids to be sequential
+	public static void CleanupIDs()
+	{
+		if (Instance == null)
+		{
+			Debug.LogWarning("No instance");
+			Load();
+		}
 
-            List<int> removedKeys = new();
-            List<int> notRemovedKeys = new();
+		Debug.Log("Cleaning IDs...");
 
-            // Check if each object exists
-            foreach (var kv in s_instance.m_unsavedDict)
-            {
-                if (kv.Value.identifierType != 2)
-                {
-                    Debug.LogWarning($"{GlobalObjectId.GlobalObjectIdentifierToObjectSlow(kv.Value)} is not a scene object. Removing.");
-                    removedKeys.Add(kv.Key);
-                    continue;
-                }
+		Instance.m_disableIdCreation = true;
 
-                // Load it's scene if it isn't already
-                string scenePath = AssetDatabase.GUIDToAssetPath(kv.Value.assetGUID);
-                if (!scenes.Contains(scenePath))
-                {
-                    EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
-                    scenes.Add(scenePath);
+		try
+		{
+			HashSet<string> scenes = new();
+			HashSet<string> startingScenes = new();
 
-                    //Debug.Log($"Loading scene {scenePath}");
-                }
+			// Add all open scenes to set
+			for (int i = 0; i < EditorSceneManager.sceneCount; ++i)
+			{
+				scenes.Add(EditorSceneManager.GetSceneAt(i).path);
+				startingScenes.Add(EditorSceneManager.GetSceneAt(i).path);
+			}
 
-                object obj = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(kv.Value);
+			List<int> removedKeys = new();
+			List<int> notRemovedKeys = new();
 
-                if (obj == null)
-                {
-                    Debug.LogWarning($"Removing object from scene: {scenePath}. It no longer exists.");
-                    removedKeys.Add(kv.Key);
-                    continue;
-                }
+			// Check if each object exists
+			foreach (var kv in Instance.m_unsavedDict)
+			{
+				if (kv.Value.identifierType != 2)
+				{
+					Debug.LogWarning($"{GlobalObjectId.GlobalObjectIdentifierToObjectSlow(kv.Value)} is not a scene object. Removing.");
+					removedKeys.Add(kv.Key);
+					continue;
+				}
 
-                // Check for duplicates
-                bool duplicate = false;
-                foreach (var key2 in notRemovedKeys)
-                {
-                    if (kv.Key != key2)
-                    {
-                        if (kv.Value.Equals(s_instance.m_unsavedDict[key2]))
-                        {
-                            Debug.LogWarning($"Duplicate detected in scene: {scenePath}. Object = {obj}");
-                            removedKeys.Add(kv.Key);
-                            duplicate = true;
-                            break;
-                        }
-                    }
-                }
+				// Load it's scene if it isn't already
+				string scenePath = AssetDatabase.GUIDToAssetPath(kv.Value.assetGUID);
+				if (!scenes.Contains(scenePath))
+				{
+					EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+					scenes.Add(scenePath);
 
-                if (duplicate) continue;
+					//Debug.Log($"Loading scene {scenePath}");
+				}
 
-                notRemovedKeys.Add(kv.Key);
-                Debug.Log($"{kv.Key} : {obj} is okay.");
-            }
+				object obj = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(kv.Value);
 
-            foreach (var key in removedKeys)
-            {
-                s_instance.m_unsavedDict.Remove(key);
-            }
+				if (obj == null)
+				{
+					Debug.LogWarning($"Removing object from scene: {scenePath}. It no longer exists.");
+					removedKeys.Add(kv.Key);
+					continue;
+				}
 
-            // Set all IDs to dict
-            foreach (var kv in s_instance.m_unsavedDict)
-            {
-                NetworkObject obj = (NetworkObject)GlobalObjectId.GlobalObjectIdentifierToObjectSlow(kv.Value);
-                obj.m_netID = kv.Key;
-                Debug.Log($"Setting {obj} ID to {kv.Key}");
-                EditorUtility.SetDirty(obj);
-            }
+				// Check for duplicates
+				bool duplicate = false;
+				foreach (var key2 in notRemovedKeys)
+				{
+					if (kv.Key != key2)
+					{
+						if (kv.Value.Equals(Instance.m_unsavedDict[key2]))
+						{
+							Debug.LogWarning($"Duplicate detected in scene: {scenePath}. Object = {obj}");
+							removedKeys.Add(kv.Key);
+							duplicate = true;
+							break;
+						}
+					}
+				}
 
-            EditorSceneManager.MarkAllScenesDirty();
-            EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+				if (duplicate) continue;
 
-            AssetDatabase.SaveAssets();
+				notRemovedKeys.Add(kv.Key);
+				Debug.Log($"{kv.Key} : {obj} is okay.");
+			}
 
-            // Unload all scenes except original
-            foreach (string scenePath in scenes)
-            {
-                if (!startingScenes.Contains(scenePath))
-                    EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByPath(scenePath), true);
-            }
+			foreach (var key in removedKeys)
+			{
+				Instance.m_unsavedDict.Remove(key);
+			}
 
-            SaveDict();
-            AssetDatabase.SaveAssets();
-        }
-        finally
-        {
-            s_instance.m_disableIdCreation = false;
-        }
+			// Set all IDs to dict
+			foreach (var kv in Instance.m_unsavedDict)
+			{
+				NetworkObject obj = (NetworkObject)GlobalObjectId.GlobalObjectIdentifierToObjectSlow(kv.Value);
+				obj.m_netID = kv.Key;
+				Debug.Log($"Setting {obj} ID to {kv.Key}");
+				EditorUtility.SetDirty(obj);
+			}
 
-        return;
-    }
+			SaveDict();
+
+			AssetDatabase.SaveAssets();
+			EditorSceneManager.MarkAllScenesDirty();
+			EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+
+			// Unload all scenes except original
+			foreach (string scenePath in scenes)
+			{
+				if (!startingScenes.Contains(scenePath))
+					EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByPath(scenePath), true);
+			}
+		}
+		finally
+		{
+			Instance.m_disableIdCreation = false;
+		}
+
+		return;
+	}
 #endif
 }

@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 5092439885962647577}
   - component: {fileID: 2213383416683529951}
   - component: {fileID: 1088744576527787851}
+  - component: {fileID: 8567217731000636549}
+  - component: {fileID: 154431401152453823}
+  - component: {fileID: 672335222773801557}
   m_Layer: 8
   m_Name: ThrowingSpear_Item
   m_TagString: Item
@@ -156,3 +159,42 @@ MonoBehaviour:
   dropRotationOffset: {x: 0.49999997, y: -0.49999997, z: -0.49999997, w: -0.49999997}
   _throwForce: 10
   _throwOffset: {x: 0, y: 0, z: 0.3}
+--- !u!114 &8567217731000636549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5860663832543337747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a07c115402beb8419e366061c756f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_prefabIndex: 5
+  m_netID: 0
+--- !u!114 &154431401152453823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5860663832543337747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a9dd8b3b3306e4f8e2c4f8f01f9baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideTransform: 0
+--- !u!114 &672335222773801557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5860663832543337747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91674231dac9db848a0db9612a37160f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

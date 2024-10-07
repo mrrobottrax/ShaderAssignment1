@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody), typeof(NetworkTransformSync))]
 public class NetworkRigidbody : NetworkBehaviour
 {
 	Rigidbody m_rigidbody;
@@ -14,7 +14,7 @@ public class NetworkRigidbody : NetworkBehaviour
 	{
 		if (IsOwner)
 		{
-			m_rigidbody.isKinematic = false;
+			//m_rigidbody.isKinematic = false;
 		}
 		else
 		{

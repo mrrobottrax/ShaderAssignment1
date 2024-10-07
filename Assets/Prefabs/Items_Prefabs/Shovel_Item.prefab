@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 6011865623749331964}
   - component: {fileID: 6639112356079039154}
   - component: {fileID: 8670198770572760168}
+  - component: {fileID: 4933565649569861078}
+  - component: {fileID: 5372587284424270830}
+  - component: {fileID: 7539560642263236695}
   m_Layer: 8
   m_Name: Shovel_Item
   m_TagString: Item
@@ -166,3 +169,42 @@ MonoBehaviour:
       - <AttackData>k__BackingField: {fileID: 11400000, guid: 6c31358106b914a4b95f2e1427ebde26, type: 2}
       - <AttackData>k__BackingField: {fileID: 11400000, guid: 6c31358106b914a4b95f2e1427ebde26, type: 2}
       - <AttackData>k__BackingField: {fileID: 11400000, guid: 817e5bedb38c10e489e3cdf9886fd592, type: 2}
+--- !u!114 &4933565649569861078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7377304451960411583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a07c115402beb8419e366061c756f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_prefabIndex: 4
+  m_netID: 0
+--- !u!114 &5372587284424270830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7377304451960411583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a9dd8b3b3306e4f8e2c4f8f01f9baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideTransform: 0
+--- !u!114 &7539560642263236695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7377304451960411583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91674231dac9db848a0db9612a37160f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

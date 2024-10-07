@@ -10,10 +10,12 @@ public class Interaction
 	public InteractDelegate interact;
 }
 
-public abstract class Interactable : MonoBehaviour
+public abstract class Interactable : NetworkBehaviour
 {
 	[Header("Interactable")]
 	[SerializeField] Transform _interactionPoint;
+
+	[NetVar]
 	public bool interactionEnabled = true;
 
 	public Transform GetInteractionPoint()
