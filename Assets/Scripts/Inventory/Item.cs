@@ -33,26 +33,11 @@ public class Item : Interactable
 		if (ownerInventory != null && ownerSlot != null && ownerSlot.items != null && ownerSlot.items.Contains(this))
 		{
 			ownerSlot.items.Pop();
-			ownerSlot.itemUpdate?.Invoke();
+			ownerSlot.ItemUpdate?.Invoke();
 		}
 	}
 
-	protected PlayerInventory GetInventoryComponent(PlayerInteraction interactor)
-	{
-		return interactor.transform.parent.GetComponent<PlayerInventory>();
-	}
-
-	protected virtual void PickUp(PlayerInteraction interactor)
-	{
-		ownerInventory = GetInventoryComponent(interactor);
-		if (!ownerInventory.AddItem(this, out ownerSlot))
-			ownerInventory = null;
-	}
-
-	public virtual void Drop()
-	{
-		ownerInventory = null;
-	}
+	#region Interaction
 
 	public override Interaction[] GetInteractions()
 	{
@@ -61,11 +46,39 @@ public class Item : Interactable
 
 	public virtual string GetCustomStackText() { return null; }
 
+	protected virtual void PickUp(PlayerInteraction interactor)
+	{
+		ownerInventory = GetInventoryComponent(interactor);
+		ownerInventory.AddItem(this, out ownerSlot);
+	}
+
+	#endregion
+
+	#region Virtual Callbacks
+
+	public virtual void OnDrop() { }
+
+	public virtual void OnEquip() { }
+	public virtual void OnUnEquip() { }
+
+	#endregion
+
+	#region Accessors
+
+	protected PlayerInventory GetInventoryComponent(PlayerInteraction interactor)
+	{
+		return interactor.transform.parent.GetComponent<PlayerInventory>();
+	}
+
 	public void SetOwnerInventory(PlayerInventory ownerInventory)
 	{
 		this.ownerInventory = ownerInventory;
 	}
 
-	public virtual void Equip() { }
-	public virtual void UnEquip() { }
+	public void SetOwnerSlot(InventorySlot slot)
+	{
+		ownerSlot = slot;
+	}
+
+	#endregion
 }

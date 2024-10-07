@@ -182,7 +182,7 @@ public class InventoryUI : MonoBehaviour
 		for (int i = 0; i < toolbeltSlots.Count; ++i)
 		{
 			toolbeltSlots[i].SetSlot(inventory.Slots[i]);
-			inventory.Slots[i].itemUpdate?.Invoke();
+			inventory.Slots[i].ItemUpdate?.Invoke();
 		}
 
 		if (inventory.Slots[destIndex] == inventory.GetActiveSlot())

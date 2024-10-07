@@ -25,16 +25,16 @@ public class InventorySlotDisplay : MonoBehaviour
 	private void OnDestroy()
 	{
 		if (assignedSlot != null)
-			assignedSlot.itemUpdate -= ItemUpdate;
+			assignedSlot.ItemUpdate -= ItemUpdate;
 	}
 
 	public void SetSlot(InventorySlot slot)
 	{
 		if (assignedSlot != null)
-			assignedSlot.itemUpdate -= ItemUpdate;
+			assignedSlot.ItemUpdate -= ItemUpdate;
 
 		assignedSlot = slot;
-		assignedSlot.itemUpdate += ItemUpdate;
+		assignedSlot.ItemUpdate += ItemUpdate;
 	}
 
 	public InventorySlot GetSlot()

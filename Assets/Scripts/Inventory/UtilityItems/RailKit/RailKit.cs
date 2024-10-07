@@ -108,21 +108,21 @@ public class RailKit : UseableItem
 		base.PickUp(interactor);
 	}
 
-	public override void Drop()
+	public override void OnDrop()
 	{
-		base.Drop();
+		base.OnDrop();
 		DestroyPreview();
 	}
 
-	public override void Equip()
+	public override void OnEquip()
 	{
-		base.Equip();
+		base.OnEquip();
 		CreatePreview();
 	}
 
-	public override void UnEquip()
+	public override void OnUnEquip()
 	{
-		base.UnEquip();
+		base.OnUnEquip();
 		m_bExtendingTrack = false;
 
 		if (s_previewMeshRenderer1 != null)
@@ -150,7 +150,7 @@ public class RailKit : UseableItem
 			Destroy(gameObject);
 		}
 
-		kit.ownerSlot.itemUpdate?.Invoke();
+		kit.ownerSlot.ItemUpdate?.Invoke();
 	}
 
 	#endregion
@@ -388,10 +388,9 @@ public class RailKit : UseableItem
 		return true;
 	}
 
-	public override void Fire1(bool pressed)
+	public override void OnFire1Pressed()
 	{
-		base.Fire1(pressed);
-		if (!pressed) return;
+		base.OnFire1Pressed();
 
 		UpdatePreview();
 
@@ -406,17 +405,15 @@ public class RailKit : UseableItem
 				Destroy(gameObject);
 			}
 
-			ownerSlot.itemUpdate?.Invoke();
+			ownerSlot.ItemUpdate?.Invoke();
 		}
 	}
 
-	public override void Fire2(bool pressed)
+	public override void OnFire2Pressed()
 	{
-		base.Fire2(pressed);
-		if (pressed)
-		{
-			m_bExtendingTrack = false;
-		}
+		base.OnFire2Pressed();
+
+		m_bExtendingTrack = false;
 	}
 
 	void ShowFailedStart()

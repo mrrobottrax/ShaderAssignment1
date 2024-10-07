@@ -11,7 +11,7 @@ public delegate void OnToolbeltToggleDelegate(bool isOpen);
 public class InventorySlot
 {
 	public Stack<Item> items = new();
-	public Action itemUpdate;
+	public Action ItemUpdate;
 }
 
 public class PlayerInventory : NetworkBehaviour, IInputHandler
@@ -124,12 +124,12 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 		if (prevSlot != null && prevSlot.items.TryPeek(out var item))
 		{
-			item.UnEquip();
+			item.OnUnEquip();
 		}
 
 		if (activeSlot.items.TryPeek(out var item1))
 		{
-			item1.Equip();
+			item1.OnEquip();
 		}
 
 		OnActiveSlotChange?.Invoke(prevSlot, activeSlot);
@@ -233,8 +233,9 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		Item item = slot.items.Pop();
 
 		OnDropItem?.Invoke(item, slot);
-		slot.itemUpdate?.Invoke();
+		slot.ItemUpdate?.Invoke();
 
+		// Set velocity
 		if (item.TryGetComponent(out Rigidbody rb))
 		{
 			rb.velocity = _firstPersonCamera.transform.forward * dropForce + _playerController.GetVelocity();
@@ -246,8 +247,12 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		item.transform.SetPositionAndRotation(_dropPoint.position + (_dropPoint.rotation * dropPointOffset), _dropPoint.rotation * rotationOffset);
 		SceneManager.MoveGameObjectToScene(item.gameObject, SceneManager.GetActiveScene());
 
-		item.UnEquip();
-		item.Drop();
+		item.OnUnEquip();
+
+		item.SetOwnerInventory(null);
+		item.SetOwnerSlot(null);
+
+		item.OnDrop();
 	}
 
 	void AddItemToSlot(Item item, InventorySlot slot)
@@ -261,16 +266,18 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		}
 
 		slot.items.Push(item);
-		slot.itemUpdate?.Invoke();
+		slot.ItemUpdate?.Invoke();
 
 		item.SetOwnerInventory(this);
+		item.SetOwnerSlot(slot);
 
 		if (activeSlot == slot)
 		{
-			item.Equip();
+			item.OnEquip();
 		}
 
 		OnAddItem?.Invoke(item, slot);
+		slot.ItemUpdate?.Invoke();
 	}
 
 	public delegate bool ItemSearchDelegate(Item item);
@@ -303,7 +310,6 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 			{
 				AddItemToSlot(item, slots[i]);
 				slot = slots[i];
-				slot.itemUpdate?.Invoke();
 				return true;
 			}
 		}
@@ -314,7 +320,6 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		{
 			AddItemToSlot(item, activeSlot);
 			slot = activeSlot;
-			slot.itemUpdate?.Invoke();
 			return true;
 		}
 
@@ -327,7 +332,6 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 				if (allowAutoSelect)
 					SelectSlot(i);
 				slot = slots[i];
-				slot.itemUpdate?.Invoke();
 				return true;
 			}
 		}
