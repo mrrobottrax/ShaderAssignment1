@@ -303,6 +303,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 			{
 				AddItemToSlot(item, slots[i]);
 				slot = slots[i];
+				slot.itemUpdate?.Invoke();
 				return true;
 			}
 		}
@@ -313,6 +314,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 		{
 			AddItemToSlot(item, activeSlot);
 			slot = activeSlot;
+			slot.itemUpdate?.Invoke();
 			return true;
 		}
 
@@ -325,6 +327,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 				if (allowAutoSelect)
 					SelectSlot(i);
 				slot = slots[i];
+				slot.itemUpdate?.Invoke();
 				return true;
 			}
 		}

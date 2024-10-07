@@ -83,35 +83,41 @@ public class RailKit : UseableItem
 
 	protected override void PickUp(PlayerInteraction interactor)
 	{
-		ownerInventory = GetInventoryComponent(interactor);
+		PlayerInventory inventory = GetInventoryComponent(interactor);
 
 		// Check if we have an empty hand
-		if (ownerInventory.GetActiveSlot().items.Count != 0)
+		if (inventory.GetActiveSlot().items.Count != 0)
 		{
 			// Check for any non-full rail kits
-			if (ownerInventory.FindItemWhere(IsNotFull) != null)
+			if (inventory.FindItemWhere(IsNotFull) != null)
 			{
 				// Absord metres into existing kits
 				RailKit kit;
-				while (kit = ownerInventory.FindItemWhere(IsNotFull) as RailKit)
+				while (kit = inventory.FindItemWhere(IsNotFull) as RailKit)
 				{
 					TransportMetresTo(kit);
 				}
 
+				interactor.ForceRefresh();
 				return;
 			}
 		}
 
+		// Normal pickup
 		CreatePreview();
 		base.PickUp(interactor);
-
-		interactor.ForceRefresh();
 	}
 
 	public override void Drop()
 	{
 		base.Drop();
 		DestroyPreview();
+	}
+
+	public override void Equip()
+	{
+		base.Equip();
+		CreatePreview();
 	}
 
 	public override void UnEquip()
@@ -143,6 +149,8 @@ public class RailKit : UseableItem
 		{
 			Destroy(gameObject);
 		}
+
+		kit.ownerSlot.itemUpdate?.Invoke();
 	}
 
 	#endregion
@@ -228,6 +236,12 @@ public class RailKit : UseableItem
 			Debug.DrawRay(m_curve.m_points[i], m_curve.m_orientations[i] * (Vector3.forward + Vector3.up), Color.blue);
 		}
 
+		if (m_curve.m_length > m_metresLeft)
+		{
+			ShowFailedCurve();
+			return;
+		}
+
 		if (m_bExtendingTrack && !CheckCurveTightness(m_curve))
 		{
 			ShowFailedStartAndEnd();
@@ -244,15 +258,8 @@ public class RailKit : UseableItem
 		ShowCurve();
 	}
 
-	public override void Fire1(bool pressed)
+	bool TryPlaceRail()
 	{
-		base.Fire1(pressed);
-		if (!pressed) return;
-
-		UpdatePreview();
-
-		if (!m_bCanMakeRail) return;
-
 		if (!m_bExtendingTrack)
 		{
 			// Start extending a node
@@ -260,24 +267,24 @@ public class RailKit : UseableItem
 			{
 				m_bExtendingTrack = true;
 				m_endNode = m_startNode;
-				return;
+				return false;
 			}
 
 			// Place a new rail
 			RailNode node1 = Instantiate(m_railNodePrefab).GetComponent<RailNode>();
 			RailNode node2 = Instantiate(m_railNodePrefab).GetComponent<RailNode>();
 
-			RailGenerator.Curve defaultCurve = GetDefaultCurve();
+			m_curve = GetDefaultCurve();
 
 			node1.transform.SetPositionAndRotation(m_startPos, m_startRot);
-			node2.transform.SetPositionAndRotation(defaultCurve.m_points[1], defaultCurve.m_orientations[1]);
+			node2.transform.SetPositionAndRotation(m_curve.m_points[1], m_curve.m_orientations[1]);
 
 			node1.next = node2;
 			node2.prev = node1;
 
-			node1.GenerateMesh(m_generator, defaultCurve);
+			node1.GenerateMesh(m_generator, m_curve);
 
-			return;
+			return true;
 		}
 
 		m_bExtendingTrack = false;
@@ -289,7 +296,7 @@ public class RailKit : UseableItem
 			if (m_endNode == null)
 			{
 				Debug.LogWarning("Rail invalid");
-				return;
+				return false;
 			}
 
 			bool connectFront = m_endNode.next == null && m_endNode.prev != null;
@@ -298,7 +305,7 @@ public class RailKit : UseableItem
 			if (connectFront == connectBack)
 			{
 				Debug.LogWarning("Rail invalid");
-				return;
+				return false;
 			}
 
 			RailNode node1 = Instantiate(m_railNodePrefab).GetComponent<RailNode>();
@@ -319,14 +326,14 @@ public class RailKit : UseableItem
 				node1.GenerateMesh(m_generator, m_curve);
 			}
 
-			return;
+			return true;
 		}
 
 		// Connect two nodes
 		if (m_startNode == null || m_endNode == null)
 		{
 			Debug.LogWarning("Rail invalid");
-			return;
+			return false;
 		}
 
 		bool startConnectFront = m_startNode.next == null && m_startNode.prev != null;
@@ -338,7 +345,7 @@ public class RailKit : UseableItem
 		if (startConnectFront == startConnectBack || endConnectFront == endConnectBack)
 		{
 			Debug.LogWarning("Rail invalid");
-			return;
+			return false;
 		}
 
 		// Connect them
@@ -376,6 +383,30 @@ public class RailKit : UseableItem
 			{
 				m_endNode.GenerateMesh(m_generator, m_curve);
 			}
+		}
+
+		return true;
+	}
+
+	public override void Fire1(bool pressed)
+	{
+		base.Fire1(pressed);
+		if (!pressed) return;
+
+		UpdatePreview();
+
+		if (!m_bCanMakeRail) return;
+
+		if (TryPlaceRail())
+		{
+			m_metresLeft -= m_curve.m_length;
+
+			if ((int)m_metresLeft <= 0)
+			{
+				Destroy(gameObject);
+			}
+
+			ownerSlot.itemUpdate?.Invoke();
 		}
 	}
 

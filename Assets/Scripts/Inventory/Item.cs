@@ -30,7 +30,7 @@ public class Item : Interactable
 
 	protected void OnDestroy()
 	{
-		if (ownerInventory != null)
+		if (ownerInventory != null && ownerSlot != null && ownerSlot.items != null && ownerSlot.items.Contains(this))
 		{
 			ownerSlot.items.Pop();
 			ownerSlot.itemUpdate?.Invoke();
