@@ -80,12 +80,6 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 		//if (!Entity.IsAbleToAttack) return;
 
 		bool fired = ctx.ReadValueAsButton();
-		if (HasParameter("IsHoldingFire1"))
-			Animator.SetBool("IsHoldingFire1", fired);
-
-		// Only trigger fire if the button is pressed, no released
-		if (fired && HasParameter("Fire1"))
-			Animator.SetTrigger("Fire1");
 
 		if (_inventory.GetActiveSlot().items.TryPeek(out Item item))
 		{
@@ -105,12 +99,6 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 		// if (!Entity.IsAbleToAttack) return;
 
 		bool fired = ctx.ReadValueAsButton();
-		if (HasParameter("IsHoldingFire2"))
-			Animator.SetBool("IsHoldingFire2", fired);
-
-		// Only trigger fire if the button is pressed, no released
-		if (fired && HasParameter("Fire2"))
-			Animator.SetTrigger("Fire2");
 
 		if (_inventory.GetActiveSlot().items.TryPeek(out Item item))
 		{

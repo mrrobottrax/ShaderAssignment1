@@ -57,7 +57,7 @@ public abstract class EntityAnimationManager_Base : NetworkBehaviour
     /// <summary>
     /// Returns true if this managers animator contains a variable with a string.
     /// </summary>
-    protected bool HasParameter(string parameterName)
+    public bool HasParameter(string parameterName)
     {
         foreach (var param in Animator.parameters)
         {
