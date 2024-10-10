@@ -1,3 +1,4 @@
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -301,7 +302,8 @@ public class PlayerController : NetworkBehaviour
 
 	void CollideAndSlide()
 	{
-		Vector3 originalVelocity = m_velocity;
+		Vector3 startVelocity = m_velocity;
+		Vector3 velocityBeforePlanes = m_velocity;
 
 		// When we collide with multiple planes at once (crease)
 		Vector3[] planes = new Vector3[k_maxPlanes];
@@ -341,6 +343,8 @@ public class PlayerController : NetworkBehaviour
 					time -= fraction * Time.fixedDeltaTime;
 
 					planeCount = 0;
+
+					velocityBeforePlanes = m_velocity;
 				}
 
 				if (planeCount >= k_maxPlanes)
@@ -357,7 +361,12 @@ public class PlayerController : NetworkBehaviour
 				bool conflictingPlanes = false;
 				for (int j = 0; j < planeCount; ++j)
 				{
-					m_velocity = Vector3.ProjectOnPlane(originalVelocity, planes[j]);
+					m_velocity = Vector3.ProjectOnPlane(velocityBeforePlanes, planes[j]);
+
+					if (planeCount == 1)
+					{
+						velocityBeforePlanes = m_velocity;
+					}
 
 					// Check if the velocity is against any other planes
 					for (int k = 0; k < planeCount; ++k)
@@ -384,7 +393,7 @@ public class PlayerController : NetworkBehaviour
 						Vector3 dir = Vector3.Cross(planes[0], planes[1]).normalized; // todo: maybe normalize is unnecessary?
 
 						// Go in that direction
-						m_velocity = dir * Vector3.Dot(dir, originalVelocity);
+						m_velocity = dir * Vector3.Dot(dir, m_velocity);
 					}
 					else
 					{
@@ -401,7 +410,7 @@ public class PlayerController : NetworkBehaviour
 			}
 
 			// Stop tiny oscillations
-			if (Vector3.Dot(m_velocity, originalVelocity) <= 0)
+			if (Vector3.Dot(m_velocity, startVelocity) <= 0)
 			{
 				m_velocity = Vector3.zero;
 				break;
@@ -476,6 +485,32 @@ public class PlayerController : NetworkBehaviour
 		{
 			IsGrounded = false;
 		}
+
+		if (!IsGrounded)
+		{
+			// Additionally, check if any point on the player is on the ground
+			// Source uses 4 box checks, but I'm really lazy so I'll use a raycast
+
+			if (Physics.Raycast(m_position,
+				Vector3.down,
+				out RaycastHit hit2,
+				k_groundCheckDist,
+				m_movementData.m_layerMask,
+				QueryTriggerInteraction.Ignore
+			))
+			{
+				if (hit2.normal.y > Mathf.Cos(Mathf.Deg2Rad * m_movementData.m_maxWalkableAngle))
+				{
+					IsGrounded = true;
+				}
+				else
+				{
+					IsGrounded = false;
+				}
+			}
+
+			Debug.DrawRay(m_position, Vector3.down * k_groundCheckDist, Color.yellow);
+		}
 	}
 
 	void CategorizePosition()
@@ -524,6 +559,7 @@ public class PlayerController : NetworkBehaviour
 		CategorizePosition();
 
 		Vector3 globalWishDir = m_fpsCamera.RotateVectorYaw(m_wishMoveDir);
+		globalWishDir.x = 1;
 
 		// Crouch / un-crouch
 		if (m_isCrouchPressed)

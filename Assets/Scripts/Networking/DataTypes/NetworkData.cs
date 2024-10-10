@@ -183,7 +183,7 @@ internal class NetworkData : ScriptableObject
 #if UNITY_EDITOR
 	public static bool HasSceneGameObject(NetworkObject obj)
 	{
-		if (Instance == null) return true;
+		if (s_instance == null) return true;
 		if (Instance.m_disableIdCreation) return true;
 
 		//Debug.Log($"Looking for {obj.m_netID}");
