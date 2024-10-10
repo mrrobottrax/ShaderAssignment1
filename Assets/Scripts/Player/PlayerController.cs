@@ -8,7 +8,7 @@ public class PlayerController : NetworkBehaviour
 {
 	// Constants
 	const float k_hitEpsilon = 0.015f; // Min distance to wall
-	const float k_groundCheckDist = 0.03f;
+	const float k_groundCheckDist = 0.04f;
 	const float k_stopEpsilon = 0.0001f; // Stop when <= this speed
 	const int k_maxBumps = 8; // Max number of iterations per frame
 	const int k_maxPlanes = 8; // Max number of planes to collide with at once
@@ -509,7 +509,7 @@ public class PlayerController : NetworkBehaviour
 				}
 			}
 
-			Debug.DrawRay(m_position, Vector3.down * k_groundCheckDist, Color.yellow);
+			//Debug.DrawRay(m_position, Vector3.down * k_groundCheckDist, Color.yellow);
 		}
 	}
 
@@ -551,6 +551,7 @@ public class PlayerController : NetworkBehaviour
 		m_velocity += add * direction;
 	}
 
+
 	private void StandardMovement()
 	{
 		if (StuckCheck())
@@ -559,7 +560,6 @@ public class PlayerController : NetworkBehaviour
 		CategorizePosition();
 
 		Vector3 globalWishDir = m_fpsCamera.RotateVectorYaw(m_wishMoveDir);
-		//globalWishDir.x = 1;
 
 		// Crouch / un-crouch
 		if (m_isCrouchPressed)
@@ -659,6 +659,8 @@ public class PlayerController : NetworkBehaviour
 		{
 			m_position = downPosition;
 			m_velocity = downVelocity;
+
+			GroundCheck();
 		}
 		// Otherwise, pick the move that goes the furthest
 		else if (Vector3.Distance(startPosition, downPosition) >= Vector3.Distance(startPosition, m_position))
