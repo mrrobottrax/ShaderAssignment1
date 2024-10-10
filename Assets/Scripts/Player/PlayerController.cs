@@ -559,7 +559,7 @@ public class PlayerController : NetworkBehaviour
 		CategorizePosition();
 
 		Vector3 globalWishDir = m_fpsCamera.RotateVectorYaw(m_wishMoveDir);
-		globalWishDir.x = 1;
+		//globalWishDir.x = 1;
 
 		// Crouch / un-crouch
 		if (m_isCrouchPressed)
