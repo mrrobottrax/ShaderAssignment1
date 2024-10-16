@@ -3298,7 +3298,11 @@ PrefabInstance:
     - target: {fileID: 623655948388898632, guid: 6c3031eb40c228244ab796cd49d9623e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6ed0b2441649a7d4b9e0a95a60f86271, type: 2}
+      objectReference: {fileID: 2100000, guid: 27afe3bf4a0a5154aa09f4720f019339, type: 2}
+    - target: {fileID: 623655948388898632, guid: 6c3031eb40c228244ab796cd49d9623e, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 243dc9993c227e4428d4fddc6540b0cf, type: 2}
     - target: {fileID: 919132149155446097, guid: 6c3031eb40c228244ab796cd49d9623e, type: 3}
       propertyPath: m_Name
       value: Test Level
