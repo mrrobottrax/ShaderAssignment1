@@ -3918,6 +3918,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 18.32
       objectReference: {fileID: 0}
+    - target: {fileID: -6532688060091915378, guid: 170bd2d6dcf1a694d9d996c1d8c40164, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c754ac25d02e1ad46b2954069707e5dc, type: 2}
     - target: {fileID: -5794902808645698778, guid: 170bd2d6dcf1a694d9d996c1d8c40164, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18.82
@@ -3978,6 +3982,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MineTileset
       objectReference: {fileID: 0}
+    - target: {fileID: 2024685805787603991, guid: 170bd2d6dcf1a694d9d996c1d8c40164, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c754ac25d02e1ad46b2954069707e5dc, type: 2}
     - target: {fileID: 4001981339872503035, guid: 170bd2d6dcf1a694d9d996c1d8c40164, type: 3}
       propertyPath: m_Layer
       value: 6
