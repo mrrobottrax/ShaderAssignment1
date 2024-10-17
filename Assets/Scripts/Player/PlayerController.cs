@@ -494,7 +494,7 @@ public class PlayerController : NetworkBehaviour
 			if (Physics.Raycast(m_position,
 				Vector3.down,
 				out RaycastHit hit2,
-				k_groundCheckDist,
+				k_groundCheckDist * 2,
 				m_movementData.m_layerMask,
 				QueryTriggerInteraction.Ignore
 			))
