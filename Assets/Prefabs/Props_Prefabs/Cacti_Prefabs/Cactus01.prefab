@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2779435234969116683}
-  - component: {fileID: 566986569375168831}
   m_Layer: 7
   m_Name: Cactus01
   m_TagString: Untagged
@@ -33,33 +32,6 @@ Transform:
   - {fileID: 3205904479583449682}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &566986569375168831
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4210777565772772678}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.049421668, y: 1.1722239, z: 0.012363195}
-  m_Size: 2.380303
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.6
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 464215848328953444}
-  - screenRelativeHeight: 0.3
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 464215848328953444}
-  - screenRelativeHeight: 0.0015
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 464215848328953444}
-  m_Enabled: 1
 --- !u!1 &6226932752909646118
 GameObject:
   m_ObjectHideFlags: 0
