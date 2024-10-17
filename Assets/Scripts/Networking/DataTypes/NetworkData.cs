@@ -103,7 +103,7 @@ internal class NetworkData : ScriptableObject
 				{
 					if (!m_networkPrefabs[i].TryGetComponent<NetworkObject>(out var obj))
 					{
-						Debug.LogWarning($"Network prefab {obj.gameObject.name} doesn't have a NetworkObject");
+						Debug.LogWarning($"Network prefab {m_networkPrefabs[i].name} doesn't have a NetworkObject");
 						continue;
 					}
 

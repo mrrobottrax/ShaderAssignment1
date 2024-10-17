@@ -10,6 +10,8 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 	[Header("Camera Variables")]
 	[SerializeField, Range(0.01f, 1)] float m_lookSenseYaw = .1f;
 	[SerializeField, Range(0.01f, 1)] float m_lookSensePitch = .1f;
+	[SerializeField] float m_runTiltMax = 15f;
+	[SerializeField] float m_runTiltMultiplier = 15f;
 	[SerializeField] float m_pitchMin = -85;
 	[SerializeField] float m_pitchMax = 85;
 	[SerializeField] float m_foreheadSize = 0.2f; // Sinks the camera down from the top of the head
@@ -25,6 +27,8 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 
 	Vector3 m_lastPosition; // Positions are in world space
 	Vector3 m_position;
+	float m_lastRoll;
+	float m_roll;
 
 	InputAction m_lookAction;
 
@@ -54,16 +58,18 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 			m_pitch -= mouseDelta.y * m_lookSensePitch;
 
 			m_pitch = Mathf.Clamp(m_pitch, m_pitchMin, m_pitchMax);
-
-			transform.localRotation = Quaternion.Euler(m_pitch, m_yaw, 0);
 		}
 
 		// Interpolate between positions calculated in FixedUpdate
 		// todo: don't interpolate when distance is too large
 #pragma warning disable UNT0004
 		float fract = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
-		transform.position = Vector3.Lerp(m_lastPosition, m_position, fract);
 #pragma warning restore UNT0004
+
+		transform.position = Vector3.Lerp(m_lastPosition, m_position, fract);
+
+		float roll = Mathf.Lerp(m_lastRoll, m_roll, fract);
+		transform.localRotation = Quaternion.Euler(m_pitch, m_yaw, roll);
 	}
 
 	private void FixedUpdate()
@@ -71,6 +77,7 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 		if (m_followPlayer == null)
 		{
 			m_lastPosition = m_position;
+			m_lastRoll = m_roll;
 			return;
 		}
 
@@ -93,6 +100,10 @@ public class FirstPersonCamera : MonoBehaviour, IInputHandler
 		m_position = CalcCameraPos();
 
 		m_stepOffset -= 0.5f * m_stepOffset * Time.fixedDeltaTime * m_stepLerpSpeed; // we do this in 2 parts for more accurate integration
+
+		// Update camera tilt
+		m_lastRoll = m_roll;
+		m_roll = Mathf.Clamp(-Vector3.Dot(m_followPlayer.GetVelocity(), CameraTransform.right) * m_runTiltMultiplier, -m_runTiltMax, m_runTiltMax);
 	}
 	#endregion
 

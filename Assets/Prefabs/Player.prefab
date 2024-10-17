@@ -923,6 +923,8 @@ MonoBehaviour:
   m_followPlayer: {fileID: 2944094973486998542}
   m_lookSenseYaw: 0.1
   m_lookSensePitch: 0.1
+  m_runTiltMax: 10
+  m_runTiltMultiplier: 0.5
   m_pitchMin: -85
   m_pitchMax: 85
   m_foreheadSize: 0.2
