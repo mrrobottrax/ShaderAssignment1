@@ -1,4 +1,6 @@
-[System.Serializable]
+using System.Runtime.InteropServices;
+
+[StructLayout(LayoutKind.Sequential)]
 public abstract class MessageBase
 {
 	public virtual bool Peer2Peer { get { return false; } }
