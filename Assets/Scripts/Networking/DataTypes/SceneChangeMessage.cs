@@ -1,5 +1,6 @@
 using UnityEngine.SceneManagement;
 
+[System.Serializable]
 public class SceneChangeMessage : MessageBase
 {
 	public override EMessageFilter Filter => EMessageFilter.ClientOnly;

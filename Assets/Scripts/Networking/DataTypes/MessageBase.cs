@@ -1,3 +1,4 @@
+[System.Serializable]
 public abstract class MessageBase
 {
 	public virtual bool Peer2Peer { get { return false; } }

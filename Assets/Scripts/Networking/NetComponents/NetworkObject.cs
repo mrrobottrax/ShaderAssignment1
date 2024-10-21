@@ -82,6 +82,14 @@ public class NetworkObject : MonoBehaviour
 		NetworkObjectManager.RemoveNetworkObjectFromList(this);
 	}
 
+	public virtual void SendSnapshot(Peer peer)
+	{
+		foreach (var net in m_networkBehaviours)
+		{
+			net.SendSnapshot(peer);
+		}
+	}
+
 #if UNITY_EDITOR
 	private void OnValidate()
 	{
