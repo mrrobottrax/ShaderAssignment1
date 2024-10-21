@@ -185,6 +185,6 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		}
 
 		if (parent == null)
-			Debug.LogWarning($"NetworkBehaviour detected on a GameObject without a NetworkObject as it's self or parent, tread lightly!", this);
+			Debug.LogWarning($"NetworkBehaviour detected on a GameObject {this.gameObject.name} without a NetworkObject as it's self or parent, tread lightly!", this);
 	}
 }
