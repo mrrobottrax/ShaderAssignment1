@@ -52,17 +52,19 @@ public class NetworkObject : MonoBehaviour
 			net.IsOwner = IsOwner;
 		}
 
-		// Get ID
+		// Get ID. This will be called when the host spawns an object through Instantiate.
 
-		if (NetworkManager.Mode == ENetworkMode.Host && m_netID == 0)
+		if (m_netID == 0 && NetworkManager.Mode == ENetworkMode.Host)
 		{
 			// Reserve net ID
 			m_netID = NetworkObjectManager.ReserveID(this);
 
 			// Notify peers of object creation
-			// todo:
-			// SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, NetworkManager.m_localIdentity);
-			// SendFunctions.SendObjectSnapshot(this);
+			foreach (var peer in NetworkManager.GetAllPeers())
+			{
+				NetworkManager.SendMessage(new SpawnPrefabMessage(this), peer);
+				SendSnapshot(peer);
+			}
 		}
 
 		NetworkObjectManager.AddNetworkObjectToList(this);

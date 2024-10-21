@@ -146,14 +146,13 @@ internal class Host : MonoBehaviour
 			// todo:
 			// Give initial info
 			NetworkManager.SendMessage(new SceneChangeMessage(), client);
-			// SendFunctions.SendSceneInfo(client);
 
-			// // Send DontDestroyOnLoad objects on first connection
-			// foreach (var networkObject in NetworkObjectManager.GetPersistentNetObjects())
-			// {
-			// 	SendFunctions.SendSpawnPrefab(networkObject.m_netID, networkObject.m_prefabIndex, networkObject.m_ownerIndentity, client);
-			// 	SendFunctions.SendObjectSnapshot(networkObject, client);
-			// }
+			// Send DontDestroyOnLoad objects on first connection
+			foreach (var networkObject in NetworkObjectManager.GetPersistentNetObjects())
+			{
+				NetworkManager.SendMessage(new SpawnPrefabMessage(networkObject), client);
+				networkObject.SendSnapshot(client);
+			}
 
 			// SendFunctions.SendFullSnapshot(client);
 

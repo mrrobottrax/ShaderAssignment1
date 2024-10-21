@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 using UnityEngine.SceneManagement;
 
 [StructLayout(LayoutKind.Sequential)]
-public class SceneChangeMessage : MessageBase
+internal class SceneChangeMessage : MessageBase
 {
 	public override EMessageFilter Filter => EMessageFilter.ClientOnly;
 
