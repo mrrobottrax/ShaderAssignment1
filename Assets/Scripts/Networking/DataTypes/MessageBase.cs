@@ -11,5 +11,5 @@ public abstract class MessageBase
 	}
 	public virtual EMessageFilter Filter { get { return EMessageFilter.All; } }
 
-	internal abstract void Receive(Peer sender);
+	public abstract void Receive(Peer sender);
 }
