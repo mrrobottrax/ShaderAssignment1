@@ -145,6 +145,7 @@ internal class Host : MonoBehaviour
 
 			// todo:
 			// Give initial info
+			NetworkManager.SendMessage(new SceneChangeMessage(), client);
 			// SendFunctions.SendSceneInfo(client);
 
 			// // Send DontDestroyOnLoad objects on first connection

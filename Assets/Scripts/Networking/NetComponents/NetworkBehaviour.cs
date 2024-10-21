@@ -23,4 +23,6 @@ public abstract class NetworkBehaviour : MonoBehaviour
 		if (parent == null)
 			Debug.LogWarning($"NetworkBehaviour detected on a GameObject without a NetworkObject as it's self or parent, add it!", this);
 	}
+
+	public virtual void SendSnapshot(Peer peer) { }
 }

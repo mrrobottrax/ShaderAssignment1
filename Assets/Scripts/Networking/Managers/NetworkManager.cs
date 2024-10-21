@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Reflection;
+
 public enum ENetworkMode
 {
 	None = 0,
@@ -14,12 +15,12 @@ public enum ENetworkMode
 
 internal struct MessageID_t
 {
-	public byte value;
+	public ushort value;
 
 	public static MessageID_t Read(IntPtr p)
 	{
 		MessageID_t id;
-		id.value = Marshal.ReadByte(p);
+		id.value = (ushort)Marshal.ReadInt16(p);
 		return id;
 	}
 }

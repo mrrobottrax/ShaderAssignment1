@@ -143,11 +143,6 @@ internal class Client : MonoBehaviour
 
 	void SendFinishedLoading()
 	{
-		SceneChangeMessage message = new()
-		{
-			m_sceneIndex = SceneManager.GetActiveScene().buildIndex,
-		};
-
-		NetworkManager.SendMessage(message, m_hostPeer);
+		NetworkManager.SendMessage(new SceneChangeMessage(), m_hostPeer);
 	}
 }
