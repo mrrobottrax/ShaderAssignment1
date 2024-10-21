@@ -16,7 +16,7 @@ internal class Client : MonoBehaviour
 	readonly Queue<Tuple<IntPtr, Peer>> m_messageBackup = new();
 
 	internal Peer m_hostPeer;
-	internal Dictionary<SteamNetworkingIdentity, Peer> m_peers;
+	internal Dictionary<SteamNetworkingIdentity, Peer> m_peers = new();
 
 	internal NetworkObject m_player;
 
