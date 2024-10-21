@@ -93,66 +93,66 @@ internal static class NetworkObjectManager
 		return m_persistentNetObjects.Values;
 	}
 
-	internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message, Peer sender)
-	{
-		if (message.m_prefabIndex == -1)
-		{
-			Debug.LogError("Only network prefabs can be spawned!");
-			return null;
-		}
+	// internal static NetworkObject SpawnNetworkPrefab(SpawnPrefabMessage message, Peer sender)
+	// {
+	// 	if (message.m_prefabIndex == -1)
+	// 	{
+	// 		Debug.LogError("Only network prefabs can be spawned!");
+	// 		return null;
+	// 	}
 
-		// Get the prefab
-		GameObject prefab;
+	// 	// Get the prefab
+	// 	GameObject prefab;
 
-		if (message.m_prefabIndex == NetworkData.k_playerPrefabIndex)
-		{
-			prefab = NetworkData.GetPlayerPrefab();
-		}
-		else
-		{
-			prefab = NetworkData.GetNetworkPrefabs()[message.m_prefabIndex];
-		}
+	// 	if (message.m_prefabIndex == NetworkData.k_playerPrefabIndex)
+	// 	{
+	// 		prefab = NetworkData.GetPlayerPrefab();
+	// 	}
+	// 	else
+	// 	{
+	// 		prefab = NetworkData.GetNetworkPrefabs()[message.m_prefabIndex];
+	// 	}
 
-		// Spawn it
-		GameObject goPrefab = Object.Instantiate(prefab);
-		NetworkObject netObj = goPrefab.GetComponent<NetworkObject>();
+	// 	// Spawn it
+	// 	GameObject goPrefab = Object.Instantiate(prefab);
+	// 	NetworkObject netObj = goPrefab.GetComponent<NetworkObject>();
 
-		netObj.m_netID = message.m_networkID;
-		netObj.m_ownerIndentity = message.m_ownerIdentity;
+	// 	netObj.m_netID = message.m_networkID;
+	// 	netObj.m_ownerIndentity = message.m_ownerIdentity;
 
-		if (message.m_networkID < 0)
-		{
-			Object.DontDestroyOnLoad(goPrefab);
-		}
+	// 	if (message.m_networkID < 0)
+	// 	{
+	// 		Object.DontDestroyOnLoad(goPrefab);
+	// 	}
 
-		netObj.InitNetworkBehaviours();
+	// 	netObj.InitNetworkBehaviours();
 
-		// Players get added to dictionary
-		if (netObj.m_ownerIndentity.Equals(sender.m_identity))
-		{
-			sender.m_player = netObj;
-		}
+	// 	// Players get added to dictionary
+	// 	if (netObj.m_ownerIndentity.Equals(sender.m_identity))
+	// 	{
+	// 		sender.m_player = netObj;
+	// 	}
 
-		// Check if local player
-		if (netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity))
-		{
-			NetworkManager.m_localClient.m_player = netObj;
-		}
+	// 	// Check if local player
+	// 	if (netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity))
+	// 	{
+	// 		NetworkManager.m_localClient.m_player = netObj;
+	// 	}
 
-		// Add to list
-		AddNetworkObjectToList(netObj);
+	// 	// Add to list
+	// 	AddNetworkObjectToList(netObj);
 
-		// Set IsOwner of NetworkBehaviours
-		foreach (var component in netObj.m_networkBehaviours)
-		{
-			component.IsOwner = netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity);
-		}
+	// 	// Set IsOwner of NetworkBehaviours
+	// 	foreach (var component in netObj.m_networkBehaviours)
+	// 	{
+	// 		component.IsOwner = netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity);
+	// 	}
 
-		return netObj;
-	}
+	// 	return netObj;
+	// }
 
-	internal static void RemoveObject(RemoveObjectMessage message)
-	{
-		Object.Destroy(GetNetworkObject(message.m_networkID).gameObject);
-	}
+	// internal static void RemoveObject(RemoveObjectMessage message)
+	// {
+	// 	Object.Destroy(GetNetworkObject(message.m_networkID).gameObject);
+	// }
 }

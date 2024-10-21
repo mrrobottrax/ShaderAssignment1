@@ -1,13 +1,10 @@
 ﻿using Steamworks;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
+using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
-using UnityEngine;
 
 public class NetworkObject : MonoBehaviour
 {
@@ -18,46 +15,67 @@ public class NetworkObject : MonoBehaviour
 	internal int m_netID = 0;
 
 	internal SteamNetworkingIdentity m_ownerIndentity;
-
 	internal NetworkBehaviour[] m_networkBehaviours;
+
+	public bool IsOwner => NetworkManager.LocalIdentity.Equals(m_ownerIndentity);
 
 	bool m_initialized = false;
 
-	private void Awake()
+	void Awake()
 	{
-		TickManager.OnSend += Send;
-
-		// Non-prefabs are always owned by server
-		if (m_prefabIndex == -1)
-		{
-			m_ownerIndentity = NetworkManager.GetServerIdentity();
-		}
-
-		// Add to list if a scene object
+		// Scene objects are always server owned
 		if (m_netID != 0)
 		{
-			NetworkObjectManager.AddNetworkObjectToList(this);
+			m_ownerIndentity = NetworkManager.GetServerIdentity();
+			Init(); // Init scene objects early
 		}
 	}
 
-	private void Start()
+	void Start()
 	{
-		InitNetworkBehaviours();
+		Init();
+	}
 
-		if (NetworkManager.Mode == ENetworkMode.Host)
+	internal void Init()
+	{
+		if (m_initialized) return;
+		m_initialized = true;
+
+		// Setup networkbehaviours
+
+		m_networkBehaviours = gameObject.GetComponentsInChildren<NetworkBehaviour>();
+
+		for (int i = 0; i < m_networkBehaviours.Length; ++i)
 		{
-			ForceRegister();
+			NetworkBehaviour net = m_networkBehaviours[i];
+			net.m_index = i;
+			net.IsOwner = IsOwner;
 		}
+
+		// Get ID
+
+		if (NetworkManager.Mode == ENetworkMode.Host && m_netID == 0)
+		{
+			// Reserve net ID
+			m_netID = NetworkObjectManager.ReserveID(this);
+
+			// Notify peers of object creation
+			// todo:
+			// SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, NetworkManager.m_localIdentity);
+			// SendFunctions.SendObjectSnapshot(this);
+		}
+
+		NetworkObjectManager.AddNetworkObjectToList(this);
 	}
 
 	private void OnDestroy()
 	{
-		TickManager.OnSend -= Send;
-
 		// Notify clients of destruction
+		// todo: IsOwner
 		if (NetworkManager.Mode == ENetworkMode.Host)
 		{
-			SendFunctions.SendDestroyGameObject(m_netID);
+			// todo:
+			//SendFunctions.SendDestroyGameObject(m_netID);
 		}
 
 		// Remove from list
@@ -95,117 +113,6 @@ public class NetworkObject : MonoBehaviour
 		}
 	}
 #endif
-
-	void Send()
-	{
-		if (NetworkManager.LocalIdentity.Equals(m_ownerIndentity))
-		{
-			// Scan NetworkBehaviours for changes
-			foreach (var net in m_networkBehaviours)
-			{
-				byte[] newBytes = net.GetNetVarBytes();
-
-				if (!Enumerable.SequenceEqual(net.m_netVarBuffer, newBytes))
-				{
-					// Change detected
-					net.m_netVarBuffer = newBytes;
-
-					SendFunctions.SendNetworkBehaviourUpdate(m_netID, net.m_index, newBytes);
-				}
-			}
-		}
-	}
-
-	// Get NetID and add to lists and all that
-	public void ForceRegister()
-	{
-		InitNetworkBehaviours();
-
-		if (m_netID == 0)
-		{
-			// Reserve net ID
-			m_netID = NetworkObjectManager.ReserveID(this);
-
-			// Add to list
-			NetworkObjectManager.AddNetworkObjectToList(this);
-
-			// Notify peers of object creation
-			SendFunctions.SendSpawnPrefab(m_netID, m_prefabIndex, NetworkManager.m_localIdentity);
-			SendFunctions.SendObjectSnapshot(this);
-		}
-	}
-
-	internal void InitNetworkBehaviours()
-	{
-		if (m_initialized) return;
-		m_initialized = true;
-
-		m_networkBehaviours = gameObject.GetComponentsInChildren<NetworkBehaviour>();
-
-		for (int i = 0; i < m_networkBehaviours.Length; ++i)
-		{
-			NetworkBehaviour net = m_networkBehaviours[i];
-
-			net.m_index = i;
-
-			// Get all NetVars
-			Type type = net.GetType();
-
-			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy;
-
-			net.m_netVarFields = type.GetFields(flags)
-				.Where(field => field.GetCustomAttribute(typeof(NetVarAttribute)) != null).ToArray();
-
-			net.m_netVarCallbacks = new MethodInfo[net.m_netVarFields.Length];
-
-			// Iterate NetVars
-			int size = 0;
-			for (int index = 0; index < net.m_netVarFields.Length; ++index)
-			{
-				FieldInfo field = net.m_netVarFields[index];
-
-				if (field.FieldType.IsByRef)
-				{
-					throw new InvalidOperationException($"NetVars cannot be reference types");
-				}
-
-				if (field.FieldType.IsArray)
-				{
-					// Get size of array
-					Array array = (Array)field.GetValue(net);
-					Type elementType = field.FieldType.GetElementType();
-
-					size += array.Length * Marshal.SizeOf(elementType);
-				}
-				else if (field.FieldType.IsEnum)
-				{
-					Type underlyingType = Enum.GetUnderlyingType(field.FieldType);
-					size += Marshal.SizeOf(underlyingType);
-				}
-				else
-				{
-					// Get size of NetVar
-					size += Marshal.SizeOf(field.FieldType);
-				}
-
-				// Set callbacks
-				string callbackName = field.GetCustomAttribute<NetVarAttribute>().m_callback;
-				if (callbackName != null)
-				{
-					MethodInfo info = type.GetMethod(callbackName, flags);
-					net.m_netVarCallbacks[index] = info;
-				}
-				else
-				{
-					net.m_netVarCallbacks[index] = null;
-				}
-			}
-
-			// Apply to array
-			net.m_netVarBuffer = new byte[size];
-			net.m_netVarBuffer = net.GetNetVarBytes();
-		}
-	}
 }
 
 #if UNITY_EDITOR

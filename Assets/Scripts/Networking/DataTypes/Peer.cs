@@ -16,7 +16,7 @@ public enum ESteamNetworkingSend : int
 	k_nSteamNetworkingSend_ReliableNoNagle = k_nSteamNetworkingSend_Reliable | k_nSteamNetworkingSend_NoNagle
 }
 
-internal class Peer
+public class Peer
 {
 	internal HSteamNetConnection m_hConn;
 	internal SteamNetworkingIdentity m_identity;

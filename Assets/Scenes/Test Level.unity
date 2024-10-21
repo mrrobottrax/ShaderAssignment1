@@ -6505,7 +6505,8 @@ PrefabInstance:
       propertyPath: m_netID
       value: 2147483631
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3599360685319568530, guid: 6f83a5478d38e13488dd820d9a6d3ff2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6685,7 +6686,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 736054235098835601, guid: 9f9723fcf300b324c8fa7c3a836090cc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -9863,7 +9865,8 @@ PrefabInstance:
       propertyPath: m_netID
       value: 2147483632
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3599360685319568530, guid: 6f83a5478d38e13488dd820d9a6d3ff2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

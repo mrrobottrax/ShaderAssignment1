@@ -3,12 +3,25 @@ using Steamworks;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System;
-
+using System.Linq;
+using System.Reflection;
 public enum ENetworkMode
 {
 	None = 0,
 	Host,
 	Client
+}
+
+internal struct MessageID_t
+{
+	public byte value;
+
+	public static MessageID_t Read(IntPtr p)
+	{
+		MessageID_t id;
+		id.value = Marshal.ReadByte(p);
+		return id;
+	}
 }
 
 public static class NetworkManager
@@ -20,9 +33,8 @@ public static class NetworkManager
 	internal static ENetworkMode m_mode;
 	internal static SteamNetworkingIdentity m_localIdentity;
 
-	internal static bool m_tickFrame = false;
-
-	internal static Dictionary<SteamNetworkingIdentity, Peer> m_peers = new(); // all other players
+	internal static Dictionary<Type, MessageID_t> m_messageToID = new();
+	internal static Dictionary<MessageID_t, Type> m_IdToMessage = new();
 
 	public static void Init()
 	{
@@ -35,6 +47,30 @@ public static class NetworkManager
 		if (!SteamNetworkingSockets.GetIdentity(out m_localIdentity))
 		{
 			Debug.LogError("Failed to get identity from Steam");
+		}
+
+		// Get an ID for each message type
+
+		var types = AppDomain.CurrentDomain.GetAssemblies()
+			.SelectMany(s => s.GetTypes())
+			.Where(p => typeof(MessageBase).IsAssignableFrom(p));
+
+		MessageID_t id;
+		id.value = 0;
+		foreach (var type in types)
+		{
+			//Debug.Log(type.ToString());
+
+			m_messageToID.Add(type, id);
+			m_IdToMessage.Add(id, type);
+
+			if (id.value >= 255)
+			{
+				Debug.LogError("Out of message IDs");
+				break;
+			}
+
+			++id.value;
 		}
 	}
 
@@ -65,105 +101,139 @@ public static class NetworkManager
 		JoinGame(pIdentity);
 	}
 
-	#region Send Functions
-
-	public static void SendMessageAll<T>(EMessageType messageType, T message, ESteamNetworkingSend sendType) where T : struct
+	internal static IEnumerable<Peer> GetAllPeers()
 	{
-		IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
-
-		try
+		if (m_mode == ENetworkMode.Host)
 		{
-			Marshal.StructureToPtr(message, ptr, false);
-
-			// Send the message
-			SendMessageAll(messageType, ptr, Marshal.SizeOf(message), sendType);
+			return m_host.m_clients.Values;
 		}
-		finally
+		else if (m_mode == ENetworkMode.Client)
 		{
-			Marshal.FreeHGlobal(ptr);
+			var iter = m_localClient.m_peers.Values;
+			iter.Append(m_localClient.m_hostPeer);
+			return iter;
+		}
+
+		throw new NotImplementedException();
+	}
+
+	internal static void ProcessMessage(SteamNetworkingMessage_t message, Peer sender)
+	{
+		MessageID_t id = MessageID_t.Read(message.m_pData);
+		Type type = m_IdToMessage[id];
+
+		// Use the MakeGenericMethod to create a generic method for PtrToStructure
+		MethodInfo method = typeof(Marshal).GetMethod("PtrToStructure", new Type[] { typeof(IntPtr) });
+		MethodInfo generic = method.MakeGenericMethod(type);
+		MessageBase messageObj = (MessageBase)generic.Invoke(null, new object[] { message.m_pData + Marshal.SizeOf(id) });
+
+		// Filter message
+
+		if (messageObj.Filter == MessageBase.EMessageFilter.All ||
+			messageObj.Filter == MessageBase.EMessageFilter.ClientOnly && m_mode == ENetworkMode.Client ||
+			messageObj.Filter == MessageBase.EMessageFilter.HostOnly && m_mode == ENetworkMode.Host)
+		{
+			messageObj.Receive(sender);
 		}
 	}
 
-	public static void SendMessageAll(EMessageType messageType, System.IntPtr pData, int cbLength, ESteamNetworkingSend sendType)
+	#region Send Functions
+
+	public static void SendMessage<T>(T message, Peer target) where T : MessageBase
 	{
 		if (!SteamManager.Initialized)
 			return;
 
-		// Allocate a new buffer to hold the messageType byte and the original data
-		byte[] buffer = new byte[cbLength + 1];
-		buffer[0] = (byte)messageType;
+		Type messageType = typeof(T);
+		MessageID_t typeID = m_messageToID[messageType];
 
-		// Copy the original data to the new buffer, starting at index 1
-		Marshal.Copy(pData, buffer, 1, cbLength);
+		int cbType = Marshal.SizeOf(typeID);
+		int cbMessage = Marshal.SizeOf(typeof(T));
+		int cbBuffer = cbMessage + cbType;
 
-		// Pin the buffer in memory and get a pointer to it
-		GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+		IntPtr pBuffer = Marshal.AllocHGlobal(cbBuffer);
 		try
 		{
-			System.IntPtr pBuffer = handle.AddrOfPinnedObject();
+			IntPtr pId = pBuffer;
+			IntPtr pMessage = pBuffer + cbType;
 
-			// Send the message
-			if (m_peers != null)
+			Marshal.StructureToPtr(typeID, pId, false);
+			Marshal.StructureToPtr(message, pMessage, false);
+
+			int sendType = (int)(
+				message.Reliable ?
+				ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable :
+				ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
+
+
+			SteamNetworkingSockets.SendMessageToConnection(target.m_hConn, pBuffer, (uint)cbBuffer, sendType, out _);
+		}
+		finally
+		{
+			Marshal.FreeHGlobal(pBuffer);
+		}
+	}
+
+	public static void BroadcastMessage<T>(T message) where T : MessageBase
+	{
+		if (!SteamManager.Initialized)
+			return;
+
+		Type messageType = typeof(T);
+		MessageID_t typeID = m_messageToID[messageType];
+
+		int cbType = Marshal.SizeOf(typeID);
+		int cbMessage = Marshal.SizeOf(typeof(T));
+		int cbBuffer = cbMessage + cbType;
+
+		IntPtr pBuffer = Marshal.AllocHGlobal(cbBuffer);
+		try
+		{
+			IntPtr pId = pBuffer;
+			IntPtr pMessage = pBuffer + cbType;
+
+			Marshal.StructureToPtr(typeID, pId, false);
+			Marshal.StructureToPtr(message, pMessage, false);
+
+			int sendType = (int)(
+				message.Reliable ?
+				ESteamNetworkingSend.k_nSteamNetworkingSend_Reliable :
+				ESteamNetworkingSend.k_nSteamNetworkingSend_Unreliable);
+
+			if (message.Peer2Peer)
 			{
-				foreach (var client in m_peers.Values)
+				// Send to all peers
+				foreach (var peer in GetAllPeers())
 				{
-					SteamNetworkingSockets.SendMessageToConnection(client.m_hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
+					SteamNetworkingSockets.SendMessageToConnection(peer.m_hConn, pBuffer, (uint)cbBuffer, sendType, out _);
+				}
+			}
+			else
+			{
+				// Send to host if client, send to all if host
+				if (m_mode == ENetworkMode.Client)
+				{
+					SteamNetworkingSockets.SendMessageToConnection(m_localClient.m_hostPeer.m_hConn, pBuffer, (uint)cbBuffer, sendType, out _);
+				}
+				else
+				{
+					// Send to all peers
+					foreach (var peer in GetAllPeers())
+					{
+						SteamNetworkingSockets.SendMessageToConnection(peer.m_hConn, pBuffer, (uint)cbBuffer, sendType, out _);
+					}
 				}
 			}
 		}
 		finally
 		{
-			handle.Free();
-		}
-	}
-
-	public static void SendMessage<T>(EMessageType messageType, T message, ESteamNetworkingSend sendType, HSteamNetConnection hConn) where T : struct
-	{
-		IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(T)));
-
-		try
-		{
-			Marshal.StructureToPtr(message, ptr, false);
-
-			// Send the message
-			SendMessage(messageType, ptr, Marshal.SizeOf(message), sendType, hConn);
-		}
-		finally
-		{
-			Marshal.FreeHGlobal(ptr);
-		}
-	}
-
-	public static void SendMessage(EMessageType messageType, System.IntPtr pData, int cbLength, ESteamNetworkingSend sendType, HSteamNetConnection hConn)
-	{
-		if (!SteamManager.Initialized)
-			return;
-
-		// Allocate a new buffer to hold the messageType byte and the original data
-		byte[] buffer = new byte[cbLength + 1];
-		buffer[0] = (byte)messageType;
-
-		// Copy the original data to the new buffer, starting at index 1
-		Marshal.Copy(pData, buffer, 1, cbLength);
-
-		// Pin the buffer in memory and get a pointer to it
-		GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-		try
-		{
-			System.IntPtr pBuffer = handle.AddrOfPinnedObject();
-
-			// Send the message
-			SteamNetworkingSockets.SendMessageToConnection(hConn, pBuffer, (uint)buffer.Length, (int)sendType, out _);
-		}
-		finally
-		{
-			handle.Free();
+			Marshal.FreeHGlobal(pBuffer);
 		}
 	}
 
 	#endregion
 
-	#region API
+	#region Public API
 
 	public static ENetworkMode Mode { get { return m_mode; } }
 
@@ -240,7 +310,7 @@ public static class NetworkManager
 
 	public static int GetPlayerCount()
 	{
-		return m_peers.Count + 1;
+		return GetAllPeers().Count() + 1;
 	}
 
 	public static NetworkObject[] GetAllPlayers()
@@ -250,7 +320,7 @@ public static class NetworkManager
 		players[0] = GetLocalPlayer();
 
 		int i = 1;
-		foreach (var peer in m_peers.Values)
+		foreach (var peer in GetAllPeers())
 		{
 			players[i] = peer.m_player;
 
@@ -268,7 +338,7 @@ public static class NetworkManager
 		}
 		else if (m_mode == ENetworkMode.Client)
 		{
-			return m_localClient.m_serverID;
+			return m_localClient.m_hostPeer.m_identity;
 		}
 
 		return new SteamNetworkingIdentity();

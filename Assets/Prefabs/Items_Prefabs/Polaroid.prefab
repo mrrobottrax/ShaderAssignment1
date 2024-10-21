@@ -242,8 +242,8 @@ GameObject:
   - component: {fileID: 6328081511322441092}
   - component: {fileID: 4249204400496774167}
   - component: {fileID: 1011478620890278221}
-  - component: {fileID: 6333336101164535021}
   - component: {fileID: 3376863449856246442}
+  - component: {fileID: 34504885504390169}
   m_Layer: 8
   m_Name: Polaroid
   m_TagString: Item
@@ -402,19 +402,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_prefabIndex: 2
   m_netID: 0
---- !u!114 &6333336101164535021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7448076903940694488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45a9dd8b3b3306e4f8e2c4f8f01f9baa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  overrideTransform: 0
 --- !u!114 &3376863449856246442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,6 +412,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91674231dac9db848a0db9612a37160f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &34504885504390169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7448076903940694488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a122f685176064a4989c8ae12f502a86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8360785883629101133
