@@ -72,10 +72,11 @@ internal class Client : MonoBehaviour
 		{
 			SteamNetworkingMessage_t message = Marshal.PtrToStructure<SteamNetworkingMessage_t>(pMessages[i]);
 
-			MessageID_t id = MessageID_t.Read(message.m_pData);
-			Type type = NetworkManager.m_IdToMessage[id];
+			// MessageID_t id = MessageID_t.Read(message.m_pData);
+			// Type type = NetworkManager.m_IdToMessage[id];
 
-			bool isObjectUpdate = typeof(ObjectUpdateMessage).IsAssignableFrom(type);
+			// todo: allow voice to pass
+			bool isObjectUpdate = true;
 
 			if (!(isObjectUpdate && m_ignoreObjectUpdates))
 			{
