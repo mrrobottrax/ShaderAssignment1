@@ -93,8 +93,7 @@ internal class Host : MonoBehaviour
 		}
 
 		// Tell all clients to change scene
-		// todo:
-		//SendFunctions.SendSceneInfo();
+		NetworkManager.BroadcastMessage(new SceneChangeMessage());
 
 		StartCoroutine(SendSnapshotNextFrame());
 
@@ -113,8 +112,16 @@ internal class Host : MonoBehaviour
 	IEnumerator SendSnapshotNextFrame()
 	{
 		yield return null;
-		// todo:
-		//SendFunctions.SendFullSnapshot();
+
+		// Send prefabs and update scene objects
+		foreach (var obj in NetworkObjectManager.GetSceneNetObjects())
+		{
+			if (!obj.IsFromScene)
+			{
+				NetworkManager.BroadcastMessage(new SpawnPrefabMessage(obj));
+			}
+			obj.BroadcastSnapshot();
+		}
 	}
 
 	private void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t pCallback)
@@ -143,7 +150,6 @@ internal class Host : MonoBehaviour
 				client.UpdateConnection(pCallback.m_hConn);
 			}
 
-			// todo:
 			// Give initial info
 			NetworkManager.SendMessage(new SceneChangeMessage(), client);
 
@@ -154,9 +160,18 @@ internal class Host : MonoBehaviour
 				networkObject.SendSnapshot(client);
 			}
 
-			// SendFunctions.SendFullSnapshot(client);
+			// Send prefabs and update scene objects
+			foreach (var obj in NetworkObjectManager.GetSceneNetObjects())
+			{
+				if (!obj.IsFromScene)
+				{
+					NetworkManager.SendMessage(new SpawnPrefabMessage(obj), client);
+				}
+				obj.SendSnapshot(client);
+			}
 
 			// // Send the info of the other players
+			// todo:
 			// SendFunctions.SendPeers(client);
 		}
 	}

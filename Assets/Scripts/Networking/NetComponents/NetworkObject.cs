@@ -20,14 +20,18 @@ public class NetworkObject : MonoBehaviour
 	internal NetworkBehaviour[] m_networkBehaviours;
 
 	public bool IsOwner => NetworkManager.LocalIdentity.Equals(m_ownerIndentity);
+	public bool IsFromScene => m_isFromScene;
 
 	bool m_initialized = false;
+	bool m_isFromScene = false;
 
 	void Awake()
 	{
 		// Scene objects are always server owned
 		if (m_netID != 0)
 		{
+			m_isFromScene = true;
+
 			m_ownerIndentity = NetworkManager.GetServerIdentity();
 			Init(); // Init scene objects early
 		}
