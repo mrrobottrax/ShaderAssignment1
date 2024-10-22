@@ -8,7 +8,7 @@ public class NetworkAnimator : NetworkBehaviour
 {
 	Animator m_animator;
 
-	[NetVar(nameof(OnRcvParams))] byte[] m_paramsBuffer;
+	byte[] m_paramsBuffer;
 
 	Dictionary<int, int> m_paramIndices;
 	List<int> m_triggers;

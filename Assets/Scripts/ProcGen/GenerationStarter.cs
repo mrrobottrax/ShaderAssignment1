@@ -6,7 +6,7 @@ public class GenerationStarter : NetworkBehaviour
 	[SerializeField] GenerationSettings m_settings;
 	[SerializeField] Transform m_nextPieceAnchor;
 
-	[NetVar(nameof(OnGetSeed))] int m_seed;
+	int m_seed;
 
 	enum ERotation
 	{

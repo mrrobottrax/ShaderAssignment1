@@ -145,11 +145,11 @@ public static class NetworkManager
 		if (!SteamManager.Initialized)
 			return;
 
-		Type messageType = typeof(T);
+		Type messageType = message.GetType();
 		MessageID_t typeID = m_messageToID[messageType];
 
 		int cbType = Marshal.SizeOf(typeID);
-		int cbMessage = Marshal.SizeOf(typeof(T));
+		int cbMessage = Marshal.SizeOf(messageType);
 		int cbBuffer = cbMessage + cbType;
 
 		IntPtr pBuffer = Marshal.AllocHGlobal(cbBuffer);
@@ -180,11 +180,11 @@ public static class NetworkManager
 		if (!SteamManager.Initialized)
 			return;
 
-		Type messageType = typeof(T);
+		Type messageType = message.GetType();
 		MessageID_t typeID = m_messageToID[messageType];
 
 		int cbType = Marshal.SizeOf(typeID);
-		int cbMessage = Marshal.SizeOf(typeof(T));
+		int cbMessage = Marshal.SizeOf(messageType);
 		int cbBuffer = cbMessage + cbType;
 
 		IntPtr pBuffer = Marshal.AllocHGlobal(cbBuffer);

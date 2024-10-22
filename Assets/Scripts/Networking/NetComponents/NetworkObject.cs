@@ -1,5 +1,7 @@
 ﻿using Steamworks;
 using UnityEngine;
+using System.Collections.Generic;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -48,6 +50,7 @@ public class NetworkObject : MonoBehaviour
 		for (int i = 0; i < m_networkBehaviours.Length; ++i)
 		{
 			NetworkBehaviour net = m_networkBehaviours[i];
+			net.m_object = this;
 			net.m_index = i;
 			net.IsOwner = IsOwner;
 		}
@@ -60,11 +63,8 @@ public class NetworkObject : MonoBehaviour
 			m_netID = NetworkObjectManager.ReserveID(this);
 
 			// Notify peers of object creation
-			foreach (var peer in NetworkManager.GetAllPeers())
-			{
-				NetworkManager.SendMessage(new SpawnPrefabMessage(this), peer);
-				SendSnapshot(peer);
-			}
+			NetworkManager.BroadcastMessage(new SpawnPrefabMessage(this));
+			BroadcastSnapshot();
 		}
 
 		NetworkObjectManager.AddNetworkObjectToList(this);
@@ -84,11 +84,33 @@ public class NetworkObject : MonoBehaviour
 		NetworkObjectManager.RemoveNetworkObjectFromList(this);
 	}
 
-	public virtual void SendSnapshot(Peer peer)
+	public void SendSnapshot(Peer peer)
 	{
+		List<MessageBase> snapshotMessages = new();
+
 		foreach (var net in m_networkBehaviours)
 		{
-			net.SendSnapshot(peer);
+			net.AddSnapshotMessages(snapshotMessages);
+		}
+
+		foreach (var message in snapshotMessages)
+		{
+			NetworkManager.SendMessage(message, peer);
+		}
+	}
+
+	public void BroadcastSnapshot()
+	{
+		List<MessageBase> snapshotMessages = new();
+
+		foreach (var net in m_networkBehaviours)
+		{
+			net.AddSnapshotMessages(snapshotMessages);
+		}
+
+		foreach (var message in snapshotMessages)
+		{
+			NetworkManager.BroadcastMessage(message);
 		}
 	}
 
