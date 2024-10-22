@@ -10,20 +10,22 @@ public class NetworkTransformSync : NetworkBehaviour
 	[StructLayout(LayoutKind.Sequential)]
 	internal class TransformUpdateMessage : ObjectUpdateMessageBase<NetworkTransformSync>
 	{
-		public Vector3 position;
-		public Quaternion rotation;
-		public Vector3 scale;
+		Vector3 m_position;
+		Quaternion m_rotation;
+		Vector3 m_scale;
 
 		public TransformUpdateMessage(NetworkTransformSync component) : base(component)
 		{
-			position = component.transform.position;
-			rotation = component.transform.rotation;
-			scale = component.transform.localScale;
+			m_position = component.transform.position;
+			m_rotation = component.transform.rotation;
+			m_scale = component.transform.localScale;
 		}
 
 		public override void ReceiveOnComponent(NetworkTransformSync component, Peer sender)
 		{
-			throw new System.NotImplementedException();
+			component.transform.position = m_position;
+			component.transform.rotation = m_rotation;
+			component.transform.localScale = m_scale;
 		}
 	}
 
