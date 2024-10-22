@@ -16,7 +16,7 @@ internal class Host : MonoBehaviour
 	internal NetworkObject m_player;
 	internal Dictionary<SteamNetworkingIdentity, Peer> m_clients = new();
 
-	bool m_waitingForPeers = false;
+	public bool m_waitingForPeers = false;
 
 	#region Callbacks
 
@@ -51,26 +51,6 @@ internal class Host : MonoBehaviour
 			ReceiveMessages(client);
 			client.FlushQueuedMessages();
 		}
-
-		// Check if any clients are still loading
-		if (m_waitingForPeers)
-		{
-			bool noneLoading = true;
-			foreach (var peer in NetworkManager.GetAllPeers())
-			{
-				if (peer.m_loading)
-				{
-					noneLoading = false;
-					break;
-				}
-			}
-
-			if (noneLoading)
-			{
-				m_waitingForPeers = false;
-				Time.timeScale = 1;
-			}
-		}
 	}
 
 	public void AddPlayer()
@@ -104,8 +84,9 @@ internal class Host : MonoBehaviour
 			{
 				peer.m_loading = true;
 			}
-			Time.timeScale = 0;
+
 			m_waitingForPeers = true;
+			//Time.timeScale = 0;
 		}
 	}
 

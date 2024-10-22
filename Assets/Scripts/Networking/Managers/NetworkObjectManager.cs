@@ -137,6 +137,7 @@ internal static class NetworkObjectManager
 		if (isPlayer && netObj.m_ownerIndentity.Equals(NetworkManager.m_localIdentity))
 		{
 			NetworkManager.m_localClient.m_player = netObj;
+			NetworkManager.SendMessage(new LoadedInMessage(), NetworkManager.m_localClient.m_hostPeer);
 		}
 
 		netObj.Init();

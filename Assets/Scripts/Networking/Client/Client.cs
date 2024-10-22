@@ -117,7 +117,7 @@ internal class Client : MonoBehaviour
 		// (if we don't have a player yet, the load message is sent when we spawn)
 		if (m_player)
 		{
-			SendFinishedLoading();
+			NetworkManager.SendMessage(new LoadedInMessage(), m_hostPeer);
 		}
 	}
 
@@ -140,10 +140,5 @@ internal class Client : MonoBehaviour
 			Peer peer = new(pCallback.m_hConn, pCallback.m_info.m_identityRemote, null);
 			m_peers.Add(pCallback.m_info.m_identityRemote, peer);
 		}
-	}
-
-	void SendFinishedLoading()
-	{
-		NetworkManager.SendMessage(new SceneChangeMessage(), m_hostPeer);
 	}
 }
