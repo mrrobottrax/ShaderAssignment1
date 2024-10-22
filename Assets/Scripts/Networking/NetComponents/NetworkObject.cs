@@ -35,6 +35,12 @@ public class NetworkObject : MonoBehaviour
 			m_ownerIndentity = NetworkManager.GetServerIdentity();
 			Init(); // Init scene objects early
 		}
+		// Non-player prefabs are also server owned
+		else if (m_prefabIndex >= 0)
+		{
+			m_ownerIndentity = NetworkManager.GetServerIdentity();
+			Init();
+		}
 	}
 
 	void Start()
