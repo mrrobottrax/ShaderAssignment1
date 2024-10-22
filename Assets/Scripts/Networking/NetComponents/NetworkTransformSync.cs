@@ -37,6 +37,10 @@ public class NetworkTransformSync : NetworkBehaviour
 	// /// </summary>
 	public bool overrideTransform = false;
 
+	Vector3 m_lastPos;
+	Quaternion m_lastRot;
+	Vector3 m_lastScale;
+
 	private void Start()
 	{
 		if (IsOwner)
@@ -55,7 +59,15 @@ public class NetworkTransformSync : NetworkBehaviour
 
 	private void Tick()
 	{
-		NetworkManager.BroadcastMessage(new TransformUpdateMessage(this));
+		if (transform.position != m_lastPos ||
+			transform.rotation != m_lastRot ||
+			transform.localScale != m_lastScale)
+		{
+			m_lastPos = transform.position;
+			m_lastRot = transform.rotation;
+			m_lastScale = transform.localScale;
+			NetworkManager.BroadcastMessage(new TransformUpdateMessage(this));
+		}
 	}
 
 	public override void AddSnapshotMessages(List<MessageBase> messages)
