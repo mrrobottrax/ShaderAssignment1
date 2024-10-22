@@ -77,11 +77,9 @@ public class NetworkObject : MonoBehaviour
 	private void OnDestroy()
 	{
 		// Notify clients of destruction
-		// todo: IsOwner
-		if (NetworkManager.Mode == ENetworkMode.Host)
+		if (IsOwner)
 		{
-			// todo:
-			//SendFunctions.SendDestroyGameObject(m_netID);
+			NetworkManager.BroadcastMessage(new DestroyObjectMessage(this));
 		}
 
 		// Remove from list

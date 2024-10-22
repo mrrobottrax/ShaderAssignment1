@@ -144,9 +144,4 @@ internal static class NetworkObjectManager
 
 		return netObj;
 	}
-
-	// internal static void RemoveObject(RemoveObjectMessage message)
-	// {
-	// 	Object.Destroy(GetNetworkObject(message.m_networkID).gameObject);
-	// }
 }
