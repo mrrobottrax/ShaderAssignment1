@@ -9,11 +9,6 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Material
     second: {fileID: 2100000, guid: 444dd6497bd2ee549af757ad91bd53fc, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.001
-    second: {fileID: 2100000, guid: c044da7fe6d435b47bbd6377ed4994ce, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
