@@ -6,6 +6,7 @@ Shader "BasicLit"
 {
 	Properties
 	{
+		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Main Texture", 2D) = "white" {}
 	}
 
@@ -19,6 +20,8 @@ Shader "BasicLit"
 			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+
+			float4 _Color;
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
@@ -49,7 +52,7 @@ Shader "BasicLit"
 
 			float4 frag (Varyings IN) : SV_TARGET
 			{
-				float4 color = tex2D(_MainTex, IN.uvs * _MainTex_ST.xy + _MainTex_ST.zw).rgba;
+				float4 color = _Color * tex2D(_MainTex, IN.uvs * _MainTex_ST.xy + _MainTex_ST.zw).rgba;
 				return color;
 			}
 			ENDHLSL
