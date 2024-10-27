@@ -1,14 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Player : NetworkBehaviour
+public class PlayerInstance : NetworkBehaviour
 {
-	[SerializeField] GameObject m_uiPrefab;
+	[SerializeField] private PlayerUIInstance UIPrefab;
 
 	[SerializeField] GameObject[] m_firstPersonObjects;
 	[SerializeField] GameObject[] m_thirdPersonObjects;
 
+	[Header("System")]
+	private PlayerUIInstance playerUI;
 	PlayerController m_controller;
+
+	#region Initialization Methods
 
 	private void Awake()
 	{
@@ -22,7 +26,7 @@ public class Player : NetworkBehaviour
 			SetLocalOnlyStuffEnabled(true);
 			SceneManager.activeSceneChanged += OnSceneLoad;
 
-			Instantiate(m_uiPrefab, transform);
+			playerUI = Instantiate(UIPrefab, transform);
 
 			TrySpawn();
 		}
@@ -31,6 +35,9 @@ public class Player : NetworkBehaviour
 			SetLocalOnlyStuffEnabled(false);
 		}
 	}
+	#endregion
+
+	#region Unity Callbacks
 
 	private void OnDestroy()
 	{
@@ -39,6 +46,7 @@ public class Player : NetworkBehaviour
 			SceneManager.activeSceneChanged -= OnSceneLoad;
 		}
 	}
+	#endregion
 
 	private void SetLocalOnlyStuffEnabled(bool enabled)
 	{
@@ -70,4 +78,13 @@ public class Player : NetworkBehaviour
 			Debug.LogWarning("No spawn found in level");
 		}
 	}
+
+	#region Utility Methods
+
+	public PlayerUIInstance GetPlayersUI()
+	{
+		return playerUI;
+	}
+
+    #endregion
 }

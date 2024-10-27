@@ -1,19 +1,19 @@
 using UnityEngine;
 
-public class PlayerUIManager : MonoBehaviour
+public class PlayerUIInstance : MonoBehaviour
 {
 	[SerializeField] InteractionUIManager interactionPromptDisplay;
-	[SerializeField] PlayerHUDManager hudManager;
+	[SerializeField] PlayerHUD hudManager;
 	[SerializeField] InventoryUI inventoryUI;
 
 	public static InteractionUIManager InteractionPromptDisplay { get { return instance.interactionPromptDisplay; } }
-	public static PlayerHUDManager HUDManager { get { return instance.hudManager; } }
+	public static PlayerHUD HUDManager { get { return instance.hudManager; } }
 	public static InventoryUI InventoryUI { get { return instance.inventoryUI; } }
 
 	// System
 	private MenuDisplayBase activeDisplay;
 	private PlayerStats playerHealth;
-	private static PlayerUIManager instance;
+	private static PlayerUIInstance instance;
 
 	private void Awake()
 	{

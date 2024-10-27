@@ -2,17 +2,19 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HUD_HealthBar : MonoBehaviour
+public class HUD_O2Bar : MonoBehaviour
 {
     [Header("Properties")]
     [SerializeField] private float _timeBeforeHidden;
 
     [Header("UI Elelements")]
     [SerializeField] private Animator _animator;
-    [SerializeField] private Slider _healthBar;
+
+    [SerializeField] private Slider _staminaBar;
+    [SerializeField] private Slider _toxinBar;
 
     [Header("System")]
-    private bool isHealthBarHidden = true;
+    private bool isBarHidden = true;
     private Coroutine hideTimer;
     private WaitForSeconds waitForSeconds;
 
@@ -25,9 +27,11 @@ public class HUD_HealthBar : MonoBehaviour
     /// <summary>
     /// This method sets the value of the healthbar and refreshes the animation
     /// </summary>
-    public void SetHealthBar(int value)
+    public void SetValue(int staminaValue, int toxinValue)
     {
-        _healthBar.value = value;
+        _staminaBar.value = staminaValue;
+        _toxinBar.value = toxinValue;
+
         RefreshDisplay();
     }
 
@@ -37,9 +41,9 @@ public class HUD_HealthBar : MonoBehaviour
     private void RefreshDisplay()
     {
         // Turn slider graphic on
-        if (isHealthBarHidden)
+        if (isBarHidden)
         {
-            isHealthBarHidden = false;
+            isBarHidden = false;
             _animator.SetTrigger("Show");
         }
 
@@ -55,12 +59,11 @@ public class HUD_HealthBar : MonoBehaviour
     /// <summary>
     /// Hides the Health Bar after wait time has elapsed
     /// </summary>
-    /// <returns></returns>
     private IEnumerator HideCountdown()
     {
         yield return waitForSeconds;
 
-        isHealthBarHidden = true;
+        isBarHidden = true;
         _animator.SetTrigger("Hide");
     }
 }

@@ -220,17 +220,19 @@ public class PlayerController : NetworkBehaviour
 
 	private void TrySprint(bool isAttemptingSprint)
 	{
-		if (isAttemptingSprint)
+		if (isAttemptingSprint && playerStats.GetStamina() > 0)
 		{
             // Stop the player from crouching
             if (IsCrouching)
                 TryCrouch(false);
 
             IsSprinting = true;
-			return;
-        }
 
-        IsSprinting = false;
+        }
+		else
+		{
+            IsSprinting = false;
+        }
     }
 
 	private void Jump()
@@ -624,6 +626,9 @@ public class PlayerController : NetworkBehaviour
 		// Pick movement speed based on current player state
         float moveSpeed = IsCrouching ? m_movementData.m_crouchingSpeed : 
 			(IsSprinting ? m_movementData.sprintingSpeed : m_movementData.m_walkingSpeed);
+
+		if (IsSprinting)
+			playerStats.SetStamina(playerStats.Stamina - playerStats.SprintStaminaReduction * Time.deltaTime);
 
         float acceleration = m_movementData.m_acceleration;
 		float friction = m_movementData.m_friction;

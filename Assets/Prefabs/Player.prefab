@@ -1891,10 +1891,11 @@ MonoBehaviour:
   maxHealth: 100
   _gatherHurtboxesOnInit: 0
   _hurtBoxes: []
+  maxStamina: 100
+  staminaRecovery: 15
+  <SprintStaminaReduction>k__BackingField: 30
+  toxinRecovery: 2
   <FirstPersonCamera>k__BackingField: {fileID: 3701271248387694150}
-  playerController: {fileID: 2944094973486998542}
-  inventoryComponent: {fileID: 7647309867230405321}
-  playerViewModelManager: {fileID: 3285336454719170954}
 --- !u!114 &8292569634489466495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1907,7 +1908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9df08e4e3f41b5c4b95b63e9859ba885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_uiPrefab: {fileID: 7718804340616863760, guid: 703682f9d77f38b43b20e71bab0ec7dd, type: 3}
+  UIPrefab: {fileID: 2584426041692649102, guid: 703682f9d77f38b43b20e71bab0ec7dd, type: 3}
   m_firstPersonObjects:
   - {fileID: 2332926557876443484}
   m_thirdPersonObjects:

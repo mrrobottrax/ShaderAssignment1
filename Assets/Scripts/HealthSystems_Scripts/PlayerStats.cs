@@ -1,11 +1,19 @@
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(PlayerController), typeof(PlayerInventory))]
 public class PlayerStats : Entity_Base
 {
     [field: Header("Stamina")]
     [SerializeField] private float maxStamina;
-    private float stamina;
+    [SerializeField] private float staminaRecovery = 2f;
+    [field: SerializeField] public float SprintStaminaReduction { get; private set; } = 10f;
+    public float Stamina { get; private set; }
+
+    [field: Header("Toxins")]
+    [SerializeField] private float toxinRecovery = 0.5f;
+
+    private int toxinLevel;
     private float toxins;
 
     [field: Header("Components")]
@@ -24,7 +32,20 @@ public class PlayerStats : Entity_Base
         base.Start();
 
         PlayerController = GetComponent<PlayerController>();
+
+        Stamina = maxStamina;
     }
+
+    #endregion
+
+    #region Unity Callbacks
+
+    private void Update()
+    {
+        DetermineBloodToxins();
+        RegenStamina();
+    }
+
     #endregion
 
     #region Stat Methods
@@ -32,32 +53,74 @@ public class PlayerStats : Entity_Base
     public override void SetHealth(int value)
     {
         base.SetHealth(value);
-
-        PlayerUIManager.HUDManager.HealthBar.SetHealthBar(value);
     }
 
     public void SetStamina(float value)
     {
-        stamina = Mathf.Clamp(value, 0, maxStamina - toxins);
+        Stamina = Mathf.Clamp(value, 0, maxStamina - toxins);
+
+        PlayerUIInstance.HUDManager.O2Bar.SetValue(Mathf.FloorToInt(Stamina), Mathf.FloorToInt(toxins));
     }
 
     public void SetToxins(float value)
     {
         toxins = Mathf.Clamp(value, 0, maxStamina);
+
+        PlayerUIInstance.HUDManager.O2Bar.SetValue(Mathf.FloorToInt(Stamina), Mathf.FloorToInt(toxins));
+    }
+    #endregion
+
+    #region Regeneration Methods
+
+    #region Toxin Level Methods
+
+    public void SetToxinLevel(int value)
+    {
+        toxinLevel = value;
+
+        // Clamp
+        if (toxinLevel < 0)
+            toxinLevel = 0;
+
+        PlayerUIInstance.HUDManager.O2Bar.SetValue(Mathf.FloorToInt(Stamina), Mathf.FloorToInt(toxins));
     }
 
+    public void AddToxinLevel(int value)
+    {
+        SetToxinLevel(toxinLevel + value);
+    }
+
+    public void RemoveToxinLevel(int value)
+    {
+        SetToxinLevel(toxinLevel - value);
+    }
+    #endregion
+
+    private void RegenStamina()
+    {
+        if (!PlayerController.IsSprinting && Stamina < maxStamina)
+            SetStamina(Stamina + staminaRecovery * Time.deltaTime);
+    }
+
+    private void DetermineBloodToxins()
+    {
+        if (toxinLevel > 0)
+            SetToxins(toxins + toxinLevel * Time.deltaTime);
+        else if (toxins > 0)
+            SetToxins(toxins - toxinRecovery * Time.deltaTime);
+    }
     #endregion
 
     #region Utility Methods
 
     public float GetStamina()
     {
-        return stamina;
+        return Stamina;
     }
 
     public float GetToxins()
     {
-        return stamina;
+        return Stamina;
     }
     #endregion
 }
