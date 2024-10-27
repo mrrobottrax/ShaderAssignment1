@@ -1,4 +1,3 @@
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -17,15 +16,14 @@ public class PlayerController : NetworkBehaviour
 	[SerializeField] PlayerMovementData m_movementData;
 	public PlayerMovementData MvmtData { get => m_movementData; }
 
-	// Components
 	[Header("Components")]
 	[SerializeField] FirstPersonCamera m_fpsCamera;
 	Rigidbody m_rigidbody;
 	BoxCollider m_collider;
 	NetworkAnimator m_animator;
 
-	// System
-	public bool IsCrouching { get; private set; }
+    [field: Header("System")]
+    public bool IsCrouching { get; private set; }
 	public bool IsGrounded { get; private set; }
 
 	Vector2 m_wishMoveDir;
@@ -38,15 +36,14 @@ public class PlayerController : NetworkBehaviour
 	int m_framesStuck = 0;
 	bool m_justJumped;
 
-
 	enum EMovementMode
 	{
 		Standard,
 		Noclip
 	}
+
 	[Header("Debug")]
 	[SerializeField] private EMovementMode m_movementMode;
-
 
 	#region Initialization Methods
 
@@ -78,12 +75,12 @@ public class PlayerController : NetworkBehaviour
 
 	#region Unity Callbacks
 
-	void OnDestroy()
+	private void OnDestroy()
 	{
 		SetControlsSubscription(false);
 	}
 
-	void FixedUpdate()
+    private void FixedUpdate()
 	{
 		UpdateCollider();
 
@@ -124,12 +121,12 @@ public class PlayerController : NetworkBehaviour
 			Unsubscribe();
 	}
 
-	void OnMoveInput(InputAction.CallbackContext context)
+    private void OnMoveInput(InputAction.CallbackContext context)
 	{
 		m_wishMoveDir = context.ReadValue<Vector2>();
 	}
 
-	void OnJumpInput(InputAction.CallbackContext context)
+    private void OnJumpInput(InputAction.CallbackContext context)
 	{
 		m_isJumpPressed = context.ReadValueAsButton();
 
@@ -137,7 +134,7 @@ public class PlayerController : NetworkBehaviour
 			Jump();
 	}
 
-	void OnCrouchInput(InputAction.CallbackContext context)
+    private void OnCrouchInput(InputAction.CallbackContext context)
 	{
 		m_isCrouchPressed = context.ReadValueAsButton();
 	}
@@ -212,11 +209,11 @@ public class PlayerController : NetworkBehaviour
 		m_justJumped = true;
 	}
 
-	#endregion
+    #endregion
 
-	#region Collision
+    #region Collision
 
-	bool CastHull(Vector3 direction, float maxDist, out RaycastHit hitInfo)
+    private bool CastHull(Vector3 direction, float maxDist, out RaycastHit hitInfo)
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 
@@ -236,7 +233,7 @@ public class PlayerController : NetworkBehaviour
 		return hit;
 	}
 
-	bool CheckHull()
+    private bool CheckHull()
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 		return Physics.CheckBox(
@@ -248,7 +245,7 @@ public class PlayerController : NetworkBehaviour
 		);
 	}
 
-	bool StuckCheck()
+    private bool StuckCheck()
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 		Collider[] colliders = Physics.OverlapBox(
@@ -300,7 +297,7 @@ public class PlayerController : NetworkBehaviour
 		return false;
 	}
 
-	void CollideAndSlide()
+    private void CollideAndSlide()
 	{
 		Vector3 startVelocity = m_velocity;
 		Vector3 velocityBeforePlanes = m_velocity;
@@ -428,11 +425,11 @@ public class PlayerController : NetworkBehaviour
 			Debug.LogWarning("Bumps exceeded");
 		}
 	}
-	#endregion
+    #endregion
 
-	#region Utility
+    #region Utility
 
-	void UpdateCollider()
+    private void UpdateCollider()
 	{
 		float h = GetColliderHeight();
 		m_collider.size = new Vector3(m_movementData.m_horizontalSize, h, m_movementData.m_horizontalSize);
@@ -455,7 +452,7 @@ public class PlayerController : NetworkBehaviour
 	}
 
 
-	void GroundCheck()
+    private void GroundCheck()
 	{
 		if (m_justJumped)
 		{
@@ -513,15 +510,15 @@ public class PlayerController : NetworkBehaviour
 		}
 	}
 
-	void CategorizePosition()
+    private void CategorizePosition()
 	{
 		GroundCheck();
 	}
-	#endregion
+    #endregion
 
-	#region Movement Methods
+    #region Movement Methods
 
-	void Friction(float friction)
+    private void Friction(float friction)
 	{
 		float speed = m_velocity.magnitude;
 
@@ -536,7 +533,7 @@ public class PlayerController : NetworkBehaviour
 		}
 	}
 
-	void Accelerate(Vector3 direction, float acceleration, float maxSpeed)
+    private void Accelerate(Vector3 direction, float acceleration, float maxSpeed)
 	{
 		float add = acceleration * maxSpeed * Time.fixedDeltaTime;
 
@@ -552,7 +549,7 @@ public class PlayerController : NetworkBehaviour
 	}
 
 
-	private void StandardMovement()
+    private void StandardMovement()
 	{
 		if (StuckCheck())
 			return;
