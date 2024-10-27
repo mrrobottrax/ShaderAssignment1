@@ -13,25 +13,28 @@ public class PlayerController : NetworkBehaviour
 	const int k_maxPlanes = 8; // Max number of planes to collide with at once
 
 	[Header("Movement")]
-	[SerializeField] PlayerMovementData m_movementData;
+	[SerializeField] private PlayerMovementData m_movementData;
 	public PlayerMovementData MvmtData { get => m_movementData; }
 
 	[Header("Components")]
-	[SerializeField] FirstPersonCamera m_fpsCamera;
-	Rigidbody m_rigidbody;
-	BoxCollider m_collider;
-	NetworkAnimator m_animator;
+	[SerializeField] private FirstPersonCamera m_fpsCamera;
+    private PlayerStats playerStats;
+    private Rigidbody m_rigidbody;
+    private BoxCollider m_collider;
+    private NetworkAnimator m_animator;
 
     [field: Header("System")]
     public bool IsCrouching { get; private set; }
-	public bool IsGrounded { get; private set; }
+    public bool IsSprinting { get; private set; }
+    public bool IsGrounded { get; private set; }
 
 	Vector2 m_wishMoveDir;
 	Vector3 m_velocity;
 	Vector3 m_position;
 
 	bool m_isCrouchPressed;
-	bool m_isJumpPressed;
+    bool isSprintPressed;
+    bool m_isJumpPressed;
 
 	int m_framesStuck = 0;
 	bool m_justJumped;
@@ -49,7 +52,8 @@ public class PlayerController : NetworkBehaviour
 
 	void Awake()
 	{
-		m_rigidbody = GetComponent<Rigidbody>();
+        playerStats = GetComponent<PlayerStats>();
+        m_rigidbody = GetComponent<Rigidbody>();
 		m_collider = GetComponent<BoxCollider>();
 		m_animator = GetComponent<NetworkAnimator>();
 
@@ -135,11 +139,16 @@ public class PlayerController : NetworkBehaviour
 	}
 
     private void OnCrouchInput(InputAction.CallbackContext context)
+    {
+        m_isCrouchPressed = context.ReadValueAsButton();
+    }
+
+    private void OnSprintInput(InputAction.CallbackContext context)
 	{
-		m_isCrouchPressed = context.ReadValueAsButton();
+		isSprintPressed = context.ReadValueAsButton();
 	}
 
-	public void Subscribe()
+    public void Subscribe()
 	{
 		InputManager.Instance.Player.Movement.performed += OnMoveInput;
 
@@ -148,7 +157,10 @@ public class PlayerController : NetworkBehaviour
 
 		InputManager.Instance.Player.Crouch.performed += OnCrouchInput;
 		InputManager.Instance.Player.Crouch.canceled += OnCrouchInput;
-	}
+
+        InputManager.Instance.Player.Sprint.performed += OnSprintInput;
+        InputManager.Instance.Player.Sprint.canceled += OnSprintInput;
+    }
 
 	public void Unsubscribe()
 	{
@@ -160,7 +172,10 @@ public class PlayerController : NetworkBehaviour
 		InputManager.Instance.Player.Crouch.performed -= OnCrouchInput;
 		InputManager.Instance.Player.Crouch.canceled -= OnCrouchInput;
 
-		m_wishMoveDir = Vector2.zero;
+        InputManager.Instance.Player.Sprint.performed -= OnSprintInput;
+        InputManager.Instance.Player.Sprint.canceled -= OnSprintInput;
+
+        m_wishMoveDir = Vector2.zero;
 	}
 	#endregion
 
@@ -171,6 +186,7 @@ public class PlayerController : NetworkBehaviour
 		if (isAttemptingCrouch)
 		{
 			IsCrouching = true;
+			IsSprinting = false;
 
 			if (!IsGrounded)
 			{
@@ -201,6 +217,21 @@ public class PlayerController : NetworkBehaviour
 
 		m_animator.SetBool("Crouched", IsCrouching);
 	}
+
+	private void TrySprint(bool isAttemptingSprint)
+	{
+		if (isAttemptingSprint)
+		{
+            // Stop the player from crouching
+            if (IsCrouching)
+                TryCrouch(false);
+
+            IsSprinting = true;
+			return;
+        }
+
+        IsSprinting = false;
+    }
 
 	private void Jump()
 	{
@@ -558,8 +589,10 @@ public class PlayerController : NetworkBehaviour
 
 		Vector3 globalWishDir = m_fpsCamera.RotateVectorYaw(m_wishMoveDir);
 
-		// Crouch / un-crouch
-		if (m_isCrouchPressed)
+		TrySprint(isSprintPressed);
+
+        // Crouch / un-crouch
+        if (m_isCrouchPressed)
 		{
 			if (!IsCrouching)
 			{
@@ -588,8 +621,11 @@ public class PlayerController : NetworkBehaviour
 	{
 		m_velocity.y = 0;
 
-		float moveSpeed = IsCrouching ? m_movementData.m_crouchingSpeed : m_movementData.m_walkingSpeed;
-		float acceleration = m_movementData.m_acceleration;
+		// Pick movement speed based on current player state
+        float moveSpeed = IsCrouching ? m_movementData.m_crouchingSpeed : 
+			(IsSprinting ? m_movementData.sprintingSpeed : m_movementData.m_walkingSpeed);
+
+        float acceleration = m_movementData.m_acceleration;
 		float friction = m_movementData.m_friction;
 
 		// Friction

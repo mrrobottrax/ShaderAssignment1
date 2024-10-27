@@ -232,7 +232,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 			}
 
 			// Use normal UsableItem functionality
-			usableItem.TryModelFunction(Entity as PlayerHealth, this, functionPos, actionTitle);
+			usableItem.TryModelFunction(Entity as PlayerStats, this, functionPos, actionTitle);
 			prevAttackGroup = null;
 		}
 		else
@@ -254,7 +254,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 		if (weapon != null)
 		{
 			// Perform the attack data using the AttackData from the weapons ViewModels AttackList.
-			weapon.TryModelFunction(Entity as PlayerHealth, this, attackPos, actionTitle, attack);
+			weapon.TryModelFunction(Entity as PlayerStats, this, attackPos, actionTitle, attack);
 		}
 		else
 		{

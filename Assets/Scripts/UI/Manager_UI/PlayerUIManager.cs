@@ -12,12 +12,12 @@ public class PlayerUIManager : MonoBehaviour
 
 	// System
 	private MenuDisplayBase activeDisplay;
-	private PlayerHealth playerHealth;
+	private PlayerStats playerHealth;
 	private static PlayerUIManager instance;
 
 	private void Awake()
 	{
-		playerHealth = GetComponentInParent<PlayerHealth>();
+		playerHealth = GetComponentInParent<PlayerStats>();
 
 		if (!instance)
 		{
@@ -57,8 +57,8 @@ public class PlayerUIManager : MonoBehaviour
 		InputManager.SetControlMode(InputManager.ControlType.Player);
 
 		// Enable camera & player movement
-		instance.playerHealth.GetPlayerCamera().EnableFirstPersonCamera(true);
-		instance.playerHealth.GetPlayerController().SetControlsSubscription(true);
+		instance.playerHealth.FirstPersonCamera.EnableFirstPersonCamera(true);
+		instance.playerHealth.PlayerController.SetControlsSubscription(true);
 
 		// Enable interaction system
 		PlayerInteraction interaction = instance.playerHealth.GetComponent<PlayerInteraction>();

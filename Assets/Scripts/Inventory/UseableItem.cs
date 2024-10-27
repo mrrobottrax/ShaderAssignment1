@@ -48,6 +48,6 @@ public class UseableItem : Item
 	/// <summary>
 	/// This method executes a view model's function based on the action title passed in.
 	/// </summary>
-	public virtual void TryModelFunction(PlayerHealth player, PlayerViewmodelManager viewModelManager, Vector3 functionPos, string actionTitle, AttackList.Attack attack = null) { }
+	public virtual void TryModelFunction(PlayerStats player, PlayerViewmodelManager viewModelManager, Vector3 functionPos, string actionTitle, AttackList.Attack attack = null) { }
 	#endregion
 }

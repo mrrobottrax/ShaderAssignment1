@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff299647888bcdb4ca07437416c0b6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Entity>k__BackingField: {fileID: 5234002548523702153}
+  <Entity>k__BackingField: {fileID: 0}
   <Animator>k__BackingField: {fileID: 3942988104529243446}
   <EntityAttacks>k__BackingField:
     <AttackGroups>k__BackingField:
@@ -1815,8 +1815,8 @@ GameObject:
   - component: {fileID: 6727032766827451354}
   - component: {fileID: 6924214010678200475}
   - component: {fileID: 2965891379874120525}
+  - component: {fileID: 213278659782010821}
   - component: {fileID: 8292569634489466495}
-  - component: {fileID: 5234002548523702153}
   - component: {fileID: 2944094973486998542}
   - component: {fileID: 7647309867230405321}
   - component: {fileID: 4644058051439156076}
@@ -1876,6 +1876,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overrideTransform: 0
+--- !u!114 &213278659782010821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5067302201104481768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a145ce0ec464c4d8320d0fd3ce79a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  _gatherHurtboxesOnInit: 0
+  _hurtBoxes: []
+  <FirstPersonCamera>k__BackingField: {fileID: 3701271248387694150}
+  playerController: {fileID: 2944094973486998542}
+  inventoryComponent: {fileID: 7647309867230405321}
+  playerViewModelManager: {fileID: 3285336454719170954}
 --- !u!114 &8292569634489466495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1893,25 +1912,6 @@ MonoBehaviour:
   - {fileID: 2332926557876443484}
   m_thirdPersonObjects:
   - {fileID: 3293345382478405963}
---- !u!114 &5234002548523702153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5067302201104481768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eabe06b38df3c7841a4d74810c32e445, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  _gatherHurtboxesOnInit: 0
-  _hurtBoxes: []
-  <FirstPersonCamera>k__BackingField: {fileID: 3701271248387694150}
-  playerController: {fileID: 2944094973486998542}
-  inventoryComponent: {fileID: 7647309867230405321}
-  playerViewModelManager: {fileID: 3285336454719170954}
 --- !u!114 &2944094973486998542
 MonoBehaviour:
   m_ObjectHideFlags: 0
