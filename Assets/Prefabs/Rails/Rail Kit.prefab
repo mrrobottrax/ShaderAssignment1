@@ -107,6 +107,7 @@ MonoBehaviour:
   interactionEnabled: 1
   itemName: Rail Kit
   stackSize: 1
+  value: 1
   itemSprite: {fileID: 21300000, guid: 256f0600a5a91f040b4fedae6a65df11, type: 3}
   animatorController: {fileID: 22100000, guid: f5340fa2984240a42a2705d6938efe1c, type: 2}
   dropOffset: {x: 0, y: 0, z: 0}
