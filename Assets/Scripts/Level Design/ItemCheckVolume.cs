@@ -1,24 +1,17 @@
-using System.Linq;
 using UnityEngine;
 
 public class ItemCheckVolume : MonoBehaviour
 {
-    [SerializeField] private Vector3 _center;
-    [SerializeField] private Vector3 _size;
+    public static ItemCheckVolume Instance;
 
-    [SerializeField] private LayerMask _itemsLayer;
+    [field: SerializeField] public Vector3 Center { get; private set; }
+    [field: SerializeField] public Vector3 Size { get; private set; }
 
-    public Item[] CheckItems()
+    private void Awake()
     {
-        Collider[] colliders = Physics.OverlapBox(_center, _size / 2, Quaternion.identity, _itemsLayer);
-
-        // Ensure only items are passed
-        Item[] items = colliders.Select(collider => collider.GetComponent<Item>())
-            .Where(item => item != null)
-            .ToArray();
-
-        return items;
+        Instance = this;
     }
+
 
     #region Debug Methods
 #if DEBUG
@@ -26,7 +19,7 @@ public class ItemCheckVolume : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(transform.position + _center, _size);
+        Gizmos.DrawWireCube(transform.position + Center, Size);
     }
 #endif
     #endregion
