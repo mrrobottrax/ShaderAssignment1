@@ -105,31 +105,12 @@ public class TimeManager : MonoBehaviour
     /// </summary>
     private void UpdateTimeOfDay()
     {
-        int h;
+        // Set AM/PM and convert to 12-hour format
+        isMorning = GetIsMorning();
+        int displayHour = (hr % 12 == 0) ? 12 : hr % 12;
 
-        if (hr >= 13)
-        {
-            h = hr - 12;
-            isMorning = false;
-        }
-        else if (hr == 0)
-        {
-            h = 12;
-            isMorning = true;
-        }
-        else
-            h = hr;
-
-        displayTime = h + ":";
-
-        if (min <= 9)
-            displayTime += "0" + min;
-        else
-            displayTime += min;
-
-        if (isMorning)
-            displayTime += " AM";
-        else displayTime += " PM";
+        // Format the time string
+        displayTime = $"{displayHour}:{min:D2} {(isMorning ? "AM" : "PM")}";
     }
 
     #region Utility
