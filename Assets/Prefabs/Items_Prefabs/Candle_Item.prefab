@@ -153,6 +153,7 @@ MonoBehaviour:
   interactionEnabled: 1
   itemName: Candle
   stackSize: 1
+  value: 1
   itemSprite: {fileID: 21300000, guid: 36ea8a689dcbceb49bf198743c3fb1c8, type: 3}
   animatorController: {fileID: 9100000, guid: 52f6c69df62c0134da3af753559846f9, type: 2}
   dropOffset: {x: 0, y: 0, z: 0}
