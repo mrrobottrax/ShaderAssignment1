@@ -146,7 +146,9 @@ public class PlayerController : NetworkBehaviour
     private void OnSprintInput(InputAction.CallbackContext context)
 	{
 		isSprintPressed = context.ReadValueAsButton();
-	}
+
+		TrySprint(isSprintPressed);
+    }
 
     public void Subscribe()
 	{
@@ -593,7 +595,8 @@ public class PlayerController : NetworkBehaviour
 
 		Vector3 globalWishDir = m_fpsCamera.RotateVectorYaw(m_wishMoveDir);
 
-		TrySprint(isSprintPressed);
+		if (playerStats.GetStamina() <= 0)
+			TrySprint(false);
 
         // Crouch / un-crouch
         if (m_isCrouchPressed)
