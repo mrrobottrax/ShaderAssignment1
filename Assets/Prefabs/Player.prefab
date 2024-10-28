@@ -1894,6 +1894,7 @@ MonoBehaviour:
   maxStamina: 100
   staminaRecovery: 15
   <SprintStaminaReduction>k__BackingField: 30
+  <JumpStaminaReduction>k__BackingField: 20
   toxinRecovery: 2
   <FirstPersonCamera>k__BackingField: {fileID: 3701271248387694150}
 --- !u!114 &8292569634489466495

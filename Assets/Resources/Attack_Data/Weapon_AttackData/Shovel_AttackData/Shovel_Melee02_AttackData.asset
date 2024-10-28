@@ -15,7 +15,7 @@ MonoBehaviour:
   <AttackDamage>k__BackingField: 0
   <AttackRange>k__BackingField: 0
   <Knockback>k__BackingField: 7.2
-  <Cooldown>k__BackingField: 0.25
+  <Cooldown>k__BackingField: 0.1
   <ApplicationType>k__BackingField: 2
   <SwingRange>k__BackingField: 22.5
   <SwingClockwiseAngle>k__BackingField: 22.5
@@ -26,6 +26,5 @@ MonoBehaviour:
   <ProjectileCreated>k__BackingField: {fileID: 0}
   <IsPhysicalAttack>k__BackingField: 1
   <DamageType>k__BackingField: 0
-  <ImpactPauseDuration>k__BackingField: 0.2
   <ScreenShakeAmplitude>k__BackingField: 0.1
   <ScreenShakeDuration>k__BackingField: 0.2

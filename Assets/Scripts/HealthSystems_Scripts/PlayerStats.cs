@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(PlayerController), typeof(PlayerInventory))]
 public class PlayerStats : Entity_Base
@@ -8,6 +7,7 @@ public class PlayerStats : Entity_Base
     [SerializeField] private float maxStamina;
     [SerializeField] private float staminaRecovery = 2f;
     [field: SerializeField] public float SprintStaminaReduction { get; private set; } = 10f;
+    [field: SerializeField] public float JumpStaminaReduction { get; private set; } = 20f;
     public float Stamina { get; private set; }
 
     [field: Header("Toxins")]

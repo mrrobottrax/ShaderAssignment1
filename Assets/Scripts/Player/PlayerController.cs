@@ -232,21 +232,23 @@ public class PlayerController : NetworkBehaviour
 		else
 		{
             IsSprinting = false;
-        }
-    }
+		}
+	}
 
 	private void Jump()
 	{
 		m_velocity.y += m_movementData.m_jumpForce;
 		IsGrounded = false;
 		m_justJumped = true;
-	}
 
-    #endregion
+        playerStats.SetStamina(playerStats.Stamina - playerStats.JumpStaminaReduction);
+    }
 
-    #region Collision
+	#endregion
 
-    private bool CastHull(Vector3 direction, float maxDist, out RaycastHit hitInfo)
+	#region Collision
+
+	private bool CastHull(Vector3 direction, float maxDist, out RaycastHit hitInfo)
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 

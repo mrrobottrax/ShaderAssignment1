@@ -54,7 +54,6 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	{
 		playerStats = GetComponent<PlayerStats>();
 
-
         SelectSlot(0);
 
 		if (IsOwner)
