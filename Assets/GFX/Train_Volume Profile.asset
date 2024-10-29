@@ -79,12 +79,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   texture:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {fileID: 0}
     dimension: 1
   contribution:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &1733674505641509881
 MonoBehaviour:
   m_ObjectHideFlags: 3
