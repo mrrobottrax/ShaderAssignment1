@@ -1,25 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5712525983014643036
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e021b4c809a781e468c2988c016ebbea, type: 3}
-  m_Name: ColorLookup
-  m_EditorClassIdentifier: 
-  active: 1
-  texture:
-    m_OverrideState: 1
-    m_Value: {fileID: 0}
-    dimension: 1
-  contribution:
-    m_OverrideState: 1
-    m_Value: 1
 --- !u!114 &-5166833168677202240
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -84,7 +64,6 @@ MonoBehaviour:
   - {fileID: -4764346274576717829}
   - {fileID: -5166833168677202240}
   - {fileID: 8400515829194508727}
-  - {fileID: -5712525983014643036}
 --- !u!114 &4587644717626971956
 MonoBehaviour:
   m_ObjectHideFlags: 3
