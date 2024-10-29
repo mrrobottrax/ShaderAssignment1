@@ -68,6 +68,14 @@ Material:
         m_Texture: {fileID: 2800000, guid: 87fb439ba80467248979b3abd787ba87, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _LutTex0:
+        m_Texture: {fileID: 2800000, guid: 87fb439ba80467248979b3abd787ba87, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LutTex1:
+        m_Texture: {fileID: 2800000, guid: 87fb439ba80467248979b3abd787ba87, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -101,6 +109,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints:
+    - _Colours: 32
     - _LutHeight: 32
     m_Floats:
     - _AlphaClip: 0
@@ -110,7 +119,7 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Contribution: 1
+    - _Contribution: 0
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -121,6 +130,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _LutBlend: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005

@@ -2,8 +2,11 @@ Shader "Custom/LUTPost"
 {
 	Properties
 	{
-		_LutTex ("LUT", 2D) = "white" {}
-		_LutHeight ("LUT Height", Integer) = 32
+		_Colours ("LUT Height", Integer) = 32
+		_LutTex0 ("LUT", 2D) = "white" {}
+		_LutTex1 ("LUT", 2D) = "white" {}
+		_LutBlend ("Blend", Range(0, 1)) = 1
+		_Contribution ("Contribution", Range(0, 1)) = 1
 	}
 	SubShader
 	{
@@ -31,10 +34,17 @@ Shader "Custom/LUTPost"
 			// Screen colour
 			sampler2D _BlitTexture;
 
-			Texture2D _LutTex;
-			SamplerState sampler_LutTex;
+			Texture2D _LutTex0;
+			float4 _LutTex0_TexelSize;
+			SamplerState sampler_LutTex0;
 
-			int _LutHeight;
+			Texture2D _LutTex1;
+			float4 _LutTex1_TexelSize;
+			SamplerState sampler_LutTex1;
+
+			int _Colours;
+			float _Contribution;
+			float _LutBlend;
 
 			// Big tri that covers whole screen
 			static float4 positions[] = {
@@ -68,18 +78,35 @@ Shader "Custom/LUTPost"
 				return output;
 			}
 
-			float4 LookupColour(float3 colour)
+			float4 LookupColour(float3 colour, Texture2D lut, SamplerState samplerState)
 			{
-				int b = colour.b * _LutHeight;
-				colour = saturate(colour);
-				return _LutTex.Sample(sampler_LutTex, float2(((float)b + colour.r) / (float)_LutHeight, colour.g));
+				float maxColour = _Colours - 1.0;
+				float4 col = float4(saturate(colour), 1);
+
+				float halfColX = 0.5 / _LutTex0_TexelSize.z;
+				float halfColY = 0.5 / _LutTex0_TexelSize.w;
+				float threshold = maxColour / _Colours;
+
+				float xOffset = halfColX + col.r * threshold / _Colours;
+				float yOffset = halfColY + col.g * threshold;
+				float cell = floor(col.b * maxColour);
+
+				float2 lutPos = float2(cell / _Colours + xOffset, yOffset);
+
+				return lut.Sample(samplerState, lutPos);
 			}
 
 			float4 frag(Varyings input) : SV_Target
 			{
 				float4 colour = tex2D(_BlitTexture, input.uv);
 
-				return LookupColour(colour);
+				float4 lutColor = lerp(
+					LookupColour(colour, _LutTex0, sampler_LutTex0),
+					LookupColour(colour, _LutTex1, sampler_LutTex1),
+					_LutBlend
+				);
+
+				return lerp(colour, lutColor, _Contribution);
 			}
 			
 			ENDHLSL

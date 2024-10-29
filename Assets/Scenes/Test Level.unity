@@ -29473,10 +29473,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 440896365}
     m_Modifications:
-    - target: {fileID: 20676120760729357, guid: 2c960e362aaf28544a40d5dd5b1e1633, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 323774029521934876, guid: 2c960e362aaf28544a40d5dd5b1e1633, type: 3}
       propertyPath: m_Name
       value: MainTrain
@@ -29521,9 +29517,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8137316784351857997, guid: 2c960e362aaf28544a40d5dd5b1e1633, type: 3}
-      propertyPath: m_Layer
-      value: 8
+    - target: {fileID: 6692135190087531396, guid: 2c960e362aaf28544a40d5dd5b1e1633, type: 3}
+      propertyPath: m_netID
+      value: 2147483638
+      objectReference: {fileID: 0}
+    - target: {fileID: 7044849695169924546, guid: 2c960e362aaf28544a40d5dd5b1e1633, type: 3}
+      propertyPath: m_netID
+      value: 2147483639
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
