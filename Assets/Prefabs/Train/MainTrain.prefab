@@ -1,5 +1,91 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &20676120760729357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7825252742580337169}
+  - component: {fileID: 289049253274747289}
+  - component: {fileID: 1996398455525357252}
+  m_Layer: 0
+  m_Name: RampUp_Interaction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7825252742580337169
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20676120760729357}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -43.82172, y: 3.17, z: 1.98}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 488881322216296302}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &289049253274747289
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20676120760729357}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.3, y: 2, z: 0.18}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1996398455525357252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20676120760729357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f790e34659953e042831430cf87329d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactionPoint: {fileID: 7825252742580337169}
+  interactionEnabled: 1
+  _interactions:
+  - prompt: Open
+    sprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+    interact:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1889405673629375250}
+          m_TargetAssemblyTypeName: Train, Assembly-CSharp
+          m_MethodName: SetOreRampOpen
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
 --- !u!1 &78073606193538370
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +218,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 323774029521934876}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -163,6 +249,8 @@ Transform:
   - {fileID: 7401250697429707902}
   - {fileID: 4505312845596888256}
   - {fileID: 70804666526451336}
+  - {fileID: 7825252742580337169}
+  - {fileID: 4222492119608542135}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1889405673629375250
@@ -179,6 +267,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Center>k__BackingField: {x: -43.82172, y: 3.19, z: 0}
   <Size>k__BackingField: {x: 15.18, y: 2, z: 3.53}
+  <Open_Interactable>k__BackingField: {fileID: 1996398455525357252}
+  <Close_Interactable>k__BackingField: {fileID: 1019956318929116246}
 --- !u!95 &6707651334091560042
 Animator:
   serializedVersion: 5
@@ -475,7 +565,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2391849775480003153}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ramp02_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1637,14 +1727,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5675646033275009524}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0008048239, y: 0.7084531, z: 0.0008078604, w: 0.70575696}
+  m_LocalRotation: {x: -0.66867816, y: 0.2266239, z: -0.6712237, w: 0.22576506}
   m_LocalPosition: {x: 7.5273433e-25, y: 0.02, z: -0.0014999988}
   m_LocalScale: {x: 0.99999994, y: 1.0000001, z: 1.0000144}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2391849775480003153}
   m_Father: {fileID: 7772580313235887661}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.132, y: 89.827, z: -142.688}
 --- !u!65 &5184762664574747327
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2635,6 +2725,92 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3298154549470513284, guid: 655f6296cd3719c4cbbdcf7875a30578, type: 3}
+--- !u!1 &8137316784351857997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4222492119608542135}
+  - component: {fileID: 1486845099349345729}
+  - component: {fileID: 1019956318929116246}
+  m_Layer: 0
+  m_Name: RampDown_Interaction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4222492119608542135
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8137316784351857997}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.4806958, y: -0, z: -0, w: 0.8768874}
+  m_LocalPosition: {x: -43.82172, y: 1.74, z: 2.78}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 488881322216296302}
+  m_LocalEulerAnglesHint: {x: -57.462, y: 0, z: 0}
+--- !u!65 &1486845099349345729
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8137316784351857997}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.3, y: 4.6230965, z: 0.18}
+  m_Center: {x: 0, y: -1.3115367, z: -0.000004368056}
+--- !u!114 &1019956318929116246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8137316784351857997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f790e34659953e042831430cf87329d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactionPoint: {fileID: 4222492119608542135}
+  interactionEnabled: 1
+  _interactions:
+  - prompt: Close
+    sprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+    interact:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1889405673629375250}
+          m_TargetAssemblyTypeName: Train, Assembly-CSharp
+          m_MethodName: SetOreRampOpen
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &8308205535436106935
 GameObject:
   m_ObjectHideFlags: 0

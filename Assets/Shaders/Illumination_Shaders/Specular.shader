@@ -1,13 +1,11 @@
-//SimpleDiffuseWithAmbientAndSpecular
-
 Shader "Ethan/UnlitSpecular"
 {
     Properties
     {
-        _BaseColor ("Base Color", Color) = (1, 1, 1, 1) // Base color of the object
-        _MainTex ("Base Texture", 2D) = "white" {} // Texture map
-        _SpecColor ("Specular Color", Color) = (1, 1, 1, 1) // Specular color
-        _Shininess ("Shininess", Range(0.1, 100)) = 16 // Shininess (specular exponent)
+        _BaseColor ("Base Color", Color) = (1, 1, 1, 1)
+        _MainTex ("Base Texture", 2D) = "white" {}
+        _SpecColor ("Specular Color", Color) = (1, 1, 1, 1)
+        _Shininess ("Shininess", Range(0.1, 100)) = 16
     }
     SubShader
     {
@@ -24,9 +22,9 @@ Shader "Ethan/UnlitSpecular"
 
             struct Attributes
             {
-                float4 positionOS : POSITION; // Object space position
-                float3 normalOS : NORMAL; // Object space normal
-                float2 uv : TEXCOORD0; // Texture UV
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
             };
 
             struct Varyings
@@ -34,10 +32,9 @@ Shader "Ethan/UnlitSpecular"
                 float4 positionHCS : SV_POSITION; // Homogeneous clip-space position
                 float3 normalWS : TEXCOORD1; // World space normal
                 float3 viewDirWS : TEXCOORD2; // World space view direction
-                float2 uv : TEXCOORD0; // UV for texturing
+                float2 uv : TEXCOORD0;
             };
 
-            // Declare the base texture and sampler
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
 
@@ -47,7 +44,6 @@ Shader "Ethan/UnlitSpecular"
                 float _Shininess; // Shininess (specular exponent)
             CBUFFER_END
 
-            // Vertex Shader
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
@@ -67,7 +63,6 @@ Shader "Ethan/UnlitSpecular"
                 return OUT;
             }
 
-            // Fragment Shader
             half4 frag(Varyings IN) : SV_Target
             {
                 // Sample the base texture
@@ -83,9 +78,6 @@ Shader "Ethan/UnlitSpecular"
                 // Calculate Lambertian diffuse lighting (NdotL)
                 half NdotL = saturate(dot(normalWS, lightDir));
 
-                // Calculate ambient lighting using spherical harmonics (SH)
-                half3 ambientSH = SampleSH(normalWS);
-
                 // Combine the base color and texture with the diffuse light
                 half3 diffuse = texColor.rgb * _BaseColor.rgb * NdotL;
 
@@ -98,7 +90,7 @@ Shader "Ethan/UnlitSpecular"
                 half3 specular = _SpecColor.rgb * specFactor;
 
                 // Combine diffuse lighting, ambient lighting, and specular highlights
-                half3 finalColor = diffuse + ambientSH * texColor.rgb * _BaseColor.rgb + specular;
+                half3 finalColor = diffuse * texColor.rgb * _BaseColor.rgb + specular;
 
                 // Return the final color
                 return half4(finalColor, 1.0);

@@ -98,9 +98,6 @@ public class CycleManager : MonoBehaviour
         UpdateTimeOfDay();
 
         isTimeAdvancing = true;
-
-        // Open Train Ramp
-        trainRef.SetOreRampOpen(true);
     }
 
     /// <summary>

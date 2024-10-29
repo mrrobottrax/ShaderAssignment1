@@ -960,7 +960,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""FavouritesWheel"",
+                    ""name"": ""QuickDrop"",
                     ""type"": ""Button"",
                     ""id"": ""b2ee7326-1e0c-48c4-b591-7dce7172cee8"",
                     ""expectedControlType"": ""Button"",
@@ -1008,7 +1008,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""FavouritesWheel"",
+                    ""action"": ""QuickDrop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1019,7 +1019,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""FavouritesWheel"",
+                    ""action"": ""QuickDrop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1082,7 +1082,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Permanents = asset.FindActionMap("Permanents", throwIfNotFound: true);
         m_Permanents_Pause = m_Permanents.FindAction("Pause", throwIfNotFound: true);
         m_Permanents_Inventory = m_Permanents.FindAction("Inventory", throwIfNotFound: true);
-        m_Permanents_FavouritesWheel = m_Permanents.FindAction("FavouritesWheel", throwIfNotFound: true);
+        m_Permanents_QuickDrop = m_Permanents.FindAction("QuickDrop", throwIfNotFound: true);
         m_Permanents_Interact = m_Permanents.FindAction("Interact", throwIfNotFound: true);
     }
 
@@ -1415,7 +1415,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private List<IPermanentsActions> m_PermanentsActionsCallbackInterfaces = new List<IPermanentsActions>();
     private readonly InputAction m_Permanents_Pause;
     private readonly InputAction m_Permanents_Inventory;
-    private readonly InputAction m_Permanents_FavouritesWheel;
+    private readonly InputAction m_Permanents_QuickDrop;
     private readonly InputAction m_Permanents_Interact;
     public struct PermanentsActions
     {
@@ -1423,7 +1423,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public PermanentsActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Pause => m_Wrapper.m_Permanents_Pause;
         public InputAction @Inventory => m_Wrapper.m_Permanents_Inventory;
-        public InputAction @FavouritesWheel => m_Wrapper.m_Permanents_FavouritesWheel;
+        public InputAction @QuickDrop => m_Wrapper.m_Permanents_QuickDrop;
         public InputAction @Interact => m_Wrapper.m_Permanents_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Permanents; }
         public void Enable() { Get().Enable(); }
@@ -1440,9 +1440,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Inventory.started += instance.OnInventory;
             @Inventory.performed += instance.OnInventory;
             @Inventory.canceled += instance.OnInventory;
-            @FavouritesWheel.started += instance.OnFavouritesWheel;
-            @FavouritesWheel.performed += instance.OnFavouritesWheel;
-            @FavouritesWheel.canceled += instance.OnFavouritesWheel;
+            @QuickDrop.started += instance.OnQuickDrop;
+            @QuickDrop.performed += instance.OnQuickDrop;
+            @QuickDrop.canceled += instance.OnQuickDrop;
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
@@ -1456,9 +1456,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Inventory.started -= instance.OnInventory;
             @Inventory.performed -= instance.OnInventory;
             @Inventory.canceled -= instance.OnInventory;
-            @FavouritesWheel.started -= instance.OnFavouritesWheel;
-            @FavouritesWheel.performed -= instance.OnFavouritesWheel;
-            @FavouritesWheel.canceled -= instance.OnFavouritesWheel;
+            @QuickDrop.started -= instance.OnQuickDrop;
+            @QuickDrop.performed -= instance.OnQuickDrop;
+            @QuickDrop.canceled -= instance.OnQuickDrop;
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
@@ -1513,7 +1513,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         void OnPause(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
-        void OnFavouritesWheel(InputAction.CallbackContext context);
+        void OnQuickDrop(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
     }
 }
