@@ -15603,6 +15603,10 @@ PrefabInstance:
       value: MainTrain
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 655f6296cd3719c4cbbdcf7875a30578, type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 655f6296cd3719c4cbbdcf7875a30578, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -17170,7 +17174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2789170575893136952, guid: 2ede5e5a551f8a646bd29b40839d8f88, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.303
+      value: -0.334
       objectReference: {fileID: 0}
     - target: {fileID: 2789170575893136952, guid: 2ede5e5a551f8a646bd29b40839d8f88, type: 3}
       propertyPath: m_LocalPosition.y
@@ -17178,7 +17182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2789170575893136952, guid: 2ede5e5a551f8a646bd29b40839d8f88, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.561
+      value: -0.608
       objectReference: {fileID: 0}
     - target: {fileID: 2789170575893136952, guid: 2ede5e5a551f8a646bd29b40839d8f88, type: 3}
       propertyPath: m_LocalRotation.w

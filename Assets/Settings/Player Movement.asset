@@ -27,7 +27,7 @@ MonoBehaviour:
   m_gravity: 15
   m_layerMask:
     serializedVersion: 2
-    m_Bits: 52983
+    m_Bits: 1101559
   m_horizontalSize: 1
   m_standingHeight: 2
   m_crouchingHeight: 1.2
