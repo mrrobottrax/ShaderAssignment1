@@ -78,15 +78,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Drop",
-                    "type": "Button",
-                    "id": "e4383500-ba18-4970-aa3e-8a7a9b36e503",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Slot1",
                     "type": "Value",
                     "id": "3cb25c71-61b5-4b83-9e81-e93f53f8e69e",
@@ -485,17 +476,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Slot9",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "54d9bd88-e878-4313-a37e-ed20ebaded23",
-                    "path": "<Keyboard>/g",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

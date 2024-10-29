@@ -16,17 +16,17 @@ public class InventorySlot
 
 public class PlayerInventory : NetworkBehaviour, IInputHandler
 {
-	[SerializeField] int _inventorySize = 3;
-	[SerializeField] float _dropForce = 1;
+	[SerializeField] private int _inventorySize = 3;
+	[SerializeField] private float _dropForce = 1;
 
 	[field: Header("Components")]
-	[SerializeField] FirstPersonCamera _firstPersonCamera;
-	[SerializeField] PlayerController _playerController;
+	[SerializeField] private FirstPersonCamera _firstPersonCamera;
+	[SerializeField] private PlayerController _playerController;
+    [field: SerializeField] private Transform _dropPoint;
     private PlayerStats playerStats;
-    [field: SerializeField] Transform _dropPoint;
 
-	// System
-	private InventorySlot[] slots;
+    // System
+    private InventorySlot[] slots;
 	public InventorySlot[] Slots => slots;
 
 	public bool ToolbeltOpen { get; private set; } = false;
@@ -77,7 +77,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	public void Subscribe()
 	{
 		InputManager.Instance.Permanents.Inventory.performed += ToggleToolbelt;
-		InputManager.Instance.Player.Drop.performed += Drop;
+		InputManager.Instance.Permanents.QuickDrop.performed += Drop;
 
 		// Hotbar
 		InputManager.Instance.Player.Slot1.performed += Slot1;
@@ -94,7 +94,7 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	public void Unsubscribe()
 	{
 		InputManager.Instance.Permanents.Inventory.performed -= ToggleToolbelt;
-		InputManager.Instance.Player.Drop.performed -= Drop;
+		InputManager.Instance.Permanents.QuickDrop.performed -= Drop;
 
 		// Hotbar
 		InputManager.Instance.Player.Slot1.performed -= Slot1;
