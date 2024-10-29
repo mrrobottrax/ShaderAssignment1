@@ -36,8 +36,8 @@ public class CustomModelImporter : AssetPostprocessor
 		{
 			// Only run for static meshes
 			// todo: support bones
-			if (renderers[i] is not SkinnedMeshRenderer)
-				FilterMesh(filters[i].sharedMesh, renderers[i]);
+			// if (renderers[i] is not SkinnedMeshRenderer)
+			// 	FilterMesh(filters[i].sharedMesh, renderers[i]);
 		}
 	}
 

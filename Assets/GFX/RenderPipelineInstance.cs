@@ -16,45 +16,46 @@ public class RenderPipelineInstance : RenderPipeline
 
 		public void Create(Mesh mesh)
 		{
-			GraphicsBuffer indexBuffer = mesh.GetIndexBuffer();
+			// GraphicsBuffer indexBuffer = mesh.GetIndexBuffer();
 
-			if (mesh.indexFormat == IndexFormat.UInt16 || mesh.triangles.Length == indexBuffer.count)
-			{
-				indexBuffer.Dispose();
-				return;
-			}
+			// if (mesh.indexFormat == IndexFormat.UInt16 || mesh.triangles.Length == indexBuffer.count)
+			// {
+			// 	indexBuffer.Dispose();
+			// 	return;
+			// }
 
-			// Vertex buffer
+			// // Vertex buffer
 
-			m_vertexBuffer = new(GraphicsBuffer.Target.Structured, mesh.vertexCount, 4 * 3);
-			//m_vertexBuffer = new(mesh.vertexCount, 4 * 3, ComputeBufferType.Structured, ComputeBufferMode.Dynamic);
-			m_vertexBuffer.SetData(mesh.vertices);
+			// m_vertexBuffer = new(GraphicsBuffer.Target.Structured, mesh.vertexCount, 4 * 3);
+			// //m_vertexBuffer = new(mesh.vertexCount, 4 * 3, ComputeBufferType.Structured, ComputeBufferMode.Dynamic);
+			// m_vertexBuffer.SetData(mesh.vertices);
 
-			// Adjacent buffer
+			// // Adjacent buffer
 
-			uint[] data = new uint[indexBuffer.count];
-			indexBuffer.GetData(data);
+			// uint[] data = new uint[indexBuffer.count];
+			// indexBuffer.GetData(data);
 
-			// Skip actual indices (first half)
+			// // Skip actual indices (first half)
 
-			uint[] data2 = new uint[data.Length / 2];
-			Array.Copy(data, data2.Length, data2, 0, data2.Length);
+			// uint[] data2 = new uint[data.Length / 2];
+			// Array.Copy(data, data2.Length, data2, 0, data2.Length);
 
-			m_adjacentBuffer = new(GraphicsBuffer.Target.Structured, data2.Length, 4);
-			m_adjacentBuffer.SetData(data2);
+			// m_adjacentBuffer = new(GraphicsBuffer.Target.Structured, data2.Length, 4);
+			// m_adjacentBuffer.SetData(data2);
 
-			indexBuffer.Dispose();
+			// indexBuffer.Dispose();
 		}
 
 		public void Dispose()
 		{
-			m_vertexBuffer?.Dispose();
-			m_adjacentBuffer?.Dispose();
+			// m_vertexBuffer?.Dispose();
+			// m_adjacentBuffer?.Dispose();
 		}
 
 		public bool Valid()
 		{
-			return m_vertexBuffer != null && m_adjacentBuffer != null;
+			return true;
+			//return m_vertexBuffer != null && m_adjacentBuffer != null;
 		}
 	}
 
@@ -160,8 +161,8 @@ public class RenderPipelineInstance : RenderPipeline
 
 						//shadowCmd.SetGlobalBuffer("adjacentBuffer", buffers.m_adjacentBuffer);
 						uint offset = 0;
-						shadowCmd.SetGlobalBuffer("_VertexBuffer", buffers.m_vertexBuffer);
-						shadowCmd.SetGlobalBuffer("_AdjacentBuffer", buffers.m_adjacentBuffer);
+						//shadowCmd.SetGlobalBuffer("_VertexBuffer", buffers.m_vertexBuffer);
+						//shadowCmd.SetGlobalBuffer("_AdjacentBuffer", buffers.m_adjacentBuffer);
 						for (int submesh = 0; submesh < filter.sharedMesh.subMeshCount && submesh < renderer.sharedMaterials.Length; offset += filter.sharedMesh.GetIndexCount(submesh), ++submesh)
 						{
 							Material mat = renderer.sharedMaterials[submesh];
