@@ -144,6 +144,7 @@ public class RenderPipelineInstance : RenderPipeline
 						MeshFilter filter = renderer.GetComponent<MeshFilter>();
 
 						if (filter.sharedMesh == null) continue;
+						if (renderer.shadowCastingMode == ShadowCastingMode.Off) continue;
 
 						// Create buffers if they don't exist
 						if (!m_meshData.TryGetValue(filter.sharedMesh, out MeshBuffers buffers))
@@ -208,6 +209,17 @@ public class RenderPipelineInstance : RenderPipeline
 
 				context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
 			}
+
+			// Draw transparent
+			// {
+			// 	ShaderTagId shaderPassName = new("Forward");
+			// 	SortingSettings sortingSettings = new(camera);
+			// 	DrawingSettings drawingSettings = new(shaderPassName, sortingSettings);
+
+			// 	FilteringSettings filteringSettings = FilteringSettings.defaultValue;
+
+			// 	context.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
+			// }
 
 			// Draw skybox
 			context.DrawSkybox(camera);

@@ -17,6 +17,7 @@ Shader "BasicLit"
 			// The value of the LightMode Pass tag must match the ShaderTagId in ScriptableRenderContext.DrawRenderers
 			Tags { "LightMode" = "Forward"}
 
+			Cull Off
 			ZTest Lequal
 			Stencil
 			{
@@ -65,6 +66,8 @@ Shader "BasicLit"
 			float4 frag (Varyings IN) : SV_TARGET
 			{
 				float4 color = _AmbientColor * _Color * tex2D(_MainTex, IN.uvs * _MainTex_ST.xy + _MainTex_ST.zw).rgba;
+
+				if (color.a < 0.5) discard;
 
 				return color;
 			}

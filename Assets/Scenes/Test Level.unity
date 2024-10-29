@@ -915,6 +915,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 80.238
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_Name
       value: Shrub (3)
@@ -1895,6 +1899,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 80.238
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_Name
       value: Shrub (2)
@@ -2511,6 +2519,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -58.031006
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_Name
@@ -3677,6 +3689,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 120.886
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_Name
@@ -9185,6 +9201,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 4.5319977
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_Name
