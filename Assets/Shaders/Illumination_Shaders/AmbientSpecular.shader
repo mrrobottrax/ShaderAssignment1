@@ -1,4 +1,4 @@
-Shader "Ethan/BasicLambertWAmbient"
+Shader "Ethan/AmbientSpecular"
 {
     Properties
 {

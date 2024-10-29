@@ -1,28 +1,27 @@
-Shader "Ethan/SimpleTint"
+Shader "Ethan/Unlit"
 {
     Properties
     {
-        _MainTex ("Main Texture", 2D) = "white" {}
-        _TintColour ("Tint Color", Color) = (1, 1, 1, 1) // Tint colour applied to  the object
+        _MainTex ("Texture", 2D) = "white" {}
     }
 
     SubShader
     {
-        Tags { "RenderPipeline" = "UniversalRenderPipeline" }
-
+        Tags { "RenderPipeline" = "UniversalRenderPipeline" "RenderType" = "Opaque" }
+        
         Pass
         {
             HLSLPROGRAM
-
             #pragma vertex vert
             #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             struct Attributes
             {
                 float4 positionOS : POSITION; // Object space position
-                float2 uv : TEXCOORD0; // Object space normal
+                float2 uv : TEXCOORD0;
             };
 
             struct Varyings
@@ -31,33 +30,30 @@ Shader "Ethan/SimpleTint"
                 float2 uv : TEXCOORD0;
             };
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-            float4 _TintColour;
+            // Declare the base texture
+            sampler2D _MainTex;
 
-
-            // Vertex Shader
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
 
-                // Transform object space position to homogeneous clip-space
+                // Transform the object space position to homogeneous clip space
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
 
-                // Pass the uv
+                // Pass the UV to the fragment shader
                 OUT.uv = IN.uv;
 
                 return OUT;
             }
 
-            // Fragment Shader
             half4 frag(Varyings IN) : SV_Target
             {
-                half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+                // Sample the texture
+                half4 texColor = tex2D(_MainTex, IN.uv);
                 
-                return col * _TintColour;
-
+                return texColor;
             }
+
             ENDHLSL
         }
     }
