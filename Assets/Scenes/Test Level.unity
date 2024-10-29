@@ -5988,6 +5988,142 @@ Transform:
   - {fileID: 343467999}
   m_Father: {fileID: 304332258}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &125514775 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+  m_PrefabInstance: {fileID: 437249026}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &125514776 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+  m_PrefabInstance: {fileID: 437249026}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &125514777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125514775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5963a718c1dac924ab3b833633c025f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactionPoint: {fileID: 178713194}
+  interactionEnabled: 1
+  _interactions:
+  - prompt: No Lighting
+    sprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+    interact:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 125514777}
+          m_TargetAssemblyTypeName: MatBarrelInteraction, Assembly-CSharp
+          m_MethodName: ApplyNoLighting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prompt: Ambient Lighting
+    sprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+    interact:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 125514777}
+          m_TargetAssemblyTypeName: MatBarrelInteraction, Assembly-CSharp
+          m_MethodName: ApplyAmbientLighting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prompt: Specular Lighting
+    sprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+    interact:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 125514777}
+          m_TargetAssemblyTypeName: MatBarrelInteraction, Assembly-CSharp
+          m_MethodName: ApplySpecularLighting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prompt: Ambient + Specular
+    sprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+    interact:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 125514777}
+          m_TargetAssemblyTypeName: MatBarrelInteraction, Assembly-CSharp
+          m_MethodName: ApplyAmbientSpecLighting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - prompt: Ambient + Specular + Custom
+    sprite: {fileID: 21300000, guid: a6ae981ff2763344cb4249a6741acb38, type: 3}
+    interact:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 125514777}
+          m_TargetAssemblyTypeName: MatBarrelInteraction, Assembly-CSharp
+          m_MethodName: ApplyCustomLighting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  noLighting: {fileID: 0}
+  ambientLighting: {fileID: 0}
+  specularLighting: {fileID: 0}
+  AmbientSpec: {fileID: 0}
+  Custom: {fileID: 0}
+--- !u!65 &125514780
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125514775}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.013308314, y: 0.013308312, z: 0.013364261}
+  m_Center: {x: 0, y: 0, z: 0.0066821286}
 --- !u!1 &128500852
 GameObject:
   m_ObjectHideFlags: 0
@@ -6336,6 +6472,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6c3031eb40c228244ab796cd49d9623e, type: 3}
   m_PrefabInstance: {fileID: 642240863}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &178713193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 178713194}
+  m_Layer: 8
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &178713194
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178713193}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.013364263}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 125514776}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &202417985 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5411494232548119163, guid: 170bd2d6dcf1a694d9d996c1d8c40164, type: 3}
@@ -14015,6 +14182,84 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 934527320276890537, guid: 170bd2d6dcf1a694d9d996c1d8c40164, type: 3}
+--- !u!1001 &437249026
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 440896365}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 99.999985
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 99.999985
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.38
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0146865845
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.23
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_Name
+      value: WoodenBarrel (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 178713194}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 125514777}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 125514780}
+  m_SourcePrefab: {fileID: 100100000, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
 --- !u!1 &440896364
 GameObject:
   m_ObjectHideFlags: 0
@@ -14051,7 +14296,7 @@ Transform:
   - {fileID: 669185597}
   - {fileID: 169436611}
   - {fileID: 1186595196}
-  - {fileID: 468567991}
+  - {fileID: 125514776}
   - {fileID: 1790324212}
   - {fileID: 1237172446}
   - {fileID: 1842173142}
@@ -14061,76 +14306,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4320330308238729165, guid: 2af6982389e07124383ef6f109376e74, type: 3}
   m_PrefabInstance: {fileID: 1148536251}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &468567990
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 440896365}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 99.999985
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 99.999985
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -10.224466
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.0146865845
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -23.373566
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071067
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-      propertyPath: m_Name
-      value: WoodenBarrel
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
---- !u!4 &468567991 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
-  m_PrefabInstance: {fileID: 468567990}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &499873472
 GameObject:
@@ -15074,7 +15249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.14685822
+      value: -0.028
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7b4486dee93c25c4fa9abee7d7b3d90b, type: 3}
       propertyPath: m_LocalPosition.z
