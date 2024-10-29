@@ -15,7 +15,10 @@ Shader "BasicLit"
 		Pass
 		{
 			// The value of the LightMode Pass tag must match the ShaderTagId in ScriptableRenderContext.DrawRenderers
-			Tags { "LightMode" = "Forward"}
+			Tags { 
+				"LightMode" = "Forward"
+				"TerrainCompatible" = "True"
+			}
 
 			Cull Off
 			ZTest Lequal
