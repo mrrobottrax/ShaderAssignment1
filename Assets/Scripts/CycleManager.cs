@@ -8,7 +8,7 @@ public class CycleManager : MonoBehaviour
     public static CycleManager Instance { get { return instance; } }
 
     [Header("Components")]
-    private ItemCheckVolume itemCheck;
+    private Train trainRef;
 
     [Header("Cycle Properties")]
     [SerializeField] private int _startingQuota = 100;
@@ -58,9 +58,9 @@ public class CycleManager : MonoBehaviour
 
     private void Start()
     {
+        trainRef = Train.Instance;
         StartCycle();
 
-        itemCheck = ItemCheckVolume.Instance;
     }
     #endregion
 
@@ -98,6 +98,9 @@ public class CycleManager : MonoBehaviour
         UpdateTimeOfDay();
 
         isTimeAdvancing = true;
+
+        // Open Train Ramp
+        trainRef.SetOreRampOpen(true);
     }
 
     /// <summary>
@@ -124,7 +127,7 @@ public class CycleManager : MonoBehaviour
 
         // Determine total profit
         int totalProfit = 0;
-        Item[] items = CheckItems(itemCheck.transform.position + itemCheck.Center, itemCheck.Size);
+        Item[] items = CheckItems(trainRef.transform.position + trainRef.Center, trainRef.Size);
         foreach (Item i in items)
         {
             totalProfit += i.value;
