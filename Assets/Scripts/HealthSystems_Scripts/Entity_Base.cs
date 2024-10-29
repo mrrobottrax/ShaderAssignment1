@@ -70,8 +70,7 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
 	/// </summary>
 	public virtual void SetHealth(int value)
 	{
-		health = value;
-		health = Mathf.Clamp(health, 0, maxHealth);
+		health = Mathf.Clamp(value, 0, maxHealth);
 
 		if (health <= 0)
 			isDead = true;
@@ -126,7 +125,6 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
 		// Retrieve the combat packet assigned to the ongoing attack
 		CombatPacket packet = CombatManager.Instance.GetCombatPacket(this, ongoingAttackID);
 
-		// Ensure a packet with this instigator and ongoing attack ID exists
 		if (packet == null)
 			return;
 
@@ -273,7 +271,6 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
 
 		// Complete the active attack
 		CompleteAttack();
-
 		IsAttackInProgress = false;
 	}
 
@@ -290,10 +287,6 @@ public abstract class Entity_Base : MonoBehaviour, IHealthComponent, ICombatPack
 
 	#region Cooldown
 
-	/// <summary>
-	/// Starts a new attack cooldown
-	/// </summary>
-	/// <param name="duration">How long the cooldown lasts</param>
 	public void StartAttackCooldown(float duration)
 	{
 		if (attackCooldown != null)

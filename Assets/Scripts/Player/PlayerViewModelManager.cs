@@ -54,6 +54,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 	{
 		InputManager.Instance.Player.Fire1.performed += Fire1;
 		InputManager.Instance.Player.Fire1.canceled += Fire1;
+
 		InputManager.Instance.Player.Fire2.performed += Fire2;
 		InputManager.Instance.Player.Fire2.canceled += Fire2;
 	}
@@ -62,6 +63,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 	{
 		InputManager.Instance.Player.Fire1.performed -= Fire1;
 		InputManager.Instance.Player.Fire1.canceled -= Fire1;
+
 		InputManager.Instance.Player.Fire2.performed -= Fire2;
 		InputManager.Instance.Player.Fire2.canceled -= Fire2;
 	}
@@ -77,7 +79,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 	void Fire1(InputAction.CallbackContext ctx)
 	{
 		// Ensure the player is not already attacking before triggering
-		//if (!Entity.IsAbleToAttack) return;
+		if (!Entity.IsAbleToAttack) return;
 
 		bool fired = ctx.ReadValueAsButton();
 
@@ -96,7 +98,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 	void Fire2(InputAction.CallbackContext ctx)
 	{
 		// Ensure the player is not already attacking before triggering
-		// if (!Entity.IsAbleToAttack) return;
+		if (!Entity.IsAbleToAttack) return;
 
 		bool fired = ctx.ReadValueAsButton();
 
@@ -232,7 +234,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 			}
 
 			// Use normal UsableItem functionality
-			usableItem.TryModelFunction(Entity as PlayerHealth, this, functionPos, actionTitle);
+			usableItem.TryModelFunction(Entity as PlayerStats, this, functionPos, actionTitle);
 			prevAttackGroup = null;
 		}
 		else
@@ -254,7 +256,7 @@ public class PlayerViewmodelManager : EntityAnimationManager_Base, IInputHandler
 		if (weapon != null)
 		{
 			// Perform the attack data using the AttackData from the weapons ViewModels AttackList.
-			weapon.TryModelFunction(Entity as PlayerHealth, this, attackPos, actionTitle, attack);
+			weapon.TryModelFunction(Entity as PlayerStats, this, attackPos, actionTitle, attack);
 		}
 		else
 		{

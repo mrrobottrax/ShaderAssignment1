@@ -22,7 +22,8 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 	[field: Header("Components")]
 	[SerializeField] FirstPersonCamera _firstPersonCamera;
 	[SerializeField] PlayerController _playerController;
-	[field: SerializeField] Transform _dropPoint;
+    private PlayerStats playerStats;
+    [field: SerializeField] Transform _dropPoint;
 
 	// System
 	private InventorySlot[] slots;
@@ -51,7 +52,9 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 	private void Start()
 	{
-		SelectSlot(0);
+		playerStats = GetComponent<PlayerStats>();
+
+        SelectSlot(0);
 
 		if (IsOwner)
 		{
@@ -115,6 +118,10 @@ public class PlayerInventory : NetworkBehaviour, IInputHandler
 
 	public void SelectSlot(int slotIndex)
 	{
+		if (!playerStats.IsAbleToAttack)
+			return;
+
+
 		if (slotIndex >= slots.Length) return;
 
 		InventorySlot prevSlot = activeSlot;

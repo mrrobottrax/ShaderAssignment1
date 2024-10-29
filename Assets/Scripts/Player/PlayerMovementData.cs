@@ -3,14 +3,15 @@
 //[CreateAssetMenu]
 public class PlayerMovementData : ScriptableObject
 {
-	[field: Header("Walking Movement Values")]
-	public float m_walkingSpeed = 5.5f;
-	public float m_crouchingSpeed = 2.5f;
+	[field: Header("Ground Movement Values")]
+    public float m_walkingSpeed = 5.5f;
+    public float sprintingSpeed = 8f;
+    public float m_crouchingSpeed = 2.5f;
 	public float m_friction = 50;
 	public float m_acceleration = 120;
 	public float m_stopSpeed = 80;
 
-	[field: Header("Ground Movement Values")]
+    [field: Header("Ground Movement Values")]
 	public float m_jumpForce = 6;
 
 	[Tooltip("This much upwards velocity removes the grounded state.")]

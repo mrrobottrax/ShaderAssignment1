@@ -1,4 +1,3 @@
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -14,45 +13,47 @@ public class PlayerController : NetworkBehaviour
 	const int k_maxPlanes = 8; // Max number of planes to collide with at once
 
 	[Header("Movement")]
-	[SerializeField] PlayerMovementData m_movementData;
+	[SerializeField] private PlayerMovementData m_movementData;
 	public PlayerMovementData MvmtData { get => m_movementData; }
 
-	// Components
 	[Header("Components")]
-	[SerializeField] FirstPersonCamera m_fpsCamera;
-	Rigidbody m_rigidbody;
-	BoxCollider m_collider;
-	NetworkAnimator m_animator;
+	[SerializeField] private FirstPersonCamera m_fpsCamera;
+    private PlayerStats playerStats;
+    private Rigidbody m_rigidbody;
+    private BoxCollider m_collider;
+    private NetworkAnimator m_animator;
 
-	// System
-	public bool IsCrouching { get; private set; }
-	public bool IsGrounded { get; private set; }
+    [field: Header("System")]
+    public bool IsCrouching { get; private set; }
+    public bool IsSprinting { get; private set; }
+    public bool IsGrounded { get; private set; }
 
 	Vector2 m_wishMoveDir;
 	Vector3 m_velocity;
 	Vector3 m_position;
 
 	bool m_isCrouchPressed;
-	bool m_isJumpPressed;
+    bool isSprintPressed;
+    bool m_isJumpPressed;
 
 	int m_framesStuck = 0;
 	bool m_justJumped;
-
 
 	enum EMovementMode
 	{
 		Standard,
 		Noclip
 	}
+
 	[Header("Debug")]
 	[SerializeField] private EMovementMode m_movementMode;
-
 
 	#region Initialization Methods
 
 	void Awake()
 	{
-		m_rigidbody = GetComponent<Rigidbody>();
+        playerStats = GetComponent<PlayerStats>();
+        m_rigidbody = GetComponent<Rigidbody>();
 		m_collider = GetComponent<BoxCollider>();
 		m_animator = GetComponent<NetworkAnimator>();
 
@@ -78,12 +79,12 @@ public class PlayerController : NetworkBehaviour
 
 	#region Unity Callbacks
 
-	void OnDestroy()
+	private void OnDestroy()
 	{
 		SetControlsSubscription(false);
 	}
 
-	void FixedUpdate()
+    private void FixedUpdate()
 	{
 		UpdateCollider();
 
@@ -124,12 +125,12 @@ public class PlayerController : NetworkBehaviour
 			Unsubscribe();
 	}
 
-	void OnMoveInput(InputAction.CallbackContext context)
+    private void OnMoveInput(InputAction.CallbackContext context)
 	{
 		m_wishMoveDir = context.ReadValue<Vector2>();
 	}
 
-	void OnJumpInput(InputAction.CallbackContext context)
+    private void OnJumpInput(InputAction.CallbackContext context)
 	{
 		m_isJumpPressed = context.ReadValueAsButton();
 
@@ -137,12 +138,19 @@ public class PlayerController : NetworkBehaviour
 			Jump();
 	}
 
-	void OnCrouchInput(InputAction.CallbackContext context)
-	{
-		m_isCrouchPressed = context.ReadValueAsButton();
-	}
+    private void OnCrouchInput(InputAction.CallbackContext context)
+    {
+        m_isCrouchPressed = context.ReadValueAsButton();
+    }
 
-	public void Subscribe()
+    private void OnSprintInput(InputAction.CallbackContext context)
+	{
+		isSprintPressed = context.ReadValueAsButton();
+
+		TrySprint(isSprintPressed);
+    }
+
+    public void Subscribe()
 	{
 		InputManager.Instance.Player.Movement.performed += OnMoveInput;
 
@@ -151,7 +159,10 @@ public class PlayerController : NetworkBehaviour
 
 		InputManager.Instance.Player.Crouch.performed += OnCrouchInput;
 		InputManager.Instance.Player.Crouch.canceled += OnCrouchInput;
-	}
+
+        InputManager.Instance.Player.Sprint.performed += OnSprintInput;
+        InputManager.Instance.Player.Sprint.canceled += OnSprintInput;
+    }
 
 	public void Unsubscribe()
 	{
@@ -163,7 +174,10 @@ public class PlayerController : NetworkBehaviour
 		InputManager.Instance.Player.Crouch.performed -= OnCrouchInput;
 		InputManager.Instance.Player.Crouch.canceled -= OnCrouchInput;
 
-		m_wishMoveDir = Vector2.zero;
+        InputManager.Instance.Player.Sprint.performed -= OnSprintInput;
+        InputManager.Instance.Player.Sprint.canceled -= OnSprintInput;
+
+        m_wishMoveDir = Vector2.zero;
 	}
 	#endregion
 
@@ -174,6 +188,7 @@ public class PlayerController : NetworkBehaviour
 		if (isAttemptingCrouch)
 		{
 			IsCrouching = true;
+			IsSprinting = false;
 
 			if (!IsGrounded)
 			{
@@ -205,18 +220,37 @@ public class PlayerController : NetworkBehaviour
 		m_animator.SetBool("Crouched", IsCrouching);
 	}
 
+	private void TrySprint(bool isAttemptingSprint)
+	{
+		if (isAttemptingSprint && playerStats.GetStamina() > 0)
+		{
+            // Stop the player from crouching
+            if (IsCrouching)
+                TryCrouch(false);
+
+            IsSprinting = true;
+
+        }
+		else
+		{
+            IsSprinting = false;
+		}
+	}
+
 	private void Jump()
 	{
 		m_velocity.y += m_movementData.m_jumpForce;
 		IsGrounded = false;
 		m_justJumped = true;
-	}
+
+        playerStats.SetStamina(playerStats.Stamina - playerStats.JumpStaminaReduction);
+    }
 
 	#endregion
 
 	#region Collision
 
-	bool CastHull(Vector3 direction, float maxDist, out RaycastHit hitInfo)
+	private bool CastHull(Vector3 direction, float maxDist, out RaycastHit hitInfo)
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 
@@ -236,7 +270,7 @@ public class PlayerController : NetworkBehaviour
 		return hit;
 	}
 
-	bool CheckHull()
+    private bool CheckHull()
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 		return Physics.CheckBox(
@@ -248,7 +282,7 @@ public class PlayerController : NetworkBehaviour
 		);
 	}
 
-	bool StuckCheck()
+    private bool StuckCheck()
 	{
 		float halfHeight = GetColliderHeight() / 2f;
 		Collider[] colliders = Physics.OverlapBox(
@@ -300,7 +334,7 @@ public class PlayerController : NetworkBehaviour
 		return false;
 	}
 
-	void CollideAndSlide()
+    private void CollideAndSlide()
 	{
 		Vector3 startVelocity = m_velocity;
 		Vector3 velocityBeforePlanes = m_velocity;
@@ -428,11 +462,11 @@ public class PlayerController : NetworkBehaviour
 			Debug.LogWarning("Bumps exceeded");
 		}
 	}
-	#endregion
+    #endregion
 
-	#region Utility
+    #region Utility
 
-	void UpdateCollider()
+    private void UpdateCollider()
 	{
 		float h = GetColliderHeight();
 		m_collider.size = new Vector3(m_movementData.m_horizontalSize, h, m_movementData.m_horizontalSize);
@@ -455,7 +489,7 @@ public class PlayerController : NetworkBehaviour
 	}
 
 
-	void GroundCheck()
+    private void GroundCheck()
 	{
 		if (m_justJumped)
 		{
@@ -513,15 +547,15 @@ public class PlayerController : NetworkBehaviour
 		}
 	}
 
-	void CategorizePosition()
+    private void CategorizePosition()
 	{
 		GroundCheck();
 	}
-	#endregion
+    #endregion
 
-	#region Movement Methods
+    #region Movement Methods
 
-	void Friction(float friction)
+    private void Friction(float friction)
 	{
 		float speed = m_velocity.magnitude;
 
@@ -536,7 +570,7 @@ public class PlayerController : NetworkBehaviour
 		}
 	}
 
-	void Accelerate(Vector3 direction, float acceleration, float maxSpeed)
+    private void Accelerate(Vector3 direction, float acceleration, float maxSpeed)
 	{
 		float add = acceleration * maxSpeed * Time.fixedDeltaTime;
 
@@ -552,7 +586,7 @@ public class PlayerController : NetworkBehaviour
 	}
 
 
-	private void StandardMovement()
+    private void StandardMovement()
 	{
 		if (StuckCheck())
 			return;
@@ -561,8 +595,11 @@ public class PlayerController : NetworkBehaviour
 
 		Vector3 globalWishDir = m_fpsCamera.RotateVectorYaw(m_wishMoveDir);
 
-		// Crouch / un-crouch
-		if (m_isCrouchPressed)
+		if (playerStats.GetStamina() <= 0)
+			TrySprint(false);
+
+        // Crouch / un-crouch
+        if (m_isCrouchPressed)
 		{
 			if (!IsCrouching)
 			{
@@ -591,8 +628,14 @@ public class PlayerController : NetworkBehaviour
 	{
 		m_velocity.y = 0;
 
-		float moveSpeed = IsCrouching ? m_movementData.m_crouchingSpeed : m_movementData.m_walkingSpeed;
-		float acceleration = m_movementData.m_acceleration;
+		// Pick movement speed based on current player state
+        float moveSpeed = IsCrouching ? m_movementData.m_crouchingSpeed : 
+			(IsSprinting ? m_movementData.sprintingSpeed : m_movementData.m_walkingSpeed);
+
+		if (IsSprinting)
+			playerStats.SetStamina(playerStats.Stamina - playerStats.SprintStaminaReduction * Time.deltaTime);
+
+        float acceleration = m_movementData.m_acceleration;
 		float friction = m_movementData.m_friction;
 
 		// Friction

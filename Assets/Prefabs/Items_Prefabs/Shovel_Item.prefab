@@ -153,6 +153,7 @@ MonoBehaviour:
   interactionEnabled: 1
   itemName: Shovel
   stackSize: 1
+  value: 1
   itemSprite: {fileID: 21300000, guid: 28f3870423875fa45aaf9f05fbf083c0, type: 3}
   animatorController: {fileID: 22100000, guid: 3c1d4e95af3ec7a4ba519538fa6aae2d, type: 2}
   dropOffset: {x: 0, y: 0, z: 0}

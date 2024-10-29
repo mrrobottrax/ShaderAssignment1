@@ -6,7 +6,8 @@ public class Item : Interactable
 	[Header("Item Properties")]
 	public string itemName = "Item Name";
 	public int stackSize = 1;
-	public Sprite itemSprite;
+    public int value = 1;
+    public Sprite itemSprite;
 	public RuntimeAnimatorController animatorController;
 
 	[Header("Item Dropping")]

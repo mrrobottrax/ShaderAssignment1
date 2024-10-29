@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff299647888bcdb4ca07437416c0b6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Entity>k__BackingField: {fileID: 5234002548523702153}
+  <Entity>k__BackingField: {fileID: 213278659782010821}
   <Animator>k__BackingField: {fileID: 3942988104529243446}
   <EntityAttacks>k__BackingField:
     <AttackGroups>k__BackingField:
@@ -832,6 +832,7 @@ GameObject:
   - component: {fileID: 7586937137847046177}
   - component: {fileID: 3701271248387694150}
   - component: {fileID: 770677309151715295}
+  - component: {fileID: 1072294587379991429}
   m_Layer: 12
   m_Name: Camera
   m_TagString: MainCamera
@@ -888,7 +889,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 11000
+  far clip plane: 1500
   field of view: 90
   orthographic: 0
   orthographic size: 5
@@ -938,6 +939,50 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2077720315052293206}
   m_Enabled: 1
+--- !u!114 &1072294587379991429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077720315052293206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1 &2083990809222214549
 GameObject:
   m_ObjectHideFlags: 0
@@ -1770,8 +1815,8 @@ GameObject:
   - component: {fileID: 6727032766827451354}
   - component: {fileID: 6924214010678200475}
   - component: {fileID: 2965891379874120525}
+  - component: {fileID: 213278659782010821}
   - component: {fileID: 8292569634489466495}
-  - component: {fileID: 5234002548523702153}
   - component: {fileID: 2944094973486998542}
   - component: {fileID: 7647309867230405321}
   - component: {fileID: 4644058051439156076}
@@ -1831,6 +1876,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overrideTransform: 0
+--- !u!114 &213278659782010821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5067302201104481768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a145ce0ec464c4d8320d0fd3ce79a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  _gatherHurtboxesOnInit: 0
+  _hurtBoxes: []
+  maxStamina: 100
+  staminaRecovery: 15
+  <SprintStaminaReduction>k__BackingField: 22
+  <JumpStaminaReduction>k__BackingField: 20
+  toxinRecovery: 2
+  <FirstPersonCamera>k__BackingField: {fileID: 3701271248387694150}
 --- !u!114 &8292569634489466495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1843,30 +1909,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9df08e4e3f41b5c4b95b63e9859ba885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_uiPrefab: {fileID: 7718804340616863760, guid: 703682f9d77f38b43b20e71bab0ec7dd, type: 3}
+  UIPrefab: {fileID: 2584426041692649102, guid: 703682f9d77f38b43b20e71bab0ec7dd, type: 3}
   m_firstPersonObjects:
   - {fileID: 2332926557876443484}
   m_thirdPersonObjects:
   - {fileID: 3293345382478405963}
---- !u!114 &5234002548523702153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5067302201104481768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eabe06b38df3c7841a4d74810c32e445, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  _gatherHurtboxesOnInit: 0
-  _hurtBoxes: []
-  <FirstPersonCamera>k__BackingField: {fileID: 3701271248387694150}
-  playerController: {fileID: 2944094973486998542}
-  inventoryComponent: {fileID: 7647309867230405321}
-  playerViewModelManager: {fileID: 3285336454719170954}
 --- !u!114 &2944094973486998542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1969,7 +2016,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 0.7, y: 2, z: 0.7}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &2020695960217352520
 Animator:

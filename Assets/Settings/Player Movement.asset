@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb27d0e4235f1034cbfd82b720d47c02, type: 3}
   m_Name: Player Movement
   m_EditorClassIdentifier: 
-  m_walkingSpeed: 5
+  m_walkingSpeed: 4
+  sprintingSpeed: 8
   m_crouchingSpeed: 2.5
   m_friction: 4
   m_acceleration: 7.1
   m_stopSpeed: 4
-  m_jumpForce: 4
+  m_jumpForce: 6
   m_knockUpThreshold: 5
   m_stepHeight: 0.7
   m_maxWalkableAngle: 55
@@ -26,7 +27,7 @@ MonoBehaviour:
   m_gravity: 15
   m_layerMask:
     serializedVersion: 2
-    m_Bits: 52983
+    m_Bits: 1101559
   m_horizontalSize: 1
   m_standingHeight: 2
   m_crouchingHeight: 1.2
