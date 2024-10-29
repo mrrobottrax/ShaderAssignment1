@@ -18,8 +18,8 @@ RenderSettings:
   m_FogColor: {r: 0.8915094, g: 0.94879025, b: 1, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.01
-  m_LinearFogStart: 50
-  m_LinearFogEnd: 500.01
+  m_LinearFogStart: 75
+  m_LinearFogEnd: 200
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
@@ -14259,7 +14259,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6aa0f57555254b347919a18f1c14384d, type: 2}
+      objectReference: {fileID: 2100000, guid: 41e6c224557a02440a0a680974abe498, type: 2}
     - target: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
       propertyPath: m_Name
       value: WoodenBarrel (1)
@@ -14267,6 +14267,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

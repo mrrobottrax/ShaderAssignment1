@@ -148,7 +148,7 @@ public class CycleManager : MonoBehaviour
         else
         {
             // Lose game
-            Debug.Log("LOOSER");
+            Debug.Log("LOSER");
         }
     }
 

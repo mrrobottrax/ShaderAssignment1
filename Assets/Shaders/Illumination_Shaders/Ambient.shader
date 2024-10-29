@@ -1,12 +1,9 @@
-// Ambient shader is a simple diffuse with ambient shader
-
-
 Shader "Ethan/Ambient"
 {
     Properties
     {
-        _BaseColor ("Base Color", Color) = (1, 1, 1, 1) // Base color of the object
-        _MainTex ("Base Texture", 2D) = "white" {} // Texture map
+        _BaseColor ("Base Color", Color) = (1, 1, 1, 1)
+        _MainTex ("Base Texture", 2D) = "white" {}
     }
     SubShader
     {
@@ -22,15 +19,15 @@ Shader "Ethan/Ambient"
 
             struct Attributes
             {
-                float4 positionOS : POSITION; // Object space position
-                float3 normalOS : NORMAL; // Object space normal
-                float2 uv : TEXCOORD0; // Texture UV
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
             };
             struct Varyings
             {
-                float4 positionHCS : SV_POSITION; // Homogeneous clip-space position
-                float3 normalWS : TEXCOORD1; // World space normal
-                float2 uv : TEXCOORD0; // UV for texturing
+                float4 positionHCS : SV_POSITION;
+                float3 normalWS : TEXCOORD1;
+                float2 uv : TEXCOORD0;
             };
 
             // Declare the base texture and sampler
@@ -45,6 +42,7 @@ Shader "Ethan/Ambient"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
+
                 // Transform the object space position to homogeneous clip space
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
 
@@ -55,6 +53,7 @@ Shader "Ethan/Ambient"
                 OUT.uv = IN.uv;
                 return OUT;
             }
+
             // Fragment Shader
             half4 frag(Varyings IN) : SV_Target
             {
