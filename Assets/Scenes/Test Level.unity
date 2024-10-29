@@ -3567,7 +3567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3133292727745147947, guid: 6c3031eb40c228244ab796cd49d9623e, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 238684189700443686, guid: 6c3031eb40c228244ab796cd49d9623e, type: 3}
       propertyPath: m_StaticShadowCaster
@@ -7847,13 +7847,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731213899}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.84246457, y: 0.2615929, z: -0.3315304, w: -0.3345299}
+  m_LocalRotation: {x: -0.57904565, y: -0.6102226, z: 0.028152706, w: -0.5399463}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 939323891}
-  m_LocalEulerAnglesHint: {x: 47.486, y: 145.415, z: 558.905}
+  m_LocalEulerAnglesHint: {x: 41.274, y: 123.547, z: 424.139}
 --- !u!114 &1731213903
 MonoBehaviour:
   m_ObjectHideFlags: 0

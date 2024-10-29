@@ -95,7 +95,7 @@ public class RenderPipelineInstance : RenderPipeline
 	{
 		CommandBuffer clearCmd = new();
 		clearCmd.ClearRenderTarget(true, true, Color.clear);
-		clearCmd.SetGlobalVector("_AmbientColor", new Color(0.1f, 0.1f, 0.1f, 1));
+		clearCmd.SetGlobalVector("_AmbientColor", new Color(0.05f, 0.05f, 0.05f, 1));
 
 		foreach (Camera camera in cameras)
 		{
@@ -142,6 +142,8 @@ public class RenderPipelineInstance : RenderPipeline
 						if (renderer is not MeshRenderer) continue;
 
 						MeshFilter filter = renderer.GetComponent<MeshFilter>();
+
+						if (filter.sharedMesh == null) continue;
 
 						// Create buffers if they don't exist
 						if (!m_meshData.TryGetValue(filter.sharedMesh, out MeshBuffers buffers))

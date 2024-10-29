@@ -36,16 +36,19 @@ Shader "BasicLit"
 
 			float4x4 unity_MatrixVP;
 			float4x4 unity_ObjectToWorld;
+			float4 _WorldSpaceLightPos0;
 
 			struct Attributes
 			{
 				float4 positionOS   : POSITION;
+				float3 normalOS		: NORMAL;
 				float2 uvs			: TEXCOORD0;
 			};
 
 			struct Varyings
 			{
 				float4 positionCS 	: SV_POSITION;
+				float3 normalWS		: NORMAL;
 				float2 uvs			: TEXCOORD0;
 			};
 
@@ -53,6 +56,7 @@ Shader "BasicLit"
 			{
 				Varyings OUT;
 				float4 worldPos = mul(unity_ObjectToWorld, IN.positionOS);
+				OUT.normalWS = mul(unity_ObjectToWorld, IN.normalOS);
 				OUT.positionCS = mul(unity_MatrixVP, worldPos);
 				OUT.uvs = IN.uvs;
 				return OUT;
@@ -61,6 +65,7 @@ Shader "BasicLit"
 			float4 frag (Varyings IN) : SV_TARGET
 			{
 				float4 color = _AmbientColor * _Color * tex2D(_MainTex, IN.uvs * _MainTex_ST.xy + _MainTex_ST.zw).rgba;
+
 				return color;
 			}
 			ENDHLSL
@@ -170,7 +175,7 @@ Shader "BasicLit"
 						triStream.Append(output);
 					}
 
-					float4 offset = float4((-_WorldSpaceLightPos0 * 1000).xyz, 0);
+					float4 offset = float4((-_WorldSpaceLightPos0 * 10000).xyz, 0);
 
 					//triStream.RestartStrip();
 
