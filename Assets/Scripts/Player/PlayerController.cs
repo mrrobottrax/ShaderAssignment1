@@ -222,7 +222,7 @@ public class PlayerController : NetworkBehaviour
 
 	private void TrySprint(bool isAttemptingSprint)
 	{
-		if (isAttemptingSprint && playerStats.GetStamina() > 0)
+		if (isAttemptingSprint && playerStats.GetStamina() > 0 && m_wishMoveDir.magnitude > 0.05)
 		{
             // Stop the player from crouching
             if (IsCrouching)
@@ -595,7 +595,8 @@ public class PlayerController : NetworkBehaviour
 
 		Vector3 globalWishDir = m_fpsCamera.RotateVectorYaw(m_wishMoveDir);
 
-		if (playerStats.GetStamina() <= 0)
+		// Stop sprinting if the player runs out of stamina or stops moving
+		if (playerStats.GetStamina() <= 0 || m_wishMoveDir.magnitude <= 0.05)
 			TrySprint(false);
 
         // Crouch / un-crouch
