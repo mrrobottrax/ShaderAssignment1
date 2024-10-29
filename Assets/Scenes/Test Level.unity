@@ -6098,11 +6098,11 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  noLighting: {fileID: 0}
-  ambientLighting: {fileID: 0}
-  specularLighting: {fileID: 0}
-  AmbientSpec: {fileID: 0}
-  Custom: {fileID: 0}
+  noLighting: {fileID: 2100000, guid: 41e6c224557a02440a0a680974abe498, type: 2}
+  ambientLighting: {fileID: 2100000, guid: 6aa0f57555254b347919a18f1c14384d, type: 2}
+  specularLighting: {fileID: 2100000, guid: 7cad5cb175a93b84696196a1589db647, type: 2}
+  AmbientSpec: {fileID: 2100000, guid: 101b90545910ea5438038b0fdd10d8dd, type: 2}
+  Custom: {fileID: 2100000, guid: de663aa4b4826a241a744cad0907615c, type: 2}
 --- !u!65 &125514780
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14238,6 +14238,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6aa0f57555254b347919a18f1c14384d, type: 2}
     - target: {fileID: 919132149155446097, guid: 50a2ea9da01353a4cb30e2c920ad6dfa, type: 3}
       propertyPath: m_Name
       value: WoodenBarrel (1)
