@@ -86,7 +86,7 @@ public class InteractionUIManager : MonoBehaviour
 
 		if (options == null)
 		{
-			Debug.LogWarning($"No interactions on object {interactable.gameObject.name}");
+			//Debug.LogWarning($"No interactions on object {interactable.gameObject.name}");
 			return;
 		}
 
@@ -95,7 +95,7 @@ public class InteractionUIManager : MonoBehaviour
 			availableOptionsPool.Add(Instantiate(_optionPrefab, _optionHolder));
 		}
 
-		for (int i = 0; i < availableOptionsPool.Count; ++i)
+		for (int i = 0; i < options.Length; ++i)
 		{
 			availableOptionsPool[i].gameObject.SetActive(true);
 			availableOptionsPool[i].Setup(options[i]);

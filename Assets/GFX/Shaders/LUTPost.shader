@@ -3,8 +3,8 @@ Shader "Custom/LUTPost"
 	Properties
 	{
 		_Colours ("LUT Height", Integer) = 32
-		_LutTex0 ("LUT", 2D) = "white" {}
-		_LutTex1 ("LUT", 2D) = "white" {}
+		_LutTex0 ("LUT0", 2D) = "white" {}
+		_LutTex1 ("LUT1", 2D) = "white" {}
 		_LutBlend ("Blend", Range(0, 1)) = 1
 		_Contribution ("Contribution", Range(0, 1)) = 1
 	}
@@ -78,13 +78,13 @@ Shader "Custom/LUTPost"
 				return output;
 			}
 
-			float4 LookupColour(float3 colour, Texture2D lut, SamplerState samplerState)
+			float4 LookupColour(float3 colour, Texture2D lut, SamplerState samplerState, float4 texelSize)
 			{
 				float maxColour = _Colours - 1.0;
 				float4 col = float4(saturate(colour), 1);
 
-				float halfColX = 0.5 / _LutTex0_TexelSize.z;
-				float halfColY = 0.5 / _LutTex0_TexelSize.w;
+				float halfColX = 0.5 / texelSize.z;
+				float halfColY = 0.5 / texelSize.w;
 				float threshold = maxColour / _Colours;
 
 				float xOffset = halfColX + col.r * threshold / _Colours;
@@ -101,8 +101,8 @@ Shader "Custom/LUTPost"
 				float4 colour = tex2D(_BlitTexture, input.uv);
 
 				float4 lutColor = lerp(
-					LookupColour(colour, _LutTex0, sampler_LutTex0),
-					LookupColour(colour, _LutTex1, sampler_LutTex1),
+					LookupColour(colour, _LutTex0, sampler_LutTex0, _LutTex0_TexelSize),
+					LookupColour(colour, _LutTex1, sampler_LutTex1, _LutTex1_TexelSize),
 					_LutBlend
 				);
 
