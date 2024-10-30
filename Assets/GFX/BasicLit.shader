@@ -21,7 +21,7 @@ Shader "BasicLit"
 			}
 
 			Cull Off
-			ZTest Lequal
+			ZTest LEqual
 			Stencil
 			{
 				Ref 0
@@ -82,10 +82,11 @@ Shader "BasicLit"
 			// The value of the LightMode Pass tag must match the ShaderTagId in ScriptableRenderContext.DrawRenderers
 			Tags { "LightMode" = "ShadowCaster"}
 
-			Cull off
+			Cull Off
 			ZTest Less
 			ZWrite Off
 			Blend Zero One
+			Offset 0.01, 1
 
 			Stencil
 			{
@@ -137,7 +138,7 @@ Shader "BasicLit"
 				return OUT;
 			}
 
-			[maxvertexcount(30)]
+			[maxvertexcount(12)]
 			void geom(triangle V2G input[3], inout TriangleStream<G2F> triStream, uint id : SV_PrimitiveID)
 			{
 				G2F output;
@@ -181,7 +182,7 @@ Shader "BasicLit"
 						triStream.Append(output);
 					}
 
-					float4 offset = float4((-_WorldSpaceLightPos0 * 10000).xyz, 0);
+					float4 offset = float4((-_WorldSpaceLightPos0 * 1000).xyz, 0);
 
 					//triStream.RestartStrip();
 
