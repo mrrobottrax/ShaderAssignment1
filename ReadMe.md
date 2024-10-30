@@ -4,7 +4,7 @@ Zachary O’Brien 100909491
 
 # CG Assignment 1 Read Me
 
-Youtube link: [https://youtu.be/WUwO7fqUvqs](https://youtu.be/WUwO7fqUvqs)   
+Youtube link: [https://youtu.be/WUwO7fqUvqs](https://youtu.be/Hlf02GrOUnM)   
 Github link: [https://github.com/mrrobottrax/ShaderAssignment1](https://github.com/mrrobottrax/ShaderAssignment1)  
 Slideshow:[https://docs.google.com/presentation/d/1y1T7qb2CbIzT4xLl4gqmGeddgcwzwbdhPEF7CduINS4/edit?usp=sharing](https://docs.google.com/presentation/d/1y1T7qb2CbIzT4xLl4gqmGeddgcwzwbdhPEF7CduINS4/edit?usp=sharing) 
 
