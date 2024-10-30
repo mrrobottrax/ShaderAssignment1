@@ -31,6 +31,9 @@ public class LutBlender : Interactable
 		var mat = feature.passMaterial;
 		mat.SetTexture("_LutTex0", m_NeutralLUT);
 		mat.SetTexture("_LutTex1", m_NeutralLUT);
+
+		mat.SetFloat("_LutBlend", 1);
+		mat.SetFloat("_Contribution", 1);
 	}
 
 	public override Interaction[] GetInteractions()
