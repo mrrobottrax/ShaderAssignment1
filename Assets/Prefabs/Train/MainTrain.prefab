@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 289049253274747289}
   - component: {fileID: 1996398455525357252}
   - component: {fileID: 7044849695169924546}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RampUp_Interaction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2752,7 +2752,7 @@ GameObject:
   - component: {fileID: 1486845099349345729}
   - component: {fileID: 1019956318929116246}
   - component: {fileID: 6692135190087531396}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RampDown_Interaction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
