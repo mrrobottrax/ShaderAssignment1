@@ -86,4 +86,3 @@ Shader "Ethan/Ambient"
         }
     }
 }
-
