@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e66485fa23221f44b71095b360906ab, type: 3}
+  m_Name: DefaultSettings
+  m_EditorClassIdentifier: 
+  m_TilePack: {fileID: 11400000, guid: ccfa6a045eabcce43853336bd621b6ec, type: 2}
+  m_Width: 11
+  m_Depth: 11
+  m_Height: 11

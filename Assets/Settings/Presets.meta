@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Presets.meta
+guid: d976e59fea0535c4b97808ac6b673fb9
+========
+guid: deaa65c3a8a2501469ff8dd28a1d0809
+>>>>>>>> develop:Assets/Prefabs/Player.meta
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

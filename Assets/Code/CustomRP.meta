@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Render Pipeline.meta
+guid: 7d7b883938eba4849a34948f7a214ff4
+========
+guid: 6763a063fbfd63b4ba1f6678a77124ac
+>>>>>>>> develop:Assets/Materials/Train.meta
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

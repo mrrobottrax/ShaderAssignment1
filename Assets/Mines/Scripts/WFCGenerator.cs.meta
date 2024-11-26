@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/WFC/Scripts/WFCGenerator.cs.meta
+guid: d31c19ae44a0bf04699d14d9a17d8a39
+========
+guid: 03de4f03a73bbc24c98727286572a440
+>>>>>>>> develop:Assets/WFC/Scripts/Editor/TileDataEditor.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

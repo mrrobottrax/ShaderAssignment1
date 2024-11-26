@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 828dcad9b8a9f1a45b4a965969a295ef, type: 3}
+  m_Name: Render Pipeline
+  m_EditorClassIdentifier: 
+  m_DefaultShader: {fileID: 4800000, guid: 9c2c987f8fc595d4ea2e9b28c508f929, type: 3}
+  m_DefaultMaterial: {fileID: 2100000, guid: 6ed0b2441649a7d4b9e0a95a60f86271, type: 2}
+  m_Settings:
+    EnableDynamicBatching: 1
+    EnableInstancing: 0
+    LightingMaterial: {fileID: 2100000, guid: e60a58d318d9c0e48ba4ed822a70d02f, type: 2}
+    BGMaterial: {fileID: 2100000, guid: 352ddaeb8a85f644ca787597d3cc1ae9, type: 2}

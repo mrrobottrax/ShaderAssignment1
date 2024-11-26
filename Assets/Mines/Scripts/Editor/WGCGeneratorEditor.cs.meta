@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/WFC/Scripts/Editor/WGCGeneratorEditor.cs.meta
+guid: 5d11a816ebfd31f43bf89f033510bbb7
+========
+guid: d31c19ae44a0bf04699d14d9a17d8a39
+>>>>>>>> develop:Assets/WFC/Scripts/WFCGenerator.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
