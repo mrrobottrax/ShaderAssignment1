@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Fog
-  m_Shader: {fileID: 4800000, guid: 57ac7ae49edae0a49b2ffe91448f4c04, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9b0a89c05f4f9a440ade1e2c8fc0056a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

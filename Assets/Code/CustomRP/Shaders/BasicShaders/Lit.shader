@@ -139,7 +139,7 @@ Shader "CustomRP/Lit"
 			}
 
 			Cull Off
-			ZTest Less
+			ZTest LEqual
 			ZWrite Off
 			Blend Zero One
 			Offset 0.009, 0

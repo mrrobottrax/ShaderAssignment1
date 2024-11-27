@@ -4,7 +4,9 @@ using UnityEngine.Rendering;
 
 public class RenderPipelineInstance : RenderPipeline
 {
-	RPAsset.RPSettings m_Settings;
+	public static RenderPipelineInstance Singleton;
+
+	public RPAsset.RPSettings m_Settings;
 
 	Mesh k_FullscreenQuad = null;
 
@@ -38,12 +40,13 @@ public class RenderPipelineInstance : RenderPipeline
 	public RenderPipelineInstance(RPAsset.RPSettings settings) : base()
 	{
 		m_Settings = settings;
+		Singleton = this;
 
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		TierSettings tierSettings = EditorGraphicsSettings.GetTierSettings(UnityEditor.BuildTargetGroup.Standalone, GraphicsTier.Tier3);
 		tierSettings.renderingPath = RenderingPath.DeferredShading;
 		EditorGraphicsSettings.SetTierSettings(UnityEditor.BuildTargetGroup.Standalone, GraphicsTier.Tier3, tierSettings);
-		#endif
+#endif
 	}
 
 	protected override void Render(ScriptableRenderContext context, Camera[] cameras)
@@ -105,13 +108,15 @@ public class RenderPipelineInstance : RenderPipeline
 				whiteTextures.Dispose();
 			}
 
-			DrawLighting(context, cullingResults, color, depth, albedo, normal, position);
+			DrawLighting(context, cullingResults, color, depth, albedo, normal, position, camera);
 
 			context.DrawSkybox(camera);
 			DrawBG(context);
 
 			// Render transparent
 			DrawTransparent(context, camera, cullingResults, color, depth);
+
+			DrawPostProcessing(context, width, height, color, depth, position, camera);
 
 			// Blit over to camera texture
 			CommandBuffer blit = new()
@@ -140,6 +145,59 @@ public class RenderPipelineInstance : RenderPipeline
 			RenderTexture.ReleaseTemporary(normal);
 			RenderTexture.ReleaseTemporary(position);
 		}
+	}
+
+	void DrawPostProcessing(ScriptableRenderContext context, int width, int height,
+		RenderTexture color, RenderTexture depth, RenderTexture position, Camera camera)
+	{
+		CommandBuffer cmd = new()
+		{
+			name = "Post Processing"
+		};
+
+		// Setup
+		int colorID = Shader.PropertyToID("_Color");
+		cmd.GetTemporaryRT(colorID, width, height, 0, FilterMode.Point, RenderTextureFormat.Default);
+		cmd.Blit(color, colorID);
+
+		cmd.SetRenderTarget(color, depth);
+
+		cmd.SetGlobalTexture("_Position", position);
+
+		// Fog
+		if (RenderSettings.fog)
+		{
+			cmd.SetGlobalVector("_CameraPos", camera.transform.position);
+			cmd.SetGlobalColor("_FogColor", RenderSettings.fogColor);
+			cmd.SetGlobalFloat("_FogStart", RenderSettings.fogStartDistance);
+			cmd.SetGlobalFloat("_FogEnd", RenderSettings.fogEndDistance);
+
+			cmd.DrawMesh(k_FullscreenQuad, Matrix4x4.identity, m_Settings.FogMaterial, 0, 0);
+		}
+
+		cmd.Blit(color, colorID);
+		cmd.SetRenderTarget(color, depth);
+
+		// LUT
+		{
+			cmd.DrawMesh(k_FullscreenQuad, Matrix4x4.identity, m_Settings.LUTMaterial, 0, 0);
+		}
+
+		cmd.ReleaseTemporaryRT(colorID);
+
+		context.ExecuteCommandBuffer(cmd);
+		cmd.Dispose();
+
+
+
+		// CommandBuffer pass2 = new()
+		// {
+		// 	name = "Pass 2"
+		// };
+
+		// pass2.SetRenderTarget(color, depth);
+		// context.ExecuteCommandBuffer(pass2);
+		// pass2.Dispose();
 	}
 
 	void DrawBG(ScriptableRenderContext context)
@@ -200,6 +258,8 @@ public class RenderPipelineInstance : RenderPipeline
 		{
 			name = "Init GBuffer"
 		};
+		cmd.SetRenderTarget(position);
+		cmd.ClearRenderTarget(RTClearFlags.Color, new Color(float.PositiveInfinity, 0, 0), 1, 0);
 		cmd.SetRenderTarget(gbuffer, depth, 0, CubemapFace.Unknown, 0);
 		cmd.ClearRenderTarget(RTClearFlags.DepthStencil, new Color(), 1, 0);
 
@@ -221,7 +281,7 @@ public class RenderPipelineInstance : RenderPipeline
 	}
 
 	void DrawLighting(ScriptableRenderContext context, CullingResults cullingResults, RenderTexture color,
-		RenderTexture depth, RenderTexture albedo, RenderTexture normal, RenderTexture position)
+		RenderTexture depth, RenderTexture albedo, RenderTexture normal, RenderTexture position, Camera camera)
 	{
 		CommandBuffer cmd = new()
 		{
@@ -232,6 +292,32 @@ public class RenderPipelineInstance : RenderPipeline
 		cmd.SetGlobalTexture("_Albedo", albedo);
 		cmd.SetGlobalTexture("_Normal", normal);
 		cmd.SetGlobalTexture("_Position", position);
+
+		// CG STUFF
+		cmd.DisableShaderKeyword("NO_LIGHTING");
+		cmd.DisableShaderKeyword("DIFFUSE_ONLY");
+		cmd.DisableShaderKeyword("SPECULAR_ONLY");
+		cmd.DisableShaderKeyword("DIFFUSE_SPECULAR");
+		cmd.SetGlobalVector("_CameraPos", camera.transform.position);
+		switch (CGClass.mode)
+		{
+			case RenderMode.NO_LIGHTING:
+				cmd.EnableShaderKeyword("NO_LIGHTING");
+				break;
+
+			case RenderMode.DIFFUSE:
+				cmd.EnableShaderKeyword("DIFFUSE_ONLY");
+				break;
+
+			case RenderMode.SPECULAR:
+				cmd.EnableShaderKeyword("SPECULAR_ONLY");
+				break;
+
+			case RenderMode.DIFFUSE_SPECULAR:
+				cmd.EnableShaderKeyword("DIFFUSE_SPECULAR");
+				break;
+		}
+		// CG STUFF
 
 		context.ExecuteCommandBuffer(cmd);
 		cmd.Dispose();
@@ -288,7 +374,7 @@ public class RenderPipelineInstance : RenderPipeline
 			name = "Directional Light"
 		};
 
-		lighting.SetGlobalColor("_LightColor", light.color);
+		lighting.SetGlobalColor("_LightColor", light.color * light.intensity);
 		lighting.SetGlobalColor("_AmbientColor", RenderSettings.subtractiveShadowColor);
 
 		// Light
@@ -337,7 +423,7 @@ public class RenderPipelineInstance : RenderPipeline
 		};
 
 		// Light
-		lighting.SetGlobalColor("_LightColor", light.color);
+		lighting.SetGlobalColor("_LightColor", light.color * light.intensity);
 
 		Vector3 forward = light.transform.forward;
 		lighting.SetGlobalVector("_LightDir", new Vector4(forward.x, forward.y, forward.z, light.range));

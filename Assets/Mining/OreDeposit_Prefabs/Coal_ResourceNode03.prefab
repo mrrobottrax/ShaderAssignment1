@@ -127,6 +127,7 @@ MonoBehaviour:
   explosiveResistance: 0
   piercingResistance: 0
   slashingResistance: 0.5
+  destroySFX: {fileID: 0}
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
@@ -355,6 +356,7 @@ MonoBehaviour:
   explosiveResistance: 0
   piercingResistance: 0
   slashingResistance: 0.5
+  destroySFX: {fileID: 8300000, guid: 40c81bbe052a9794d9c2a7a83267650e, type: 3}
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
@@ -583,6 +585,7 @@ MonoBehaviour:
   explosiveResistance: 0
   piercingResistance: 0
   slashingResistance: 0.5
+  destroySFX: {fileID: 0}
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
@@ -811,6 +814,7 @@ MonoBehaviour:
   explosiveResistance: 0
   piercingResistance: 0
   slashingResistance: 0.5
+  destroySFX: {fileID: 0}
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
@@ -1039,6 +1043,7 @@ MonoBehaviour:
   explosiveResistance: 0
   piercingResistance: 0
   slashingResistance: 0.5
+  destroySFX: {fileID: 0}
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}

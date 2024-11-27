@@ -130,7 +130,7 @@ MonoBehaviour:
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
-  debrisParticles: {fileID: 0}
+  debrisParticles: {fileID: 5060559484227898982, guid: b2e7b5d6b0357e14e96514d2cde156e8, type: 3}
   destructionParticles: {fileID: 0}
 --- !u!82 &5242690604004835732
 AudioSource:
@@ -396,7 +396,7 @@ MonoBehaviour:
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
-  debrisParticles: {fileID: 0}
+  debrisParticles: {fileID: 5060559484227898982, guid: b2e7b5d6b0357e14e96514d2cde156e8, type: 3}
   destructionParticles: {fileID: 0}
 --- !u!82 &1173642969970528076
 AudioSource:
@@ -624,7 +624,7 @@ MonoBehaviour:
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
-  debrisParticles: {fileID: 0}
+  debrisParticles: {fileID: 5060559484227898982, guid: b2e7b5d6b0357e14e96514d2cde156e8, type: 3}
   destructionParticles: {fileID: 0}
 --- !u!82 &958149417004955314
 AudioSource:
@@ -852,7 +852,7 @@ MonoBehaviour:
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
-  debrisParticles: {fileID: 0}
+  debrisParticles: {fileID: 5060559484227898982, guid: b2e7b5d6b0357e14e96514d2cde156e8, type: 3}
   destructionParticles: {fileID: 0}
 --- !u!82 &7317971756955761124
 AudioSource:
@@ -1080,7 +1080,7 @@ MonoBehaviour:
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
-  debrisParticles: {fileID: 0}
+  debrisParticles: {fileID: 5060559484227898982, guid: b2e7b5d6b0357e14e96514d2cde156e8, type: 3}
   destructionParticles: {fileID: 0}
 --- !u!82 &984348599127303086
 AudioSource:
@@ -1308,7 +1308,7 @@ MonoBehaviour:
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
-  debrisParticles: {fileID: 0}
+  debrisParticles: {fileID: 5060559484227898982, guid: b2e7b5d6b0357e14e96514d2cde156e8, type: 3}
   destructionParticles: {fileID: 0}
 --- !u!82 &1961176046181517023
 AudioSource:
@@ -1536,7 +1536,7 @@ MonoBehaviour:
   hitDropChance: 0.75
   destructionDropSize: 6
   resourceDropped: {fileID: 1180447363939942243, guid: f82398daebcb2c042b27ab5c1a5f22d8, type: 3}
-  debrisParticles: {fileID: 0}
+  debrisParticles: {fileID: 5060559484227898982, guid: b2e7b5d6b0357e14e96514d2cde156e8, type: 3}
   destructionParticles: {fileID: 0}
 --- !u!82 &7634101075442829550
 AudioSource:

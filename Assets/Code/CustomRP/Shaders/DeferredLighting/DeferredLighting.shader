@@ -13,6 +13,8 @@ Shader "Hidden/DeferredLighting"
 
         Pass
         {
+			// Sun lighting
+
 			Name "Directional Lit"
 
 			Stencil
@@ -22,6 +24,14 @@ Shader "Hidden/DeferredLighting"
 			}
 
             HLSLPROGRAM
+
+			#include_with_pragmas "CGClass.hlsl"
+
+			#ifdef SPECULAR
+			float3 _CameraPos;
+			sampler2D _Position;
+			#endif
+
             #pragma vertex vert
             #pragma fragment frag
 
@@ -63,13 +73,39 @@ Shader "Hidden/DeferredLighting"
 
 				float3 lightColor = lerp(_AmbientColor.rgb, _LightColor.rgb, lambert);
 
-                return lightColor * albedo.rgb * albedo.a;
+				#if NO_LIGHTING
+                return albedo.rgb;
+				#endif
+
+				#ifdef DIFFUSE
+				float3 diffuse = lightColor * albedo.rgb * albedo.a;
+				#endif
+				
+				#ifdef SPECULAR
+				float3 position = tex2D(_Position, IN.uv).rgb;
+				float3 viewDir = normalize(position - _CameraPos);
+				float3 specular = GetHighlight(_WorldSpaceLightPos0.xyz, viewDir, normal, 16) * 0.5f;
+				#endif
+
+				#if DIFFUSE_SPECULAR
+				return diffuse + specular;
+				#endif
+
+				#if DIFFUSE_ONLY
+				return diffuse;
+				#endif
+
+				#if SPECULAR_ONLY
+				return specular;
+				#endif
             }
             ENDHLSL
         }
 
 		Pass
         {
+			// Shadows
+
 			Name "Directional Ambient"
 
 			Stencil
@@ -79,8 +115,11 @@ Shader "Hidden/DeferredLighting"
 			}
 
             HLSLPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
+
+			#include_with_pragmas "CGClass.hlsl"
+
+			#pragma vertex vert
+			#pragma fragment frag
 
 			sampler2D _Albedo;
 
@@ -110,15 +149,28 @@ Shader "Hidden/DeferredLighting"
 
             float3 frag(Varyings IN) : SV_TARGET
             {
-				float4 color = tex2D(_Albedo, IN.uv);
+				float4 albedo = tex2D(_Albedo, IN.uv);
 
-                return _AmbientColor.rgb * color.rgb * color.a;
+				#if NO_LIGHTING
+                return albedo.rgb;
+				#endif
+
+				#ifdef DIFFUSE
+				float3 diffuse = _AmbientColor.rgb * albedo.rgb * albedo.a;
+				return diffuse;
+				#endif
+
+				#if SPECULAR_ONLY
+				return 0;
+				#endif
             }
             ENDHLSL
         }
 
 		Pass
         {
+			// Point light
+
 			Name "Point"
 
 			Stencil
@@ -195,6 +247,8 @@ Shader "Hidden/DeferredLighting"
 
 		Pass
         {
+			// Spot light
+
 			Name "Spot"
 
 			Stencil

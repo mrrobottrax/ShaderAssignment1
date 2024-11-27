@@ -7,14 +7,15 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BGMaterial
-  m_Shader: {fileID: 4800000, guid: 9f33665460c258e46baebb3bcbb654f6, type: 3}
+  m_Name: Normal
+  m_Shader: {fileID: 4800000, guid: 9c2c987f8fc595d4ea2e9b28c508f929, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_ValidKeywords:
   - _ROTATE_90_ON
+  - _SMOOTH_SHADING_ON
   - _TRIPLANAR_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -31,8 +32,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AmbientScale: 1
+    - _DISABLE_DIRECTIONAL: 0
     - _ROTATE_90: 1
-    - _SMOOTH: 0
+    - _SMOOTH_SHADING: 1
     - _TRIPLANAR: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

@@ -31,3 +31,10 @@ float4 ObjToHClip(float3 obj)
 {
 	return WorldToHClip(ObjToWorld(obj));
 }
+
+float3 UnpackNormal(float4 packedNormal)
+{
+	float3 normal;
+	normal.xy = packedNormal.wy * 2 - 1;
+	normal.z = sqrt(1 - normal.x * normal.x - normal.y * normal.y);
+}

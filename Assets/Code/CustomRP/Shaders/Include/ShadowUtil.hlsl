@@ -59,7 +59,7 @@ void DirectionalShadows(V2G input[3], float3 normal, inout TriangleStream<G2F> t
 	float3 offset = _WorldSpaceLightPos0.xyz * -1024;
 
 	// Expand faces outwards by a bit so there are no gaps
-	float expansion = 2;
+	float expansion = 1.125;
 	float3 backCap[3];
 	for (int j = 0; j < 3; ++j)
 	{

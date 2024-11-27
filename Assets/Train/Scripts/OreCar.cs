@@ -25,8 +25,6 @@ public class OreCar : TrainCar
             Instance = this;
         else Destroy(this);
 
-        animator = GetComponent<Animator>();
-
         SetOreRampOpen(false);
     }
     #endregion

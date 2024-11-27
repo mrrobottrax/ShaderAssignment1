@@ -15,7 +15,7 @@ public class CycleManager : MonoBehaviour
     [SerializeField] private int daysPerCycle = 3;
 
     [Header("Clock Properties")]
-    [SerializeField] private float secPerMin = 0.5f;
+    [SerializeField] private float secPerMin = 1f;
 
     [SerializeField] private int maxMin = 60;
     [SerializeField] private int maxHr = 24;
@@ -50,7 +50,7 @@ public class CycleManager : MonoBehaviour
     string displayTime;
 
     [field: Header("Events")]
-    public Action<int> OnHourAdvance;
+    public Action<int, int> OnTimeAdvance;
 
     #region Initialization Methods
 
@@ -222,8 +222,6 @@ public class CycleManager : MonoBehaviour
                 min = 0;
                 hr++;
 
-                OnHourAdvance?.Invoke(hr);
-
                 // Check if the hours exceeds max hours in a day
                 if (hr >= maxHr)
                 {
@@ -266,6 +264,9 @@ public class CycleManager : MonoBehaviour
         // Update Lighting
         if (lightManager != null)
             lightManager.EvaluateTime(normalizedTime);
+
+        // Advance time
+        OnTimeAdvance?.Invoke(min, hr);
     }
 
     /// <summary>

@@ -74,8 +74,8 @@ MonoBehaviour:
     interact:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Train, Assembly-CSharp
+        - m_Target: {fileID: 6310341993783275293}
+          m_TargetAssemblyTypeName: OreCar, Assembly-CSharp
           m_MethodName: SetOreRampOpen
           m_Mode: 6
           m_Arguments:
@@ -393,6 +393,8 @@ GameObject:
   - component: {fileID: 488881322216296302}
   - component: {fileID: 8152094247782171304}
   - component: {fileID: 6723969704525300342}
+  - component: {fileID: 1126657449538056763}
+  - component: {fileID: 2903432738295839276}
   m_Layer: 0
   m_Name: MainTrain
   m_TagString: Untagged
@@ -454,6 +456,112 @@ MonoBehaviour:
   playerCarStartPos: {fileID: 4986774989239007637}
   shopCarStartPos: {fileID: 2286113012078184436}
   oreCarPos: {fileID: 1491654471260484802}
+--- !u!114 &1126657449538056763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323774029521934876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a215a302aac3b4b9e9d3fbd80d10e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventMin: 0
+  eventHr: 10
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6723969704525300342}
+        m_TargetAssemblyTypeName: TrainManager, Assembly-CSharp
+        m_MethodName: StartTrain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7615682932410683408}
+        m_TargetAssemblyTypeName: SteamEngine, Assembly-CSharp
+        m_MethodName: SetBrakesActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6310341993783275293}
+        m_TargetAssemblyTypeName: OreCar, Assembly-CSharp
+        m_MethodName: SetOreRampOpen
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2903432738295839276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323774029521934876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a215a302aac3b4b9e9d3fbd80d10e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventMin: 0
+  eventHr: 22
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6723969704525300342}
+        m_TargetAssemblyTypeName: TrainManager, Assembly-CSharp
+        m_MethodName: StartTrain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7615682932410683408}
+        m_TargetAssemblyTypeName: SteamEngine, Assembly-CSharp
+        m_MethodName: SetBrakesActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6310341993783275293}
+        m_TargetAssemblyTypeName: OreCar, Assembly-CSharp
+        m_MethodName: SetOreRampOpen
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &467977309903359527
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,7 +1099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5e1c728e469164fab158fa2b6ac430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 5
+  maxSpeed: 6
   brakeForce: 1
   stopThreshold: 0.5
   brakeTimerThreshold: 2
@@ -1009,7 +1117,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4224
+    m_Bits: 4480
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -2507,8 +2615,8 @@ MonoBehaviour:
     interact:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Train, Assembly-CSharp
+        - m_Target: {fileID: 6310341993783275293}
+          m_TargetAssemblyTypeName: OreCar, Assembly-CSharp
           m_MethodName: SetOreRampOpen
           m_Mode: 6
           m_Arguments:
@@ -3890,7 +3998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02d6bb1eed9e90e43b66acb4ae91a563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 5
+  maxSpeed: 6
   brakeForce: 1
   stopThreshold: 0.5
   brakeTimerThreshold: 2
@@ -3917,7 +4025,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4224
+    m_Bits: 4480
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -9286,7 +9394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6be435e41b48554fb7d327385fdcfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 5
+  maxSpeed: 6
   brakeForce: 1
   stopThreshold: 0.01
   brakeTimerThreshold: 2
@@ -9299,7 +9407,7 @@ MonoBehaviour:
   animator: {fileID: 8156848253373686876}
   smokeParticles: {fileID: 5196955860378981938}
   isAccelerating: 1
-  acceleration: 2
+  acceleration: 0.1
 --- !u!54 &7608103594389999362
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9340,7 +9448,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4224
+    m_Bits: 4480
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -11204,7 +11312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5e1c728e469164fab158fa2b6ac430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 5
+  maxSpeed: 6
   brakeForce: 1
   stopThreshold: 0.5
   brakeTimerThreshold: 2
@@ -11222,7 +11330,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4224
+    m_Bits: 4480
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -11745,8 +11853,8 @@ MonoBehaviour:
     interact:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Train, Assembly-CSharp
+        - m_Target: {fileID: 6310341993783275293}
+          m_TargetAssemblyTypeName: OreCar, Assembly-CSharp
           m_MethodName: SetOreRampOpen
           m_Mode: 6
           m_Arguments:
@@ -11956,8 +12064,8 @@ MonoBehaviour:
     interact:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Train, Assembly-CSharp
+        - m_Target: {fileID: 6310341993783275293}
+          m_TargetAssemblyTypeName: OreCar, Assembly-CSharp
           m_MethodName: SetOreRampOpen
           m_Mode: 6
           m_Arguments:

@@ -18,4 +18,6 @@ MonoBehaviour:
     EnableDynamicBatching: 1
     EnableInstancing: 0
     LightingMaterial: {fileID: 2100000, guid: e60a58d318d9c0e48ba4ed822a70d02f, type: 2}
+    FogMaterial: {fileID: 2100000, guid: 1a75adc39a4e29a4990397d67741608a, type: 2}
+    LUTMaterial: {fileID: 2100000, guid: 8e884f270f08ec147865dbcc4a6a7915, type: 2}
     BGMaterial: {fileID: 2100000, guid: 352ddaeb8a85f644ca787597d3cc1ae9, type: 2}

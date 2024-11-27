@@ -13,6 +13,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ROTATE_90_ON
+  - _SMOOTH_SHADING_ON
   - _TRIPLANAR_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -64,8 +65,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _AmbientFactor: 1
+    - _AmbientScale: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
+    - _DISABLE_DIRECTIONAL: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
@@ -76,6 +79,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ROTATE_90: 1
+    - _SMOOTH_SHADING: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

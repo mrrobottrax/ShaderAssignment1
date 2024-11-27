@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ShaderAssignment1.sln"
+    "dotnet.defaultSolution": "SpaghettiCompany.sln"
 }

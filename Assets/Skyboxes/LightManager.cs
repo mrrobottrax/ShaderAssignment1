@@ -34,6 +34,11 @@ public class LightManager : MonoBehaviour
         directionalLight.color = Profile.LightingColorOverDay.Evaluate(timeOfDay);
         directionalLight.intensity = Profile.LightIntensityOverDay.Evaluate(timeOfDay);
 
+        // Fog
+        RenderSettings.fogColor = Profile.FogColorOverDay.Evaluate(timeOfDay);
+        RenderSettings.fogStartDistance = Profile.FogStartOverDay.Evaluate(timeOfDay);
+        RenderSettings.fogEndDistance = Profile.FogEndOverDay.Evaluate(timeOfDay);
+
         // Light flipping for time of day
         lightTransform.rotation = Quaternion.Euler(isDay ? lightAngle : lightAngle + 180f, 0f, 0f);
         RenderSettings.skybox.SetInt("_IsDay", isDay ? 1 : 0);

@@ -13,12 +13,6 @@ Shader "Hidden/BG"
         {
 			Name "Background"
 
-			Stencil
-			{
-				Ref 0
-				Comp Equal
-			}
-
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag

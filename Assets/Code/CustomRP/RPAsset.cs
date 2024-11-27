@@ -19,6 +19,8 @@ public class RPAsset : RenderPipelineAsset
 		public bool EnableInstancing;
 
 		public Material LightingMaterial;
+		public Material FogMaterial;
+		public Material LUTMaterial;
 		public Material BGMaterial;
 	};
 

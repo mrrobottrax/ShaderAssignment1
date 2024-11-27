@@ -36,6 +36,10 @@ public class DestructableObject : MonoBehaviour, IHealthComponent, IDamagable
     public float SlashingResistance => slashingResistance;
     [SerializeField, Range(0, 1)] private float slashingResistance;
 
+
+    [Header("SFX")]
+    [SerializeField] private AudioClip destroySFX;
+
     #region Initialization Methods
 
     private void Awake()
@@ -57,6 +61,9 @@ public class DestructableObject : MonoBehaviour, IHealthComponent, IDamagable
 
         if (health <= 0)
         {
+            if (destroySFX != null)
+                audioSource.PlayOneShot(destroySFX);
+
             isDead = true;
             Destroy(gameObject);
         }
