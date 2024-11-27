@@ -6,12 +6,12 @@ internal static class EditorAutoHost
 {
 	public static void Init()
 	{
-#if UNITY_EDITOR
-		if (SceneManager.GetActiveScene().buildIndex != 0)
+//#if UNITY_EDITOR
+//		if (SceneManager.GetActiveScene().buildIndex != 0)
 		{
 			NetworkManager.StartHosting(true);
 			NetworkManager.SetGameJoinable(true);
 		}
-#endif
+//#endif
 	}
 }
