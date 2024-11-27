@@ -24,53 +24,53 @@ The shaders that were replaced include the ghost shader, flame shader, and stenc
 
 Our custom rendering pipeline uses a deferred shading model with volumetric shadows. This allows us to render crisp, retro looking shadows with high performance when using many realtime shadow casting lights. This fits our artstyle and game requirements, as our game features dark underground mines that the players must light themselves.
 
-![](docs/image3.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image3.png)  
 
 ### **GBuffer**
 
 The GBuffer consists of an albedo buffer, a world space normal buffer, and a world space position buffer. The alpha channel of the albedo buffer is used to specify how much ambient light a surface receives. This allows us to make the mines pitch black when receiving no light.
 
-![](docs/image39.png)  
-![](docs/image34.png)  
-![](docs/image9.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image39.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image34.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image9.png)  
 
 ### **Shadows**
 
 Shadows are calculated by extruding the geometry away from the light. This is accomplished by using a geometry shader (Assets/Code/CustomRP/Shaders/Include/ShadowUtil.hlsl).
 
-![](docs/image30.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image30.png)  
 (a resulting shadow volume from the sun)
 
 The extruded geometry is rendered with special stencil buffer properties. On depth fail, the stencil buffer is incremented when rendering backfaces, and decremented when rendering frontfaces. This results in the stencil buffer being 0 in all areas that receive direct illumination.
 
-![](docs/image28.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image28.png)  
 (the stencil buffer representing shadows, overlapping shadows result in a value greater than 1\)
 
 ### **Lighting**
 
 Lighting is calculated by rendering shadows to the stencil buffer, then summing light to the colour buffer only in areas that receive light. The directional light has an additional pass where it adds ambient light to shadows.
 
-![](docs/image31.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image31.png)  
 (shadows calculated from a point light)
 
 The shader responsible for lighting is “Assets\\Code\\CustomRP\\Shaders\\DeferredLighting\\DeferredLighting.shader”.
 
-![](docs/image14.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image14.png)  
 (an illustration of the directional light colour and the shadow colour)
 
-![](docs/image23.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image23.png)  
 (lambertian lighting blends between the light colour and the shadow colour)
 
 ### **Lighting Stages Illustration**
 
-![](docs/image38.png)![](docs/image29.png)  
-![](docs/image43.png)![](docs/image11.png)  
-![](docs/image17.png)![](docs/image16.png)  
-![](docs/image19.png)![](docs/image3.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image38.png)![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image29.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image43.png)![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image11.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image17.png)![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image16.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image19.png)![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image3.png)  
 
 ### **Transparency**
 
-![](docs/image8.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image8.png)  
 
 We implement transparency by running a quick forward pass after deferred lighting, sorting objects by depth for proper blending.
 
@@ -78,14 +78,14 @@ We implement transparency by running a quick forward pass after deferred lightin
 
 We have deferred versions of all our previous shaders, including fullbright, diffuse lighting, specular lighting, and diffuse \+ specular lighting. Switching these modes now affects the entire scene rather than one object.
 
-![](docs/image12.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image12.png)  
 (specular only mode)
 
 ##  **Train**
 
 One of the key gameplay features of our GDW project is a physically simulated train that follows splines to transport players to and from various maps within the game. The train will initially drop players off before departing, but it will return periodically throughout the day, allowing players to buy and sell items.
 
-![](docs/image33.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image33.png)  
 
 ## **Day and night cycle**
 
@@ -93,8 +93,8 @@ The backend for the day-night cycle has been implemented into our game. This sys
 
 Additionally, we have created a custom procedural skybox shader and included a dynamic clock in the UI to help visualise the change in time over the course of the day.
 
-![](docs/image4.png)  
-![](docs/image15.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image4.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image15.png)  
 
 ## **Sound effects**
 
@@ -104,8 +104,8 @@ Our game features different footstep sounds that play depending on the surface t
 
 Over the past few weeks, we have worked hard to create a more finalised scene that enhances our game’s retro graphical style and provides a clearer sense of how the final product will play. This scene is set on a cliffside towering above the desert, with a mine nestled within a canyon adjacent to the players' train drop-off point. The design features two train tunnels on opposite sides of the map, through which the train enters and exits, transporting players to and from the area.
 
-![](docs/image6.png)  
-![](docs/image36.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image6.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image36.png)  
 
 ## **LUTs**
 
@@ -113,7 +113,7 @@ Over the past few weeks, we have worked hard to create a more finalised scene th
 
 Many improvements have been made to the LUT shader. The LUT is now represented with a 3D texture so that blending can be more accurate. The LUTs themselves have been adjusted. The system still allows for LUT blending and transitions. Overall, the new shader provides much better results.
 
-![](docs/image22.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image22.png)  
 
 # **Texturing** 
 
@@ -124,23 +124,23 @@ As mentioned in our previous submission, graphically, our game is heavily inspir
 Since our last update, new assets have been created, with all of the ones currently present in the scene being textured. assets have been prototyped, modelled, uv unwrapped, and textured.
 
 Train Ore Cart:  
-![](docs/image2.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image2.png)  
 
 ### **Texture format**
 
 To best suit our game, we determined early on that we will be using texture atlases. Texture atlases are lager textures comprised of smaller textures:
 
 Steam engine texture atlas:  
-![](docs/image18.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image18.png)  
 
 **UV unwrapping** 
 
 For assets such as the train, items, and foliage, we UV unwrapped our models manually using *Blender*. From here, we took our faces, and moved them to parts of the texture atlas that made sense. To streamline the unwrapping process, seams were defined on each mesh so that faces would be grouped together to ensure that the textures are smooth and don't change abruptly with each face.  
-![](docs/image20.png)![](docs/image37.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image20.png)![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image37.png)  
 
 Seams help *Blender* understand which parts of a mesh are grouped together by checking which faces are separated by edges marked as “seams.”
 
-![](docs/image27.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image27.png)  
 
 ## **Triplanar Shader Textures**
 
@@ -155,20 +155,20 @@ There is also a variant of this shader that rotates the triplanar sampling by 90
 Our game is set in a fictional western setting. As a result, we have chosen a warm colour palette with many reds, yellows, oranges and browns above ground. However, we want a bright blue sky to contrast the warm colours of the terrain. For the mines below the overworld, we aim to achieve a cold look with many dull blues and greys.
 
 Overworld colours:  
-![](docs/image5.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image5.png)  
 
 Below ground colours:  
-![](docs/image25.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image25.png)  
 
 ## **How we met the texturing requirements for our group size**
 
 Every asset in our scene is textured, as we have three members in our group. We achieved this by reducing our required asset list to only those essential for the gameplay demo and by strategically choosing which assets to manually texture and which to texture using triplanar shaders. Important assets with unique, more defined geometry, such as the train, items, and foliage, were textured by hand. In contrast, geometry with larger, more angular shapes, like the terrain, was assigned the triplanar shader, which projects textures onto the mesh based on its UVs in world space.
 
 Top down view of scene:  
-![](docs/image21.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image21.png)  
 
 First person perspective  
-![](docs/image26.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image26.png)  
 
 # **Visual Effects**
 
@@ -178,11 +178,11 @@ First person perspective
 
 We’ve implemented smoke using a custom transparency shader. Smoke is alpha blended based on the opacity of the texture.
 
-![](docs/image42.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image42.png)  
 
 There is an alternative shader that uses additive blending for steam. (Assets\\Code\\CustomRP\\Shaders\\BasicShaders\\Additive.shader)
 
-![](docs/image10.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image10.png)  
 
 ## **Rock Debris particle system with shader**
 
@@ -196,7 +196,7 @@ We added some juice from the previous interaction to the mining. Now when you hi
 
 We’ve added a simple water shader for a pond. The shader is a fairly simple shader meant for small bodies of water like ponds. To achieve the desired effect the water blends two normal maps moving in different directions with different tilings and controllable strength. To match real water the surface is slightly reflective and partially transparent. 
 
-![](docs/image7.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image7.png)  
 
 ## **Scrolling Clouds**
 
@@ -204,7 +204,7 @@ We’ve added a simple water shader for a pond. The shader is a fairly simple sh
 
 To add extra detail to our desert skies, we have also included a scrolling transparent cloud shader on a plane separate from the skybox. This shader includes properties for texture, tiling, colour, scroll speed on x and y, and cutoff. This shader simply scrolls the UV’s over time in the vertex shader, while the fragment shader handles the texturing, colouring, and alpha cutoff.
 
-![](docs/image13.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image13.png)  
 
 ## **Skybox**  
 
@@ -215,10 +215,10 @@ Since the last iteration of this project, we have added a fully dynamic skybox s
 The shader dynamically updates as the scene's directional light moves, adjusting the sun and moon's positions, brightness, and visibility based on whether they are above or below the horizon. Day and night gradients transition smoothly using the y-axis rotation of the directional light, while stars fade in as the sun sets, and horizon effects enhance sunrise and sunset visuals. This system ensures the skybox responds to changes made to the sun's rotation in real time, creating natural, seamless transitions. This shader is used in conjunction with our day-night cycle system, which handles the rotation of the sun direction light that the shader updates based off of.
 
 Sunset:  
-![](docs/image24.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image24.png)  
 
 High noon:  
-![](docs/image35.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image35.png)  
 
 ## **Fog**
 
@@ -226,12 +226,12 @@ High noon:
 
 We implemented a fullscreen post-processing pass to achieve a radial fog effect. It renders using the position buffer, and can somewhat handle transparent objects (it uses the position of the opaque object behind it, this will change if it becomes an issue).
 
-![](docs/image32.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image32.png)  
 
 The colour, start and end distances, and opacity are all customizable.
 
-![](docs/image1.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image1.png)  
 (possible sandstorm effect)
 
-![](docs/image41.png)  
+![](https://media.githubusercontent.com/media/mrrobottrax/ShaderAssignment1/develop/Docs/image41.png)  
 (fog lets you see slightly in the mines)
